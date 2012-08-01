@@ -112,7 +112,10 @@ VEXTERNC void Vmvcs(int *nx, int *ny, int *nz,
         VMESSAGE3("Coarse Grid Size: (%d, %d, %d)", nxc, nyc, nzc);
     }
 
-    /// @todo add timing
+    if (*iok != 0) {
+        Vprtstp(*iok, -1, 0.0, 0.0, 0.0);
+
+    }
 
 	/*    **************************************************************
 	 *    *** Note: if (iok != 0) then:  use a stopping test.        ***
@@ -154,11 +157,13 @@ VEXTERNC void Vmvcs(int *nx, int *ny, int *nz,
 
 		if (rsden == 0.0) {
 			rsden = 1.0;
-            VWARN_MSG0(rsden != 0, "rhs is zero on finest level");
+            VERRMSG0("rhs is zero on finest level");
 		}
 		rsnrm = rsden;
 	    orsnrm = rsnrm;
 	    iters_s = 0;
+
+        Vprtstp(*iok, 0, rsnrm, rsden, orsnrm);
 	}
 
 
@@ -291,9 +296,8 @@ VEXTERNC void Vmvcs(int *nx, int *ny, int *nz,
 			else {
                 VABORT_MSG1("Bad istop value: %d\n", *istop);
 			}
-
+            Vprtstp(*iok, *iters, rsnrm, rsden, orsnrm);
 		}
-
 		return;
 	}
 
@@ -549,8 +553,8 @@ VEXTERNC void Vmvcs(int *nx, int *ny, int *nz,
 			} else {
                 VABORT_MSG1("Bad istop value: %d", *istop);
 			}
+            Vprtstp(*iok, *iters, rsnrm, rsden, orsnrm);
 		}
-
 	} while (*iters<*itmax && (rsnrm/rsden) > *errtol);
 
 	*ierror = *iters < *itmax ? 0 : 1;

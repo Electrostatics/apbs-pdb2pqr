@@ -156,16 +156,6 @@ VEXTERNC void Vmgdriv2(
 		double *tcf    ///< @todo: Doc
 		);
 
-VPUBLIC void Vmgdriv3(int *iparm, double *rparm, int *nx, int *ny, int *nz,
-		double *u, int *iz, int *ipc, double *rpc, double *pc, double *ac,
-		double *cc, double *fc, double *xf, double *yf, double *zf, double *gxcf,
-		double *gycf, double *gzcf, double *a1cf, double *a2cf, double *a3cf,
-		double *ccf, double *fcf, double *tcf,
-		int *nlev, int *nu1, int *nu2, int *mgkey, int *itmax, int *istop,
-		int *iinfo, int *ipkey, int* mode, int *mgprol, int *mgcoar,
-		int *mgdisc, int *mgsmoo, int *mgsolv, int *iperf,
-		double *errtol, double *omegal, double *omegan);
-
 
 
 /** @brief   This routine computes the required sizes of the real and integer

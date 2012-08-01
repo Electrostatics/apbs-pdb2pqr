@@ -271,7 +271,7 @@ z_lib = @z_lib@
 zlib = @zlib@
 AUTOMAKE_OPTIONS = no-dependencies
 SUFFIXES = .H .h .C .cc .c .f .o
-SUBDIRS = contrib src bin @apbs_do_tools@ 
+SUBDIRS = contrib src bin @apbs_do_tools@
 all: all-recursive
 
 .SUFFIXES:
@@ -702,7 +702,7 @@ info: info-recursive
 
 info-am:
 
-install-data-am: install-data-local
+install-data-am:
 
 install-dvi: install-dvi-recursive
 
@@ -761,8 +761,8 @@ uninstall-am:
 	distclean-libtool distclean-local distclean-tags \
 	distcleancheck distdir distuninstallcheck dvi dvi-am html \
 	html-am info info-am install install-am install-data \
-	install-data-am install-data-local install-dvi install-dvi-am \
-	install-exec install-exec-am install-exec-local install-html \
+	install-data-am install-dvi install-dvi-am install-exec \
+	install-exec-am install-exec-local install-html \
 	install-html-am install-info install-info-am install-man \
 	install-pdf install-pdf-am install-ps install-ps-am \
 	install-strip installcheck installcheck-am installdirs \
@@ -781,12 +781,6 @@ clean-ac:
 
 install-exec-local:
 	-rm -f ./bin/apbs
-
-install-data-local:
-	mkdir -p ${prefix}/share
-	-cp -rf examples ${prefix}/share 
-	-cp -rf doc ${prefix}/share 
-	-cp -rf tools ${prefix}/share
 
 test:
 	cd examples; make test

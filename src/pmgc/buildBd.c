@@ -139,6 +139,8 @@ VPUBLIC void Vbuildband1_7(int *nx, int *ny, int *nz,
 
     jj = 0;
 
+    //fprintf(data, "%s\n", PRINT_FUNC);
+
     for (k=2; k<=*nz-1; k++) {
 
         for (j=2; j<=*ny-1; j++) {
@@ -166,6 +168,8 @@ VPUBLIC void Vbuildband1_7(int *nx, int *ny, int *nz,
                 ii = jj - (*nx - 2) * (*ny - 2);
                 kk = ii - jj + *m + 1;
                 VAT2(acB, kk, jj) = - VAT3(uC, i, j, k-1);
+
+                //fprintf(data, "%19.12E\n", VAT2(acB, kk, jj));
             }
         }
     }
@@ -212,6 +216,8 @@ VPUBLIC void Vbuildband1_27(int *nx, int *ny, int *nz,
     VAT(ipcB, 4) = 0;
 
     jj = 0;
+
+    //fprintf(data, "%s\n", PRINT_FUNC);
 
     for (k=2; k<=*nz-1; k++) {
 
@@ -290,6 +296,7 @@ VPUBLIC void Vbuildband1_27(int *nx, int *ny, int *nz,
                 kk = ii - jj + *m + 1;
                 VAT2(acB, kk, jj) = - VAT3(uSW, i, j, k-1);
 
+                //fprintf(data, "%19.12E\n", VAT2(acB, kk, jj));
             }
         }
     }

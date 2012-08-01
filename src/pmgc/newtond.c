@@ -195,7 +195,9 @@ VPUBLIC void Vnewton(int *nx, int *ny, int *nz,
         VMESSAGE3("Starting: (%d, %d, %d)", *nx, *ny, *nz);
     }
 
-    /// @todo Add timing back
+    if (*iok != 0) {
+        Vprtstp(*iok, -1, 0.0, 0.0, 0.0);
+    }
 
     /**************************************************************
      *** note: if (iok!=0) then:  use a stopping test.          ***
@@ -247,6 +249,10 @@ VPUBLIC void Vnewton(int *nx, int *ny, int *nz,
     }
     rsnrm = rsden;
     orsnrm = rsnrm;
+
+    if (*iok != 0) {
+        Vprtstp(*iok, 0, rsnrm, rsden, orsnrm);
+    }
 
     /*********************************************************************
      *** begin newton iteration
@@ -468,6 +474,8 @@ VPUBLIC void Vnewton(int *nx, int *ny, int *nz,
             } else {
                 VABORT_MSG1("Bad istop value: %d", *istop);
             }
+
+             Vprtstp(*iok, *iters, rsnrm, rsden, orsnrm);
 
             if ((rsnrm/rsden) <= *errtol)
                 break;

@@ -27,13 +27,13 @@
  *
  * Purpose:  Virtual numerical machine.
  *
- *           In particular, this module defines an imaginary ideal 
- *           Virtual Machine for numerical codes, independent of the 
+ *           In particular, this module defines an imaginary ideal
+ *           Virtual Machine for numerical codes, independent of the
  *           underlying hardware.  All resources are provided abstractly.
  *
  * Notes:    The vnm library provides abstractions only for
  *           ANSI/ISO/Standard C; no extensions are provided for.
- *           In particular, "getenv" and "system", being almost the 
+ *           In particular, "getenv" and "system", being almost the
  *           only ISO C facilities for communicating with the underlying
  *           command shell, are the only facilities provided for in
  *           the abstraction layer.  All other facilities are layered
@@ -48,23 +48,23 @@
 VEMBED(rcsid="$Id: vnm.c,v 1.18 2008/03/12 05:13:59 fetk Exp $")
 
 #if defined(HAVE_UNISTD_H)
-#   include <unistd.h> 
+#   include <unistd.h>
 #endif
 
 #if defined(HAVE_SYS_TYPES_H)
-#   include <sys/types.h> 
+#   include <sys/types.h>
 #endif
 
 #if defined(HAVE_SYS_TIME_H)
-#   include <sys/time.h> 
+#   include <sys/time.h>
 #endif
 
 #if defined(HAVE_SYS_TIMES_H)
-#   include <sys/times.h> 
+#   include <sys/times.h>
 #endif
 
 #if defined(HAVE_SYS_STAT_H)
-#   include <sys/stat.h> 
+#   include <sys/stat.h>
 #endif
 
 #if defined(HAVE_WINSOCK_H)
@@ -363,14 +363,14 @@ VPUBLIC double Vnm_epsmac(void)
  * Routine:  Vnm_gentokens
  *
  * Purpose:  Generate an [argv,argc] pair from a character string "buf"
- *           (assumed NULL-terminated) in which tokens are separated by 
+ *           (assumed NULL-terminated) in which tokens are separated by
  *           whitespace "white" with possible comments "comment" occuring.
  *           THE INPUT STRING IS MODIFIED HERE!
  *
  * Notes:    Again, the input string "buf" IS MODIFIED; white space characters
- *           (defined in the input string "white") are replaced by the NULL 
+ *           (defined in the input string "white") are replaced by the NULL
  *           character '\0'.  The output "argv" is simply a list of pointers
- *           to the start of the tokens in "buf", which are NULL-terminated 
+ *           to the start of the tokens in "buf", which are NULL-terminated
  *           after we replace the white space with NULLs.
  *
  *           We follow convention and "NULL"-terminate "argv" by setting
@@ -380,7 +380,7 @@ VPUBLIC double Vnm_epsmac(void)
  *           maximal length of argv in the parameter "argvmax".
  *
  *           If we encounter a token which begins with a comment character
- *           (defined in the input string "comment"), then we ignore the 
+ *           (defined in the input string "comment"), then we ignore the
  *           rest of the tokens in the input buffer "buf".  This is suitable
  *           for parsing shell languages such as sh/ksh/bash which have
  *           comments that start with e.g. "#" and continue until a newline.
@@ -393,7 +393,7 @@ VPUBLIC double Vnm_epsmac(void)
  * Author:   Michael Holst
  * ***************************************************************************
  */
-VPUBLIC int Vnm_gentokens(char *buf, char **argv, 
+VPUBLIC int Vnm_gentokens(char *buf, char **argv,
     const int argvmax, const char *white, const char *comment)
 {
     int  i, j, ntok, state, done, bufsize;
@@ -469,7 +469,7 @@ VPUBLIC void Vnm_tstop(int timer, const char *name)
     VASSERT( (timer>=0) && (timer<VTIMERS) );
     after  = clock();
     cputme = (double)(after-before[timer]) / (double)(CLOCKS_PER_SEC);
-    Vnm_print(0, "Vnm_tstop: stopping timer %d (%s).  CPU TIME = %e\n", 
+    Vnm_print(0, "Vnm_tstop: stopping timer %d (%s).  CPU TIME = %e\n",
         timer, name, cputme);
 }
 
@@ -671,7 +671,7 @@ VPUBLIC int Vnm_mkdir(const char *path)
 VPUBLIC int Vnm_system(const char *cmd)
 {
     return system(cmd);
-}   
+}
 
 /*
  * ***************************************************************************
@@ -694,7 +694,7 @@ VPUBLIC int Vnm_systemBack(const char *cmd)
     strcat(cmdbuf, " &");
 #endif
     return Vnm_system(cmdbuf);
-}   
+}
 
 /*
  * ***************************************************************************
@@ -724,7 +724,7 @@ VPUBLIC int Vnm_systemKill(const char *cmd)
     (void)Vnm_system(cmdbuf);
 #endif
     return 0;
-}   
+}
 
 /*
  * ***************************************************************************
@@ -749,7 +749,7 @@ VPUBLIC int Vnm_exec(int argc, char **argv)
     /* Vnm_system("play sorry.au"); */
 
     return -1;
-}   
+}
 
 /*
  * ***************************************************************************
@@ -894,9 +894,9 @@ VPUBLIC FILE *Vnm_open(const int unit)
         } else if (unit == 3) {
             sprintf(fname,"%s/%s%s",myhome,"hist.mcsh",apnd);
             if (!consIni[unit]) {
-                cons[unit]=fopen(fname, "a" /*"w"*/); 
+                cons[unit]=fopen(fname, "a" /*"w"*/);
             } else {
-                cons[unit]=fopen(fname, "a"); 
+                cons[unit]=fopen(fname, "a");
             }
         } else fprintf(stderr,"Vnm_open: Bad UNIT <%d> specified.\n", unit);
 
@@ -949,7 +949,7 @@ VPUBLIC int Vnm_close(const int unit)
         fprintf(stderr,"Vnm_close: Bad UNIT <%d> specified.\n", unit);
     }
 
-    if (  (cons[unit] != VNULL) 
+    if (  (cons[unit] != VNULL)
        && (cons[unit] != stdin)
        && (cons[unit] != stdout)
        && (cons[unit] != stderr) ) {
@@ -1200,7 +1200,7 @@ VPUBLIC void Vnm_dqsortOrd(double *u, int *ord, int size)
  *           or equal to all entries u[0],...,u[right].
  *
  *           pivot=u[left] is arbitrarily chosen as the pivot key.
- *           i,j=used to partition sublist so at all times: 
+ *           i,j=used to partition sublist so at all times:
  *
  *                u[m] <= pivot <= u[n],   m<i, n>j.
  *
@@ -1218,14 +1218,14 @@ VPRIVATE void Vnm_qsortR(int *u, int left, int right)
             do { i++; } while (u[i] < pivot);
             do { j--; } while (u[j] > pivot);
             if (i<j) {
-                tmp = u[i]; 
-                u[i] = u[j]; 
-                u[j] = tmp; 
+                tmp = u[i];
+                u[i] = u[j];
+                u[j] = tmp;
             }
         } while (i<j);
-        tmp = u[left]; 
-        u[left] = u[j]; 
-        u[j] = tmp; 
+        tmp = u[left];
+        u[left] = u[j];
+        u[j] = tmp;
         Vnm_qsortR(u, left, j-1);
         Vnm_qsortR(u, j+1, right);
     }
@@ -1243,7 +1243,7 @@ VPRIVATE void Vnm_qsortR(int *u, int left, int right)
  *           or equal to all entries u[0],...,u[right].
  *
  *           pivot=u[left] is arbitrarily chosen as the pivot key.
- *           i,j=used to partition sublist so at all times: 
+ *           i,j=used to partition sublist so at all times:
  *
  *                u[m] <= pivot <= u[n],   m<i, n>j.
  *
@@ -1261,20 +1261,20 @@ VPRIVATE void Vnm_qsortOrdR(int *u, int *ord, int left, int right)
             do { i++; } while (u[i] < pivot);
             do { j--; } while (u[j] > pivot);
             if (i<j) {
-                tmp = u[i]; 
-                u[i] = u[j]; 
-                u[j] = tmp; 
-                itmp = ord[i]; 
-                ord[i] = ord[j]; 
-                ord[j] = itmp; 
+                tmp = u[i];
+                u[i] = u[j];
+                u[j] = tmp;
+                itmp = ord[i];
+                ord[i] = ord[j];
+                ord[j] = itmp;
             }
         } while (i<j);
-        tmp = u[left]; 
-        u[left] = u[j]; 
-        u[j] = tmp; 
-        itmp = ord[left]; 
-        ord[left] = ord[j]; 
-        ord[j] = itmp; 
+        tmp = u[left];
+        u[left] = u[j];
+        u[j] = tmp;
+        itmp = ord[left];
+        ord[left] = ord[j];
+        ord[j] = itmp;
         Vnm_qsortOrdR(u, ord, left, j-1);
         Vnm_qsortOrdR(u, ord, j+1, right);
     }
@@ -1292,7 +1292,7 @@ VPRIVATE void Vnm_qsortOrdR(int *u, int *ord, int left, int right)
  *           or equal to all entries u[0],...,u[right].
  *
  *           pivot=u[left] is arbitrarily chosen as the pivot key.
- *           i,j=used to partition sublist so at all times: 
+ *           i,j=used to partition sublist so at all times:
  *
  *                u[m] <= pivot <= u[n],   m<i, n>j.
  *
@@ -1311,14 +1311,14 @@ VPRIVATE void Vnm_dqsortR(double *u, int left, int right)
             do { i++; } while (u[i] < pivot);
             do { j--; } while (u[j] > pivot);
             if (i<j) {
-                tmp = u[i]; 
-                u[i] = u[j]; 
-                u[j] = tmp; 
+                tmp = u[i];
+                u[i] = u[j];
+                u[j] = tmp;
             }
         } while (i<j);
-        tmp = u[left]; 
-        u[left] = u[j]; 
-        u[j] = tmp; 
+        tmp = u[left];
+        u[left] = u[j];
+        u[j] = tmp;
         Vnm_dqsortR(u, left, j-1);
         Vnm_dqsortR(u, j+1, right);
     }
@@ -1336,7 +1336,7 @@ VPRIVATE void Vnm_dqsortR(double *u, int left, int right)
  *           or equal to all entries u[0],...,u[right].
  *
  *           pivot=u[left] is arbitrarily chosen as the pivot key.
- *           i,j=used to partition sublist so at all times: 
+ *           i,j=used to partition sublist so at all times:
  *
  *                u[m] <= pivot <= u[n],   m<i, n>j.
  *
@@ -1355,20 +1355,20 @@ VPRIVATE void Vnm_dqsortOrdR(double *u, int *ord, int left, int right)
             do { i++; } while (u[i] < pivot);
             do { j--; } while (u[j] > pivot);
             if (i<j) {
-                tmp = u[i]; 
-                u[i] = u[j]; 
-                u[j] = tmp; 
-                itmp = ord[i]; 
-                ord[i] = ord[j]; 
-                ord[j] = itmp; 
+                tmp = u[i];
+                u[i] = u[j];
+                u[j] = tmp;
+                itmp = ord[i];
+                ord[i] = ord[j];
+                ord[j] = itmp;
             }
         } while (i<j);
-        tmp = u[left]; 
-        u[left] = u[j]; 
-        u[j] = tmp; 
-        itmp = ord[left]; 
-        ord[left] = ord[j]; 
-        ord[j] = itmp; 
+        tmp = u[left];
+        u[left] = u[j];
+        u[j] = tmp;
+        itmp = ord[left];
+        ord[left] = ord[j];
+        ord[j] = itmp;
         Vnm_dqsortOrdR(u, ord, left, j-1);
         Vnm_dqsortOrdR(u, ord, j+1, right);
     }

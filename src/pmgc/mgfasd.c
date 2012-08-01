@@ -198,7 +198,7 @@ VPUBLIC void Vmvfas(int *nx, int *ny, int *nz,
 
     // Initial wall clock
     if (*iok != 0) {
-        /// @todo  Add/Implement timing
+        Vprtstp(*iok, -1, 0.0, 0.0, 0.0);
     }
 
     /**************************************************************
@@ -253,7 +253,7 @@ VPUBLIC void Vmvfas(int *nx, int *ny, int *nz,
          rsnrm = rsden;
          orsnrm = rsnrm;
 
-         /// @todo stop timing
+         Vprtstp(*iok, 0, rsnrm, rsden, orsnrm);
     }
 
 
@@ -351,7 +351,7 @@ VPUBLIC void Vmvfas(int *nx, int *ny, int *nz,
                 Vnm_print(2, "Vmvcs: bad istop value: %d\n", *istop);
             }
 
-            /// @todo Stop timing
+            Vprtstp(*iok, *iters, rsnrm, rsden, orsnrm);
         }
         return;
     }
@@ -584,10 +584,10 @@ VPUBLIC void Vmvfas(int *nx, int *ny, int *nz,
                        w1, w2, w3);
                        rsnrm = VSQRT(Vxdot(&nxf, &nyf, &nzf,w1,w2));
             } else {
-                Vnm_print(2, "Vmvfas: bad istop value: %d\n", *istop);
+                VABORT_MSG1("Bad istop value: %d", *istop);
             }
 
-            /// @todo Stop timing;
+            Vprtstp(*iok, *iters, rsnrm, rsden, orsnrm);
 
             if ((rsnrm / rsden) <= *errtol)
                 break;
