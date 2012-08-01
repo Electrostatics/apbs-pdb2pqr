@@ -189,6 +189,7 @@ VPUBLIC void VbuildA_fv(int *nx, int *ny, int *nz,
      * ********************************************************************* */
 
     // build the operator
+    //fprintf(data, "%s\n", PRINT_FUNC);
     for(k=2; k<=*nz-1; k++) {
 
     	hzm1 = VAT(zf, k)   - VAT(zf, k-1);
@@ -222,6 +223,7 @@ VPUBLIC void VbuildA_fv(int *nx, int *ny, int *nz,
                 // Calculate the coefficient and source function
     			VAT3(fc, i, j, k) = coef_fc * VAT3(fcf, i, j, k);
     			VAT3(cc, i, j, k) = coef_fc * VAT3(ccf, i, j, k);
+                //fprintf(data, "%19.12E\n", VAT3(cc, i, j, k));
 
     			// Calculate the diagonal for matvecs and smoothings
 			    VAT3(oC, i, j, k) = coef_oE   * VAT3(a1cf,   i,   j,   k) +
@@ -231,21 +233,26 @@ VPUBLIC void VbuildA_fv(int *nx, int *ny, int *nz,
 			    		      coef_uC   * VAT3(a3cf,   i,   j,   k) +
 			    		      coef_uCm1 * VAT3(a3cf,   i,   j, k-1);
 
+                //fprintf(data, "%19.12E\n", VAT3(oC, i, j, k));
+
                 // Calculate the east neighbor
 			    ike = VMIN2(1, VABS(i - nxm1));
 			    VAT3(oE, i, j, k) = ike * coef_oE * VAT3(a1cf, i, j, k);
+                //fprintf(data, "%19.12E\n", VAT3(oE, i, j, k));
 			    bc_cond_e = (1 - ike) * coef_oE * VAT3(a1cf, i, j, k) * VAT3(gxcf,  j, k, 2);
 			    VAT3(fc, i, j, k) += bc_cond_e;
 
 			    // Calculate the north neighbor
 			    jke = VMIN2(1, VABS(j - nym1));
 			    VAT3(oN, i, j, k) = jke * coef_oN * VAT3(a2cf, i, j, k);
+                //fprintf(data, "%19.12E\n", VAT3(oN, i, j, k));
 			    bc_cond_n = (1 - jke) * coef_oN * VAT3(a2cf, i, j, k) * VAT3(gycf, i, k, 2);
 			    VAT3(fc, i, j, k) += bc_cond_n;
 
 			    // Calculate the up neighbor
 			    kke = VMIN2(1, VABS(k - nzm1));
 			    VAT3(uC, i, j, k) = kke * coef_uC * VAT3(a3cf, i, j, k);
+                //fprintf(data, "%19.12E\n", VAT3(uC, i, j, k));
 			    bc_cond_u = (1 - kke) * coef_uC * VAT3(a3cf, i, j, k) * VAT3(gzcf, i, j, 2);
 			    VAT3(fc, i, j, k) += bc_cond_u;
 
@@ -263,6 +270,8 @@ VPUBLIC void VbuildA_fv(int *nx, int *ny, int *nz,
 			    kke = VMIN2(1, VABS(k - 2));
 			    bc_cond_d = (1 - kke) * coef_uCm1 * VAT3(a3cf, i, j, k-1) * VAT3(gzcf, i, j, 1);
 			    VAT3(fc, i, j, k) += bc_cond_d;
+
+                //fprintf(data, "%19.12E\n", VAT3(fc, i, j, k));
     		}
     	}
     }

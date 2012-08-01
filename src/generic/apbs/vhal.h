@@ -52,9 +52,12 @@
  * @endverbatim
  */
 
-
 #ifndef _VAPBSHAL_H_
 #define _VAPBSHAL_H_
+
+#include "stdio.h"
+
+FILE *data;
 
 /**
  *    @ingroup Vhal
@@ -608,73 +611,96 @@ typedef enum eVdata_Format Vdata_Format;
 
 
 
+/* Utility messages.  Print out messages with location information */
 #ifdef DEBUG
-#define VMESSAGE0(msg)                                        \
+#define VCHANNELEDMESSAGE0(channel, msg)                      \
         do {                                                  \
-            Vnm_print(2, "%s:%d [%s()]: MESSAGE:\n"           \
+            Vnm_print(channel, "%s:%d [%s()]: MESSAGE:\n"     \
                          "    %s\n\n",                        \
                       __FILE__, __LINE__, __FUNCTION__, msg); \
         } while(0)
 
-#define VMESSAGE1(msg, arg)                                    \
+#define VCHANNELEDMESSAGE1(channel, msg, arg)                  \
         do {                                                   \
             char buff[1000];                                   \
             snprintf( buff, 1000, msg, arg );                  \
-            Vnm_print(2, "%s:%d [%s()]: MESSAGE:\n"            \
+            Vnm_print(channel, "%s:%d [%s()]: MESSAGE:\n"      \
                          "    %s\n\n",                         \
                       __FILE__, __LINE__, __FUNCTION__, buff); \
         } while(0)
 
-#define VMESSAGE2(msg, arg0, arg1)                             \
+#define VCHANNELEDMESSAGE2(channel, msg, arg0, arg1)           \
         do {                                                   \
             char buff[1000];                                   \
             snprintf( buff, 1000, msg, arg0, arg1 );           \
-            Vnm_print(2, "%s:%d [%s()]: MESSAGE:\n"            \
+            Vnm_print(channel, "%s:%d [%s()]: MESSAGE:\n"      \
                          "    %s\n\n",                         \
                       __FILE__, __LINE__, __FUNCTION__, buff); \
         } while(0)
 
-#define VMESSAGE3(msg, arg0, arg1, arg2)                       \
+#define VCHANNELEDMESSAGE3(channel, msg, arg0, arg1, arg2)     \
         do {                                                   \
             char buff[1000];                                   \
             snprintf(buff, 1000, msg, arg0, arg1, arg2);       \
-            Vnm_print(2, "%s:%d [%s()]: MESSAGE:\n"            \
+            Vnm_print(channel, "%s:%d [%s()]: MESSAGE:\n"      \
                          "    %s\n\n",                         \
                       __FILE__, __LINE__, __FUNCTION__, buff); \
         } while(0)
+
+#define VMESSAGE0(msg)                   VCHANNELEDMESSAGE0(2, msg)
+#define VMESSAGE1(msg, arg0)             VCHANNELEDMESSAGE1(2, msg, arg0)
+#define VMESSAGE2(msg, arg0, arg1)       VCHANNELEDMESSAGE2(2, msg, arg0, arg1)
+#define VMESSAGE3(msg, arg0, arg1, arg2) VCHANNELEDMESSAGE3(2, msg, arg0, arg1, arg2)
+
+#define VERRMSG0(msg)                   VMESSAGE0(msg)
+#define VERRMSG1(msg, arg0)             VMESSAGE1(msg, arg0)
+#define VERRMSG2(msg, arg0, arg1)       VMESSAGE2(msg, arg0, arg1)
+#define VERRMSG3(msg, arg0, arg1, arg2) VMESSAGE3(msg, arg0, arg1, arg2)
 #else
-#define VMESSAGE0(msg)                                    \
-        do {                                              \
-            Vnm_print(0, "%s: %s\n", __FUNCTION__, msg);  \
+#define VCHANNELEDMESSAGE0(channel, msg)                       \
+        do {                                                   \
+            Vnm_print(channel, "%s: %s\n", __FUNCTION__, msg); \
         } while(0)
 
-#define VMESSAGE1(msg, arg0)                              \
-        do {                                              \
-            char buff[1000];                              \
-            snprintf( buff, 1000, msg, arg0 );            \
-            Vnm_print(0, "%s: %s\n", __FUNCTION__, buff); \
+#define VCHANNELEDMESSAGE1(channel, msg, arg0)                  \
+        do {                                                    \
+            char buff[1000];                                    \
+            snprintf( buff, 1000, msg, arg0 );                  \
+            Vnm_print(channel, "%s: %s\n", __FUNCTION__, buff); \
         } while(0)
 
-#define VMESSAGE2(msg, arg0, arg1)                        \
-        do {                                              \
-            char buff[1000];                              \
-            snprintf( buff, 1000, msg, arg0, arg1 );      \
-            Vnm_print(0, "%s: %s\n", __FUNCTION__, buff); \
+#define VCHANNELEDMESSAGE2(channel, msg, arg0, arg1)            \
+        do {                                                    \
+            char buff[1000];                                    \
+            snprintf( buff, 1000, msg, arg0, arg1 );            \
+            Vnm_print(channel, "%s: %s\n", __FUNCTION__, buff); \
         } while(0)
 
-#define VMESSAGE3(msg, arg0, arg1, arg2)                  \
-        do {                                              \
-            char buff[1000];                              \
-            snprintf(buff, 1000, msg, arg0, arg1, arg2);  \
-            Vnm_print(0, "%s: %s\n", __FUNCTION__, buff); \
+#define VCHANNELEDMESSAGE3(channel, msg, arg0, arg1, arg2)       \
+        do {                                                     \
+            char buff[1000];                                     \
+            snprintf(buff, 1000, msg, arg0, arg1, arg2);         \
+            Vnm_print(channel, "%s: %s\n", __FUNCTION__, buff);  \
         } while(0)
+
+#define VMESSAGE0(msg)                   VCHANNELEDMESSAGE0(0, msg)
+#define VMESSAGE1(msg, arg0)             VCHANNELEDMESSAGE1(0, msg, arg0)
+#define VMESSAGE2(msg, arg0, arg1)       VCHANNELEDMESSAGE2(0, msg, arg0, arg1)
+#define VMESSAGE3(msg, arg0, arg1, arg2) VCHANNELEDMESSAGE3(0, msg, arg0, arg1, arg2)
+
+#define VERRMSG0(msg)                    VCHANNELEDMESSAGE0(2, msg)
+#define VERRMSG1(msg, arg0)              VCHANNELEDMESSAGE1(2, msg, arg0)
+#define VERRMSG2(msg, arg0, arg1)        VCHANNELEDMESSAGE2(2, msg, arg0, arg1)
+#define VERRMSG3(msg, arg0, arg1, arg2)  VCHANNELEDMESSAGE3(2, msg, arg0, arg1, arg2)
 #endif
 
-/** Utility assertion; if it fails prints a message and aborts
- *  @author Tucker Beck
- *  @ingroup Vhal
- *  @note    The do{...} while(0) simply enforces that a semicolon at the end
+
+
+/* Utility assertions.  If they fail, they print out messages with possible
+ * arguments and then abort
+ * The do{...} while(0) simply enforces that a semicolon appears at the end
  */
+#ifdef DEBUG
 #define VASSERT_MSG0(cnd, msg)                                                                           \
     do {                                                            \
         if( (cnd) == 0 ) {                                          \
@@ -685,11 +711,6 @@ typedef enum eVdata_Format Vdata_Format;
         }                                                           \
     } while(0)
 
-/** Utility assertion; if it fails prints a message with an argument and aborts
- *  @author Tucker Beck
- *  @ingroup Vhal
- *  @note    The do{...} while(0) simply enforces that a semicolon at the end
- */
 #define VASSERT_MSG1(cnd, msg, arg)                                  \
     do {                                                             \
         if( (cnd) == 0 ) {                                           \
@@ -702,11 +723,6 @@ typedef enum eVdata_Format Vdata_Format;
         }                                                            \
     } while(0)
 
-/** Utility assertion; if it fails prints a message with an argument and aborts
- *  @author Tucker Beck
- *  @ingroup Vhal
- *  @note    The do{...} while(0) simply enforces that a semicolon at the end
- */
 #define VASSERT_MSG2(cnd, msg, arg0, arg1)                           \
     do {                                                             \
         if( (cnd) == 0 ) {                                           \
@@ -718,12 +734,49 @@ typedef enum eVdata_Format Vdata_Format;
             abort();                                                 \
         }                                                            \
     } while(0)
+#else
+#define VASSERT_MSG0(cnd, msg)                                                                           \
+    do {                                                            \
+        if( (cnd) == 0 ) {                                          \
+            Vnm_print(2, "%[%s()]: ERROR:\n"                        \
+                         "    Assertion Failed (%s): %s\n\n",       \
+                      __FUNCTION__, #cnd, msg);                     \
+            abort();                                                \
+        }                                                           \
+    } while(0)
 
-/** Conditional warning; if true prints a message
- *  @author Tucker Beck
- *  @ingroup Vhal
- *  @note    The do{...} while(0) simply enforces that a semicolon at the end
+#define VASSERT_MSG1(cnd, msg, arg)                                  \
+    do {                                                             \
+        if( (cnd) == 0 ) {                                           \
+            char buff[1000];                                         \
+            snprintf( buff, 1000, msg, arg );                        \
+            Vnm_print(2, "[%s()]: ERROR:\n"                          \
+                         "    Assertion Failed (%s): %s\n\n",        \
+                      __FUNCTION__, #cnd, buff);                     \
+            abort();                                                 \
+        }                                                            \
+    } while(0)
+
+#define VASSERT_MSG2(cnd, msg, arg0, arg1)                           \
+    do {                                                             \
+        if( (cnd) == 0 ) {                                           \
+            char buff[1000];                                         \
+            snprintf( buff, 1000, msg, arg0, arg1 );                 \
+            Vnm_print(2, "[%s()]: ERROR:\n"                          \
+                         "    Assertion Failed (%s): %s\n\n",        \
+                      __FUNCTION__, #cnd, buff);                     \
+            abort();                                                 \
+        }                                                            \
+    } while(0)
+#endif
+
+
+
+/* Utility warning.  Tests a condition and if it fails prints out a message
+ * with optional arguments
+ * The do{...} while(0) simply enforces that a semicolon at the end
  */
+#ifdef DEBUG
 #define VWARN_MSG0(cnd, msg)                                              \
         do {                                                              \
                 if( (cnd) == 0 ) {                                        \
@@ -740,11 +793,6 @@ typedef enum eVdata_Format Vdata_Format;
                 }                                                         \
         } while(0)
 
-/** Conditional warning; if true prints a message and an argument
- *  @author Tucker Beck
- *  @ingroup Vhal
- *  @note    The do{...} while(0) simply enforces that a semicolon at the end
- */
 #define VWARN_MSG1(cnd, msg, arg0)                                        \
         do {                                                              \
                 if( (cnd) == 0 ) {                                        \
@@ -763,11 +811,6 @@ typedef enum eVdata_Format Vdata_Format;
                 }                                                         \
         } while(0)
 
-/** Conditional warning; if true prints a message and an argument
- *  @author Tucker Beck
- *  @ingroup Vhal
- *  @note    The do{...} while(0) simply enforces that a semicolon at the end
- */
 #define VWARN_MSG2(cnd, msg, arg0, arg1)                                  \
         do {                                                              \
                 if( (cnd) == 0 ) {                                        \
@@ -785,12 +828,53 @@ typedef enum eVdata_Format Vdata_Format;
                                 );                                        \
                 }                                                         \
         } while(0)
+#else
+#define VWARN_MSG0(cnd, msg)                                              \
+        do {                                                              \
+                if( (cnd) == 0 ) {                                        \
+                        Vnm_print(                                        \
+                                2,                                        \
+                                "[%s()]: WARNING:\n"                      \
+                                "    %s\n\n",                             \
+                                __FUNCTION__,                             \
+                                msg                                       \
+                                );                                        \
+                }                                                         \
+        } while(0)
 
-/** Prints a message and aborts
- *  @author Tucker Beck
- *  @ingroup Vhal
- *  @note    The do{...} while(0) simply enforces that a semicolon at the end
- */
+#define VWARN_MSG1(cnd, msg, arg0)                                        \
+        do {                                                              \
+                if( (cnd) == 0 ) {                                        \
+                        char buff[1000];                                  \
+                        snprintf(buff, 1000, msg, arg0);                  \
+                        Vnm_print(                                        \
+                                2,                                        \
+                                "[%s()]: WARNING:\n"                      \
+                                "    %s\n\n",                             \
+                                __FUNCTION__,                             \
+                                buff                                      \
+                                );                                        \
+                }                                                         \
+        } while(0)
+
+#define VWARN_MSG2(cnd, msg, arg0, arg1)                                  \
+        do {                                                              \
+                if( (cnd) == 0 ) {                                        \
+                        char buff[1000];                                  \
+                        snprintf(buff, 1000, msg, arg0, arg1);            \
+                        Vnm_print(                                        \
+                                2,                                        \
+                                "[%s()]: WARNING:\n"                      \
+                                "    %s\n\n",                             \
+                                __FUNCTION__,                             \
+                                buff                                      \
+                                );                                        \
+                }                                                         \
+        } while(0)
+#endif
+
+/* Utility Abort.  Prints a message with optional arugments and aborts */
+#ifdef DEBUG
 #define VABORT_MSG0(msg)                                      \
         do {                                                  \
             Vnm_print(2, "%s:%d [%s()]: ABORTING:\n"          \
@@ -799,11 +883,6 @@ typedef enum eVdata_Format Vdata_Format;
             abort();                                          \
         } while(0)
 
-/** Prints a message with an argument and aborts
- *  @author Tucker Beck
- *  @ingroup Vhal
- *  @note    The do{...} while(0) simply enforces that a semicolon at the end\
- */
 #define VABORT_MSG1(msg, arg)                                  \
         do {                                                   \
             char buff[1000];                                   \
@@ -814,11 +893,6 @@ typedef enum eVdata_Format Vdata_Format;
             abort();                                           \
         } while(0)
 
-/** Prints a message with an argument and aborts
- *  @author Tucker Beck
- *  @ingroup Vhal
- *  @note    The do{...} while(0) simply enforces that a semicolon at the end
- */
 #define VABORT_MSG2(msg, arg0, arg1)                           \
         do {                                                   \
             char buff[1000];                                   \
@@ -828,7 +902,40 @@ typedef enum eVdata_Format Vdata_Format;
                       __FILE__, __LINE__, __FUNCTION__, buff); \
             abort();                                           \
         } while(0)
+#else
+#define VABORT_MSG0(msg)                        \
+        do {                                    \
+            Vnm_print(2, "%[%s()]: ABORTING:\n" \
+                         "    %s\n\n",          \
+                      __FUNCTION__, msg);       \
+            abort();                            \
+        } while(0)
 
+#define VABORT_MSG1(msg, arg)                  \
+        do {                                   \
+            char buff[1000];                   \
+            snprintf( buff, 1000, msg, arg );  \
+            Vnm_print(2, "[%s()]: ABORTING:\n" \
+                         "    %s\n\n",         \
+                      __FUNCTION__, buff);     \
+            abort();                           \
+        } while(0)
+
+#define VABORT_MSG2(msg, arg0, arg1)                \
+        do {                                        \
+            char buff[1000];                        \
+            snprintf( buff, 1000, msg, arg0, arg1); \
+            Vnm_print(2, "[%s()]: ABORTING:\n"      \
+                         "    %s\n\n",              \
+                      __FUNCTION__, buff);          \
+            abort();                                \
+        } while(0)
+#endif
+
+
+
+/* Utility expression printers.  Print the expression and its value */
+#ifdef DEBUG
 #define PRINT_INT(expr)                                             \
     do {                                                            \
         Vnm_print(2, "%s:%d [%s()]: %s == %d\n",                    \
@@ -840,6 +947,10 @@ typedef enum eVdata_Format Vdata_Format;
         Vnm_print(2, "%s:%d [%s()]: %s == %f\n\n",                \
                   __FILE__, __LINE__, __FUNCTION__, #expr, expr); \
     } while(0)
+#else
+#define PRINT_INT(expr)
+#define PRINT_DBL(expr)
+#endif
 
 #define VMALLOC(vmem, n, type) ((type*)Vmem_malloc(vmem, n, sizeof(type)))
 

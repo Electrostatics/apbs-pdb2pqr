@@ -261,11 +261,11 @@ double bf, oh, cputme;
  *  @note    Replaces prtstp from mgsubd.f
  */
 VEXTERNC void Vprtstp(
-		int *iok,      ///< @todo  Document
-		int *iters,    ///< @todo  Document
-		double *rsnrm, ///< @todo  Document
-		double *rsden, ///< @todo  Document
-		double *orsnrm ///< @todo  Document
+		int  iok,      ///< @todo  Document
+		int  iters,    ///< @todo  Document
+		double  rsnrm, ///< @todo  Document
+		double  rsden, ///< @todo  Document
+		double  orsnrm ///< @todo  Document
         );
 
 

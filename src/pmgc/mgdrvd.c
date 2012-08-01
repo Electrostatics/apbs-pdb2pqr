@@ -57,47 +57,47 @@ VPUBLIC void Vmgdriv(int* iparm, double* rparm,
         double* ccf, double* fcf, double* tcf) {
 
     // The following variables will be returned from mgsz
-    int nxc;    // @todo Document this function
-    int nyc;
-    int nzc;
-    int nf;
-    int nc;
-    int narr;
-    int narrc;
-    int n_rpc;
-    int n_iz;
-    int n_ipc;
-    int iretot;
-    int iintot;
+    int nxc    = 0;
+    int nyc    = 0;
+    int nzc    = 0;
+    int nf     = 0;
+    int nc     = 0;
+    int narr   = 0;
+    int narrc  = 0;
+    int n_rpc  = 0;
+    int n_iz   = 0;
+    int n_ipc  = 0;
+    int iretot = 0;
+    int iintot = 0;
 
     // Miscellaneous variables
-    int nrwk;
-    int niwk;
-    int nx;
-    int ny;
-    int nz;
-    int nlev;
-    int ierror;
-    int mxlv;
-    int mgcoar;
-    int mgdisc;
-    int mgsolv;
-    int k_iz;
-    int k_ipc;
-    int k_rpc;
-    int k_ac;
-    int k_cc;
-    int k_fc;
-    int k_pc;
+    int nrwk   = 0;
+    int niwk   = 0;
+    int nx     = 0;
+    int ny     = 0;
+    int nz     = 0;
+    int nlev   = 0;
+    int ierror = 0;
+    int mxlv   = 0;
+    int mgcoar = 0;
+    int mgdisc = 0;
+    int mgsolv = 0;
+    int k_iz   = 0;
+    int k_ipc  = 0;
+    int k_rpc  = 0;
+    int k_ac   = 0;
+    int k_cc   = 0;
+    int k_fc   = 0;
+    int k_pc   = 0;
 
     // Utility pointers to help in passing values
-    int *iz;
-    int *ipc;
-    double *rpc;
-    double *pc;
-    double *ac;
-    double *cc;
-    double *fc;
+    int *iz     = VNULL;
+    int *ipc    = VNULL;
+    double *rpc = VNULL;
+    double *pc  = VNULL;
+    double *ac  = VNULL;
+    double *cc  = VNULL;
+    double *fc  = VNULL;
 
     // Decode some parameters
     nrwk   = VAT(iparm, 1);
@@ -108,19 +108,17 @@ VPUBLIC void Vmgdriv(int* iparm, double* rparm,
     nlev   = VAT(iparm, 6);
 
     // Perform some checks on input
-    if ((nlev <= 0) || (nx <= 0) || (ny <= 0) || (nz <= 0)){
-    	Vnm_print(2, "Vmgdriv: nx, ny, nz, and nlev must be >= 0");
-        ierror = -1;
-        VAT(iparm, 51) = ierror;
-        return;
-    }
+    VASSERT_MSG1(nlev > 0, "nlev must be positive: %d", nlev);
+    VASSERT_MSG1(  nx > 0, "nx must be positive: %d", nx);
+    VASSERT_MSG1(  ny > 0, "nv must be positive: %d", ny);
+    VASSERT_MSG1(  nz > 0, "nz must be positive: %d", nz);
+
     mxlv = Vmaxlev(nx, ny, nz);
-    if (nlev > mxlv) {
-    	Vnm_print(2, "Vmgdriv: max levels for your grid size is %d\n", mxlv);
-    	ierror = -2;
-    	VAT(iparm, 51) = ierror;
-    	return;
-    }
+    VASSERT_MSG2(
+        nlev <= mxlv,
+        "number of levels exceeds maximum: %d > %d",
+        nlev, mxlv
+        );
 
 
     // Extract basic grid sizes, etc.
@@ -138,13 +136,16 @@ VPUBLIC void Vmgdriv(int* iparm, double* rparm,
                 &iretot, &iintot);
 
 	// Perform some more checks on input
-	if ((nrwk < iretot) || (niwk < iintot)) {
-		Vnm_print(2, "Vmgdrvd: real work space must be less than %d", iretot);
-		Vnm_print(2, "Vmgdrvd: integer work space must be less than %d", iintot);
-		ierror = -3;
-		VAT(iparm, 51) = ierror;
-		return;
-	}
+    VASSERT_MSG2(
+        iretot >= nrwk,
+        "real workspace exceeds maximum size: %d > %d",
+        nrwk, iretot
+        );
+    VASSERT_MSG2(
+        iintot >= niwk,
+        "integer workspace exceeds maximum size: %d > %d",
+        niwk, iintot
+        );
 
 	// Split up the integer work array
 	k_iz  = 1;
@@ -159,7 +160,6 @@ VPUBLIC void Vmgdriv(int* iparm, double* rparm,
 	// k_ac_after =  4 * nf +  4 * narrc;
 	// k_ac_after =  4 * nf + 14 * narrc;
 	// k_ac_after = 14 * nf + 14 * narrc;
-
 
 	iz  = RAT(iwork, k_iz);
 	ipc = RAT(iwork, k_ipc);
@@ -192,66 +192,70 @@ VPUBLIC void Vmgdriv2(int *iparm, double *rparm,
         double *a1cf, double *a2cf, double *a3cf,
         double *ccf, double *fcf, double *tcf) {
 
+    // @todo Document this function
+
 	// Miscellaneous Variables
-	int mgkey;      // @todo Document this function
-	int itmax;
-	int iok;
-	int iinfo;
-	int istop;
-	int ipkey;
-	int nu1;
-	int nu2;
-	int ilev;
-	int ido;
-	int iters;
-	int ierror;
-	int nlev_real;
-	int ibound;
-	int mgprol;
-	int mgcoar;
-	int mgsolv;
-	int mgdisc;
-	int mgsmoo;
-	int iperf;
-	int mode;
-	double epsiln;
-	double epsmac;
-	double errtol;
-	double omegal;
-	double omegan;
-	double bf;
-	double oh;
-	double tsetupf;
-	double tsetupc;
-	double tsolve;
+	int mgkey     = 0;
+	int itmax     = 0;
+	int iok       = 0;
+	int iinfo     = 0;
+	int istop     = 0;
+	int ipkey     = 0;
+	int nu1       = 0;
+	int nu2       = 0;
+	int ilev      = 0;
+	int ido       = 0;
+	int iters     = 0;
+	int ierror    = 0;
+	int nlev_real = 0;
+	int ibound    = 0;
+	int mgprol    = 0;
+	int mgcoar    = 0;
+	int mgsolv    = 0;
+	int mgdisc    = 0;
+	int mgsmoo    = 0;
+	int iperf     = 0;
+	int mode      = 0;
+
+	double epsiln  = 0.0;
+	double epsmac  = 0.0;
+	double errtol  = 0.0;
+	double omegal  = 0.0;
+	double omegan  = 0.0;
+	double bf      = 0.0;
+	double oh      = 0.0;
+	double tsetupf = 0.0;
+	double tsetupc = 0.0;
+	double tsolve  = 0.0;
 
 
 
 	// More miscellaneous variables
-	int itmax_p;
-	int iters_p;
-	int iok_p;
-	int iinfo_p;
-	double errtol_p;
-	double rho_p;
-	double rho_min;
-	double rho_max;
-	double rho_min_mod;
-	double rho_max_mod;
-	int nxf;
-	int nyf;
-	int nzf;
-	int nxc;
-	int nyc;
-	int nzc;
-	int level;
-	int nlevd;
+	int itmax_p = 0;
+	int iters_p = 0;
+	int iok_p   = 0;
+	int iinfo_p = 0;
+
+	double errtol_p    = 0.0;
+	double rho_p       = 0.0;
+	double rho_min     = 0.0;
+	double rho_max     = 0.0;
+	double rho_min_mod = 0.0;
+	double rho_max_mod = 0.0;
+
+	int nxf   = 0;
+	int nyf   = 0;
+	int nzf   = 0;
+	int nxc   = 0;
+	int nyc   = 0;
+	int nzc   = 0;
+	int level = 0;
+	int nlevd = 0;
+
+
 
 	// Utility variables
-	int numlev;
-	double rsnrm;
-	double rsden;
-	double orsnrm;
+	int numlev = 0;
 
     // Get the value of nlev here because it is needed for the iz matrix
     int nlev   = VAT(iparm,  6);
@@ -278,11 +282,14 @@ VPUBLIC void Vmgdriv2(int *iparm, double *rparm,
     omegal = VAT(rparm,  9);
     omegan = VAT(rparm, 10);
 
+    /// @todo replace timer setup
+    Vprtstp(0, -99, 0.0, 0.0, 0.0);
+
     // Build the multigrid data structure in iz
     Vbuildstr(nx, ny, nz, &nlev, iz);
 
-    /// @todo Add timing again
-    VMESSAGE0( "Fine problem setup" );
+    // Start the timer
+    Vnm_tstart(30, "Vmgdrv2: fine problem setup");
 
     // Build operator and rhs on fine grid
     ido = 0;
@@ -295,7 +302,11 @@ VPUBLIC void Vmgdriv2(int *iparm, double *rparm,
             a1cf, a2cf, a3cf,
             ccf, fcf, tcf);
 
-    VMESSAGE0( "Coarse problem setup" );
+    // Stop the timer
+    Vnm_tstop(30, "Vmgdrv2: fine problem setup");
+
+    // Start the timer
+    Vnm_tstart(30, "Vmgdrv2: coarse problem setup");
 
     // Build operator and rhs on all coarse grids
     ido = 1;
@@ -307,6 +318,9 @@ VPUBLIC void Vmgdriv2(int *iparm, double *rparm,
             gxcf, gycf, gzcf,
             a1cf, a2cf, a3cf,
             ccf, fcf, tcf);
+
+    // Stop the timer
+    Vnm_tstop(30, "Vmgdrv2: coarse problem setup");
 
     // Determine Machine Epsilon
     epsiln = Vnm_epsmac();
@@ -463,7 +477,8 @@ VPUBLIC void Vmgdriv2(int *iparm, double *rparm,
 	// Impose zero dirichlet boundary conditions (now in source fcn)
         VfboundPMG00(nx, ny, nz, u);
 
-        /**************************************************************/
+    // Start the timer
+    Vnm_tstart(30, "Vmgdrv2: solve");
 
 	// Call specified multigrid method
 	if (mode == 0 || mode == 2) {
@@ -527,6 +542,9 @@ VPUBLIC void Vmgdriv2(int *iparm, double *rparm,
             VABORT_MSG1("Bad mgkey given: %d", mgkey);
 		}
 	}
+
+    // Stop the timer
+    Vnm_tstop(30, "Vmgdrv2: solve");
 
 	// Restore boundary conditions
 	ibound = 1;

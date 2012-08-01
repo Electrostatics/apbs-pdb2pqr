@@ -208,9 +208,16 @@ VPUBLIC void Vnewdriv2(int *iparm, double *rparm,
 
     // Utility variables
     int numlev;
-    double rsnrm;
-    double rsden;
-    double orsnrm;
+
+    int iok_t;
+    int iters_t;
+    double rsnrm_t;
+    double rsden_t;
+    double orsnrm_t;
+
+    int i;
+
+
 
     // Decode the iparm array
     nlev   = VAT(iparm, 6);
@@ -231,14 +238,13 @@ VPUBLIC void Vnewdriv2(int *iparm, double *rparm,
     omegal = VAT(rparm,  9);
     omegan = VAT(rparm, 10);
 
-
-
-    /// @todo replace timer
+    Vprtstp(0, -99, 0.0, 0.0, 0.0);
 
     // Build the multigrid data structure in iz
     Vbuildstr(nx, ny, nz, &nlev, iz);
 
-    VMESSAGE0("Fine problem setup");
+    // Start the timer
+    Vnm_tstart(30, "Vnewdrv2: fine problem setup");
 
     // Build op and rhs on fine grid ***
     ido = 0;
@@ -252,7 +258,11 @@ VPUBLIC void Vnewdriv2(int *iparm, double *rparm,
             a1cf, a2cf, a3cf,
             ccf, fcf, tcf);
 
-    VMESSAGE0("Coarse problem setup");
+    // Stop the timer
+    Vnm_tstop(30, "Vnewdrv2: fine problem setup");
+
+    // Start the timer
+    Vnm_tstart(30, "Vnewdrv2: coarse problem setup");
 
     // Build op and rhs on all coarse grids
     ido = 1;
@@ -265,6 +275,9 @@ VPUBLIC void Vnewdriv2(int *iparm, double *rparm,
             gxcf, gycf, gzcf,
             a1cf, a2cf, a3cf,
             ccf, fcf, tcf);
+
+    // Stop the timer
+    Vnm_tstop(30, "Vnewdrv2: coarse problem setup");
 
 
 
@@ -286,10 +299,11 @@ VPUBLIC void Vnewdriv2(int *iparm, double *rparm,
     // Determine machine epsilon
     epsiln = Vnm_epsmac();
 
-
-
     // Impose zero dirichlet boundary conditions (now in source fcn)
     VfboundPMG00(nx, ny, nz, u);
+
+    // Start the timer
+    Vnm_tstart(30, "Vnewdrv2: solve");
 
     // Call specified multigrid method
     nlev_real = nlev;
@@ -321,6 +335,9 @@ VPUBLIC void Vnewdriv2(int *iparm, double *rparm,
     } else {
         VABORT_MSG1("Bad mgkey given: %d", mgkey);
     }
+
+    // Stop the timer
+    Vnm_tstop(30, "Vnewdrv2: solve");
 
     // Restore boundary conditions
     ibound = 1;

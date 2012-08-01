@@ -61,16 +61,19 @@ VPUBLIC void Vbuildops(
         double *ccf, double *fcf, double *tcf
         ) {
 
-    int lev;    // @todo Document this function
-    int nxx;
-    int nyy;
-    int nzz;
-    int nxold;
-    int nyold;
-    int nzold;
-    int numdia;
-    int key;
-    int i;      // An indexing variable used in loops
+    // @todo Document this function
+    int lev = 0;
+    int nxx = 0;
+    int nyy = 0;
+    int nzz = 0;
+    int nxold = 0;
+    int nyold = 0;
+    int nzold = 0;
+    int numdia = 0;
+    int key = 0;
+
+    // Utility variables
+    int i;
 
     MAT2(iz, 50, *nlev);
 
@@ -79,18 +82,14 @@ VPUBLIC void Vbuildops(
     nyy = *ny;
     nzz = *nz;
 
-
-
     // Build the operator a on the finest level
     if (*ido == 0 || *ido == 2) {
+
         lev = 1;
 
         // Some i/o
-        /*
-        if (iinfo != 0) {
-            Vnm_print(0, "BUILDOPS: (FINE): %03d, %03d, %03d\n", nxx, nyy, nzz);
-        }
-        */
+        if (*iinfo > 0)
+            VMESSAGE3("Fine: (%03d, %03d, %03d)", nxx, nyy, nzz);
 
         // Finest level discretization
         VbuildA(&nxx, &nyy, &nzz,
@@ -102,24 +101,21 @@ VPUBLIC void Vbuildops(
                 RAT(a1cf, VAT2(iz, 1,lev)), RAT(a2cf, VAT2(iz, 1,lev)), RAT(a3cf, VAT2(iz,  1,lev)),
                  RAT(ccf, VAT2(iz, 1,lev)),  RAT(fcf, VAT2(iz, 1,lev)));
 
+        VMESSAGE2("Operator stencil (lev, numdia) = (%d, %d)", lev, numdia);
+
         // Now initialize the differential operator offset
-        // Vnm_print(0, "BUILDOPS: operator stencil (lev, numdia) = (%d, %d)\n",
-        //         *lev, *numdia);
         VAT2(iz, 7, lev+1) = VAT2(iz, 7, lev) + numdia * nxx * nyy * nzz;
 
         // Debug
         if (*iinfo > 7) {
-
-
-
             Vprtmatd(&nxx, &nyy, &nzz,
                     RAT(ipc, VAT2(iz, 5,lev)), RAT(rpc, VAT2(iz, 6,lev)), RAT(ac, VAT2(iz, 7,lev)));
-
         }
     }
 
     // Build the (nlev-1) level operators
     if (*ido == 1 || *ido == 2 || *ido == 3) {
+
         for (lev=2; lev<=*nlev; lev++) {
             nxold = nxx;
             nyold = nyy;
@@ -141,11 +137,9 @@ VPUBLIC void Vbuildops(
                 // Differential operator this level with standard disc.
                 if (*mgcoar == 0) {
 
-                    /*
-                    if (iinfo != 0)
-                       Vnm_print(0, "BUILDOPS: STAND: (%03d, %03d, %03d)\n",
-                               nxx, nyy, nzz);
-                    */
+                    // Some i/o
+                    if (*iinfo > 0)
+                        VMESSAGE3("Stand: (%03d, %03d, %03d)", nxx, nyy, nzz);
 
 
 
@@ -173,11 +167,9 @@ VPUBLIC void Vbuildops(
                 // Differential operator this level with harmonic disc.
                 else if (*mgcoar == 1) {
 
-                	/*
-                	if (iinfo != 0)
-                		Vnm_print(2, "BUILDOPS: HARM0: (%03d, %03d, %03d)\n",
-                				nxx,nyy,nzz );
-					*/
+                    // Some i/o
+                    if (*iinfo > 0)
+                        VMESSAGE3("Harm0: (%03d, %03d, %03d)", nxx, nyy, nzz);
 
                     Vbuildharm0(&nxx, &nyy, &nzz, &nxold, &nyold, &nzold,
                     		  RAT(xf, VAT2(iz, 8, lev  )),   RAT(yf, VAT2(iz, 9, lev  )),   RAT(zf, VAT2(iz, 10, lev  )),
@@ -202,12 +194,9 @@ VPUBLIC void Vbuildops(
                 // Differential operator with galerkin formulation ***
 			    else if (*mgcoar == 2) {
 
-			    	/*
-
-			    	 if (iinfo != 0)
-			    	 	 Vnm_print(2, "BUILDOPS: GALER: (%03d, %03d, %03d)\n",
-			    	 	 	 	 nxx, nyy, nzz);
-					 */
+                    // Some i/o
+                    if (*iinfo > 0)
+                        VMESSAGE3("Galer: (%03d, %03d, %03d)", nxx, nyy, nzz);
 
 			    	Vbuildgaler0(&nxold, &nyold, &nzold,
 			    			&nxx, &nyy, &nzz,
@@ -225,7 +214,7 @@ VPUBLIC void Vbuildops(
 							RAT(tcf, VAT2(iz, 1,lev-1)), RAT(tcf, VAT2(iz, 1,lev)));
 			    }
 			    else {
-                    Vnm_print(2, "BUILDOPS: bad mgcoar key given...\n");
+                    VABORT_MSG1("Bad mgcoar value given: %d", *mgcoar);
 			    }
 
                 // Now initialize the differential operator offset
@@ -249,8 +238,9 @@ VPUBLIC void Vbuildops(
 			Vbuildband(&key, &nxx, &nyy, &nzz,
 					RAT(ipc, VAT2(iz, 5,lev  )), RAT(rpc, VAT2(iz, 6,lev  )), RAT(ac, VAT2(iz, 7,lev  )),
 					RAT(ipc, VAT2(iz, 5,lev+1)), RAT(rpc, VAT2(iz, 6,lev+1)), RAT(ac, VAT2(iz, 7,lev+1)));
+
 			if (key == 1) {
-				Vnm_print(2, "BUILDOPS: changing your MGSOLV to iterative...\n");
+                VERRMSG0("Changing your mgsolv to iterative");
 				*mgsolv = 0;
 			}
         }
@@ -505,21 +495,22 @@ VPUBLIC int Vmaxlev(int n1, int n2, int n3) {
 
 
 
-VPUBLIC void Vprtstp(int *iok, int *iters,
-		double *rsnrm, double *rsden, double *orsnrm) {
+VPUBLIC void Vprtstp(int iok, int iters,
+		double rsnrm, double rsden, double orsnrm) {
 
-    double relres, contrac;
+    double relres = 0.0;
+    double contrac = 0.0;
 
     // Initializing timer
-    if (*iters == -99) {
+    if (iters == -99) {
     	// Vnm_tstart(40, "MG iteration");
     	cputme = 0.0;
     	return;
     }
 
     // Setup for the iteration
-    else if (*iters == -1) {
-    	Vnm_tstop(40, "MG interation");
+    else if (iters == -1) {
+    	Vnm_tstop(40, "MG iteration");
     	return;
     }
 
@@ -530,30 +521,26 @@ VPUBLIC void Vprtstp(int *iok, int *iters,
     	// Vnm_tstop(40, "MG iteration");
 
     	// Relative residual
-    	if (*rsden == 0.0) {
+    	if (rsden == 0.0) {
     		relres = 1.0e6;
-			Vnm_print(2, "Vprtstp: avoided division by zero\n");
+			VERRMSG0("Vprtstp: avoided division by zero\n");
     	} else {
-			relres = (*rsnrm) / (*rsden);
+			relres = rsnrm / rsden;
     	}
 
     	// Contraction number
-    	if (*orsnrm == 0.0) {
+    	if (orsnrm == 0.0) {
     		contrac = 1.0e6;
-			Vnm_print(2, "Vprtstp: avoided division by zero\n");
+            VERRMSG0("avoided division by zero\n");
     	} else {
-			contrac = (*rsnrm) / (*orsnrm);
+			contrac = rsnrm / orsnrm;
     	}
 
     	// The i/o
-    	if (*iok == 1) {
-			Vnm_print(0, "PMG: iteration = %d\n", *iters);
-			Vnm_print(0, "PMG: relative residual = %f\n", relres);
-			Vnm_print(0, "PMG: contraction number = %f\n", contrac);
-    	} else if (*iok == 2) {
-			Vnm_print(0, "PMG: iteration = %d\n", *iters);
-			Vnm_print(0, "PMG: relative residual = %f\n", relres);
-			Vnm_print(0, "PMG: contraction number = %f\n", contrac);
+    	if (iok == 1 || iok == 2) {
+            VMESSAGE1("iteration = %d", iters);
+            VMESSAGE1("relative residual = %e", relres);
+            VMESSAGE1("contraction number = %e", contrac);
     	}
     }
 }

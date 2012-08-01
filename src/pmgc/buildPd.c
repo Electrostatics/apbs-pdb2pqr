@@ -290,6 +290,8 @@ VPUBLIC void VbuildPb_op7(int *nxf, int *nyf, int *nzf,
     quarter =  1.0 /  4.0;
     eighth  =  1.0 /  8.0;
 
+    //fprintf(data, "%s\n", PRINT_FUNC);
+
     for (kk = 2; kk < *nzc - 1; kk++) {
         k = 2 * kk - 1;
 
@@ -325,6 +327,8 @@ VPUBLIC void VbuildPb_op7(int *nxf, int *nyf, int *nzf,
 
                 VAT3( oPC, ii, jj, kk) = won;
 
+                //fprintf(data, "%19.12E\n", VAT3(oPC, ii, jj, kk));
+
                 // *************************************************************
                 // *** > oPN;
                 // *************************************************************
@@ -335,6 +339,8 @@ VPUBLIC void VbuildPb_op7(int *nxf, int *nyf, int *nzf,
                                                - VAT3(  oE,   i, jp1,   k)
                                                - VAT3(  uC,   i, jp1, km1)
                                                - VAT3(  uC,   i, jp1,   k));
+
+                //fprintf(data, "%19.12E\n", VAT3(oPN, ii, jj, kk));
 
                 // *************************************************************
                 // *** > oPS;
@@ -347,6 +353,8 @@ VPUBLIC void VbuildPb_op7(int *nxf, int *nyf, int *nzf,
                                                  - VAT3(  uC,   i, jm1, km1)
                                                  - VAT3(  uC,   i, jm1,   k));
 
+                //fprintf(data, "%19.12E\n", VAT3(oPS, ii, jj, kk));
+
                 // *************************************************************
                 // *** > oPE;
                 // *************************************************************
@@ -358,6 +366,8 @@ VPUBLIC void VbuildPb_op7(int *nxf, int *nyf, int *nzf,
                                                - VAT3(  oN, ip1,   j,   k)
                                                - VAT3(  oN, ip1, jm1,   k));
 
+                //fprintf(data, "%19.12E\n", VAT3(oPE, ii, jj, kk));
+
                 // *************************************************************
                 // *** > oPW;
                 // *************************************************************
@@ -368,6 +378,8 @@ VPUBLIC void VbuildPb_op7(int *nxf, int *nyf, int *nzf,
                                                  - VAT3(  uC, im1,   j,   k)
                                                  - VAT3(  oN, im1,   j,   k)
                                                  - VAT3(  oN, im1, jm1,   k));
+
+                //fprintf(data, "%19.12E\n", VAT3(oPW, ii, jj, kk));
 
                 // *************************************************************
                 // *** > oPNE;
@@ -383,6 +395,8 @@ VPUBLIC void VbuildPb_op7(int *nxf, int *nyf, int *nzf,
                           - VAT3(  uC, ip1, jp1,   k)
                         );
 
+                //fprintf(data, "%19.12E\n", VAT3(oPNE, ii, jj, kk));
+
                 // *************************************************************
                 // *** > oPNW;
                 // *************************************************************
@@ -396,6 +410,8 @@ VPUBLIC void VbuildPb_op7(int *nxf, int *nyf, int *nzf,
                           - VAT3(  uC, im1, jp1, km1)
                           - VAT3(  uC, im1, jp1,   k)
                         );
+
+                //fprintf(data, "%19.12E\n", VAT3(oPNW, ii, jj, kk));
 
                 // *************************************************************
                 // *** > oPSE;
@@ -411,6 +427,8 @@ VPUBLIC void VbuildPb_op7(int *nxf, int *nyf, int *nzf,
                       - VAT3(  uC, ip1, jm1,   k)
                     );
 
+                //fprintf(data, "%19.12E\n", VAT3(oPSE, ii, jj, kk));
+
                 // *************************************************************
                 // *** > oPSW;
                 // *************************************************************
@@ -424,6 +442,8 @@ VPUBLIC void VbuildPb_op7(int *nxf, int *nyf, int *nzf,
                       - VAT3(  uC, im1, jm1, km1)
                       - VAT3(  uC, im1, jm1,   k)
                     );
+
+                //fprintf(data, "%19.12E\n", VAT3(oPSW, ii, jj, kk));
 
                 // *************************************************************
                 // *** > dPC;
@@ -439,6 +459,8 @@ VPUBLIC void VbuildPb_op7(int *nxf, int *nyf, int *nzf,
                         - VAT3(  oE,   i,   j, km1)
                     );
 
+                //fprintf(data, "%19.12E\n", VAT3(dPC, ii, jj, kk));
+
                 // *************************************************************
                 // *** > dPN;
                 // *************************************************************
@@ -452,6 +474,8 @@ VPUBLIC void VbuildPb_op7(int *nxf, int *nyf, int *nzf,
                       - VAT3(  oE, im1, jp1, km1)
                       - VAT3(  oE,   i, jp1, km1)
                     );
+
+                //fprintf(data, "%19.12E\n", VAT3(dPN, ii, jj, kk));
 
                 // *************************************************************
                 // *** > dPS;
@@ -467,6 +491,8 @@ VPUBLIC void VbuildPb_op7(int *nxf, int *nyf, int *nzf,
                       - VAT3(  oE,   i, jm1, km1)
                     );
 
+                //fprintf(data, "%19.12E\n", VAT3(dPS, ii, jj, kk));
+
                 // *************************************************************
                 // *** > dPE;
                 // *************************************************************
@@ -480,6 +506,8 @@ VPUBLIC void VbuildPb_op7(int *nxf, int *nyf, int *nzf,
                       - VAT3(  oN, ip1,   j, km1)
                       - VAT3(  oN, ip1, jm1, km1)
                     );
+
+                //fprintf(data, "%19.12E\n", VAT3(dPE, ii, jj, kk));
 
                 // *************************************************************
                 // *** > dPW;
@@ -495,6 +523,8 @@ VPUBLIC void VbuildPb_op7(int *nxf, int *nyf, int *nzf,
                       - VAT3(  oN, im1, jm1, km1)
                     );
 
+                //fprintf(data, "%19.12E\n", VAT3(dPW, ii, jj, kk));
+
                 // *************************************************************
                 // *** > dPNE;
                 // *************************************************************
@@ -505,6 +535,8 @@ VPUBLIC void VbuildPb_op7(int *nxf, int *nyf, int *nzf,
                       + VAT3(  oE,   i, jp1, km1) * VAT3( dPN, ii, jj, kk)
                       + VAT3(  oN, ip1,   j, km1) * VAT3( dPE, ii, jj, kk)
                     ) / VAT3(  oC, ip1, jp1, km1);
+
+                //fprintf(data, "%19.12E\n", VAT3(dPNE, ii, jj, kk));
 
                 // *************************************************************
                 // *** > dPNW;
@@ -517,6 +549,8 @@ VPUBLIC void VbuildPb_op7(int *nxf, int *nyf, int *nzf,
                       + VAT3(  oN, im1,   j, km1) * VAT3( dPW, ii, jj, kk)
                     ) / VAT3(  oC, im1, jp1, km1);
 
+                //fprintf(data, "%19.12E\n", VAT3(dPNW, ii, jj, kk));
+
                 // *************************************************************
                 // *** > dPSE;
                 // *************************************************************
@@ -528,6 +562,8 @@ VPUBLIC void VbuildPb_op7(int *nxf, int *nyf, int *nzf,
                       + VAT3(  oN, ip1, jm1, km1) * VAT3( dPE, ii, jj, kk)
                     ) / VAT3(  oC, ip1, jm1, km1);
 
+                //fprintf(data, "%19.12E\n", VAT3(dPSE, ii, jj, kk));
+
                 // *************************************************************
                 // *** > dPSW;
                 // *************************************************************
@@ -538,6 +574,8 @@ VPUBLIC void VbuildPb_op7(int *nxf, int *nyf, int *nzf,
                       + VAT3(  oE, im1, jm1, km1) * VAT3( dPS, ii, jj, kk)
                       + VAT3(  oN, im1, jm1, km1) * VAT3( dPW, ii, jj, kk)
                     ) / VAT3(  oC, im1, jm1, km1);
+
+                //fprintf(data, "%19.12E\n", VAT3(dPSW, ii, jj, kk));
 
                 // *************************************************************
                 // *** > uPC;
@@ -551,6 +589,8 @@ VPUBLIC void VbuildPb_op7(int *nxf, int *nyf, int *nzf,
                       - VAT3(  oE, im1,   j, kp1)
                       - VAT3(  oE,   i,   j, kp1)
                     );
+
+                //fprintf(data, "%19.12E\n", VAT3(uPC, ii, jj, kk));
 
                 // *************************************************************
                 // *** > uPN;
@@ -566,6 +606,8 @@ VPUBLIC void VbuildPb_op7(int *nxf, int *nyf, int *nzf,
                       - VAT3(  oE,   i, jp1, kp1)
                     );
 
+                //fprintf(data, "%19.12E\n", VAT3(uPN, ii, jj, kk));
+
                 // *************************************************************
                 // *** > uPS;
                 // *************************************************************
@@ -579,6 +621,8 @@ VPUBLIC void VbuildPb_op7(int *nxf, int *nyf, int *nzf,
                       - VAT3(  oE, im1, jm1, kp1)
                       - VAT3(  oE,   i, jm1, kp1)
                     );
+
+                //fprintf(data, "%19.12E\n", VAT3(uPS, ii, jj, kk));
 
                 // *************************************************************
                 // *** > uPE;
@@ -594,6 +638,8 @@ VPUBLIC void VbuildPb_op7(int *nxf, int *nyf, int *nzf,
                       - VAT3(  oN, ip1, jm1, kp1)
                     );
 
+                //fprintf(data, "%19.12E\n", VAT3(uPE, ii, jj, kk));
+
                 // *************************************************************
                 // *** > uPW;
                 // *************************************************************
@@ -608,6 +654,8 @@ VPUBLIC void VbuildPb_op7(int *nxf, int *nyf, int *nzf,
                       - VAT3(  oN, im1, jm1, kp1)
                     );
 
+                //fprintf(data, "%19.12E\n", VAT3(uPW, ii, jj, kk));
+
                 // *************************************************************
                 // *** > uPNE;
                 // *************************************************************
@@ -618,6 +666,8 @@ VPUBLIC void VbuildPb_op7(int *nxf, int *nyf, int *nzf,
                       + VAT3(  oE,   i, jp1, kp1) * VAT3( uPN, ii, jj, kk)
                       + VAT3(  oN, ip1,   j, kp1) * VAT3( uPE, ii, jj, kk)
                     ) / VAT3(  oC, ip1, jp1, kp1);
+
+                //fprintf(data, "%19.12E\n", VAT3(uPNE, ii, jj, kk));
 
                 // *************************************************************
                 // *** > uPNW;
@@ -630,6 +680,8 @@ VPUBLIC void VbuildPb_op7(int *nxf, int *nyf, int *nzf,
                       + VAT3(  oN, im1,   j, kp1) * VAT3( uPW, ii, jj, kk)
                     ) / VAT3(  oC, im1, jp1, kp1);
 
+                //fprintf(data, "%19.12E\n", VAT3(uPNW, ii, jj, kk));
+
                 // *************************************************************
                 // *** > uPSE;
                 // *************************************************************
@@ -641,6 +693,8 @@ VPUBLIC void VbuildPb_op7(int *nxf, int *nyf, int *nzf,
                       + VAT3(  oN, ip1, jm1, kp1) * VAT3( uPE, ii, jj, kk)
                     ) / VAT3(  oC, ip1, jm1, kp1);
 
+                //fprintf(data, "%19.12E\n", VAT3(uPSE, ii, jj, kk));
+
                 // *************************************************************
                 // *** > uPSW;
                 // *************************************************************
@@ -651,6 +705,8 @@ VPUBLIC void VbuildPb_op7(int *nxf, int *nyf, int *nzf,
                       + VAT3(  oE, im1, jm1, kp1) * VAT3( uPS, ii, jj, kk)
                       + VAT3(  oN, im1, jm1, kp1) * VAT3( uPW, ii, jj, kk)
                     ) / VAT3(  oC, im1, jm1, kp1);
+
+                //fprintf(data, "%19.12E\n", VAT3(uPSW, ii, jj, kk));
 
             }
         }
@@ -765,6 +821,8 @@ VPUBLIC void VbuildPb_op27(int *nxf, int *nyf, int *nzf,
       quarter = 1.0 / 4.0;
       eighth  = 1.0 / 8.0;
 
+      //fprintf(data, "%s\n", PRINT_FUNC);
+
       for (kk = 2; kk <= *nzc - 1; kk++) {
           k = 2 * kk - 1;
 
@@ -800,6 +858,8 @@ VPUBLIC void VbuildPb_op27(int *nxf, int *nyf, int *nzf,
 
                   VAT3( oPC,  ii,  jj,  kk) = won;
 
+                  //fprintf(data, "%19.12E\n", VAT3(oPC, ii, jj, kk));
+
                   //* **********************************************************
                   //* *** > oPN;
                   //* **********************************************************
@@ -826,6 +886,8 @@ VPUBLIC void VbuildPb_op27(int *nxf, int *nyf, int *nzf,
                               - VAT3(  uW,   i, jp1,   k)
                               - VAT3(  uE,   i, jp1,   k)
                           );
+
+                  //fprintf(data, "%19.12E\n", VAT3(oPN, ii, jj, kk));
 
                   //* **********************************************************
                   //* *** > oPS;
@@ -854,6 +916,8 @@ VPUBLIC void VbuildPb_op27(int *nxf, int *nyf, int *nzf,
                               - VAT3(  uE,   i, jm1,   k)
                           );
 
+                  //fprintf(data, "%19.12E\n", VAT3(oPS, ii, jj, kk));
+
                   //* **********************************************************
                   //* *** > oPE;
                   //* **********************************************************
@@ -880,6 +944,8 @@ VPUBLIC void VbuildPb_op27(int *nxf, int *nyf, int *nzf,
                               - VAT3(  uN, ip1, jm1, km1)
                               - VAT3(  uS, ip1,   j,   k)
                           );
+
+                  //fprintf(data, "%19.12E\n", VAT3(oPE, ii, jj, kk));
 
                   //* **********************************************************
                   //* *** > oPW;
@@ -908,6 +974,8 @@ VPUBLIC void VbuildPb_op27(int *nxf, int *nyf, int *nzf,
                               - VAT3(  uS, im1,   j,   k)
                           );
 
+                  //fprintf(data, "%19.12E\n", VAT3(oPW, ii, jj, kk));
+
                   //* **********************************************************
                   //* *** > oPNE;
                   //* **********************************************************
@@ -934,6 +1002,8 @@ VPUBLIC void VbuildPb_op27(int *nxf, int *nyf, int *nzf,
                               - VAT3(  uC, ip1, jp1, km1)
                               - VAT3(  uC, ip1, jp1,   k)
                           );
+
+                  //fprintf(data, "%19.12E\n", VAT3(oPNE, ii, jj, kk));
 
                   //* **********************************************************
                   //* *** > oPNW;
@@ -962,6 +1032,8 @@ VPUBLIC void VbuildPb_op27(int *nxf, int *nyf, int *nzf,
                               - VAT3(  uC, im1, jp1,   k)
                           );
 
+                  //fprintf(data, "%19.12E\n", VAT3(oPNW, ii, jj, kk));
+
                   //* **********************************************************
                   //* *** > oPSE;
                   //* **********************************************************
@@ -988,6 +1060,8 @@ VPUBLIC void VbuildPb_op27(int *nxf, int *nyf, int *nzf,
                               - VAT3(  uC, ip1, jm1, km1)
                               - VAT3(  uC, ip1, jm1,   k)
                           );
+
+                  //fprintf(data, "%19.12E\n", VAT3(oPSE, ii, jj, kk));
 
                   //* **********************************************************
                   //* *** > oPSW;
@@ -1016,6 +1090,8 @@ VPUBLIC void VbuildPb_op27(int *nxf, int *nyf, int *nzf,
                               - VAT3(  uC, im1, jm1,   k)
                           );
 
+                  //fprintf(data, "%19.12E\n", VAT3(oPSW, ii, jj, kk));
+
                   //* **********************************************************
                   //* *** > dPC;
                   //* **********************************************************
@@ -1042,6 +1118,8 @@ VPUBLIC void VbuildPb_op27(int *nxf, int *nyf, int *nzf,
                               - VAT3(  oE,   i,   j, km1)
                               - VAT3( oNW, ip1, jm1, km1)
                           );
+
+                  //fprintf(data, "%19.12E\n", VAT3(dPC, ii, jj, kk));
 
                   //* **********************************************************
                   //* *** > dPN;
@@ -1070,6 +1148,8 @@ VPUBLIC void VbuildPb_op27(int *nxf, int *nyf, int *nzf,
                               - VAT3(  oE,   i, jp1, km1)
                           );
 
+                  //fprintf(data, "%19.12E\n", VAT3(dPN, ii, jj, kk));
+
                   //* **********************************************************
                   //* *** > dPS;
                   //* **********************************************************
@@ -1096,6 +1176,8 @@ VPUBLIC void VbuildPb_op27(int *nxf, int *nyf, int *nzf,
                               - VAT3(  oE, im1, jm1, km1)
                               - VAT3(  oE,   i, jm1, km1)
                           );
+
+                  //fprintf(data, "%19.12E\n", VAT3(dPS, ii, jj, kk));
 
                   //* **********************************************************
                   //* *** > dPE;
@@ -1124,6 +1206,8 @@ VPUBLIC void VbuildPb_op27(int *nxf, int *nyf, int *nzf,
                               - VAT3(  oN, ip1, jm1, km1)
                           );
 
+                  //fprintf(data, "%19.12E\n", VAT3(dPE, ii, jj, kk));
+
                   //* **********************************************************
                   //* *** > dPW;
                   //* **********************************************************
@@ -1151,6 +1235,7 @@ VPUBLIC void VbuildPb_op27(int *nxf, int *nyf, int *nzf,
                               - VAT3(  oN, im1, jm1, km1)
                           );
 
+                  //fprintf(data, "%19.12E\n", VAT3(dPW, ii, jj, kk));
 
                   //* **********************************************************
                   //* *** > dPNE;
@@ -1174,6 +1259,8 @@ VPUBLIC void VbuildPb_op27(int *nxf, int *nyf, int *nzf,
                           )
                           / VAT3(  oC, ip1, jp1, km1);
 
+                  //fprintf(data, "%19.12E\n", VAT3(dPNE, ii, jj, kk));
+
                   //* **********************************************************
                   //* *** > dPNW;
                   //* **********************************************************
@@ -1195,6 +1282,8 @@ VPUBLIC void VbuildPb_op27(int *nxf, int *nyf, int *nzf,
                               * VAT3( dPW,  ii,  jj,  kk)
                           )
                           / VAT3(  oC, im1, jp1, km1);
+
+                  //fprintf(data, "%19.12E\n", VAT3(dPNW, ii, jj, kk));
 
                   //* **********************************************************
                   //* *** > dPSE;
@@ -1218,6 +1307,8 @@ VPUBLIC void VbuildPb_op27(int *nxf, int *nyf, int *nzf,
                           )
                           / VAT3(  oC, ip1, jm1, km1);
 
+                  //fprintf(data, "%19.12E\n", VAT3(dPSE, ii, jj, kk));
+
                   //* **********************************************************
                   //* *** > dPSW;
                   //* **********************************************************
@@ -1239,6 +1330,8 @@ VPUBLIC void VbuildPb_op27(int *nxf, int *nyf, int *nzf,
                               * VAT3( dPW,  ii,  jj,  kk)
                           )
                           / VAT3(  oC, im1, jm1, km1);
+
+                  //fprintf(data, "%19.12E\n", VAT3(dPSW, ii, jj, kk));
 
                   //* **********************************************************
                   //* *** > uPC;
@@ -1267,6 +1360,8 @@ VPUBLIC void VbuildPb_op27(int *nxf, int *nyf, int *nzf,
                               - VAT3( oNW, ip1, jm1, kp1)
                           );
 
+                  //fprintf(data, "%19.12E\n", VAT3(uPC, ii, jj, kk));
+
                   //* **********************************************************
                   //* *** > uPN;
                   //* **********************************************************
@@ -1293,6 +1388,8 @@ VPUBLIC void VbuildPb_op27(int *nxf, int *nyf, int *nzf,
                               - VAT3(  oE, im1, jp1, kp1)
                               - VAT3(  oE,   i, jp1, kp1)
                           );
+
+                  //fprintf(data, "%19.12E\n", VAT3(uPN, ii, jj, kk));
 
                   //* **********************************************************
                   //* *** > uPS;
@@ -1321,6 +1418,8 @@ VPUBLIC void VbuildPb_op27(int *nxf, int *nyf, int *nzf,
                               - VAT3(  oE,   i, jm1, kp1)
                           );
 
+                  //fprintf(data, "%19.12E\n", VAT3(uPS, ii, jj, kk));
+
                   //* **********************************************************
                   //* *** > uPE;
                   //* **********************************************************
@@ -1347,6 +1446,8 @@ VPUBLIC void VbuildPb_op27(int *nxf, int *nyf, int *nzf,
                               - VAT3(  oN, ip1,   j, kp1)
                               - VAT3(  oN, ip1, jm1, kp1)
                           );
+
+                  //fprintf(data, "%19.12E\n", VAT3(uPE, ii, jj, kk));
 
                   //* **********************************************************
                   //* *** > uPW;
@@ -1375,6 +1476,8 @@ VPUBLIC void VbuildPb_op27(int *nxf, int *nyf, int *nzf,
                               - VAT3(  oN, im1, jm1, kp1)
                           );
 
+                  //fprintf(data, "%19.12E\n", VAT3(uPW, ii, jj, kk));
+
                   //* **********************************************************
                   //* *** > uPNE;
                   //* **********************************************************
@@ -1396,6 +1499,8 @@ VPUBLIC void VbuildPb_op27(int *nxf, int *nyf, int *nzf,
                               * VAT3( uPE,  ii,  jj,  kk)
                           )
                           / VAT3(  oC, ip1, jp1, kp1);
+
+                  //fprintf(data, "%19.12E\n", VAT3(uPNE, ii, jj, kk));
 
                   //* **********************************************************
                   //* *** > uPNW;
@@ -1419,6 +1524,8 @@ VPUBLIC void VbuildPb_op27(int *nxf, int *nyf, int *nzf,
                           )
                           / VAT3(  oC, im1, jp1, kp1);
 
+                  //fprintf(data, "%19.12E\n", VAT3(uPNW, ii, jj, kk));
+
                   //* **********************************************************
                   //* *** > uPSE;
                   //* **********************************************************
@@ -1441,6 +1548,8 @@ VPUBLIC void VbuildPb_op27(int *nxf, int *nyf, int *nzf,
                           )
                           / VAT3(  oC, ip1, jm1, kp1);
 
+                  //fprintf(data, "%19.12E\n", VAT3(uPSE, ii, jj, kk));
+
                   //* **********************************************************
                   //* *** > uPSW;
                   //* **********************************************************
@@ -1462,6 +1571,8 @@ VPUBLIC void VbuildPb_op27(int *nxf, int *nyf, int *nzf,
                               * VAT3( uPW,  ii,  jj,  kk)
                           )
                           / VAT3(  oC, im1, jm1, kp1);
+
+                  //fprintf(data, "%19.12E\n", VAT3(uPSW, ii, jj, kk));
 
               }
           }
