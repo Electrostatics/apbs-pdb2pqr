@@ -393,8 +393,10 @@ def runPDB2PQR(pdblist, ff,
     # Process the extensions
     for ext in selectedExtensions:
         module = extensions.extDict[ext]
-        tempRoutines = copy.deepcopy(myRoutines)
-        module.run_extension(tempRoutines, outroot, extensionOptions)
+        #TODO: figure out a way to do this without crashing...
+        #tempRoutines = copy.deepcopy(myRoutines)
+        module.run_extension(myRoutines, outroot, extensionOptions)
+        
 
     if verbose:
         print "Total time taken: %.2f seconds\n" % (time.time() - start)
@@ -643,7 +645,7 @@ def mainCommand(argv):
         size.parseInput(outpath)
         size.runPsize(outpath)
         async = 0 # No async files here!
-        input = inputgen.Input(outpath, size, method, async)
+        input = inputgen.Input(outpath, size, method, async, potdx=True)
         input.printInputFiles()
         input.dumpPickle()
 
