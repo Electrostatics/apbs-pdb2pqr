@@ -5,9 +5,7 @@
  *  @version $Id$
  */
 
-#include "apbscfg.h"
-#include "maloc/maloc.h"
-#include "apbs/apbs.h"
+#include "apbs.h"
 
 int main(int argc, char **argv) {
 

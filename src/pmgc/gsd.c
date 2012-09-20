@@ -47,7 +47,7 @@
  * @endverbatim
  */
 
-#include "apbs/gsd.h"
+#include "gsd.h"
 
 VPUBLIC void Vgsrb(int *nx, int *ny, int *nz,
         int *ipc, double *rpc,

@@ -47,7 +47,7 @@
  * @endverbatim
  */
 
-#include "apbs/mgsubd.h"
+#include "mgsubd.h"
 
 VPUBLIC void Vbuildops(
         int *nx, int *ny, int *nz,
@@ -172,50 +172,50 @@ VPUBLIC void Vbuildops(
                         VMESSAGE3("Harm0: (%03d, %03d, %03d)", nxx, nyy, nzz);
 
                     Vbuildharm0(&nxx, &nyy, &nzz, &nxold, &nyold, &nzold,
-                    		  RAT(xf, VAT2(iz, 8, lev  )),   RAT(yf, VAT2(iz, 9, lev  )),   RAT(zf, VAT2(iz, 10, lev  )),
-                    		RAT(gxcf, VAT2(iz, 2, lev  )), RAT(gycf, VAT2(iz, 3, lev  )), RAT(gzcf, VAT2(iz,  4, lev  )),
-                    		RAT(a1cf, VAT2(iz, 1, lev  )), RAT(a2cf, VAT2(iz, 1, lev  )), RAT(a3cf, VAT2(iz,  1, lev  )),
-                    		 RAT(ccf, VAT2(iz, 1, lev  )),  RAT(fcf, VAT2(iz, 1, lev  )),  RAT(tcf, VAT2(iz,  1, lev  )),
-                    		  RAT(xf, VAT2(iz, 8, lev-1)),   RAT(yf, VAT2(iz, 9, lev-1)),   RAT(zf, VAT2(iz, 10, lev-1)),
-                    		RAT(gxcf, VAT2(iz, 2, lev-1)), RAT(gycf, VAT2(iz, 3, lev-1)), RAT(gzcf, VAT2(iz,  4, lev-1)),
-                    		RAT(a1cf, VAT2(iz, 1, lev-1)), RAT(a2cf, VAT2(iz, 1, lev-1)), RAT(a3cf, VAT2(iz,  1, lev-1)),
-                    		 RAT(ccf, VAT2(iz, 1, lev-1)),  RAT(fcf, VAT2(iz, 1, lev-1)),  RAT(tcf, VAT2(iz,  1, lev-1)));
+                              RAT(xf, VAT2(iz, 8, lev  )),   RAT(yf, VAT2(iz, 9, lev  )),   RAT(zf, VAT2(iz, 10, lev  )),
+                            RAT(gxcf, VAT2(iz, 2, lev  )), RAT(gycf, VAT2(iz, 3, lev  )), RAT(gzcf, VAT2(iz,  4, lev  )),
+                            RAT(a1cf, VAT2(iz, 1, lev  )), RAT(a2cf, VAT2(iz, 1, lev  )), RAT(a3cf, VAT2(iz,  1, lev  )),
+                             RAT(ccf, VAT2(iz, 1, lev  )),  RAT(fcf, VAT2(iz, 1, lev  )),  RAT(tcf, VAT2(iz,  1, lev  )),
+                              RAT(xf, VAT2(iz, 8, lev-1)),   RAT(yf, VAT2(iz, 9, lev-1)),   RAT(zf, VAT2(iz, 10, lev-1)),
+                            RAT(gxcf, VAT2(iz, 2, lev-1)), RAT(gycf, VAT2(iz, 3, lev-1)), RAT(gzcf, VAT2(iz,  4, lev-1)),
+                            RAT(a1cf, VAT2(iz, 1, lev-1)), RAT(a2cf, VAT2(iz, 1, lev-1)), RAT(a3cf, VAT2(iz,  1, lev-1)),
+                             RAT(ccf, VAT2(iz, 1, lev-1)),  RAT(fcf, VAT2(iz, 1, lev-1)),  RAT(tcf, VAT2(iz,  1, lev-1)));
 
                     VbuildA(&nxx, &nyy, &nzz,
-                    		ipkey, mgdisc, &numdia,
-                    		 RAT(ipc, VAT2(iz, 5,lev)),  RAT(rpc, VAT2(iz, 6,lev)),
-                        	  RAT(ac, VAT2(iz, 7,lev)),   RAT(cc, VAT2(iz, 1,lev)),   RAT(fc, VAT2(iz,  1,lev)),
-                        	  RAT(xf, VAT2(iz, 8,lev)),   RAT(yf, VAT2(iz, 9,lev)),   RAT(zf, VAT2(iz, 10,lev)),
-                        	RAT(gxcf, VAT2(iz, 2,lev)), RAT(gycf, VAT2(iz, 3,lev)), RAT(gzcf, VAT2(iz,  4,lev)),
-                        	RAT(a1cf, VAT2(iz, 1,lev)), RAT(a2cf, VAT2(iz, 1,lev)), RAT(a3cf, VAT2(iz,  1,lev)),
-                        	 RAT(ccf, VAT2(iz, 1,lev)),  RAT(fcf, VAT2(iz, 1,lev)));
+                            ipkey, mgdisc, &numdia,
+                             RAT(ipc, VAT2(iz, 5,lev)),  RAT(rpc, VAT2(iz, 6,lev)),
+                              RAT(ac, VAT2(iz, 7,lev)),   RAT(cc, VAT2(iz, 1,lev)),   RAT(fc, VAT2(iz,  1,lev)),
+                              RAT(xf, VAT2(iz, 8,lev)),   RAT(yf, VAT2(iz, 9,lev)),   RAT(zf, VAT2(iz, 10,lev)),
+                            RAT(gxcf, VAT2(iz, 2,lev)), RAT(gycf, VAT2(iz, 3,lev)), RAT(gzcf, VAT2(iz,  4,lev)),
+                            RAT(a1cf, VAT2(iz, 1,lev)), RAT(a2cf, VAT2(iz, 1,lev)), RAT(a3cf, VAT2(iz,  1,lev)),
+                             RAT(ccf, VAT2(iz, 1,lev)),  RAT(fcf, VAT2(iz, 1,lev)));
                 }
 
                 // Differential operator with galerkin formulation ***
-			    else if (*mgcoar == 2) {
+                else if (*mgcoar == 2) {
 
                     // Some i/o
                     if (*iinfo > 0)
                         VMESSAGE3("Galer: (%03d, %03d, %03d)", nxx, nyy, nzz);
 
-			    	Vbuildgaler0(&nxold, &nyold, &nzold,
-			    			&nxx, &nyy, &nzz,
-			    			ipkey, &numdia,
-			    			 RAT(pc, VAT2(iz, 11,lev-1)),
-                         	RAT(ipc, VAT2(iz,  5,lev-1)), RAT(rpc, VAT2(iz, 6,lev-1)),
-                         	 RAT(ac, VAT2(iz,  7,lev-1)),  RAT(cc, VAT2(iz, 1,lev-1)), RAT(fc, VAT2(iz, 1,lev-1)),
-                         	RAT(ipc, VAT2(iz,  5,lev  )), RAT(rpc, VAT2(iz, 6,lev  )),
-                         	 RAT(ac, VAT2(iz,  7,lev  )),  RAT(cc, VAT2(iz, 1,lev  )), RAT(fc, VAT2(iz, 1,lev  )));
+                    Vbuildgaler0(&nxold, &nyold, &nzold,
+                            &nxx, &nyy, &nzz,
+                            ipkey, &numdia,
+                             RAT(pc, VAT2(iz, 11,lev-1)),
+                            RAT(ipc, VAT2(iz,  5,lev-1)), RAT(rpc, VAT2(iz, 6,lev-1)),
+                             RAT(ac, VAT2(iz,  7,lev-1)),  RAT(cc, VAT2(iz, 1,lev-1)), RAT(fc, VAT2(iz, 1,lev-1)),
+                            RAT(ipc, VAT2(iz,  5,lev  )), RAT(rpc, VAT2(iz, 6,lev  )),
+                             RAT(ac, VAT2(iz,  7,lev  )),  RAT(cc, VAT2(iz, 1,lev  )), RAT(fc, VAT2(iz, 1,lev  )));
 
 
 
-					Vextrac(&nxold, &nyold, &nzold,
-							&nxx, &nyy, &nzz,
-							RAT(tcf, VAT2(iz, 1,lev-1)), RAT(tcf, VAT2(iz, 1,lev)));
-			    }
-			    else {
+                    Vextrac(&nxold, &nyold, &nzold,
+                            &nxx, &nyy, &nzz,
+                            RAT(tcf, VAT2(iz, 1,lev-1)), RAT(tcf, VAT2(iz, 1,lev)));
+                }
+                else {
                     VABORT_MSG1("Bad mgcoar value given: %d", *mgcoar);
-			    }
+                }
 
                 // Now initialize the differential operator offset
                 // Vnm_print(0, "BUILDOPS: operator stencil (lev,numdia) = (%d, %d)\n",
@@ -225,24 +225,24 @@ VPUBLIC void Vbuildops(
                 // Debug
                 if (*iinfo > 8) {
 
-                	Vprtmatd(&nxx, &nyy, &nzz,
-                			RAT(ipc, VAT2(iz, 5,lev)), RAT(rpc, VAT2(iz, 6,lev)), RAT(ac, VAT2(iz, 7,lev)));
+                    Vprtmatd(&nxx, &nyy, &nzz,
+                            RAT(ipc, VAT2(iz, 5,lev)), RAT(rpc, VAT2(iz, 6,lev)), RAT(ac, VAT2(iz, 7,lev)));
                 }
             }
         }
 
         // Build a sparse format coarse grid operator
         if (*mgsolv == 1) {
-			lev = *nlev;
+            lev = *nlev;
 
-			Vbuildband(&key, &nxx, &nyy, &nzz,
-					RAT(ipc, VAT2(iz, 5,lev  )), RAT(rpc, VAT2(iz, 6,lev  )), RAT(ac, VAT2(iz, 7,lev  )),
-					RAT(ipc, VAT2(iz, 5,lev+1)), RAT(rpc, VAT2(iz, 6,lev+1)), RAT(ac, VAT2(iz, 7,lev+1)));
+            Vbuildband(&key, &nxx, &nyy, &nzz,
+                    RAT(ipc, VAT2(iz, 5,lev  )), RAT(rpc, VAT2(iz, 6,lev  )), RAT(ac, VAT2(iz, 7,lev  )),
+                    RAT(ipc, VAT2(iz, 5,lev+1)), RAT(rpc, VAT2(iz, 6,lev+1)), RAT(ac, VAT2(iz, 7,lev+1)));
 
-			if (key == 1) {
+            if (key == 1) {
                 VERRMSG0("Changing your mgsolv to iterative");
-				*mgsolv = 0;
-			}
+                *mgsolv = 0;
+            }
         }
     }
 }
@@ -334,60 +334,60 @@ VPUBLIC void Vbuildstr(int *nx, int *ny, int *nz, int *nlev, int *iz) {
 
 
 VPUBLIC void Vbuildgaler0(int *nxf, int *nyf, int *nzf,
-		int *nxc, int *nyc, int *nzc,
-		int *ipkey, int *numdia,
-		double *pcFF, int   *ipcFF, double *rpcFF,
-		double *acFF, double *ccFF, double *fcFF,
-		int *ipc, double *rpc,
-		double *ac, double *cc, double *fc) {
+        int *nxc, int *nyc, int *nzc,
+        int *ipkey, int *numdia,
+        double *pcFF, int   *ipcFF, double *rpcFF,
+        double *acFF, double *ccFF, double *fcFF,
+        int *ipc, double *rpc,
+        double *ac, double *cc, double *fc) {
 
-	int numdia_loc;
+    int numdia_loc;
 
-	// Call the algebraic galerkin routine
-	numdia_loc = VAT(ipcFF, 11);
-	VbuildG(nxf, nyf, nzf,
-			nxc, nyc, nzc,
-			&numdia_loc,
-			pcFF, acFF, ac);
+    // Call the algebraic galerkin routine
+    numdia_loc = VAT(ipcFF, 11);
+    VbuildG(nxf, nyf, nzf,
+            nxc, nyc, nzc,
+            &numdia_loc,
+            pcFF, acFF, ac);
 
-	// Note how many nonzeros in this new discretization stencil
-	VAT(ipc, 11) = 27;
-	*numdia = 14;
+    // Note how many nonzeros in this new discretization stencil
+    VAT(ipc, 11) = 27;
+    *numdia = 14;
 
-	// Save the problem key with this new operator
-	VAT(ipc, 10) = *ipkey;
+    // Save the problem key with this new operator
+    VAT(ipc, 10) = *ipkey;
 
-	// Restrict the helmholtz term and source function
-	Vrestrc(nxf, nyf, nzf,
-			nxc, nyc, nzc,
-			ccFF, cc, pcFF);
+    // Restrict the helmholtz term and source function
+    Vrestrc(nxf, nyf, nzf,
+            nxc, nyc, nzc,
+            ccFF, cc, pcFF);
 
     Vrestrc(nxf, nyf, nzf,
-			nxc, nyc, nzc,
-			fcFF, fc, pcFF);
+            nxc, nyc, nzc,
+            fcFF, fc, pcFF);
 }
 
 
 
 VPUBLIC void Vmkcors(int *numlev,
-		int *nxold, int *nyold, int *nzold,
-		int *nxnew, int *nynew, int *nznew) {
-	int nxtmp, nytmp, nztmp; // Temporary variables to hold current x,y,z values
-	int i;                   // Index used in for loops
+        int *nxold, int *nyold, int *nzold,
+        int *nxnew, int *nynew, int *nznew) {
+    int nxtmp, nytmp, nztmp; // Temporary variables to hold current x,y,z values
+    int i;                   // Index used in for loops
 
-	// Determine the coarser grid
-	*nxnew = *nxold;
-	*nynew = *nyold;
-	*nznew = *nzold;
+    // Determine the coarser grid
+    *nxnew = *nxold;
+    *nynew = *nyold;
+    *nznew = *nzold;
 
-	for (i=1; i<=*numlev; i++) {
-	   nxtmp = *nxnew;
-	   nytmp = *nynew;
-	   nztmp = *nznew;
-	   Vcorsr(&nxtmp,nxnew);
-	   Vcorsr(&nytmp,nynew);
-	   Vcorsr(&nztmp,nznew);
-	}
+    for (i=1; i<=*numlev; i++) {
+       nxtmp = *nxnew;
+       nytmp = *nynew;
+       nztmp = *nznew;
+       Vcorsr(&nxtmp,nxnew);
+       Vcorsr(&nytmp,nynew);
+       Vcorsr(&nztmp,nznew);
+    }
 }
 
 
@@ -449,16 +449,16 @@ VPUBLIC void Vfiner(int *nold, int *nnew) {
 
 VPUBLIC int Vivariv(int *nu, int *level) {
 
-	/// @todo:  Determine if the Variable V-cycle will ever be used
-	int ivariv;
+    /// @todo:  Determine if the Variable V-cycle will ever be used
+    int ivariv;
 
-	// Variable V-cycle
-	// ivariv = *nu * VPOW(2, level - 1);
+    // Variable V-cycle
+    // ivariv = *nu * VPOW(2, level - 1);
 
-	// Standard V-cycle
-	ivariv = *nu;
+    // Standard V-cycle
+    ivariv = *nu;
 
-	return ivariv;
+    return ivariv;
 }
 
 
@@ -496,93 +496,93 @@ VPUBLIC int Vmaxlev(int n1, int n2, int n3) {
 
 
 VPUBLIC void Vprtstp(int iok, int iters,
-		double rsnrm, double rsden, double orsnrm) {
+        double rsnrm, double rsden, double orsnrm) {
 
     double relres = 0.0;
     double contrac = 0.0;
 
     // Initializing timer
     if (iters == -99) {
-    	// Vnm_tstart(40, "MG iteration");
-    	cputme = 0.0;
-    	return;
+        // Vnm_tstart(40, "MG iteration");
+        cputme = 0.0;
+        return;
     }
 
     // Setup for the iteration
     else if (iters == -1) {
-    	Vnm_tstop(40, "MG iteration");
-    	return;
+        Vnm_tstop(40, "MG iteration");
+        return;
     }
 
     // During the iteration
     else {
 
-    	// Stop the timer
-    	// Vnm_tstop(40, "MG iteration");
+        // Stop the timer
+        // Vnm_tstop(40, "MG iteration");
 
-    	// Relative residual
-    	if (rsden == 0.0) {
-    		relres = 1.0e6;
-			VERRMSG0("Vprtstp: avoided division by zero\n");
-    	} else {
-			relres = rsnrm / rsden;
-    	}
+        // Relative residual
+        if (rsden == 0.0) {
+            relres = 1.0e6;
+            VERRMSG0("Vprtstp: avoided division by zero\n");
+        } else {
+            relres = rsnrm / rsden;
+        }
 
-    	// Contraction number
-    	if (orsnrm == 0.0) {
-    		contrac = 1.0e6;
+        // Contraction number
+        if (orsnrm == 0.0) {
+            contrac = 1.0e6;
             VERRMSG0("avoided division by zero\n");
-    	} else {
-			contrac = rsnrm / orsnrm;
-    	}
+        } else {
+            contrac = rsnrm / orsnrm;
+        }
 
-    	// The i/o
-    	if (iok == 1 || iok == 2) {
+        // The i/o
+        if (iok == 1 || iok == 2) {
             VMESSAGE1("iteration = %d", iters);
             VMESSAGE1("relative residual = %e", relres);
             VMESSAGE1("contraction number = %e", contrac);
-    	}
+        }
     }
 }
 
 
 
 VPUBLIC void Vpackmg(int *iparm, double *rparm, int *nrwk, int *niwk,
-		int *nx, int *ny, int *nz, int *nlev, int *nu1, int *nu2, int *mgkey,
-		int *itmax, int *istop, int *ipcon, int *nonlin, int *mgsmoo, int *mgprol,
-		int *mgcoar, int *mgsolv, int *mgdisc, int *iinfo, double *errtol,
-		int *ipkey, double *omegal, double *omegan, int *irite, int *iperf) {
+        int *nx, int *ny, int *nz, int *nlev, int *nu1, int *nu2, int *mgkey,
+        int *itmax, int *istop, int *ipcon, int *nonlin, int *mgsmoo, int *mgprol,
+        int *mgcoar, int *mgsolv, int *mgdisc, int *iinfo, double *errtol,
+        int *ipkey, double *omegal, double *omegan, int *irite, int *iperf) {
 
-	/// @todo  Convert this into a struct
+    /// @todo  Convert this into a struct
 
-	// Encode iparm parameters ***
-	VAT(iparm, 1)  = *nrwk;
-	VAT(iparm, 2)  = *niwk;
-	VAT(iparm, 3)  = *nx;
-	VAT(iparm, 4)  = *ny;
-	VAT(iparm, 5)  = *nz;
-	VAT(iparm, 6)  = *nlev;
-	VAT(iparm, 7)  = *nu1;
-	VAT(iparm, 8)  = *nu2;
-	VAT(iparm, 9)  = *mgkey;
-	VAT(iparm, 10) = *itmax;
-	VAT(iparm, 11) = *istop;
-	VAT(iparm, 12) = *iinfo;
-	VAT(iparm, 13) = *irite;
-	VAT(iparm, 14) = *ipkey;
-	VAT(iparm, 15) = *ipcon;
-	VAT(iparm, 16) = *nonlin;
-	VAT(iparm, 17) = *mgprol;
-	VAT(iparm, 18) = *mgcoar;
-	VAT(iparm, 19) = *mgdisc;
-	VAT(iparm, 20) = *mgsmoo;
-	VAT(iparm, 21) = *mgsolv;
-	VAT(iparm, 22) = *iperf;
+    // Encode iparm parameters ***
+    VAT(iparm, 1)  = *nrwk;
+    VAT(iparm, 2)  = *niwk;
+    VAT(iparm, 3)  = *nx;
+    VAT(iparm, 4)  = *ny;
+    VAT(iparm, 5)  = *nz;
+    VAT(iparm, 6)  = *nlev;
+    VAT(iparm, 7)  = *nu1;
+    VAT(iparm, 8)  = *nu2;
+    VAT(iparm, 9)  = *mgkey;
+    VAT(iparm, 10) = *itmax;
+    VAT(iparm, 11) = *istop;
+    VAT(iparm, 12) = *iinfo;
+    VAT(iparm, 13) = *irite;
+    VAT(iparm, 14) = *ipkey;
+    VAT(iparm, 15) = *ipcon;
+    VAT(iparm, 16) = *nonlin;
+    VAT(iparm, 17) = *mgprol;
+    VAT(iparm, 18) = *mgcoar;
+    VAT(iparm, 19) = *mgdisc;
+    VAT(iparm, 20) = *mgsmoo;
+    VAT(iparm, 21) = *mgsolv;
+    VAT(iparm, 22) = *iperf;
 
-	// Encode rparm parameters
-	VAT(rparm, 1)  = *errtol;
-	VAT(rparm, 9)  = *omegal;
-	VAT(rparm, 10) = *omegan;
+    // Encode rparm parameters
+    VAT(rparm, 1)  = *errtol;
+    VAT(rparm, 9)  = *omegal;
+    VAT(rparm, 10) = *omegan;
 }
 
 

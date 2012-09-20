@@ -3,7 +3,7 @@
  *  @ingroup Vstring
  *  @author  Nathan Baker
  *  @brief   Class Vstring methods
- *  @version 
+ *  @version
  *  @attention
  *  @verbatim
  *
@@ -14,47 +14,47 @@
  *
  *  Additional contributing authors listed in the code documentation.
  *
- * Copyright (c) 2010-2012 Battelle Memorial Institute. Developed at the 
- * Pacific Northwest National Laboratory, operated by Battelle Memorial 
+ * Copyright (c) 2010-2012 Battelle Memorial Institute. Developed at the
+ * Pacific Northwest National Laboratory, operated by Battelle Memorial
  * Institute, Pacific Northwest Division for the U.S. Department of Energy.
  *
  * Portions Copyright (c) 2002-2010, Washington University in St. Louis.
  * Portions Copyright (c) 2002-2010, Nathan A. Baker.
- * Portions Copyright (c) 1999-2002, The Regents of the University of 
+ * Portions Copyright (c) 1999-2002, The Regents of the University of
  * California.
  * Portions Copyright (c) 1995, Michael Holst.
  * All rights reserved.
  *
- * Redistribution and use in source and binary forms, with or without 
+ * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
- * Redistributions of source code must retain the above copyright notice, this
- * list of conditions and the following disclaimer.  
  *
- * Redistributions in binary form must reproduce the above copyright notice, 
+ * Redistributions of source code must retain the above copyright notice, this
+ * list of conditions and the following disclaimer.
+ *
+ * Redistributions in binary form must reproduce the above copyright notice,
  * this list of conditions and the following disclaimer in the documentation
  * and/or other materials provided with the distribution.
  *
- * Neither the name of the developer nor the names of its contributors may be 
- * used to endorse or promote products derived from this software without 
+ * Neither the name of the developer nor the names of its contributors may be
+ * used to endorse or promote products derived from this software without
  * specific prior written permission.
  *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
- * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE 
- * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE 
- * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE 
- * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR 
- * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF 
- * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS 
- * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN 
- * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) 
- * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF 
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF
  * THE POSSIBILITY OF SUCH DAMAGE.
  *
  * @endverbatim
  */
-#include "apbscfg.h"
-#include "apbs/vstring.h"
+
+#include "vstring.h"
 
 /* ///////////////////////////////////////////////////////////////////////////
 // Routine:  Vstring_strcasecmp
@@ -104,11 +104,11 @@ VPUBLIC int Vstring_strcasecmp(const char *s1, const char *s2) {
     unsigned char u1, u2;
 
     for ( ; ; s1++, s2++) {
-	u1 = (unsigned char) *s1;
-	u2 = (unsigned char) *s2;
-	if ((u1 == '\0') || (charmap[u1] != charmap[u2])) {
-	    break;
-	}
+    u1 = (unsigned char) *s1;
+    u2 = (unsigned char) *s2;
+    if ((u1 == '\0') || (charmap[u1] != charmap[u2])) {
+        break;
+    }
     }
     return charmap[u1] - charmap[u2];
 
@@ -130,7 +130,7 @@ VPUBLIC int Vstring_strcasecmp(const char *s1, const char *s2) {
 VPUBLIC int Vstring_isdigit(const char *tok) {
     int i, isdigit, ti;
     char checkchar[1];
-	char name[VMAX_BUFSIZE];
+    char name[VMAX_BUFSIZE];
     strcpy(name,tok);
     isdigit = 1;
     for(i=0; ; i++){
@@ -179,8 +179,8 @@ char* Vstring_wrappedtext(const char* str, int right_margin, int left_padding)
         else
         {
             /** @note:  The +2 is for the newline character
-        	  *         and the null-terminating character;
-        	  */
+              *         and the null-terminating character;
+              */
             if( k + right_margin + 2 > wrap_len )
             {
                 wrap_len += right_margin + 2;

@@ -14,52 +14,47 @@
  *
  *  Additional contributing authors listed in the code documentation.
  *
- * Copyright (c) 2010-2012 Battelle Memorial Institute. Developed at the 
- * Pacific Northwest National Laboratory, operated by Battelle Memorial 
+ * Copyright (c) 2010-2012 Battelle Memorial Institute. Developed at the
+ * Pacific Northwest National Laboratory, operated by Battelle Memorial
  * Institute, Pacific Northwest Division for the U.S. Department of Energy.
  *
  * Portions Copyright (c) 2002-2010, Washington University in St. Louis.
  * Portions Copyright (c) 2002-2010, Nathan A. Baker.
- * Portions Copyright (c) 1999-2002, The Regents of the University of 
+ * Portions Copyright (c) 1999-2002, The Regents of the University of
  * California.
  * Portions Copyright (c) 1995, Michael Holst.
  * All rights reserved.
  *
- * Redistribution and use in source and binary forms, with or without 
+ * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
- * Redistributions of source code must retain the above copyright notice, this
- * list of conditions and the following disclaimer.  
  *
- * Redistributions in binary form must reproduce the above copyright notice, 
+ * Redistributions of source code must retain the above copyright notice, this
+ * list of conditions and the following disclaimer.
+ *
+ * Redistributions in binary form must reproduce the above copyright notice,
  * this list of conditions and the following disclaimer in the documentation
  * and/or other materials provided with the distribution.
  *
- * Neither the name of the developer nor the names of its contributors may be 
- * used to endorse or promote products derived from this software without 
+ * Neither the name of the developer nor the names of its contributors may be
+ * used to endorse or promote products derived from this software without
  * specific prior written permission.
  *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
- * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE 
- * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE 
- * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE 
- * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR 
- * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF 
- * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS 
- * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN 
- * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) 
- * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF 
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF
  * THE POSSIBILITY OF SUCH DAMAGE.
  *
  * @endverbatim
  */
 
-#include "apbscfg.h"
-#include "apbs/vclist.h"
-
-#if defined(HAVE_MC_H)
-#include "mc/mc.h"
-#endif
+#include "vclist.h"
 
 VEMBED(rcsid="$Id$")
 
@@ -77,8 +72,8 @@ VPUBLIC double Vclist_maxRadius(Vclist *thee) {
 
 #endif /* if !defined(VINLINE_VCLIST) */
 
-VPUBLIC Vclist* Vclist_ctor(Valist *alist, double max_radius, 
-        int npts[VAPBS_DIM], Vclist_DomainMode mode, 
+VPUBLIC Vclist* Vclist_ctor(Valist *alist, double max_radius,
+        int npts[VAPBS_DIM], Vclist_DomainMode mode,
         double lower_corner[VAPBS_DIM],  double upper_corner[VAPBS_DIM]) {
 
     Vclist *thee = VNULL;
@@ -93,7 +88,7 @@ VPUBLIC Vclist* Vclist_ctor(Valist *alist, double max_radius,
 
 /* Get the dimensions of the molecule stored in thee->alist */
 VPRIVATE void Vclist_getMolDims(
-        Vclist *thee, 
+        Vclist *thee,
         double lower_corner[VAPBS_DIM], /* Set to lower corner of molecule */
         double upper_corner[VAPBS_DIM], /* Set to lower corner of molecule */
         double *r_max /* Set to max atom radius */
@@ -116,7 +111,7 @@ VPRIVATE void Vclist_getMolDims(
     /* Check each atom */
     for (i=0; i<Valist_getNumberAtoms(alist); i++) {
         atom = Valist_getAtom(alist, i);
-		for (j=0; j<VAPBS_DIM; j++) {
+        for (j=0; j<VAPBS_DIM; j++) {
             pos = (Vatom_getPosition(atom))[j];
             if ( pos < lower_corner[j] ) lower_corner[j] = pos;
             if ( pos > upper_corner[j] ) upper_corner[j] = pos;
@@ -139,7 +134,7 @@ VPRIVATE Vrc_Codes Vclist_setupGrid(Vclist *thee) {
     switch (thee->mode) {
         case CLIST_AUTO_DOMAIN:
             /* Get molecule dimensions */
-            Vclist_getMolDims(thee, thee->lower_corner, thee->upper_corner, 
+            Vclist_getMolDims(thee, thee->lower_corner, thee->upper_corner,
                     &r_max);
             /* Set up grid spacings */
             for (i=0; i<VAPBS_DIM; i++) {
@@ -157,13 +152,13 @@ VPRIVATE Vrc_Codes Vclist_setupGrid(Vclist *thee) {
                     thee->mode);
             return VRC_FAILURE;
     }
-   
+
     /* Set up the grid lengths and spacings */
-    for (i=0; i<VAPBS_DIM; i++) { 
+    for (i=0; i<VAPBS_DIM; i++) {
         length[i] = thee->upper_corner[i] - thee->lower_corner[i];
         thee->spacs[i] = length[i]/((double)(thee->npts[i] - 1));
     }
-    Vnm_print(0, "Vclist_setupGrid:  Grid lengths = (%g, %g, %g)\n", 
+    Vnm_print(0, "Vclist_setupGrid:  Grid lengths = (%g, %g, %g)\n",
             length[0], length[1], length[2]);
 
     Vnm_print(0, "Vclist_setupGrid:  Grid lower corner = (%g, %g, %g)\n",
@@ -190,15 +185,15 @@ VPRIVATE Vrc_Codes Vclist_storeParms(Vclist *thee, Valist *alist,
     thee->n = 1;
     for (i=0; i<VAPBS_DIM; i++) {
         if (npts[i] < 3) {
-            Vnm_print(2, 
-                    "Vclist_ctor2:  n[%d] (%d) must be greater than 2!\n", 
+            Vnm_print(2,
+                    "Vclist_ctor2:  n[%d] (%d) must be greater than 2!\n",
                     i, npts[i]);
-            return VRC_FAILURE; 
-        } 
+            return VRC_FAILURE;
+        }
         thee->npts[i] = npts[i];
         thee->n *= npts[i];
     }
-    Vnm_print(0, "Vclist_ctor2:  Using %d x %d x %d hash table\n", 
+    Vnm_print(0, "Vclist_ctor2:  Using %d x %d x %d hash table\n",
             npts[0], npts[1], npts[2]);
 
     thee->mode = mode;
@@ -233,7 +228,7 @@ VPRIVATE Vrc_Codes Vclist_storeParms(Vclist *thee, Valist *alist,
 }
 
 /* Calculate the gridpoints an atom spans */
-VPRIVATE void Vclist_gridSpan(Vclist *thee, 
+VPRIVATE void Vclist_gridSpan(Vclist *thee,
         Vatom *atom, /* Atom */
         int imin[VAPBS_DIM], /* Set to min grid indices */
         int imax[VAPBS_DIM]  /* Set to max grid indices */
@@ -247,8 +242,8 @@ VPRIVATE void Vclist_gridSpan(Vclist *thee,
 
     /* Get the range the atom radius + probe radius spans */
     rtot = Vatom_getRadius(atom) + thee->max_radius;
-    
-    /* Calculate the range of grid points the inflated atom spans in the x 
+
+    /* Calculate the range of grid points the inflated atom spans in the x
      * direction. */
     for (i=0; i<VAPBS_DIM; i++) {
         dc = coord[i] - (thee->lower_corner)[i];
@@ -262,7 +257,7 @@ VPRIVATE void Vclist_gridSpan(Vclist *thee,
 
 }
 
-/* Get the array index for a particular cell based on its i,j,k 
+/* Get the array index for a particular cell based on its i,j,k
  * coordinates */
 VPRIVATE int Vclist_arrayIndex(Vclist *thee, int i, int j, int k) {
 
@@ -283,7 +278,7 @@ VPRIVATE Vrc_Codes Vclist_assignAtoms(Vclist *thee) {
 
     /* Find out how many atoms are associated with each grid point */
     totatoms = 0;
-    for (iatom=0; iatom<Valist_getNumberAtoms(thee->alist); iatom++) { 
+    for (iatom=0; iatom<Valist_getNumberAtoms(thee->alist); iatom++) {
 
         /* Get grid span for atom */
         atom = Valist_getAtom(thee->alist, iatom);
@@ -300,10 +295,10 @@ VPRIVATE Vrc_Codes Vclist_assignAtoms(Vclist *thee) {
                     cell = &(thee->cells[ui]);
                     (cell->natoms)++;
                     totatoms++;
-                } 
-            } 
-        } 
-    } 
+                }
+            }
+        }
+    }
     Vnm_print(0, "Vclist_assignAtoms:  Have %d atom entries\n", totatoms);
 
     /* Allocate the space to store the pointers to the atoms */
@@ -316,7 +311,7 @@ VPRIVATE Vrc_Codes Vclist_assignAtoms(Vclist *thee) {
         /* Clear the counter for later use */
         cell->natoms = 0;
     }
- 
+
     /* Assign the atoms to grid points */
     for (iatom=0; iatom<Valist_getNumberAtoms(thee->alist); iatom++) {
 
@@ -339,14 +334,14 @@ VPRIVATE Vrc_Codes Vclist_assignAtoms(Vclist *thee) {
                 }
             }
         }
-    } 
+    }
 
     return VRC_SUCCESS;
 }
 
 /* Main (FORTRAN stub) constructor */
 VPUBLIC Vrc_Codes Vclist_ctor2(Vclist *thee, Valist *alist, double max_radius,
-        int npts[VAPBS_DIM], Vclist_DomainMode mode, 
+        int npts[VAPBS_DIM], Vclist_DomainMode mode,
         double lower_corner[VAPBS_DIM], double upper_corner[VAPBS_DIM]) {
 
     int i;
@@ -369,7 +364,7 @@ VPUBLIC Vrc_Codes Vclist_ctor2(Vclist *thee, Valist *alist, double max_radius,
     /* Set up cells */
     thee->cells = (VclistCell*)Vmem_malloc( thee->vmem, thee->n, sizeof(VclistCell) );
     if (thee->cells == VNULL) {
-        Vnm_print(2, 
+        Vnm_print(2,
                 "Vclist_ctor2:  Failed allocating %d VclistCell objects!\n",
                 thee->n);
         return VRC_FAILURE;
@@ -390,9 +385,9 @@ VPUBLIC Vrc_Codes Vclist_ctor2(Vclist *thee, Valist *alist, double max_radius,
         Vnm_print(2, "Vclist_ctor2:  atom assignment failed!\n");
         return VRC_FAILURE;
     }
-	
 
-	
+
+
 
 
     return VRC_SUCCESS;
@@ -400,7 +395,7 @@ VPUBLIC Vrc_Codes Vclist_ctor2(Vclist *thee, Valist *alist, double max_radius,
 
 /* Destructor */
 VPUBLIC void Vclist_dtor(Vclist **thee) {
-    
+
     if ((*thee) != VNULL) {
         Vclist_dtor2(*thee);
         Vmem_free(VNULL, 1, sizeof(Vclist), (void **)thee);
@@ -419,18 +414,18 @@ VPUBLIC void Vclist_dtor2(Vclist *thee) {
         cell = &(thee->cells[i]);
         VclistCell_dtor2(cell);
     }
-    Vmem_free(thee->vmem, thee->n, sizeof(VclistCell), 
+    Vmem_free(thee->vmem, thee->n, sizeof(VclistCell),
             (void **)&(thee->cells));
     Vmem_dtor(&(thee->vmem));
 
 }
 
-VPUBLIC VclistCell* Vclist_getCell(Vclist *thee, 
+VPUBLIC VclistCell* Vclist_getCell(Vclist *thee,
                                    double pos[VAPBS_DIM]
                                   ) {
 
-    int i, 
-        ic[VAPBS_DIM], 
+    int i,
+        ic[VAPBS_DIM],
         ui;
     double c[VAPBS_DIM];
 
@@ -477,7 +472,7 @@ VPUBLIC Vrc_Codes VclistCell_ctor2(VclistCell *thee, int natoms) {
     if (thee->natoms > 0) {
         thee->atoms = (Vatom**)Vmem_malloc(VNULL, natoms, sizeof(Vatom *));
         if (thee->atoms == VNULL) {
-            Vnm_print(2, 
+            Vnm_print(2,
           "VclistCell_ctor2:  unable to allocate space for %d atom pointers!\n",
               natoms);
             return VRC_FAILURE;
@@ -489,7 +484,7 @@ VPUBLIC Vrc_Codes VclistCell_ctor2(VclistCell *thee, int natoms) {
 }
 
 VPUBLIC void VclistCell_dtor(VclistCell **thee) {
-    
+
     if ((*thee) != VNULL) {
         VclistCell_dtor2(*thee);
         Vmem_free(VNULL, 1, sizeof(VclistCell), (void **)thee);
@@ -502,7 +497,7 @@ VPUBLIC void VclistCell_dtor(VclistCell **thee) {
 VPUBLIC void VclistCell_dtor2(VclistCell *thee) {
 
     if (thee->natoms > 0) {
-        Vmem_free(VNULL, thee->natoms, sizeof(Vatom *), 
+        Vmem_free(VNULL, thee->natoms, sizeof(Vatom *),
                 (void **)&(thee->atoms));
     }
 

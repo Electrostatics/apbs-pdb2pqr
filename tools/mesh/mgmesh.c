@@ -5,9 +5,9 @@
  *           dimensions, multigrid levels, etc. for PMG
  */
 
-#include "apbscfg.h"
-#include "maloc/maloc.h"
-#include "apbs/apbs.h"
+#include "math.h"
+
+#include "apbs.h"
 
 
 int main(int argc, char **argv) {
@@ -24,7 +24,7 @@ int main(int argc, char **argv) {
                  "%d or more levels in the mesh (because you typically use\n"
                  "one less than the max number of levels)\n\n\n", minlev);
 
-    for (i=2; i<maxvert; i++) { 
+    for (i=2; i<maxvert; i++) {
         /* the number of times it's divisible. */
         lev = 0;
         newval = (double)(i-1);
@@ -34,11 +34,11 @@ int main(int argc, char **argv) {
            newval = newval/2.0;
            if ((floor(newval) != newval) || (ceil(newval) != newval)) break;
            lev++;
-        } 
+        }
         if (lev >= minlev) {
             Vnm_print(1, "%4d verts/direction => %d levels\n", i, lev);
             Vnm_print(1, "                        %d verts on coarsest level\n",
-              (int)oldval); 
+              (int)oldval);
             Vnm_print(1, "                        ~%g MB memory (for %d^3 mesh)\n",
               (double)(i*i*i)*160.0/1024.0/1024.0, i);
         }
@@ -57,6 +57,6 @@ int main(int argc, char **argv) {
         printf("\n");
     }
 #endif
-   
+
     return 0;
 }

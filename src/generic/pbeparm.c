@@ -14,49 +14,47 @@
  *
  *  Additional contributing authors listed in the code documentation.
  *
- * Copyright (c) 2010-2012 Battelle Memorial Institute. Developed at the 
- * Pacific Northwest National Laboratory, operated by Battelle Memorial 
+ * Copyright (c) 2010-2012 Battelle Memorial Institute. Developed at the
+ * Pacific Northwest National Laboratory, operated by Battelle Memorial
  * Institute, Pacific Northwest Division for the U.S. Department of Energy.
  *
  * Portions Copyright (c) 2002-2010, Washington University in St. Louis.
  * Portions Copyright (c) 2002-2010, Nathan A. Baker.
- * Portions Copyright (c) 1999-2002, The Regents of the University of 
+ * Portions Copyright (c) 1999-2002, The Regents of the University of
  * California.
  * Portions Copyright (c) 1995, Michael Holst.
  * All rights reserved.
  *
- * Redistribution and use in source and binary forms, with or without 
+ * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
- * Redistributions of source code must retain the above copyright notice, this
- * list of conditions and the following disclaimer.  
  *
- * Redistributions in binary form must reproduce the above copyright notice, 
+ * Redistributions of source code must retain the above copyright notice, this
+ * list of conditions and the following disclaimer.
+ *
+ * Redistributions in binary form must reproduce the above copyright notice,
  * this list of conditions and the following disclaimer in the documentation
  * and/or other materials provided with the distribution.
  *
- * Neither the name of the developer nor the names of its contributors may be 
- * used to endorse or promote products derived from this software without 
+ * Neither the name of the developer nor the names of its contributors may be
+ * used to endorse or promote products derived from this software without
  * specific prior written permission.
  *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
- * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE 
- * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE 
- * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE 
- * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR 
- * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF 
- * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS 
- * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN 
- * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) 
- * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF 
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF
  * THE POSSIBILITY OF SUCH DAMAGE.
  *
  * @endverbatim
  */
 
-#include "apbscfg.h"
-#include "apbs/pbeparm.h"
-#include "apbs/vstring.h"
+#include "pbeparm.h"
 
 VEMBED(rcsid="$Id$")
 
@@ -66,7 +64,7 @@ VEMBED(rcsid="$Id$")
 
 VPUBLIC double PBEparm_getIonCharge(PBEparm *thee, int i) {
     VASSERT(thee != VNULL);
-	VASSERT(i < thee->nion);
+    VASSERT(i < thee->nion);
     return thee->ionq[i];
 }
 
@@ -112,7 +110,7 @@ VPUBLIC PBEparm* PBEparm_ctor() {
     VASSERT( PBEparm_ctor2(thee) );
 
     return thee;
-} 
+}
 
 VPUBLIC int PBEparm_ctor2(PBEparm *thee) {
 
@@ -127,49 +125,49 @@ VPUBLIC int PBEparm_ctor2(PBEparm *thee) {
     thee->setbcfl = 0;
     thee->setnion = 0;
     for (i=0; i<MAXION; i++){
-		thee->setion[i] = 0;
-		thee->ionq[i] = 0.0;
-		thee->ionc[i] = 0.0;
-		thee->ionr[i] = 0.0;
-	}
+        thee->setion[i] = 0;
+        thee->ionq[i] = 0.0;
+        thee->ionc[i] = 0.0;
+        thee->ionr[i] = 0.0;
+    }
     thee->setpdie = 0;
     thee->setsdie = 0;
     thee->setsrfm = 0;
     thee->setsrad = 0;
-    thee->setswin = 0; 
+    thee->setswin = 0;
     thee->settemp = 0;
-    thee->setcalcenergy = 0;      
-    thee->setcalcforce = 0;       
+    thee->setcalcenergy = 0;
+    thee->setcalcforce = 0;
     thee->setsdens = 0;
-    thee->numwrite = 0; 
-    thee->setwritemat = 0; 
+    thee->numwrite = 0;
+    thee->setwritemat = 0;
     thee->nion = 0;
     thee->sdens = 0;
     thee->swin = 0;
     thee->srad = 1.4;
     thee->useDielMap = 0;
     thee->useKappaMap = 0;
-	thee->usePotMap = 0;
+    thee->usePotMap = 0;
     thee->useChargeMap = 0;
-	
-	/*----------------------------------------------*/
-	/* Added by Michael Grabe                       */
-	/*----------------------------------------------*/
-	
+
+    /*----------------------------------------------*/
+    /* Added by Michael Grabe                       */
+    /*----------------------------------------------*/
+
     thee->setzmem = 0;
     thee->setLmem = 0;
     thee->setmdie = 0;
     thee->setmemv = 0;
-	
-	/*----------------------------------------------*/
-	
-	thee->smsize = 0.0;
-	thee->smvolume = 0.0;
-	
-	thee->setsmsize = 0;
-	thee->setsmvolume = 0;
-	
-    return 1; 
+
+    /*----------------------------------------------*/
+
+    thee->smsize = 0.0;
+    thee->smvolume = 0.0;
+
+    thee->setsmsize = 0;
+    thee->setsmvolume = 0;
+
+    return 1;
 }
 
 VPUBLIC void PBEparm_dtor(PBEparm **thee) {
@@ -182,7 +180,7 @@ VPUBLIC void PBEparm_dtor(PBEparm **thee) {
 
 VPUBLIC void PBEparm_dtor2(PBEparm *thee) { ; }
 
-VPUBLIC int PBEparm_check(PBEparm *thee) { 
+VPUBLIC int PBEparm_check(PBEparm *thee) {
 
     int i;
 
@@ -207,7 +205,7 @@ VPUBLIC int PBEparm_check(PBEparm *thee) {
     if (!thee->setnion) {
         thee->setnion = 1;
         thee->nion = 0;
-    } 
+    }
     for (i=0; i<thee->nion; i++) {
         if (!thee->setion[i]) {
             Vnm_print(2, "PBEparm_check: ION #%d not set!\n",i);
@@ -247,7 +245,7 @@ VPUBLIC int PBEparm_check(PBEparm *thee) {
     if ((thee->srfm==VSM_SPLINE4) && (!thee->setswin)) {
         Vnm_print(2, "PBEparm_check: SWIN not set!\n");
         return 0;
-    }	
+    }
     if (!thee->settemp) {
         Vnm_print(2, "PBEparm_check: TEMP not set!\n");
         return 0;
@@ -255,11 +253,11 @@ VPUBLIC int PBEparm_check(PBEparm *thee) {
     if (!thee->setcalcenergy) thee->calcenergy = PCE_NO;
     if (!thee->setcalcforce) thee->calcforce = PCF_NO;
     if (!thee->setwritemat) thee->writemat = 0;
-	
-	/*--------------------------------------------------------*/
-	/* Added by Michael Grabe                                 */
-	/*--------------------------------------------------------*/
-	
+
+    /*--------------------------------------------------------*/
+    /* Added by Michael Grabe                                 */
+    /*--------------------------------------------------------*/
+
     if ((!thee->setzmem) && (thee->bcfl == 3)){
         Vnm_print(2, "PBEparm_check: ZMEM not set!\n");
         return 0;
@@ -276,9 +274,9 @@ VPUBLIC int PBEparm_check(PBEparm *thee) {
         Vnm_print(2, "PBEparm_check: MEMV not set!\n");
         return 0;
     }
-	
-	/*--------------------------------------------------------*/
-	
+
+    /*--------------------------------------------------------*/
+
     return 1;
 }
 
@@ -295,11 +293,11 @@ VPUBLIC void PBEparm_copy(PBEparm *thee, PBEparm *parm) {
     thee->dielMapID = parm->dielMapID;
     thee->useKappaMap = parm->useKappaMap;
     thee->kappaMapID = parm->kappaMapID;
-	thee->usePotMap = parm->usePotMap;
-	thee->potMapID = parm->potMapID;
+    thee->usePotMap = parm->usePotMap;
+    thee->potMapID = parm->potMapID;
     thee->useChargeMap = parm->useChargeMap;
     thee->chargeMapID = parm->chargeMapID;
-    thee->pbetype = parm->pbetype; 
+    thee->pbetype = parm->pbetype;
     thee->setpbetype = parm->setpbetype;
     thee->bcfl = parm->bcfl;
     thee->setbcfl = parm->setbcfl;
@@ -329,11 +327,11 @@ VPUBLIC void PBEparm_copy(PBEparm *thee, PBEparm *parm) {
     thee->setcalcenergy = parm->setcalcenergy;
     thee->calcforce = parm->calcforce;
     thee->setcalcforce = parm->setcalcforce;
-	
-	/*----------------------------------------------------*/
-	/* Added by Michael Grabe                             */
-	/*----------------------------------------------------*/
-	
+
+    /*----------------------------------------------------*/
+    /* Added by Michael Grabe                             */
+    /*----------------------------------------------------*/
+
     thee->zmem = parm->zmem;
     thee->setzmem = parm->setzmem;
     thee->Lmem = parm->Lmem;
@@ -342,27 +340,27 @@ VPUBLIC void PBEparm_copy(PBEparm *thee, PBEparm *parm) {
     thee->setmdie = parm->setmdie;
     thee->memv = parm->memv;
     thee->setmemv = parm->setmemv;
-	
-	/*----------------------------------------------------*/
-	
+
+    /*----------------------------------------------------*/
+
     thee->numwrite = parm->numwrite;
     for (i=0; i<PBEPARM_MAXWRITE; i++) {
         thee->writetype[i] = parm->writetype[i];
         thee->writefmt[i] = parm->writefmt[i];
-        for (j=0; j<VMAX_ARGLEN; j++) 
+        for (j=0; j<VMAX_ARGLEN; j++)
           thee->writestem[i][j] = parm->writestem[i][j];
     }
     thee->writemat = parm->writemat;
     thee->setwritemat = parm->setwritemat;
     for (i=0; i<VMAX_ARGLEN; i++) thee->writematstem[i] = parm->writematstem[i];
     thee->writematflag = parm->writematflag;
-   
-	thee->smsize = parm->smsize;
-	thee->smvolume = parm->smvolume;
-	
-	thee->setsmsize = parm->setsmsize;
-	thee->setsmvolume = parm->setsmvolume;
-	
+
+    thee->smsize = parm->smsize;
+    thee->smvolume = parm->smvolume;
+
+    thee->setsmsize = parm->setsmsize;
+    thee->setsmvolume = parm->setsmvolume;
+
     thee->parsed = parm->parsed;
 
 }
@@ -390,7 +388,7 @@ VPRIVATE int PBEparm_parseMOL(PBEparm *thee, Vio *sock) {
         Vnm_print(2, "NOsh:  Read non-int (%s) while parsing MOL \
 keyword!\n", tok);
         return -1;
-    } 
+    }
     thee->molid = ti;
     thee->setmolid = 1;
     return 1;
@@ -416,61 +414,61 @@ VPRIVATE int PBEparm_parseNRPBE(PBEparm *thee, Vio *sock) {
 
 VPRIVATE int PBEparm_parseSMPBE(PBEparm *thee, Vio *sock) {
 
-	int i;
-	
-	char type[VMAX_BUFSIZE]; /* vol or size (keywords) */
-	char value[VMAX_BUFSIZE]; /* floating point value */
-	
-	char setVol = 1;
-	char setSize = 1;
-	char keyValuePairs = 2;
-	
+    int i;
+
+    char type[VMAX_BUFSIZE]; /* vol or size (keywords) */
+    char value[VMAX_BUFSIZE]; /* floating point value */
+
+    char setVol = 1;
+    char setSize = 1;
+    char keyValuePairs = 2;
+
     double size, volume;
-	
-	for(i=0;i<keyValuePairs;i++){
-		
-		/* The line two tokens at a time */
-		VJMPERR1(Vio_scanf(sock, "%s", type) == 1);
-		VJMPERR1(Vio_scanf(sock, "%s", value) == 1);
-		
-		if(!strcmp(type,"vol")){
-			if ((setVol = sscanf(value, "%lf", &volume)) == 0){
-				Vnm_print(2,"NOsh:  Read non-float (%s) while parsing smpbe keyword!\n", value);
-				return VRC_FAILURE;
-			}
-		}else if(!strcmp(type,"size")){
-			if ((setSize = sscanf(value, "%lf", &size)) == 0){
-				Vnm_print(2,"NOsh:  Read non-float (%s) while parsing smpbe keyword!\n", value);
-				return VRC_FAILURE;
-			}
-		}else{
-			Vnm_print(2,"NOsh:  Read non-float (%s) while parsing smpbe keyword!\n", value);
-			return VRC_FAILURE;
-		}
-	}
-	
-	/* If either the volume or size isn't set, throw an error */
-	if((setVol == 0) || (setSize == 0)){
-		Vnm_print(2,"NOsh:  Error while parsing smpbe keywords! Only size or vol was specified.\n");
-		return VRC_FAILURE;
-	}
-	
-	Vnm_print(0, "NOsh: parsed smpbe\n");
+
+    for(i=0;i<keyValuePairs;i++){
+
+        /* The line two tokens at a time */
+        VJMPERR1(Vio_scanf(sock, "%s", type) == 1);
+        VJMPERR1(Vio_scanf(sock, "%s", value) == 1);
+
+        if(!strcmp(type,"vol")){
+            if ((setVol = sscanf(value, "%lf", &volume)) == 0){
+                Vnm_print(2,"NOsh:  Read non-float (%s) while parsing smpbe keyword!\n", value);
+                return VRC_FAILURE;
+            }
+        }else if(!strcmp(type,"size")){
+            if ((setSize = sscanf(value, "%lf", &size)) == 0){
+                Vnm_print(2,"NOsh:  Read non-float (%s) while parsing smpbe keyword!\n", value);
+                return VRC_FAILURE;
+            }
+        }else{
+            Vnm_print(2,"NOsh:  Read non-float (%s) while parsing smpbe keyword!\n", value);
+            return VRC_FAILURE;
+        }
+    }
+
+    /* If either the volume or size isn't set, throw an error */
+    if((setVol == 0) || (setSize == 0)){
+        Vnm_print(2,"NOsh:  Error while parsing smpbe keywords! Only size or vol was specified.\n");
+        return VRC_FAILURE;
+    }
+
+    Vnm_print(0, "NOsh: parsed smpbe\n");
     thee->pbetype = PBE_SMPBE;
     thee->setpbetype = 1;
-	
-	thee->smsize = size;
-	thee->setsmsize = 1;
-	
-	thee->smvolume = volume;
-	thee->setsmvolume = 1;
-	
-	return VRC_SUCCESS;
-	
+
+    thee->smsize = size;
+    thee->setsmsize = 1;
+
+    thee->smvolume = volume;
+    thee->setsmvolume = 1;
+
+    return VRC_SUCCESS;
+
 VERROR1:
     Vnm_print(2, "parsePBE:  ran out of tokens!\n");
-	return VRC_FAILURE;
-	
+    return VRC_FAILURE;
+
 }
 
 VPRIVATE int PBEparm_parseBCFL(PBEparm *thee, Vio *sock) {
@@ -488,8 +486,8 @@ VPRIVATE int PBEparm_parseBCFL(PBEparm *thee, Vio *sock) {
         Vnm_print(2, "parsePBE:  Warning -- parsed deprecated \"bcfl %d\" \
 statement\n", ti);
         Vnm_print(2, "parsePBE:  Please use \"bcfl ");
-        switch (thee->bcfl) { 
-            case BCFL_ZERO: 
+        switch (thee->bcfl) {
+            case BCFL_ZERO:
                 Vnm_print(2, "zero");
                 break;
             case BCFL_SDH:
@@ -501,10 +499,10 @@ statement\n", ti);
             case BCFL_FOCUS:
                 Vnm_print(2, "focus");
                 break;
-			case BCFL_MEM:
+            case BCFL_MEM:
                 Vnm_print(2, "mem");
                 break;
-			case BCFL_MAP:
+            case BCFL_MAP:
                 Vnm_print(2, "map");
                 break;
             default:
@@ -533,7 +531,7 @@ statement\n", ti);
             thee->bcfl = BCFL_FOCUS;
             thee->setbcfl = 1;
             return 1;
-		} else if (Vstring_strcasecmp(tok, "mem") == 0) {
+        } else if (Vstring_strcasecmp(tok, "mem") == 0) {
             thee->bcfl = BCFL_MEM;
             thee->setbcfl = 1;
             return 1;
@@ -555,97 +553,97 @@ statement\n", ti);
 }
 
 VPRIVATE int PBEparm_parseION(PBEparm *thee, Vio *sock) {
-    
-	int i;
-	int meth = 0;
-	
-	char tok[VMAX_BUFSIZE];
-	char value[VMAX_BUFSIZE];
-	
-	double tf;
-	double charge, conc, radius;
-	
-	int setCharge = 0;
-	int setConc = 0;
-	int setRadius = 0;
-	int keyValuePairs = 3;
-	
-	/* Get the initial token for the ION statement */
+
+    int i;
+    int meth = 0;
+
+    char tok[VMAX_BUFSIZE];
+    char value[VMAX_BUFSIZE];
+
+    double tf;
+    double charge, conc, radius;
+
+    int setCharge = 0;
+    int setConc = 0;
+    int setRadius = 0;
+    int keyValuePairs = 3;
+
+    /* Get the initial token for the ION statement */
     VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
-	
-	/* Scan the token once to determine the type (old style or new keyValue pair) */
-	meth = sscanf(tok, "%lf", &tf);
-	/* If tok is a non-zero float value, we are using the old method */
-	if(meth != 0){
-		
-		Vnm_print(2, "NOsh:  Deprecated use of ION keyword! Use key-value pairs\n", tok);
-		
-		if (sscanf(tok, "%lf", &tf) == 0) {
-			Vnm_print(2, "NOsh:  Read non-float (%s) while parsing ION keyword!\n", tok);
-			return VRC_FAILURE;
-		}
-		thee->ionq[thee->nion] = tf;
-		VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
-		if (sscanf(tok, "%lf", &tf) == 0) {
-			Vnm_print(2, "NOsh:  Read non-float (%s) while parsing ION keyword!\n", tok);
-			return VRC_FAILURE;
-		}
-		thee->ionc[thee->nion] = tf;
-		VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
-		if (sscanf(tok, "%lf", &tf) == 0) {
-			Vnm_print(2, "NOsh:  Read non-float (%s) while parsing ION keyword!\n", tok);
-			return VRC_FAILURE;
-		}
-		thee->ionr[thee->nion] = tf;
-		
-	}else{
-		
-		/* Three key-value pairs (charge, radius and conc) */
-		for(i=0;i<keyValuePairs;i++){
-			
-			/* Now scan for the value (float) to be used with the key token parsed 
-			 * above the if-else statement */
-			VJMPERR1(Vio_scanf(sock, "%s", value) == 1);
-			if(!strcmp(tok,"charge")){
-				setCharge = sscanf(value, "%lf", &charge);
-				if (setCharge == 0){
-					Vnm_print(2,"NOsh:  Read non-float (%s) while parsing ION %s keyword!\n", value, tok);
-					return VRC_FAILURE;
-				}
-				thee->ionq[thee->nion] = charge;
-			}else if(!strcmp(tok,"radius")){
-				setRadius = sscanf(value, "%lf", &radius);
-				if (setRadius == 0){
-					Vnm_print(2,"NOsh:  Read non-float (%s) while parsing ION %s keyword!\n", value, tok);
-					return VRC_FAILURE;
-				}
-				thee->ionr[thee->nion] = radius;
-			}else if(!strcmp(tok,"conc")){
-				setConc = sscanf(value, "%lf", &conc);
-				if (setConc == 0){
-					Vnm_print(2,"NOsh:  Read non-float (%s) while parsing ION %s keyword!\n", value, tok);
-					return VRC_FAILURE;
-				}
-				thee->ionc[thee->nion] = conc;
-			}else{
-				Vnm_print(2,"NOsh:  Illegal or missing key-value pair for ION keyword!\n");
-				return VRC_FAILURE;
-			}
-			
-			/* If all three values haven't be set (setValue = 0) then read the next token */
-			if((setCharge != 1) || (setConc != 1) || (setRadius != 1)){
-				VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
-			}
-			
-		} /* end for */
-	} /* end if */
-	
-	/* Finally set the setion, nion and setnion flags and return success */
-	thee->setion[thee->nion] = 1;
-	(thee->nion)++;
-	thee->setnion = 1;
-	return VRC_SUCCESS;
-	
+
+    /* Scan the token once to determine the type (old style or new keyValue pair) */
+    meth = sscanf(tok, "%lf", &tf);
+    /* If tok is a non-zero float value, we are using the old method */
+    if(meth != 0){
+
+        Vnm_print(2, "NOsh:  Deprecated use of ION keyword! Use key-value pairs\n", tok);
+
+        if (sscanf(tok, "%lf", &tf) == 0) {
+            Vnm_print(2, "NOsh:  Read non-float (%s) while parsing ION keyword!\n", tok);
+            return VRC_FAILURE;
+        }
+        thee->ionq[thee->nion] = tf;
+        VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
+        if (sscanf(tok, "%lf", &tf) == 0) {
+            Vnm_print(2, "NOsh:  Read non-float (%s) while parsing ION keyword!\n", tok);
+            return VRC_FAILURE;
+        }
+        thee->ionc[thee->nion] = tf;
+        VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
+        if (sscanf(tok, "%lf", &tf) == 0) {
+            Vnm_print(2, "NOsh:  Read non-float (%s) while parsing ION keyword!\n", tok);
+            return VRC_FAILURE;
+        }
+        thee->ionr[thee->nion] = tf;
+
+    }else{
+
+        /* Three key-value pairs (charge, radius and conc) */
+        for(i=0;i<keyValuePairs;i++){
+
+            /* Now scan for the value (float) to be used with the key token parsed
+             * above the if-else statement */
+            VJMPERR1(Vio_scanf(sock, "%s", value) == 1);
+            if(!strcmp(tok,"charge")){
+                setCharge = sscanf(value, "%lf", &charge);
+                if (setCharge == 0){
+                    Vnm_print(2,"NOsh:  Read non-float (%s) while parsing ION %s keyword!\n", value, tok);
+                    return VRC_FAILURE;
+                }
+                thee->ionq[thee->nion] = charge;
+            }else if(!strcmp(tok,"radius")){
+                setRadius = sscanf(value, "%lf", &radius);
+                if (setRadius == 0){
+                    Vnm_print(2,"NOsh:  Read non-float (%s) while parsing ION %s keyword!\n", value, tok);
+                    return VRC_FAILURE;
+                }
+                thee->ionr[thee->nion] = radius;
+            }else if(!strcmp(tok,"conc")){
+                setConc = sscanf(value, "%lf", &conc);
+                if (setConc == 0){
+                    Vnm_print(2,"NOsh:  Read non-float (%s) while parsing ION %s keyword!\n", value, tok);
+                    return VRC_FAILURE;
+                }
+                thee->ionc[thee->nion] = conc;
+            }else{
+                Vnm_print(2,"NOsh:  Illegal or missing key-value pair for ION keyword!\n");
+                return VRC_FAILURE;
+            }
+
+            /* If all three values haven't be set (setValue = 0) then read the next token */
+            if((setCharge != 1) || (setConc != 1) || (setRadius != 1)){
+                VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
+            }
+
+        } /* end for */
+    } /* end if */
+
+    /* Finally set the setion, nion and setnion flags and return success */
+    thee->setion[thee->nion] = 1;
+    (thee->nion)++;
+    thee->setnion = 1;
+    return VRC_SUCCESS;
+
     VERROR1:
         Vnm_print(2, "parsePBE:  ran out of tokens!\n");
         return VRC_FAILURE;
@@ -714,11 +712,11 @@ VPRIVATE int PBEparm_parseSRFM(PBEparm *thee, Vio *sock) {
 
     VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
 
-    /* Parse old-style int arg */ 
+    /* Parse old-style int arg */
     if (sscanf(tok, "%d", &ti) == 1) {
         thee->srfm = (Vsurf_Meth)ti;
         thee->setsrfm = 1;
-		
+
         Vnm_print(2, "parsePBE:  Warning -- parsed deprecated \"srfm %d\" \
 statement.\n", ti);
         Vnm_print(2, "parsePBE:  Please use \"srfm ");
@@ -734,7 +732,7 @@ statement.\n", ti);
                 break;
             case VSM_SPLINE3:
                 Vnm_print(2, "spl3");
-                break;				
+                break;
             case VSM_SPLINE4:
                 Vnm_print(2, "spl4");
                 break;
@@ -761,8 +759,8 @@ statement.\n", ti);
     } else if (Vstring_strcasecmp(tok, "spl3") == 0) {
         thee->srfm = VSM_SPLINE3;
         thee->setsrfm = 1;
-        return 1;		
-	} else if (Vstring_strcasecmp(tok, "spl4") == 0) {
+        return 1;
+    } else if (Vstring_strcasecmp(tok, "spl4") == 0) {
         thee->srfm = VSM_SPLINE4;
         thee->setsrfm = 1;
         return 1;
@@ -844,12 +842,12 @@ VPRIVATE int PBEparm_parseUSEMAP(PBEparm *thee, Vio *sock) {
     Vnm_print(0, "PBEparm_parseToken:  Read %s...\n", tok);
     if (Vstring_strcasecmp(tok, "diel") == 0) {
         thee->useDielMap = 1;
-        VJMPERR1(Vio_scanf(sock, "%s", tok) == 1); 
+        VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
         if (sscanf(tok, "%d", &ti) == 0) {
             Vnm_print(2, "NOsh:  Read non-int (%s) while parsing \
 USEMAP DIEL keyword!\n", tok);
             return -1;
-        } 
+        }
         thee->dielMapID = ti;
         return 1;
     } else if (Vstring_strcasecmp(tok, "kappa") == 0) {
@@ -867,7 +865,7 @@ USEMAP KAPPA keyword!\n", tok);
         VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
         if (sscanf(tok, "%d", &ti) == 0) {
             Vnm_print(2, "NOsh:  Read non-int (%s) while parsing \
-					  USEMAP POT keyword!\n", tok);
+                      USEMAP POT keyword!\n", tok);
             return -1;
         }
         thee->potMapID = ti;
@@ -875,7 +873,7 @@ USEMAP KAPPA keyword!\n", tok);
     } else if (Vstring_strcasecmp(tok, "charge") == 0) {
         thee->useChargeMap = 1;
         VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
-        if (sscanf(tok, "%d", &ti) == 0) { 
+        if (sscanf(tok, "%d", &ti) == 0) {
             Vnm_print(2, "NOsh:  Read non-int (%s) while parsing \
 USEMAP CHARGE keyword!\n", tok);
             return -1;
@@ -1007,78 +1005,78 @@ calcforce!\n", tok);
 VPRIVATE int PBEparm_parseZMEM(PBEparm *thee, Vio *sock) {
     char tok[VMAX_BUFSIZE];
     double tf;
-	
+
     VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
     if (sscanf(tok, "%lf", &tf) == 0) {
         Vnm_print(2, "NOsh:  Read non-float (%s) while parsing ZMEM \
-				  keyword!\n", tok);
+                  keyword!\n", tok);
         return -1;
     }
     thee->zmem = tf;
     thee->setzmem = 1;
     return 1;
-	
+
 VERROR1:
-	Vnm_print(2, "parsePBE:  ran out of tokens!\n");
-	return -1;
+    Vnm_print(2, "parsePBE:  ran out of tokens!\n");
+    return -1;
 }
 
 
 VPRIVATE int PBEparm_parseLMEM(PBEparm *thee, Vio *sock) {
     char tok[VMAX_BUFSIZE];
     double tf;
-	
+
     VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
     if (sscanf(tok, "%lf", &tf) == 0) {
         Vnm_print(2, "NOsh:  Read non-float (%s) while parsing LMEM \
-				  keyword!\n", tok);
+                  keyword!\n", tok);
         return -1;
     }
     thee->Lmem = tf;
     thee->setLmem = 1;
     return 1;
-	
+
 VERROR1:
-	Vnm_print(2, "parsePBE:  ran out of tokens!\n");
-	return -1;
+    Vnm_print(2, "parsePBE:  ran out of tokens!\n");
+    return -1;
 }
 
 VPRIVATE int PBEparm_parseMDIE(PBEparm *thee, Vio *sock) {
     char tok[VMAX_BUFSIZE];
     double tf;
-	
+
     VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
     if (sscanf(tok, "%lf", &tf) == 0) {
         Vnm_print(2, "NOsh:  Read non-float (%s) while parsing MDIE \
-				  keyword!\n", tok);
+                  keyword!\n", tok);
         return -1;
     }
     thee->mdie = tf;
     thee->setmdie  = 1;
     return 1;
-	
+
 VERROR1:
-	Vnm_print(2, "parsePBE:  ran out of tokens!\n");
-	return -1;
+    Vnm_print(2, "parsePBE:  ran out of tokens!\n");
+    return -1;
 }
 
 VPRIVATE int PBEparm_parseMEMV(PBEparm *thee, Vio *sock) {
     char tok[VMAX_BUFSIZE];
     double tf;
-	
+
     VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
     if (sscanf(tok, "%lf", &tf) == 0) {
         Vnm_print(2, "NOsh:  Read non-float (%s) while parsing MEMV \
-				  keyword!\n", tok);
+                  keyword!\n", tok);
         return -1;
     }
     thee->memv = tf;
     thee->setmemv = 1;
     return 1;
-	
+
 VERROR1:
-	Vnm_print(2, "parsePBE:  ran out of tokens!\n");
-	return -1;
+    Vnm_print(2, "parsePBE:  ran out of tokens!\n");
+    return -1;
 }
 
 /*----------------------------------------------------------*/
@@ -1152,15 +1150,15 @@ VPRIVATE int PBEparm_parseWRITE(PBEparm *thee, Vio *sock) {
         strncpy(strnew, str+1, strlen(str)-2);
         strcpy(tok, strnew);
     }
-	if (thee->numwrite < (PBEPARM_MAXWRITE-1)) {
-		strncpy(thee->writestem[thee->numwrite], tok, VMAX_ARGLEN);
-		thee->writetype[thee->numwrite] = writetype;
-		thee->writefmt[thee->numwrite] = writefmt;
-		(thee->numwrite)++;
-	} else {
-		Vnm_print(2, "PBEparm_parse:  You have exceeded the maximum number of write statements!\n");
-		Vnm_print(2, "PBEparm_parse:  Ignoring additional write statements!\n");
-	}
+    if (thee->numwrite < (PBEPARM_MAXWRITE-1)) {
+        strncpy(thee->writestem[thee->numwrite], tok, VMAX_ARGLEN);
+        thee->writetype[thee->numwrite] = writetype;
+        thee->writefmt[thee->numwrite] = writefmt;
+        (thee->numwrite)++;
+    } else {
+        Vnm_print(2, "PBEparm_parse:  You have exceeded the maximum number of write statements!\n");
+        Vnm_print(2, "PBEparm_parse:  Ignoring additional write statements!\n");
+    }
     return 1;
 
     VERROR1:
@@ -1205,7 +1203,7 @@ WRITEMAT keyword!\n", tok);
 
 }
 
-VPUBLIC int PBEparm_parseToken(PBEparm *thee, char tok[VMAX_BUFSIZE], 
+VPUBLIC int PBEparm_parseToken(PBEparm *thee, char tok[VMAX_BUFSIZE],
   Vio *sock) {
 
     if (thee == VNULL) {
@@ -1259,11 +1257,11 @@ VPUBLIC int PBEparm_parseToken(PBEparm *thee, char tok[VMAX_BUFSIZE],
         return PBEparm_parseWRITE(thee, sock);
     } else if (Vstring_strcasecmp(tok, "writemat") == 0) {
         return PBEparm_parseWRITEMAT(thee, sock);
-		
-	/*----------------------------------------------------------*/
-	/* Added by Michael Grabe                                   */
-	/*----------------------------------------------------------*/
-		
+
+    /*----------------------------------------------------------*/
+    /* Added by Michael Grabe                                   */
+    /*----------------------------------------------------------*/
+
     } else if (Vstring_strcasecmp(tok, "zmem") == 0) {
         return PBEparm_parseZMEM(thee, sock);
     } else if (Vstring_strcasecmp(tok, "Lmem") == 0) {
@@ -1273,8 +1271,8 @@ VPUBLIC int PBEparm_parseToken(PBEparm *thee, char tok[VMAX_BUFSIZE],
     } else if (Vstring_strcasecmp(tok, "memv") == 0) {
         return PBEparm_parseMEMV(thee, sock);
     }
-	
-	/*----------------------------------------------------------*/
+
+    /*----------------------------------------------------------*/
 
     return 0;
 

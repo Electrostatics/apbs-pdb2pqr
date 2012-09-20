@@ -47,65 +47,64 @@
  * @endverbatim
  */
 
-#include "apbs/mgcsd.h"
-#include "apbs/vhal.h"
+#include "mgcsd.h"
 
 VEXTERNC void Vmvcs(int *nx, int *ny, int *nz,
-		double *x,
-		int *iz,
-		double *w0, double *w1, double *w2, double *w3,
-		int *istop, int *itmax, int *iters, int *ierror,
-		int *nlev, int *ilev, int *nlev_real,
-		int *mgsolv, int *iok, int *iinfo,
-		double *epsiln, double *errtol, double *omega,
-		int *nu1, int *nu2,
-		int *mgsmoo,
-		int *ipc, double *rpc,
-		double *pc, double *ac, double *cc, double *fc, double *tru) {
+        double *x,
+        int *iz,
+        double *w0, double *w1, double *w2, double *w3,
+        int *istop, int *itmax, int *iters, int *ierror,
+        int *nlev, int *ilev, int *nlev_real,
+        int *mgsolv, int *iok, int *iinfo,
+        double *epsiln, double *errtol, double *omega,
+        int *nu1, int *nu2,
+        int *mgsmoo,
+        int *ipc, double *rpc,
+        double *pc, double *ac, double *cc, double *fc, double *tru) {
 
-	int level;       // @todo: doc
-	int lev;         // @todo: doc
-	int itmax_s;     // @todo: doc
-	int iters_s;     // @todo: doc
-	int nuuu;        // @todo: doc
-	int mgsmoo_s;    // @todo: doc
-	int iresid;      // @todo: doc
-	int nxf;         // @todo: doc
-	int nyf;         // @todo: doc
-	int nzf;         // @todo: doc
-	int nxc;         // @todo: doc
-	int nyc;         // @todo: doc
-	int nzc;         // @todo: doc
-	int lpv;         // @todo: doc
-	int n;           // @todo: doc
-	int m;           // @todo: doc
-	int iadjoint;    // @todo: doc
-	double errtol_s; // @todo: doc
-	double rsden;    // @todo: doc
-	double rsnrm;    // @todo: doc
-	double orsnrm;   // @todo: doc
-	double xnum;     // @todo: doc
-	double xden;     // @todo: doc
-	double xdamp;    // @todo: doc
-	int lda;         // @todo: doc
+    int level;       // @todo: doc
+    int lev;         // @todo: doc
+    int itmax_s;     // @todo: doc
+    int iters_s;     // @todo: doc
+    int nuuu;        // @todo: doc
+    int mgsmoo_s;    // @todo: doc
+    int iresid;      // @todo: doc
+    int nxf;         // @todo: doc
+    int nyf;         // @todo: doc
+    int nzf;         // @todo: doc
+    int nxc;         // @todo: doc
+    int nyc;         // @todo: doc
+    int nzc;         // @todo: doc
+    int lpv;         // @todo: doc
+    int n;           // @todo: doc
+    int m;           // @todo: doc
+    int iadjoint;    // @todo: doc
+    double errtol_s; // @todo: doc
+    double rsden;    // @todo: doc
+    double rsnrm;    // @todo: doc
+    double orsnrm;   // @todo: doc
+    double xnum;     // @todo: doc
+    double xden;     // @todo: doc
+    double xdamp;    // @todo: doc
+    int lda;         // @todo: doc
 
-	double alpha;     // A utility variable used to pass a parameter to xaxpy
-	int numlev;       // A utility variable used to pass a parameter to mkcors
+    double alpha;     // A utility variable used to pass a parameter to xaxpy
+    int numlev;       // A utility variable used to pass a parameter to mkcors
 
-	MAT2(iz, 50, 1);
+    MAT2(iz, 50, 1);
 
-	// Recover level information
-	level = 1;
-	lev = (*ilev - 1) + level;
+    // Recover level information
+    level = 1;
+    lev = (*ilev - 1) + level;
 
-	// Recover grid sizes
-	nxf = *nx;
+    // Recover grid sizes
+    nxf = *nx;
     nyf = *ny;
     nzf = *nz;
     numlev = *nlev - 1;
     Vmkcors(&numlev, &nxf, &nyf, &nzf, &nxc, &nyc, &nzc);
 
-	// Do some i/o if requested
+    // Do some i/o if requested
     if (*iinfo > 1) {
         VMESSAGE0("Starting mvcs operation");
         VMESSAGE3("Fine Grid Size:   (%d, %d, %d)", nxf, nyf, nzf);
@@ -117,445 +116,445 @@ VEXTERNC void Vmvcs(int *nx, int *ny, int *nz,
 
     }
 
-	/*    **************************************************************
-	 *    *** Note: if (iok != 0) then:  use a stopping test.        ***
-	 *    ***       else:  use just the itmax to stop iteration.     ***
-	 *    **************************************************************
-	 *    *** istop=0 most efficient (whatever it is)                ***
-	 *    *** istop=1 relative residual                              ***
-	 *    *** istop=2 rms difference of successive iterates          ***
-	 *    *** istop=3 relative true error (provided for testing)     ***
-	 *    **************************************************************/
+    /*    **************************************************************
+     *    *** Note: if (iok != 0) then:  use a stopping test.        ***
+     *    ***       else:  use just the itmax to stop iteration.     ***
+     *    **************************************************************
+     *    *** istop=0 most efficient (whatever it is)                ***
+     *    *** istop=1 relative residual                              ***
+     *    *** istop=2 rms difference of successive iterates          ***
+     *    *** istop=3 relative true error (provided for testing)     ***
+     *    **************************************************************/
 
     // Compute denominator for stopping criterion
-	if (*iok != 0) {
-		if (*istop == 0) {
-			rsden = 1.0;
-		}
-		else if (*istop == 1) {
-			rsden = Vxnrm1(&nxf, &nyf, &nzf, RAT(fc, VAT2(iz, 1,lev)));
-		}
-		else if (*istop == 2) {
-			rsden = VSQRT(nxf * nyf * nzf);
-		}
-		else if (*istop == 3) {
-			rsden = Vxnrm2(&nxf, &nyf, &nzf, RAT(tru, VAT2(iz, 1,lev)));
-		}
-		else if (*istop == 4) {
-			rsden = Vxnrm2(&nxf, &nyf, &nzf, RAT(tru, VAT2(iz, 1,lev)));
-		}
-		else if (*istop == 5) {
-		    Vmatvec(&nxf, &nyf, &nzf,
-				RAT(ipc, VAT2(iz, 5,lev)), RAT(rpc, VAT2(iz, 6,lev)),
-				 RAT(ac, VAT2(iz, 7,lev)),  RAT(cc, VAT2(iz, 1,lev)),
-				RAT(tru, VAT2(iz, 1,lev)),  w1);
-			rsden = VSQRT(Vxdot(&nxf, &nyf, &nzf, RAT(tru, VAT2(iz, 1,lev)), w1));
-		}
-		else {
+    if (*iok != 0) {
+        if (*istop == 0) {
+            rsden = 1.0;
+        }
+        else if (*istop == 1) {
+            rsden = Vxnrm1(&nxf, &nyf, &nzf, RAT(fc, VAT2(iz, 1,lev)));
+        }
+        else if (*istop == 2) {
+            rsden = VSQRT(nxf * nyf * nzf);
+        }
+        else if (*istop == 3) {
+            rsden = Vxnrm2(&nxf, &nyf, &nzf, RAT(tru, VAT2(iz, 1,lev)));
+        }
+        else if (*istop == 4) {
+            rsden = Vxnrm2(&nxf, &nyf, &nzf, RAT(tru, VAT2(iz, 1,lev)));
+        }
+        else if (*istop == 5) {
+            Vmatvec(&nxf, &nyf, &nzf,
+                RAT(ipc, VAT2(iz, 5,lev)), RAT(rpc, VAT2(iz, 6,lev)),
+                 RAT(ac, VAT2(iz, 7,lev)),  RAT(cc, VAT2(iz, 1,lev)),
+                RAT(tru, VAT2(iz, 1,lev)),  w1);
+            rsden = VSQRT(Vxdot(&nxf, &nyf, &nzf, RAT(tru, VAT2(iz, 1,lev)), w1));
+        }
+        else {
             VABORT_MSG1("Bad istop value: %d", *istop);
-		}
+        }
 
-		if (rsden == 0.0) {
-			rsden = 1.0;
+        if (rsden == 0.0) {
+            rsden = 1.0;
             VERRMSG0("rhs is zero on finest level");
-		}
-		rsnrm = rsden;
-	    orsnrm = rsnrm;
-	    iters_s = 0;
+        }
+        rsnrm = rsden;
+        orsnrm = rsnrm;
+        iters_s = 0;
 
         Vprtstp(*iok, 0, rsnrm, rsden, orsnrm);
-	}
+    }
 
 
 
-	/* *********************************************************************
-	 * *** solve directly if nlev = 1
-	 * *********************************************************************/
+    /* *********************************************************************
+     * *** solve directly if nlev = 1
+     * *********************************************************************/
 
-	// Solve directly if on the coarse grid
-	if (*nlev == 1) {
+    // Solve directly if on the coarse grid
+    if (*nlev == 1) {
 
-		// Use iterative method?
-		if (*mgsolv == 0) {
+        // Use iterative method?
+        if (*mgsolv == 0) {
 
-			// solve on coarsest grid with cghs, mgsmoo_s=4 (no residual)
-			iresid = 0;
-			iadjoint = 0;
-			itmax_s  = 100;
-			iters_s  = 0;
-			errtol_s = *epsiln;
-			mgsmoo_s = 4;
+            // solve on coarsest grid with cghs, mgsmoo_s=4 (no residual)
+            iresid = 0;
+            iadjoint = 0;
+            itmax_s  = 100;
+            iters_s  = 0;
+            errtol_s = *epsiln;
+            mgsmoo_s = 4;
 
-			Vazeros(&nxf, &nyf, &nzf, RAT(x, VAT2(iz, 1,lev)));
+            Vazeros(&nxf, &nyf, &nzf, RAT(x, VAT2(iz, 1,lev)));
 
-			Vsmooth(&nxf, &nyf, &nzf,
-					RAT(ipc, VAT2(iz, 5,lev)), RAT(rpc, VAT2(iz, 6,lev)),
-					 RAT(ac, VAT2(iz, 7,lev)), RAT(cc, VAT2(iz, 1,lev)), RAT(fc, VAT2(iz, 1,lev)),
-					  RAT(x, VAT2(iz, 1,lev)), w1, w2, w3,
-					  &itmax_s, &iters_s, &errtol_s, omega,
-					  &iresid, &iadjoint, &mgsmoo_s);
+            Vsmooth(&nxf, &nyf, &nzf,
+                    RAT(ipc, VAT2(iz, 5,lev)), RAT(rpc, VAT2(iz, 6,lev)),
+                     RAT(ac, VAT2(iz, 7,lev)), RAT(cc, VAT2(iz, 1,lev)), RAT(fc, VAT2(iz, 1,lev)),
+                      RAT(x, VAT2(iz, 1,lev)), w1, w2, w3,
+                      &itmax_s, &iters_s, &errtol_s, omega,
+                      &iresid, &iadjoint, &mgsmoo_s);
 
-			// Check for trouble on the coarse grid
+            // Check for trouble on the coarse grid
             VWARN_MSG2(iters_s <= itmax_s,
                 "Exceeded maximum iterations: iters_s=%d, itmax_s=%d",
                 iters_s, itmax_s);
 
-		} else if (*mgsolv == 1) {
+        } else if (*mgsolv == 1) {
 
-		    // Use direct method?
+            // Use direct method?
 
-			// Setup lpv to access the factored/banded operator
-			lpv = lev + 1;
+            // Setup lpv to access the factored/banded operator
+            lpv = lev + 1;
 
-			// setup for banded format
-			n   = *RAT(ipc, (VAT2(iz, 5,lpv) - 1) + 1);
-			m   = *RAT(ipc, (VAT2(iz, 5,lpv) - 1) + 2);
-			lda = *RAT(ipc, (VAT2(iz, 5,lpv) - 1) + 3);
+            // setup for banded format
+            n   = *RAT(ipc, (VAT2(iz, 5,lpv) - 1) + 1);
+            m   = *RAT(ipc, (VAT2(iz, 5,lpv) - 1) + 2);
+            lda = *RAT(ipc, (VAT2(iz, 5,lpv) - 1) + 3);
 
-			// Call dpbsl to solve
-			Vxcopy_small(&nxf, &nyf, &nzf, RAT(fc, VAT2(iz, 1,lev)), w1);
-			Vdpbsl(RAT(ac, VAT2(iz, 7,lpv)), &lda, &n, &m, w1);
-			Vxcopy_large(&nxf, &nyf, &nzf, w1, RAT(x, VAT2(iz, 1,lev)));
-			VfboundPMG00(&nxf, &nyf, &nzf, RAT(x, VAT2(iz, 1,lev)));
+            // Call dpbsl to solve
+            Vxcopy_small(&nxf, &nyf, &nzf, RAT(fc, VAT2(iz, 1,lev)), w1);
+            Vdpbsl(RAT(ac, VAT2(iz, 7,lpv)), &lda, &n, &m, w1);
+            Vxcopy_large(&nxf, &nyf, &nzf, w1, RAT(x, VAT2(iz, 1,lev)));
+            VfboundPMG00(&nxf, &nyf, &nzf, RAT(x, VAT2(iz, 1,lev)));
 
-		} else {
+        } else {
             VABORT_MSG1("Invalid coarse solver requested: %d", *mgsolv);
-		}
+        }
 
 
-		// Compute the stopping test
-		*iters = 1;
-		if (*iok != 0) {
+        // Compute the stopping test
+        *iters = 1;
+        if (*iok != 0) {
 
-			orsnrm = rsnrm;
+            orsnrm = rsnrm;
 
-			if (*istop == 0) {
+            if (*istop == 0) {
 
-				Vmresid(&nxf, &nyf, &nzf,
+                Vmresid(&nxf, &nyf, &nzf,
                     RAT(ipc, VAT2(iz, 5, lev)), RAT(rpc, VAT2(iz, 6, lev)),
                     RAT( ac, VAT2(iz, 7, lev)), RAT(cc , VAT2(iz, 1, lev)),
                     RAT( fc, VAT2(iz, 1,lev)),
                     RAT(  x, VAT2(iz, 1, lev)), w1);
 
-			    rsnrm = Vxnrm1(&nxf, &nyf, &nzf, w1);
-			}
+                rsnrm = Vxnrm1(&nxf, &nyf, &nzf, w1);
+            }
 
-			else if (*istop == 1) {
+            else if (*istop == 1) {
 
-				Vmresid(&nxf, &nyf, &nzf,
+                Vmresid(&nxf, &nyf, &nzf,
                     RAT(ipc, VAT2(iz, 5, lev)), RAT(rpc, VAT2(iz, 6, lev)),
                     RAT( ac, VAT2(iz, 7, lev)), RAT( cc, VAT2(iz, 1, lev)),
                     RAT( fc, VAT2(iz, 1, lev)), RAT(  x, VAT2(iz, 1, lev)),
                     w1);
-				rsnrm = Vxnrm1(&nxf, &nyf, &nzf, w1);
-			}
+                rsnrm = Vxnrm1(&nxf, &nyf, &nzf, w1);
+            }
 
-			else if (*istop == 2) {
+            else if (*istop == 2) {
 
-				alpha = -1.0;
+                alpha = -1.0;
 
-				Vxcopy(&nxf, &nyf, &nzf, RAT(tru, VAT2(iz, 1,lev)), w1);
-			    Vxaxpy(&nxf, &nyf, &nzf, &alpha,
-			    		RAT(x, VAT2(iz, 1,lev)), w1);
-			    rsnrm = Vxnrm1(&nxf, &nyf, &nzf, w1);
-			    Vxcopy(&nxf, &nyf, &nzf, RAT(x, VAT2(iz, 1,lev)), RAT(tru, VAT2(iz, 1,lev)));
-			}
+                Vxcopy(&nxf, &nyf, &nzf, RAT(tru, VAT2(iz, 1,lev)), w1);
+                Vxaxpy(&nxf, &nyf, &nzf, &alpha,
+                        RAT(x, VAT2(iz, 1,lev)), w1);
+                rsnrm = Vxnrm1(&nxf, &nyf, &nzf, w1);
+                Vxcopy(&nxf, &nyf, &nzf, RAT(x, VAT2(iz, 1,lev)), RAT(tru, VAT2(iz, 1,lev)));
+            }
 
-			else if (*istop == 3) {
+            else if (*istop == 3) {
 
-				alpha = -1.0;
+                alpha = -1.0;
 
-				Vxcopy(&nxf, &nyf, &nzf, RAT(tru, VAT2(iz, 1,lev)), w1);
-			    Vxaxpy(&nxf, &nyf, &nzf, &alpha, RAT(x, VAT2(iz, 1,lev)), w1);
-			    rsnrm = Vxnrm2(&nxf, &nyf, &nzf, w1);
-			}
+                Vxcopy(&nxf, &nyf, &nzf, RAT(tru, VAT2(iz, 1,lev)), w1);
+                Vxaxpy(&nxf, &nyf, &nzf, &alpha, RAT(x, VAT2(iz, 1,lev)), w1);
+                rsnrm = Vxnrm2(&nxf, &nyf, &nzf, w1);
+            }
 
-			else if (*istop == 4) {
+            else if (*istop == 4) {
 
-				alpha = -1.0;
+                alpha = -1.0;
 
-				Vxcopy(&nxf, &nyf, &nzf, RAT(tru, VAT2(iz, 1,lev)), w1);
-				Vxaxpy(&nxf, &nyf, &nzf, &alpha, RAT(x, VAT2(iz, 1,lev)), w1);
-			    rsnrm = Vxnrm2(&nxf, &nyf, &nzf, w1);
-			}
+                Vxcopy(&nxf, &nyf, &nzf, RAT(tru, VAT2(iz, 1,lev)), w1);
+                Vxaxpy(&nxf, &nyf, &nzf, &alpha, RAT(x, VAT2(iz, 1,lev)), w1);
+                rsnrm = Vxnrm2(&nxf, &nyf, &nzf, w1);
+            }
 
-			else if (*istop == 5) {
+            else if (*istop == 5) {
 
-				alpha = -1.0;
+                alpha = -1.0;
 
-				Vxcopy(&nxf, &nyf, &nzf, RAT(tru, VAT2(iz, 1,lev)), w1);
-				Vxaxpy(&nxf, &nyf, &nzf, &alpha, RAT(x, VAT2(iz, 1,lev)), w1);
+                Vxcopy(&nxf, &nyf, &nzf, RAT(tru, VAT2(iz, 1,lev)), w1);
+                Vxaxpy(&nxf, &nyf, &nzf, &alpha, RAT(x, VAT2(iz, 1,lev)), w1);
 
-				Vmatvec(&nxf, &nyf, &nzf,
-						RAT(ipc, VAT2(iz, 5,lev)), RAT(rpc, VAT2(iz, 6,lev)),
-						 RAT(ac, VAT2(iz, 7,lev)),  RAT(cc, VAT2(iz, 1,lev)),
-						 w1, w2);
-				rsnrm = VSQRT(Vxdot(&nxf, &nyf, &nzf, w1, w2));
-			}
+                Vmatvec(&nxf, &nyf, &nzf,
+                        RAT(ipc, VAT2(iz, 5,lev)), RAT(rpc, VAT2(iz, 6,lev)),
+                         RAT(ac, VAT2(iz, 7,lev)),  RAT(cc, VAT2(iz, 1,lev)),
+                         w1, w2);
+                rsnrm = VSQRT(Vxdot(&nxf, &nyf, &nzf, w1, w2));
+            }
 
-			else {
+            else {
                 VABORT_MSG1("Bad istop value: %d\n", *istop);
-			}
+            }
             Vprtstp(*iok, *iters, rsnrm, rsden, orsnrm);
-		}
-		return;
-	}
+        }
+        return;
+    }
 
 
-	/* *********************************************************************
-	 * *** begin mg iteration (note nxf,nyf,nzf changes during loop)
-	 * *********************************************************************/
+    /* *********************************************************************
+     * *** begin mg iteration (note nxf,nyf,nzf changes during loop)
+     * *********************************************************************/
 
-	// Setup for the v-cycle looping
-	*iters = 0;
-	do {
+    // Setup for the v-cycle looping
+    *iters = 0;
+    do {
 
-		// Finest level initialization
-		level = 1;
-		lev   = (*ilev - 1) + level;
+        // Finest level initialization
+        level = 1;
+        lev   = (*ilev - 1) + level;
 
-		// nu1 pre-smoothings on fine grid (with residual)
-		iresid = 1;
-		iadjoint = 0;
-		iters_s  = 0;
-		errtol_s = 0.0;
-		nuuu = Vivariv(nu1, &lev);
+        // nu1 pre-smoothings on fine grid (with residual)
+        iresid = 1;
+        iadjoint = 0;
+        iters_s  = 0;
+        errtol_s = 0.0;
+        nuuu = Vivariv(nu1, &lev);
 
-		Vsmooth(&nxf, &nyf, &nzf,
-				RAT(ipc, VAT2(iz, 5,lev)), RAT(rpc, VAT2(iz, 6,lev)),
-				 RAT(ac, VAT2(iz, 7,lev)),  RAT(cc, VAT2(iz, 1,lev)),  RAT(fc, VAT2(iz, 1,lev)),
-				  RAT(x, VAT2(iz, 1,lev)), w2, w3, w1,
-				&nuuu, &iters_s,
-				&errtol_s, omega,
-				&iresid, &iadjoint, mgsmoo);
+        Vsmooth(&nxf, &nyf, &nzf,
+                RAT(ipc, VAT2(iz, 5,lev)), RAT(rpc, VAT2(iz, 6,lev)),
+                 RAT(ac, VAT2(iz, 7,lev)),  RAT(cc, VAT2(iz, 1,lev)),  RAT(fc, VAT2(iz, 1,lev)),
+                  RAT(x, VAT2(iz, 1,lev)), w2, w3, w1,
+                &nuuu, &iters_s,
+                &errtol_s, omega,
+                &iresid, &iadjoint, mgsmoo);
 
-		Vxcopy(&nxf, &nyf, &nzf, w1, RAT(w0, VAT2(iz, 1,lev)));
-
-
-
-		/* *********************************************************************
-		 * begin cycling down to coarse grid
-		 * *********************************************************************/
-
-		// Go down grids: restrict resid to coarser and smooth
-		for (level=2; level<=*nlev; level++) {
-
-			lev = (*ilev - 1) + level;
-
-			// Find new grid size
-			numlev = 1;
-			Vmkcors(&numlev, &nxf, &nyf, &nzf, &nxc, &nyc, &nzc);
-
-			// Restrict residual to coarser grid ***
-			Vrestrc(&nxf, &nyf, &nzf,
-					&nxc, &nyc, &nzc,
-					w1, RAT(w0, VAT2(iz, 1,lev)), RAT(pc, VAT2(iz, 11,lev-1)));
-
-			/// New grid size
-			nxf = nxc;
-			nyf = nyc;
-			nzf = nzc;
-
-			// if not on coarsest level yet...
-			if (level != *nlev) {
-
-				// nu1 pre-smoothings on this level (with residual)
-				// (w1 has residual...)
-				Vazeros(&nxf, &nyf, &nzf, RAT(x, VAT2(iz, 1,lev)));
-			    iresid = 1;
-			    iadjoint = 0;
-			    iters_s  = 0;
-			    errtol_s = 0.0;
-			    nuuu = Vivariv(nu1, &lev);
-			    Vsmooth(&nxf, &nyf, &nzf,
-			 		   RAT(ipc, VAT2(iz, 5,lev)), RAT(rpc, VAT2(iz, 6,lev)),
-		 				RAT(ac, VAT2(iz, 7,lev)),  RAT(cc, VAT2(iz, 1,lev)), RAT(w0, VAT2(iz, 1,lev)),
-	 					RAT(x, VAT2(iz, 1,lev)), w2, w3, w1,
- 						&nuuu, &iters_s,
-						&errtol_s, omega ,
-						&iresid, &iadjoint, mgsmoo);
-			}
-			// End of cycling down to coarse grid loop
-		}
+        Vxcopy(&nxf, &nyf, &nzf, w1, RAT(w0, VAT2(iz, 1,lev)));
 
 
 
-		/* *********************************************************************
-		 * begin coarse grid
-		 * *********************************************************************/
+        /* *********************************************************************
+         * begin cycling down to coarse grid
+         * *********************************************************************/
 
-		// Coarsest level
-		level = *nlev;
-		lev = (*ilev - 1) + level;
+        // Go down grids: restrict resid to coarser and smooth
+        for (level=2; level<=*nlev; level++) {
 
-		// Use iterative method?
-		if (*mgsolv == 0) {
+            lev = (*ilev - 1) + level;
 
-			// solve on coarsest grid with cghs, mgsmoo_s=4 (no residual)
-			iresid = 0;
-			iadjoint = 0;
-			itmax_s  = 100;
-			iters_s  = 0;
-			errtol_s = *epsiln;
-			mgsmoo_s = 4;
-			Vazeros(&nxf, &nyf, &nzf, RAT(x, VAT2(iz, 1,lev)));
-			Vsmooth(&nxf, &nyf, &nzf,
-					RAT(ipc, VAT2(iz, 5,lev)), RAT(rpc, VAT2(iz, 6,lev)),
-					 RAT(ac, VAT2(iz, 7,lev)), RAT(cc, VAT2(iz, 1,lev)), RAT(w0, VAT2(iz, 1,lev)),
-					   RAT(x, VAT2(iz, 1,lev)), w1, w2, w3,
-					&itmax_s, &iters_s,
-					&errtol_s, omega,
-					&iresid, &iadjoint, &mgsmoo_s);
+            // Find new grid size
+            numlev = 1;
+            Vmkcors(&numlev, &nxf, &nyf, &nzf, &nxc, &nyc, &nzc);
 
-			// Check for trouble on the coarse grid
+            // Restrict residual to coarser grid ***
+            Vrestrc(&nxf, &nyf, &nzf,
+                    &nxc, &nyc, &nzc,
+                    w1, RAT(w0, VAT2(iz, 1,lev)), RAT(pc, VAT2(iz, 11,lev-1)));
+
+            /// New grid size
+            nxf = nxc;
+            nyf = nyc;
+            nzf = nzc;
+
+            // if not on coarsest level yet...
+            if (level != *nlev) {
+
+                // nu1 pre-smoothings on this level (with residual)
+                // (w1 has residual...)
+                Vazeros(&nxf, &nyf, &nzf, RAT(x, VAT2(iz, 1,lev)));
+                iresid = 1;
+                iadjoint = 0;
+                iters_s  = 0;
+                errtol_s = 0.0;
+                nuuu = Vivariv(nu1, &lev);
+                Vsmooth(&nxf, &nyf, &nzf,
+                       RAT(ipc, VAT2(iz, 5,lev)), RAT(rpc, VAT2(iz, 6,lev)),
+                        RAT(ac, VAT2(iz, 7,lev)),  RAT(cc, VAT2(iz, 1,lev)), RAT(w0, VAT2(iz, 1,lev)),
+                        RAT(x, VAT2(iz, 1,lev)), w2, w3, w1,
+                        &nuuu, &iters_s,
+                        &errtol_s, omega ,
+                        &iresid, &iadjoint, mgsmoo);
+            }
+            // End of cycling down to coarse grid loop
+        }
+
+
+
+        /* *********************************************************************
+         * begin coarse grid
+         * *********************************************************************/
+
+        // Coarsest level
+        level = *nlev;
+        lev = (*ilev - 1) + level;
+
+        // Use iterative method?
+        if (*mgsolv == 0) {
+
+            // solve on coarsest grid with cghs, mgsmoo_s=4 (no residual)
+            iresid = 0;
+            iadjoint = 0;
+            itmax_s  = 100;
+            iters_s  = 0;
+            errtol_s = *epsiln;
+            mgsmoo_s = 4;
+            Vazeros(&nxf, &nyf, &nzf, RAT(x, VAT2(iz, 1,lev)));
+            Vsmooth(&nxf, &nyf, &nzf,
+                    RAT(ipc, VAT2(iz, 5,lev)), RAT(rpc, VAT2(iz, 6,lev)),
+                     RAT(ac, VAT2(iz, 7,lev)), RAT(cc, VAT2(iz, 1,lev)), RAT(w0, VAT2(iz, 1,lev)),
+                       RAT(x, VAT2(iz, 1,lev)), w1, w2, w3,
+                    &itmax_s, &iters_s,
+                    &errtol_s, omega,
+                    &iresid, &iadjoint, &mgsmoo_s);
+
+            // Check for trouble on the coarse grid
             VWARN_MSG2(iters_s <= itmax_s,
                 "Exceeded maximum iterations: iters_s=%d, itmax_s=%d",
                 iters_s, itmax_s);
-		} else if (*mgsolv == 1) {
+        } else if (*mgsolv == 1) {
 
-	        // use direct method?
+            // use direct method?
 
-			// Setup lpv to access the factored/banded operator
-			lpv = lev + 1;
+            // Setup lpv to access the factored/banded operator
+            lpv = lev + 1;
 
-			// Setup for banded format
-			n   = VAT(ipc, (VAT2(iz, 5, lpv) - 1) + 1);
-			m   = VAT(ipc, (VAT2(iz, 5, lpv) - 1) + 2);
-			lda = VAT(ipc, (VAT2(iz, 5, lpv) - 1) + 3);
+            // Setup for banded format
+            n   = VAT(ipc, (VAT2(iz, 5, lpv) - 1) + 1);
+            m   = VAT(ipc, (VAT2(iz, 5, lpv) - 1) + 2);
+            lda = VAT(ipc, (VAT2(iz, 5, lpv) - 1) + 3);
 
-			// Call dpbsl to solve
-			Vxcopy_small(&nxf, &nyf, &nzf, RAT(w0, VAT2(iz, 1,lev)), w1);
-			Vdpbsl(RAT(ac, VAT2(iz, 7,lpv)), &lda, &n, &m, w1);
-			Vxcopy_large(&nxf, &nyf, &nzf, w1, RAT(x, VAT2(iz, 1,lev)));
-			VfboundPMG00(&nxf, &nyf, &nzf, RAT(x, VAT2(iz, 1,lev)));
+            // Call dpbsl to solve
+            Vxcopy_small(&nxf, &nyf, &nzf, RAT(w0, VAT2(iz, 1,lev)), w1);
+            Vdpbsl(RAT(ac, VAT2(iz, 7,lpv)), &lda, &n, &m, w1);
+            Vxcopy_large(&nxf, &nyf, &nzf, w1, RAT(x, VAT2(iz, 1,lev)));
+            VfboundPMG00(&nxf, &nyf, &nzf, RAT(x, VAT2(iz, 1,lev)));
 
-		} else {
+        } else {
             VABORT_MSG1("Invalid coarse solver requested: %d", *mgsolv);
-		}
+        }
 
 
-		/* *********************************************************************
-		 * begin cycling back to fine grid
-		 * *********************************************************************/
+        /* *********************************************************************
+         * begin cycling back to fine grid
+         * *********************************************************************/
 
 
-		// Move up grids: interpolate resid to finer and smooth
-		for (level=*nlev-1; level>=1; level--) {
+        // Move up grids: interpolate resid to finer and smooth
+        for (level=*nlev-1; level>=1; level--) {
 
-			lev = (*ilev - 1) + level;
+            lev = (*ilev - 1) + level;
 
-			// Find new grid size
-			numlev = 1;
-			Vmkfine(&numlev,
-					&nxf, &nyf, &nzf,
-					&nxc, &nyc, &nzc);
+            // Find new grid size
+            numlev = 1;
+            Vmkfine(&numlev,
+                    &nxf, &nyf, &nzf,
+                    &nxc, &nyc, &nzc);
 
-			// Interpolate to next finer grid
-			VinterpPMG(&nxf, &nyf, &nzf,
-					&nxc, &nyc, &nzc,
-					RAT(x, VAT2(iz, 1,lev+1)), w1, RAT(pc, VAT2(iz, 11,lev)));
+            // Interpolate to next finer grid
+            VinterpPMG(&nxf, &nyf, &nzf,
+                    &nxc, &nyc, &nzc,
+                    RAT(x, VAT2(iz, 1,lev+1)), w1, RAT(pc, VAT2(iz, 11,lev)));
 
-			/* Compute the hackbusch/reusken damping parameter
-			 * which is equivalent to the standard linear cg steplength
-			 */
-			Vmatvec(&nxf, &nyf, &nzf,
-					RAT(ipc, VAT2(iz, 5,lev+1)), RAT(rpc, VAT2(iz, 6,lev+1)),
-					 RAT(ac, VAT2(iz, 7,lev+1)),  RAT(cc, VAT2(iz, 1,lev+1)),
-					  RAT(x, VAT2(iz, 1,lev+1)),  w2);
+            /* Compute the hackbusch/reusken damping parameter
+             * which is equivalent to the standard linear cg steplength
+             */
+            Vmatvec(&nxf, &nyf, &nzf,
+                    RAT(ipc, VAT2(iz, 5,lev+1)), RAT(rpc, VAT2(iz, 6,lev+1)),
+                     RAT(ac, VAT2(iz, 7,lev+1)),  RAT(cc, VAT2(iz, 1,lev+1)),
+                      RAT(x, VAT2(iz, 1,lev+1)),  w2);
 
-			xnum = Vxdot(&nxf, &nyf, &nzf,
-					RAT(x, VAT2(iz, 1,lev+1)), RAT(w0, VAT2(iz, 1,lev+1)));
+            xnum = Vxdot(&nxf, &nyf, &nzf,
+                    RAT(x, VAT2(iz, 1,lev+1)), RAT(w0, VAT2(iz, 1,lev+1)));
 
-			xden = Vxdot(&nxf, &nyf, &nzf,
-					RAT(x, VAT2(iz, 1,lev+1)), w2);
-			xdamp = xnum / xden;
+            xden = Vxdot(&nxf, &nyf, &nzf,
+                    RAT(x, VAT2(iz, 1,lev+1)), w2);
+            xdamp = xnum / xden;
 
-			// New grid size
-			nxf = nxc;
-			nyf = nyc;
-			nzf = nzc;
+            // New grid size
+            nxf = nxc;
+            nyf = nyc;
+            nzf = nzc;
 
-			// perform the coarse grid correction
-			// xdamp = 1.0d0
-			Vxaxpy(&nxf, &nyf, &nzf,
-					&xdamp, w1, RAT(x, VAT2(iz, 1,lev)));
+            // perform the coarse grid correction
+            // xdamp = 1.0d0
+            Vxaxpy(&nxf, &nyf, &nzf,
+                    &xdamp, w1, RAT(x, VAT2(iz, 1,lev)));
 
-			// nu2 post-smoothings for correction (no residual)
-			iresid = 0;
-			iadjoint = 1;
-			iters_s  = 0;
-			errtol_s = 0.0;
-			nuuu = Vivariv(nu2, &lev);
-			if (level == 1) {
-			    Vsmooth(&nxf, &nyf, &nzf,
-						RAT(ipc, VAT2(iz, 5,lev)), RAT(rpc, VAT2(iz, 6,lev)),
-						 RAT(ac, VAT2(iz, 7,lev)), RAT(cc, VAT2(iz, 1,lev)), RAT(fc, VAT2(iz, 1,lev)),
-						  RAT(x, VAT2(iz, 1,lev)),w1,w2,w3,
-						 &nuuu, &iters_s, &errtol_s, omega,
-						 &iresid, &iadjoint, mgsmoo);
-			} else {
-			    Vsmooth(&nxf, &nyf, &nzf,
-						RAT(ipc, VAT2(iz, 5,lev)), RAT(rpc, VAT2(iz, 6,lev)),
-						 RAT(ac, VAT2(iz, 7,lev)),  RAT(cc, VAT2(iz, 1,lev)), RAT(w0, VAT2(iz, 1,lev)),
-						  RAT(x, VAT2(iz, 1,lev)), w1, w2, w3,
-						 &nuuu, &iters_s, &errtol_s, omega,
-						 &iresid, &iadjoint, mgsmoo);
-			}
-		}
+            // nu2 post-smoothings for correction (no residual)
+            iresid = 0;
+            iadjoint = 1;
+            iters_s  = 0;
+            errtol_s = 0.0;
+            nuuu = Vivariv(nu2, &lev);
+            if (level == 1) {
+                Vsmooth(&nxf, &nyf, &nzf,
+                        RAT(ipc, VAT2(iz, 5,lev)), RAT(rpc, VAT2(iz, 6,lev)),
+                         RAT(ac, VAT2(iz, 7,lev)), RAT(cc, VAT2(iz, 1,lev)), RAT(fc, VAT2(iz, 1,lev)),
+                          RAT(x, VAT2(iz, 1,lev)),w1,w2,w3,
+                         &nuuu, &iters_s, &errtol_s, omega,
+                         &iresid, &iadjoint, mgsmoo);
+            } else {
+                Vsmooth(&nxf, &nyf, &nzf,
+                        RAT(ipc, VAT2(iz, 5,lev)), RAT(rpc, VAT2(iz, 6,lev)),
+                         RAT(ac, VAT2(iz, 7,lev)),  RAT(cc, VAT2(iz, 1,lev)), RAT(w0, VAT2(iz, 1,lev)),
+                          RAT(x, VAT2(iz, 1,lev)), w1, w2, w3,
+                         &nuuu, &iters_s, &errtol_s, omega,
+                         &iresid, &iadjoint, mgsmoo);
+            }
+        }
 
-		/* *********************************************************************
-		 * iteration complete: do some i/o
-		 * *********************************************************************/
+        /* *********************************************************************
+         * iteration complete: do some i/o
+         * *********************************************************************/
 
-		// Increment the iteration counter
-		(*iters)++;
+        // Increment the iteration counter
+        (*iters)++;
 
-		// Compute/check the current stopping test
-		if (iok != 0) {
-			orsnrm = rsnrm;
-			if (*istop == 0) {
-				Vmresid(&nxf, &nyf, &nzf,
-						RAT(ipc, VAT2(iz, 5,lev)), RAT(rpc, VAT2(iz, 6,lev)),
-						 RAT(ac, VAT2(iz, 7,lev)), RAT(cc, VAT2(iz, 1,lev)), RAT(fc, VAT2(iz, 1,lev)),
-						  RAT(x, VAT2(iz, 1,lev)), w1);
-				rsnrm = Vxnrm1(&nxf, &nyf, &nzf, w1);
-			} else if(*istop == 1) {
-				Vmresid(&nxf, &nyf, &nzf,
-						RAT(ipc, VAT2(iz, 5,lev)), RAT(rpc, VAT2(iz, 6,lev)),
-						 RAT(ac, VAT2(iz, 7,lev)),  RAT(cc, VAT2(iz, 1,lev)), RAT(fc, VAT2(iz, 1,lev)),
-						  RAT(x, VAT2(iz, 1,lev)), w1);
-				rsnrm = Vxnrm1(&nxf, &nyf, &nzf, w1);
-			} else if (*istop == 2) {
-				Vxcopy(&nxf, &nyf, &nzf, RAT(tru, VAT2(iz, 1,lev)), w1);
-				alpha = -1.0;
-				Vxaxpy(&nxf, &nyf, &nzf, &alpha, RAT(x, VAT2(iz, 1,lev)), w1);
-				rsnrm = Vxnrm1(&nxf, &nyf, &nzf, w1);
-				Vxcopy(&nxf, &nyf, &nzf, RAT(x, VAT2(iz, 1,lev)), RAT(tru, VAT2(iz, 1,lev)));
-			} else if (*istop == 3) {
-				Vxcopy(&nxf, &nyf, &nzf, RAT(tru, VAT2(iz, 1,lev)), w1);
-				alpha = -1.0;
-				Vxaxpy(&nxf, &nyf, &nzf, &alpha, RAT(x, VAT2(iz, 1,lev)), w1);
-				rsnrm = Vxnrm2(&nxf, &nyf, &nzf, w1);
-			} else if (*istop == 4) {
-				Vxcopy(&nxf, &nyf, &nzf, RAT(tru, VAT2(iz, 1,lev)), w1);
-				alpha = -1.0;
-				Vxaxpy(&nxf, &nyf, &nzf, &alpha, RAT(x, VAT2(iz, 1,lev)), w1);
-				rsnrm = Vxnrm2(&nxf, &nyf, &nzf, w1);
-			} else if (*istop == 5) {
-				Vxcopy(&nxf, &nyf, &nzf, RAT(tru, VAT2(iz, 1,lev)), w1);
-				alpha = -1.0;
-				Vxaxpy(&nxf, &nyf, &nzf, &alpha, RAT(x, VAT2(iz, 1,lev)), w1);
-				Vmatvec(&nxf, &nyf, &nzf,
-						RAT(ipc, VAT2(iz, 5,lev)), RAT(rpc, VAT2(iz, 6,lev)),
-						 RAT(ac, VAT2(iz, 7,lev)),  RAT(cc, VAT2(iz, 1,lev)),
-						 w1, w2);
-				rsnrm = VSQRT(Vxdot(&nxf, &nyf, &nzf, w1, w2));
-			} else {
+        // Compute/check the current stopping test
+        if (iok != 0) {
+            orsnrm = rsnrm;
+            if (*istop == 0) {
+                Vmresid(&nxf, &nyf, &nzf,
+                        RAT(ipc, VAT2(iz, 5,lev)), RAT(rpc, VAT2(iz, 6,lev)),
+                         RAT(ac, VAT2(iz, 7,lev)), RAT(cc, VAT2(iz, 1,lev)), RAT(fc, VAT2(iz, 1,lev)),
+                          RAT(x, VAT2(iz, 1,lev)), w1);
+                rsnrm = Vxnrm1(&nxf, &nyf, &nzf, w1);
+            } else if(*istop == 1) {
+                Vmresid(&nxf, &nyf, &nzf,
+                        RAT(ipc, VAT2(iz, 5,lev)), RAT(rpc, VAT2(iz, 6,lev)),
+                         RAT(ac, VAT2(iz, 7,lev)),  RAT(cc, VAT2(iz, 1,lev)), RAT(fc, VAT2(iz, 1,lev)),
+                          RAT(x, VAT2(iz, 1,lev)), w1);
+                rsnrm = Vxnrm1(&nxf, &nyf, &nzf, w1);
+            } else if (*istop == 2) {
+                Vxcopy(&nxf, &nyf, &nzf, RAT(tru, VAT2(iz, 1,lev)), w1);
+                alpha = -1.0;
+                Vxaxpy(&nxf, &nyf, &nzf, &alpha, RAT(x, VAT2(iz, 1,lev)), w1);
+                rsnrm = Vxnrm1(&nxf, &nyf, &nzf, w1);
+                Vxcopy(&nxf, &nyf, &nzf, RAT(x, VAT2(iz, 1,lev)), RAT(tru, VAT2(iz, 1,lev)));
+            } else if (*istop == 3) {
+                Vxcopy(&nxf, &nyf, &nzf, RAT(tru, VAT2(iz, 1,lev)), w1);
+                alpha = -1.0;
+                Vxaxpy(&nxf, &nyf, &nzf, &alpha, RAT(x, VAT2(iz, 1,lev)), w1);
+                rsnrm = Vxnrm2(&nxf, &nyf, &nzf, w1);
+            } else if (*istop == 4) {
+                Vxcopy(&nxf, &nyf, &nzf, RAT(tru, VAT2(iz, 1,lev)), w1);
+                alpha = -1.0;
+                Vxaxpy(&nxf, &nyf, &nzf, &alpha, RAT(x, VAT2(iz, 1,lev)), w1);
+                rsnrm = Vxnrm2(&nxf, &nyf, &nzf, w1);
+            } else if (*istop == 5) {
+                Vxcopy(&nxf, &nyf, &nzf, RAT(tru, VAT2(iz, 1,lev)), w1);
+                alpha = -1.0;
+                Vxaxpy(&nxf, &nyf, &nzf, &alpha, RAT(x, VAT2(iz, 1,lev)), w1);
+                Vmatvec(&nxf, &nyf, &nzf,
+                        RAT(ipc, VAT2(iz, 5,lev)), RAT(rpc, VAT2(iz, 6,lev)),
+                         RAT(ac, VAT2(iz, 7,lev)),  RAT(cc, VAT2(iz, 1,lev)),
+                         w1, w2);
+                rsnrm = VSQRT(Vxdot(&nxf, &nyf, &nzf, w1, w2));
+            } else {
                 VABORT_MSG1("Bad istop value: %d", *istop);
-			}
+            }
             Vprtstp(*iok, *iters, rsnrm, rsden, orsnrm);
-		}
-	} while (*iters<*itmax && (rsnrm/rsden) > *errtol);
+        }
+    } while (*iters<*itmax && (rsnrm/rsden) > *errtol);
 
-	*ierror = *iters < *itmax ? 0 : 1;
+    *ierror = *iters < *itmax ? 0 : 1;
 }

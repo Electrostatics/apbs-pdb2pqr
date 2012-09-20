@@ -5,10 +5,7 @@
  *  @version $Id$
  */
 
-#include "apbscfg.h"
-#include "apbs/vatom.h"
-#include "apbs/valist.h"
-#include "apbs/vacc.h"
+#include "apbs.h"
 
 /**
  * @author  Nathan Baker
@@ -112,7 +109,7 @@ Usage: born [-v] [-f] <epsilon> <molecule.pqr>\n\n\
     alist = Valist_ctor();
     sock = Vio_ctor("FILE", "ASC", VNULL, path, "r");
     if (sock == VNULL) {
-        Vnm_print(2, "Problem opening virtual socket %s!\n", 
+        Vnm_print(2, "Problem opening virtual socket %s!\n",
                   path);
         return 0;
     }
@@ -129,7 +126,7 @@ Usage: born [-v] [-f] <epsilon> <molecule.pqr>\n\n\
 
     energy = 0.0;
     force[0] = force[1] = force[2] = force[3] = force[4] = 0.0;
-    
+
     printf("Using solvent diel %g, distance in Ang, and charge in e....\n",
       eps);
     printf("Calculating...\n");
@@ -152,11 +149,11 @@ Usage: born [-v] [-f] <epsilon> <molecule.pqr>\n\n\
                 disp[2] = pos1[2] - pos2[2];
                 dist2 = (VSQR(disp[0]) + VSQR(disp[1]) + VSQR(disp[2]));
                 dist = VSQRT(dist2);
-                dG_drij = 0.5*charge1*charge2*dfGB_drij(dist,rad1,rad2) / 
+                dG_drij = 0.5*charge1*charge2*dfGB_drij(dist,rad1,rad2) /
                   VSQR(fGB(dist, rad1, rad2));
-                dG_dRi = 0.5*charge1*charge2*dfGB_dRi(dist,rad1,rad2) / 
+                dG_dRi = 0.5*charge1*charge2*dfGB_dRi(dist,rad1,rad2) /
                   VSQR(fGB(dist, rad1, rad2));
-                dG_dRj = 0.5*charge1*charge2*dfGB_dRj(dist,rad1,rad2) / 
+                dG_dRj = 0.5*charge1*charge2*dfGB_dRj(dist,rad1,rad2) /
                   VSQR(fGB(dist, rad1, rad2));
                 myforce[0] += -disp[0]*dG_drij/(dist*dist2);
                 myforce[1] += -disp[1]*dG_drij/(dist*dist2);
@@ -187,22 +184,22 @@ Usage: born [-v] [-f] <epsilon> <molecule.pqr>\n\n\
         if (verbose) {
             printf("\tAtom %d:  Energy  = %1.12E kJ/mol\n", i, myenergy);
             if (doforce) {
-                printf("\tAtom %d:  x-force = %1.12E kJ/mol/A\n", i, 
+                printf("\tAtom %d:  x-force = %1.12E kJ/mol/A\n", i,
                   myforce[0]);
-                printf("\tAtom %d:  y-force = %1.12E kJ/mol/A\n", i, 
+                printf("\tAtom %d:  y-force = %1.12E kJ/mol/A\n", i,
                   myforce[1]);
-                printf("\tAtom %d:  z-force = %1.12E kJ/mol/A\n", i, 
+                printf("\tAtom %d:  z-force = %1.12E kJ/mol/A\n", i,
                   myforce[2]);
-                printf("\tAtom %d:  Ri-force = %1.12E kJ/mol/A\n", i, 
+                printf("\tAtom %d:  Ri-force = %1.12E kJ/mol/A\n", i,
                   myforce[3]);
-                printf("\tAtom %d:  Rj-force = %1.12E kJ/mol/A\n", i, 
+                printf("\tAtom %d:  Rj-force = %1.12E kJ/mol/A\n", i,
                   myforce[4]);
             }
         }
     }
 
     energy = energy*zmagic;
- 
+
     printf("\n\n-------------------------------------------------------\n");
     printf("GB solvation energy = %1.12e kJ/mol.\n", energy);
     printf("GB solvation x-force = %1.12e kJ/mol.\n", force[0]);

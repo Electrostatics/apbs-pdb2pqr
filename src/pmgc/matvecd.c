@@ -47,7 +47,7 @@
  * @endverbatim
  */
 
-#include "apbs/matvecd.h"
+#include "matvecd.h"
 
 VPUBLIC void Vmatvec(int *nx, int *ny, int *nz,
         int    *ipc, double *rpc,
@@ -603,7 +603,7 @@ VPUBLIC void Vnmresid(int *nx, int *ny, int *nz,
     if (numdia == 7) {
         Vnmresid7(nx, ny, nz, ipc, rpc, ac, cc, fc, x, r, w1);
     } else if (numdia == 27) {
-    	Vnmresid27(nx, ny, nz, ipc, rpc, ac, cc, fc, x, r, w1);
+        Vnmresid27(nx, ny, nz, ipc, rpc, ac, cc, fc, x, r, w1);
     } else {
         Vnm_print(2, "Vnmresid: invalid stencil type given...\n");
     }

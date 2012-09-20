@@ -5,9 +5,7 @@
  *  @version $Id$
  */
 
-
-#include "apbscfg.h"
-#include "apbs/apbs.h"  
+#include "apbs.h"
 
 VEMBED(rcsid="$Id$")
 
@@ -82,15 +80,15 @@ int invertTransform(double A[3][3], double b[3], double C[3][3], double d[3]) {
     C[2][1] = ( A[0][1]*A[2][0]-A[0][0]*A[2][1])/detA;
     C[2][2] = (-A[0][1]*A[1][0]+A[0][0]*A[1][1])/detA;
 
-    printf("%4.3f %4.3f %4.3f\n", 
+    printf("%4.3f %4.3f %4.3f\n",
             A[0][0]*C[0][0] + A[0][1]*C[1][0] + A[0][2]*C[2][0],
             A[0][0]*C[0][1] + A[0][1]*C[1][1] + A[0][2]*C[2][1],
             A[0][0]*C[0][2] + A[0][1]*C[1][2] + A[0][2]*C[2][2]);
-    printf("%4.3f %4.3f %4.3f\n", 
+    printf("%4.3f %4.3f %4.3f\n",
             A[1][0]*C[0][0] + A[1][1]*C[1][0] + A[1][2]*C[2][0],
             A[1][0]*C[0][1] + A[1][1]*C[1][1] + A[1][2]*C[2][1],
             A[1][0]*C[0][2] + A[1][1]*C[1][2] + A[1][2]*C[2][2]);
-    printf("%4.3f %4.3f %4.3f\n", 
+    printf("%4.3f %4.3f %4.3f\n",
             A[2][0]*C[0][0] + A[2][1]*C[1][0] + A[2][2]*C[2][0],
             A[2][0]*C[0][1] + A[2][1]*C[1][1] + A[2][2]*C[2][1],
             A[2][0]*C[0][2] + A[2][1]*C[1][2] + A[2][2]*C[2][2]);
@@ -206,12 +204,12 @@ int readTransform(char *path, double rotMat[3][3], double dispVec[3]) {
 /**
  * @brief  Read a grid
  * @param  grid  Pointer to Vgrid file to be read
- * @param  path  Path to read from 
+ * @param  path  Path to read from
  * @param  format  Format to read
  * @return 1 if successful, 0 otherwise */
 int readGrid(Vgrid **grid, char *path, Vdata_Format format) {
 
-    *grid = Vgrid_ctor(0, 0, 0, 
+    *grid = Vgrid_ctor(0, 0, 0,
             0.0, 0.0, 0.0,
             0.0, 0.0, 0.0,
             VNULL);
@@ -263,7 +261,7 @@ int main(int argc, char **argv) {
     Vdata_Format format;
     int gotFormat = 0;
     char *tstr, *targ;
- 
+
     /* *************** CHECK INVOCATION ******************* */
     Vio_start();
     /* Parse args */
@@ -376,14 +374,14 @@ int main(int argc, char **argv) {
         }
     }
     Vnm_print(1, "Rotation matrix for set 2 into set 1:\n");
-    Vnm_print(1, "  %1.12E %1.12E %1.12E\n", 
+    Vnm_print(1, "  %1.12E %1.12E %1.12E\n",
             rotMat2to1[0][0], rotMat2to1[0][1], rotMat2to1[0][2]);
-    Vnm_print(1, "  %1.12E %1.12E %1.12E\n", 
+    Vnm_print(1, "  %1.12E %1.12E %1.12E\n",
             rotMat2to1[1][0], rotMat2to1[1][1], rotMat2to1[1][2]);
-    Vnm_print(1, "  %1.12E %1.12E %1.12E\n", 
+    Vnm_print(1, "  %1.12E %1.12E %1.12E\n",
             rotMat2to1[2][0], rotMat2to1[2][1], rotMat2to1[2][2]);
     Vnm_print(1, "Displacement vector for set 2 into set 1:\n");
-    Vnm_print(1, "  %1.12E %1.12E %1.12E\n", 
+    Vnm_print(1, "  %1.12E %1.12E %1.12E\n",
             dispVec2to1[0], dispVec2to1[1], dispVec2to1[2]);
 
     /* Invert transformation */
@@ -393,14 +391,14 @@ int main(int argc, char **argv) {
         return 2;
     }
     Vnm_print(1, "Rotation matrix for set 1 into set 2:\n");
-    Vnm_print(1, "  %1.12E %1.12E %1.12E\n", 
+    Vnm_print(1, "  %1.12E %1.12E %1.12E\n",
             rotMat1to2[0][0], rotMat1to2[0][1], rotMat1to2[0][2]);
-    Vnm_print(1, "  %1.12E %1.12E %1.12E\n", 
+    Vnm_print(1, "  %1.12E %1.12E %1.12E\n",
             rotMat1to2[1][0], rotMat1to2[1][1], rotMat1to2[1][2]);
-    Vnm_print(1, "  %1.12E %1.12E %1.12E\n", 
+    Vnm_print(1, "  %1.12E %1.12E %1.12E\n",
             rotMat1to2[2][0], rotMat1to2[2][1], rotMat1to2[2][2]);
     Vnm_print(1, "Displacement vector for set 2 into set 1:\n");
-    Vnm_print(1, "  %1.12E %1.12E %1.12E\n", 
+    Vnm_print(1, "  %1.12E %1.12E %1.12E\n",
             dispVec1to2[0], dispVec1to2[1], dispVec1to2[2]);
 
 
@@ -410,7 +408,7 @@ int main(int argc, char **argv) {
         Vnm_print(2, "Error reading scalar data set 1!\n");
         return 2;
     }
-    Vnm_print(1, "Read %d x %d x %d grid.\n", 
+    Vnm_print(1, "Read %d x %d x %d grid.\n",
             scalar1->nx, scalar1->ny, scalar1->nz);
 
     /* Read scalar set 2 */
@@ -419,7 +417,7 @@ int main(int argc, char **argv) {
         Vnm_print(2, "Error reading scalar data set 2!\n");
         return 2;
     }
-    Vnm_print(1, "Read %d x %d x %d grid.\n", 
+    Vnm_print(1, "Read %d x %d x %d grid.\n",
             scalar2->nx, scalar2->ny, scalar2->nz);
 
     /* Read mask 1 */
@@ -429,7 +427,7 @@ int main(int argc, char **argv) {
             Vnm_print(2, "Error reading mask data set 1!\n");
             return 2;
         }
-        Vnm_print(1, "Read %d x %d x %d grid.\n", 
+        Vnm_print(1, "Read %d x %d x %d grid.\n",
                 mask1->nx, mask1->ny, mask1->nz);
     }
 
@@ -440,16 +438,16 @@ int main(int argc, char **argv) {
             Vnm_print(2, "Error reading mask data set 2!\n");
             return 2;
         }
-        Vnm_print(1, "Read %d x %d x %d grid.\n", 
+        Vnm_print(1, "Read %d x %d x %d grid.\n",
                 mask2->nx, mask2->ny, mask2->nz);
     }
 
     /* Calculate relative L2 norm of difference */
     Vnm_print(1, "Calculating similarity measures...\n");
-    nx = scalar1->nx; ny = scalar1->ny; nz = scalar1->nz; 
-    hx = scalar1->hx; hy = scalar1->hy; hzed = scalar1->hzed; 
+    nx = scalar1->nx; ny = scalar1->ny; nz = scalar1->nz;
+    hx = scalar1->hx; hy = scalar1->hy; hzed = scalar1->hzed;
     dvol = (hx*hy*hzed);
-    xmin = scalar1->xmin; ymin = scalar1->ymin; zmin = scalar1->zmin; 
+    xmin = scalar1->xmin; ymin = scalar1->ymin; zmin = scalar1->zmin;
     norm1_L1 = 0; norm1_L2 = 0; snorm1_H1 = 0; norm1_H1 = 0;
     norm2_L1 = 0; norm2_L2 = 0; snorm2_H1 = 0; norm2_H1 = 0;
     normDiff_L1 = 0; normDiff_L2 = 0; snormDiff_H1 = 0; normDiff_H1 = 0;
@@ -466,7 +464,7 @@ int main(int argc, char **argv) {
                 onGridS1 = Vgrid_value(scalar1, p1, &sval1);
                 onGridV1 = Vgrid_gradient(scalar1, p1, gval1);
                 if (gotMask1) onGridS1 = Vgrid_value(mask1, p1, &mval1);
-                else mval1 = 1.0; 
+                else mval1 = 1.0;
 
                 /* Grid 2 values */
                 p2[0] = rotMat1to2[0][0]*p1[0] + rotMat1to2[0][1]*p1[1] \
@@ -478,7 +476,7 @@ int main(int argc, char **argv) {
                 onGridS2 = Vgrid_value(scalar2, p2, &sval2);
                 onGridV2 = Vgrid_gradient(scalar2, p2, gval2);
                 if (gotMask2) onGridS2 = Vgrid_value(mask2, p2, &mval2);
-                else mval2 = 1.0; 
+                else mval2 = 1.0;
 
                 /* Measures based on scalars */
                 if (onGridS1 && onGridS2) {
@@ -500,9 +498,9 @@ int main(int argc, char **argv) {
 
                     if (isnan(norm1_L2) || isnan(norm2_L2)) {
                         Vnm_print(2, "ERROR!  Got NaN!\n");
-                        Vnm_print(2, "p1 = (%1.12E, %1.12E, %1.12E)\n", 
+                        Vnm_print(2, "p1 = (%1.12E, %1.12E, %1.12E)\n",
                                 p1[0], p1[1], p1[2]);
-                        Vnm_print(2, "p2 = (%1.12E, %1.12E, %1.12E)\n", 
+                        Vnm_print(2, "p2 = (%1.12E, %1.12E, %1.12E)\n",
                                 p2[0], p2[1], p2[2]);
                         Vnm_print(2, "mval1 = %1.12E\n", mval1);
                         Vnm_print(2, "mval2 = %1.12E\n", mval2);
@@ -534,9 +532,9 @@ int main(int argc, char **argv) {
         }
     }
     /* Volumes */
-    Vnm_print(1, "Volume used to calculate L2 and L1 measures = %1.12E\n", 
+    Vnm_print(1, "Volume used to calculate L2 and L1 measures = %1.12E\n",
             svol);
-    Vnm_print(1, "Volume used to calculate H1 measures        = %1.12E\n", 
+    Vnm_print(1, "Volume used to calculate H1 measures        = %1.12E\n",
             gvol);
     /* L2 */
     printf("norm1_L2^2 = %1.12E\n", norm1_L2);
@@ -552,12 +550,12 @@ int main(int argc, char **argv) {
     Vnm_print(1, "Set 1 absolute L2 norm           = %1.12E\n", norm1_L2);
     Vnm_print(1, "Set 2 absolute L2 norm           = %1.12E\n", norm2_L2);
     Vnm_print(1, "Difference absolute L2 norm      = %1.12E\n", normDiff_L2);
-    Vnm_print(1, "Difference relative L2 norm      = %1.12E\n", 
+    Vnm_print(1, "Difference relative L2 norm      = %1.12E\n",
             VSQR(normDiff_L2)/(norm1_L2*norm2_L2));
     Vnm_print(1, "Absolute L2 inner product        = %1.12E\n", ip_L2);
-    Vnm_print(1, "Hodgkin L2 inner product         = %1.12E\n", 
+    Vnm_print(1, "Hodgkin L2 inner product         = %1.12E\n",
             2*ip_L2/(VSQR(norm1_L2)+VSQR(norm2_L2)));
-    Vnm_print(1, "Carbo L2 inner product           = %1.12E\n", 
+    Vnm_print(1, "Carbo L2 inner product           = %1.12E\n",
             ip_L2/(norm1_L2*norm2_L2));
     /* L1 */
     norm1_L1 = (norm1_L2*dvol);
@@ -566,7 +564,7 @@ int main(int argc, char **argv) {
     Vnm_print(1, "Set 1 absolute L1 norm           = %1.12E\n", norm1_L1);
     Vnm_print(1, "Set 2 absolute L1 norm           = %1.12E\n", norm2_L1);
     Vnm_print(1, "Difference absolute L1 norm      = %1.12E\n", normDiff_L1);
-    Vnm_print(1, "Difference relative L1 norm      = %1.12E\n", 
+    Vnm_print(1, "Difference relative L1 norm      = %1.12E\n",
             VSQR(normDiff_L1)/(norm1_L1*norm2_L1));
     /* H1 */
     snorm1_H1 = VSQRT(snorm1_H1*dvol);
@@ -579,21 +577,21 @@ int main(int argc, char **argv) {
     Vnm_print(1, "Set 1 absolute H1 norm           = %1.12E\n", norm1_H1);
     Vnm_print(1, "Set 2 absolute H1 norm           = %1.12E\n", norm2_H1);
     Vnm_print(1, "Difference absolute H1 norm      = %1.12E\n", normDiff_H1);
-    Vnm_print(1, "Difference relative H1 norm      = %1.12E\n", 
+    Vnm_print(1, "Difference relative H1 norm      = %1.12E\n",
             VSQR(normDiff_H1)/(norm1_L2*norm2_H1));
     Vnm_print(1, "Set 1 absolute H1 semi-norm      = %1.12E\n", snorm1_H1);
     Vnm_print(1, "Set 2 absolute H1 semi-norm      = %1.12E\n", snorm2_H1);
     Vnm_print(1, "Difference absolute H1 semi-norm = %1.12E\n", snormDiff_H1);
     Vnm_print(1, "Absolute H1 inner product        = %1.12E\n", ip_H1);
-    Vnm_print(1, "Hodgkin H1 inner product         = %1.12E\n", 
+    Vnm_print(1, "Hodgkin H1 inner product         = %1.12E\n",
             2*ip_H1/(VSQR(snorm1_H1)+VSQR(snorm2_H1)));
-    Vnm_print(1, "Carbo H1 inner product           = %1.12E\n", 
+    Vnm_print(1, "Carbo H1 inner product           = %1.12E\n",
             ip_H1/(snorm1_H1*snorm2_H1));
-    Vnm_print(1, "Absolute H1+L2 inner product     = %1.12E\n", 
+    Vnm_print(1, "Absolute H1+L2 inner product     = %1.12E\n",
             (ip_H1+ip_L2));
-    Vnm_print(1, "Hodgkin H1+L2 inner product      = %1.12E\n", 
+    Vnm_print(1, "Hodgkin H1+L2 inner product      = %1.12E\n",
             2*(ip_H1+ip_L2)/(VSQR(norm1_H1)+VSQR(norm2_H1)));
-    Vnm_print(1, "Carbo H1+L2 inner product        = %1.12E\n", 
+    Vnm_print(1, "Carbo H1+L2 inner product        = %1.12E\n",
             (ip_H1+ip_L2)/(norm1_H1*norm2_H1));
 
     return 0;

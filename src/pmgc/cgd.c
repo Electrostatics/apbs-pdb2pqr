@@ -47,7 +47,7 @@
  * @endverbatim
  */
 
-#include "apbs/cgd.h"
+#include "cgd.h"
 
 VPUBLIC void Vcghs(int *nx, int *ny, int *nz,
         int *ipc, double *rpc,

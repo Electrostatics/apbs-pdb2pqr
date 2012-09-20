@@ -5,9 +5,7 @@
  *  @version $Id$
  */
 
-
-#include "apbscfg.h"
-#include "apbs/apbs.h"  
+#include "apbs.h"
 
 VEMBED(rcsid="$Id$")
 
@@ -38,12 +36,12 @@ and where [opts] are the options:\n\
 /**
  * @brief  Read a grid
  * @param  grid  Pointer to Vgrid file to be read
- * @param  path  Path to read from 
+ * @param  path  Path to read from
  * @param  format  Format to read
  * @return 1 if successful, 0 otherwise */
 int readGrid(Vgrid **grid, char *path, Vdata_Format format) {
 
-    *grid = Vgrid_ctor(0, 0, 0, 
+    *grid = Vgrid_ctor(0, 0, 0,
             0.0, 0.0, 0.0,
             0.0, 0.0, 0.0,
             VNULL);
@@ -87,7 +85,7 @@ int main(int argc, char **argv) {
     Vdata_Format format;
     int gotFormat = 0;
     char *tstr, *targ;
- 
+
     /* *************** CHECK INVOCATION ******************* */
     Vio_start();
     /* Parse args */
@@ -159,7 +157,7 @@ int main(int argc, char **argv) {
         Vnm_print(2, "Error reading scalar data set!\n");
         return 2;
     }
-    Vnm_print(1, "Read %d x %d x %d grid.\n", 
+    Vnm_print(1, "Read %d x %d x %d grid.\n",
             scalar->nx, scalar->ny, scalar->nz);
 
     /* Read mask */
@@ -169,16 +167,16 @@ int main(int argc, char **argv) {
             Vnm_print(2, "Error reading mask data set!\n");
             return 2;
         }
-        Vnm_print(1, "Read %d x %d x %d grid.\n", 
+        Vnm_print(1, "Read %d x %d x %d grid.\n",
                 mask->nx, mask->ny, mask->nz);
     }
 
     /* Calculate relative L2 norm of difference */
     Vnm_print(1, "Calculating metrics...\n");
-    nx = scalar->nx; ny = scalar->ny; nz = scalar->nz; 
-    hx = scalar->hx; hy = scalar->hy; hzed = scalar->hzed; 
+    nx = scalar->nx; ny = scalar->ny; nz = scalar->nz;
+    hx = scalar->hx; hy = scalar->hy; hzed = scalar->hzed;
     dvol = (hx*hy*hzed);
-    xmin = scalar->xmin; ymin = scalar->ymin; zmin = scalar->zmin; 
+    xmin = scalar->xmin; ymin = scalar->ymin; zmin = scalar->zmin;
     norm_L1 = 0; norm_L2 = 0; snorm_H1 = 0; norm_H1 = 0;
     haveMaxS = 0; haveMinS = 0; haveMaxG2 = 0; haveMinG2 = 0;
     svol = 0; gvol = 0;
@@ -197,7 +195,7 @@ int main(int argc, char **argv) {
                     gval2 = VSQR(gval[0]) + VSQR(gval[1]) + VSQR(gval[2]);
                 } else gval2 = 0.0;
                 if (gotMask) onGridS = Vgrid_value(mask, pt, &mval);
-                else mval = 1.0; 
+                else mval = 1.0;
 
                 /* Max/min */
                 if (mval > 0) {
@@ -257,35 +255,35 @@ int main(int argc, char **argv) {
     snorm_H1 = VSQRT(snorm_H1*dvol);
     norm_H1 = VSQRT(VSQR(snorm_H1)+VSQR(norm_L2));
 
-    Vnm_print(1, "Volume used to calculate L2 and L1 norms = %1.12E\n", 
+    Vnm_print(1, "Volume used to calculate L2 and L1 norms = %1.12E\n",
             svol);
-    Vnm_print(1, "Volume used to calculate H1 norms        = %1.12E\n", 
+    Vnm_print(1, "Volume used to calculate H1 norms        = %1.12E\n",
             gvol);
-    Vnm_print(1, "Max scalar value                         = %1.12E\n", 
+    Vnm_print(1, "Max scalar value                         = %1.12E\n",
             maxS);
-    Vnm_print(1, "Max scalar value location                = (%4.3f, %4.3f, %4.3f)\n", 
+    Vnm_print(1, "Max scalar value location                = (%4.3f, %4.3f, %4.3f)\n",
             maxSpt[0], maxSpt[1], maxSpt[2]);
-    Vnm_print(1, "Min scalar value                         = %1.12E\n", 
+    Vnm_print(1, "Min scalar value                         = %1.12E\n",
             minS);
-    Vnm_print(1, "Min scalar value location                = (%4.3f, %4.3f, %4.3f)\n", 
+    Vnm_print(1, "Min scalar value location                = (%4.3f, %4.3f, %4.3f)\n",
             minSpt[0], minSpt[1], minSpt[2]);
-    Vnm_print(1, "Max gradient-squared value               = %1.12E\n", 
+    Vnm_print(1, "Max gradient-squared value               = %1.12E\n",
             maxG2);
-    Vnm_print(1, "Max gradient-squared value location      = (%4.3f, %4.3f, %4.3f)\n", 
+    Vnm_print(1, "Max gradient-squared value location      = (%4.3f, %4.3f, %4.3f)\n",
             maxG2pt[0], maxG2pt[1], maxG2pt[2]);
-    Vnm_print(1, "Min gradient-squared value               = %1.12E\n", 
+    Vnm_print(1, "Min gradient-squared value               = %1.12E\n",
             minG2);
-    Vnm_print(1, "Min gradient-squared value location      = (%4.3f, %4.3f, %4.3f)\n", 
+    Vnm_print(1, "Min gradient-squared value location      = (%4.3f, %4.3f, %4.3f)\n",
             minG2pt[0], minG2pt[1], minG2pt[2]);
-    Vnm_print(1, "L2 norm                                  = %1.12E\n", 
+    Vnm_print(1, "L2 norm                                  = %1.12E\n",
             norm_L2);
-    Vnm_print(1, "L1 norm                                  = %1.12E\n", 
+    Vnm_print(1, "L1 norm                                  = %1.12E\n",
             norm_L1);
-    Vnm_print(1, "Linf norm                                = %1.12E\n", 
+    Vnm_print(1, "Linf norm                                = %1.12E\n",
             norm_Linf);
-    Vnm_print(1, "H1 semi-norm                             = %1.12E\n", 
+    Vnm_print(1, "H1 semi-norm                             = %1.12E\n",
             snorm_H1);
-    Vnm_print(1, "H1 norm                                  = %1.12E\n", 
+    Vnm_print(1, "H1 norm                                  = %1.12E\n",
             norm_H1);
 
     return 0;

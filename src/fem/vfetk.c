@@ -54,12 +54,7 @@
  * @endverbatim
  */
 
-
-#include "apbscfg.h"
-
-#ifdef HAVE_MC_H
-
-#include "apbs/vfetk.h"
+#include "vfetk.h"
 
 /* Define the macro DONEUMANN to run with all-Neumann boundary conditions.
  * Set this macro at your own risk! */
@@ -568,7 +563,7 @@ VPUBLIC int Vfetk_ctor2(Vfetk *thee,
     thee->vmem = Vmem_ctor("APBS::VFETK");
 
     /* Set up FEtk objects */
-	Vnm_print(0, "Vfetk_ctor2:  Constructing PDE...\n");
+    Vnm_print(0, "Vfetk_ctor2:  Constructing PDE...\n");
     thee->pde = Vfetk_PDE_ctor(thee);
     Vnm_print(0, "Vfetk_ctor2:  Constructing Gem...\n");
     thee->gm = Gem_ctor(thee->vmem, thee->pde);
@@ -595,7 +590,7 @@ VPUBLIC int Vfetk_ctor2(Vfetk *thee,
     var.fetk = thee;
     var.initGreen = 0;
 
-	/* Set up the external Gem subdivision hook */
+    /* Set up the external Gem subdivision hook */
     Gem_setExternalUpdateFunction(thee->gm, Vfetk_externalUpdateFunction);
 
     /* Set up ion-related variables */
@@ -919,39 +914,39 @@ VPUBLIC Vrc_Codes Vfetk_genCube(Vfetk *thee, /**< Vfetk object */
 
     /* @note This code is based on Gem_makeCube by Mike Holst */
     /* Write mesh string to buffer and read back */
-	switch (meshType) {
-		case VML_DIRICUBE:
-		    /* Create a new copy of the DIRICUBE mesh (see globals higher in this file) */
-			bufsize = strlen(diriCubeString);
-			VASSERT( bufsize <= VMAX_BUFSIZE );
-			strncpy(buf, diriCubeString, VMAX_BUFSIZE);
-			break;
-		case VML_NEUMCUBE:
-		    /* Create a new copy of the NEUMCUBE mesh (see globals higher in this file) */
-			bufsize = strlen(neumCubeString);
-			Vnm_print(2, "Vfetk_genCube:  WARNING!  USING EXPERIMENTAL NEUMANN BOUNDARY CONDITIONS!\n");
-			VASSERT( bufsize <= VMAX_BUFSIZE );
-			strncpy(buf, neumCubeString, VMAX_BUFSIZE);
-			break;
-		case VML_EXTERNAL:
-			Vnm_print(2, "Vfetk_genCube:  Got request for external mesh!\n");
-			Vnm_print(2, "Vfetk_genCube:  How did we get here?\n");
-			return VRC_FAILURE;
-		default:
-			Vnm_print(2, "Vfetk_genCube:  Unknown mesh type (%d)\n", meshType);
-			return VRC_FAILURE;
-	}
+    switch (meshType) {
+        case VML_DIRICUBE:
+            /* Create a new copy of the DIRICUBE mesh (see globals higher in this file) */
+            bufsize = strlen(diriCubeString);
+            VASSERT( bufsize <= VMAX_BUFSIZE );
+            strncpy(buf, diriCubeString, VMAX_BUFSIZE);
+            break;
+        case VML_NEUMCUBE:
+            /* Create a new copy of the NEUMCUBE mesh (see globals higher in this file) */
+            bufsize = strlen(neumCubeString);
+            Vnm_print(2, "Vfetk_genCube:  WARNING!  USING EXPERIMENTAL NEUMANN BOUNDARY CONDITIONS!\n");
+            VASSERT( bufsize <= VMAX_BUFSIZE );
+            strncpy(buf, neumCubeString, VMAX_BUFSIZE);
+            break;
+        case VML_EXTERNAL:
+            Vnm_print(2, "Vfetk_genCube:  Got request for external mesh!\n");
+            Vnm_print(2, "Vfetk_genCube:  How did we get here?\n");
+            return VRC_FAILURE;
+        default:
+            Vnm_print(2, "Vfetk_genCube:  Unknown mesh type (%d)\n", meshType);
+            return VRC_FAILURE;
+    }
 
     VASSERT( VNULL != (sock=Vio_socketOpen(key,iodev,iofmt,iohost,iofile)) ); /* Open socket */
     Vio_bufTake(sock, buf, bufsize); /* Initialize internal buffer for socket */
     AM_read(am, skey, sock); /* Take the initial mesh from the socket and load
                                 into internal AM data structure with simplex
                                 format */
-	Vio_connectFree(sock); /* Purge output buffers */
+    Vio_connectFree(sock); /* Purge output buffers */
     Vio_bufGive(sock); /* Get pointer to output buffer?  No assignment of return value... */
     Vio_dtor(&sock); /* Destroy output buffer */
 
-	/* @todo - could the following be done in a single pass? - PCE */
+    /* @todo - could the following be done in a single pass? - PCE */
     /* Scale (unit) cube - for each vertex, set the new coordinates of that
        vertex based on the vertex length */
     for (i=0; i<Gem_numVV(gm); i++) {
@@ -989,34 +984,34 @@ VPUBLIC Vrc_Codes Vfetk_loadMesh(Vfetk *thee, /* Vfetk object to load into */
                                  Vio *sock /* Socket for external mesh data (NULL otherwise) */
                                 ) {
 
-	Vrc_Codes vrc; /* Function return codes - see vhal.h for enum */
-	int skey = 0;  /* Simplex format */
+    Vrc_Codes vrc; /* Function return codes - see vhal.h for enum */
+    int skey = 0;  /* Simplex format */
 
-	/* Load mesh from socket if external mesh, otherwise generate mesh */
-	switch (meshType) {
-		case VML_EXTERNAL:
-			if (sock == VNULL) {
-				Vnm_print(2, "Vfetk_loadMesh:  Got NULL socket!\n");
-				return VRC_FAILURE;
-			}
-			AM_read(thee->am, skey, sock);
-			Vio_connectFree(sock);
-			Vio_bufGive(sock);
-			Vio_dtor(&sock);
-			break;
-		case VML_DIRICUBE:
-		case VML_NEUMCUBE:
-		    /* Create new mesh and store in thee */
-			vrc = Vfetk_genCube(thee, center, length, meshType);
-			if (vrc == VRC_FAILURE) return VRC_FAILURE;
-			break;
-		default:
-			Vnm_print(2, "Vfetk_loadMesh:  unrecognized mesh type (%d)!\n",
-					  meshType);
-			return VRC_FAILURE;
-	};
+    /* Load mesh from socket if external mesh, otherwise generate mesh */
+    switch (meshType) {
+        case VML_EXTERNAL:
+            if (sock == VNULL) {
+                Vnm_print(2, "Vfetk_loadMesh:  Got NULL socket!\n");
+                return VRC_FAILURE;
+            }
+            AM_read(thee->am, skey, sock);
+            Vio_connectFree(sock);
+            Vio_bufGive(sock);
+            Vio_dtor(&sock);
+            break;
+        case VML_DIRICUBE:
+        case VML_NEUMCUBE:
+            /* Create new mesh and store in thee */
+            vrc = Vfetk_genCube(thee, center, length, meshType);
+            if (vrc == VRC_FAILURE) return VRC_FAILURE;
+            break;
+        default:
+            Vnm_print(2, "Vfetk_loadMesh:  unrecognized mesh type (%d)!\n",
+                      meshType);
+            return VRC_FAILURE;
+    };
 
-	/* Setup charge-simplex map */
+    /* Setup charge-simplex map */
     Vnm_print(0, "Vfetk_ctor2:  Constructing Vcsm...\n");
     thee->csm = VNULL;
     /* Construct a new Vcsm with the atom list and gem data */
@@ -1024,7 +1019,7 @@ VPUBLIC Vrc_Codes Vfetk_loadMesh(Vfetk *thee, /* Vfetk object to load into */
     VASSERT(thee->csm != VNULL);
     Vcsm_init(thee->csm);
 
-	return VRC_SUCCESS;
+    return VRC_SUCCESS;
 }
 
 
@@ -1237,11 +1232,11 @@ VPUBLIC void Vfetk_PDE_dtor(PDE **thee) {
 
     if ((*thee) != VNULL) {
         Vfetk_PDE_dtor2(*thee);
-		/* TODO: The following line is commented out because at the moment,
-			there is a seg fault when deallocating at the end of a run. Since
-			this routine is called only once at the very end, we'll leave it
-			commented out. However, this could be a memory leak.
-		 */
+        /* TODO: The following line is commented out because at the moment,
+            there is a seg fault when deallocating at the end of a run. Since
+            this routine is called only once at the very end, we'll leave it
+            commented out. However, this could be a memory leak.
+         */
         /* Vmem_free(var.fetk->vmem, 1, sizeof(PDE), (void **)thee); */
         (*thee) = VNULL;
     }
@@ -1656,7 +1651,7 @@ VPUBLIC void Vfetk_PDE_initPoint(PDE *thee, int pointType, int chart,
                 }
                 break;
 
-			case PBE_SMPBE: /* SMPBE Temp */
+            case PBE_SMPBE: /* SMPBE Temp */
 
                 var.B  = 0;
                 var.DB  = 0;
@@ -1672,7 +1667,7 @@ VPUBLIC void Vfetk_PDE_initPoint(PDE *thee, int pointType, int chart,
                         var.DB += (coef2 * Vcap_exp(u2, &ichop));
                     }
                 }
-					break;
+                    break;
             default:
                 Vnm_print(2, "Vfetk_PDE_initPoint:  Unknown PBE type (%d)!\n",
                   pdetype);
@@ -2051,7 +2046,7 @@ VPUBLIC double Vfetk_PDE_Ju(PDE *thee, int key) {
                     }
                 } else qmE = 0;
                 break;
-			case PBE_SMPBE: /* SMPBE Temp */
+            case PBE_SMPBE: /* SMPBE Temp */
                 if ((var.ionacc > VSMALL) && (var.zks2 > VSMALL)) {
                     qmE = 0.;
                     for (i=0; i<var.nion; i++) {

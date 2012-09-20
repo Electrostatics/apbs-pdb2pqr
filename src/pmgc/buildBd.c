@@ -47,9 +47,7 @@
  * @endverbatim
  */
 
-#include "apbs/buildBd.h"
-#include "apbs/vhal.h"
-#include "apbs/mlinpckd.h"
+#include "buildBd.h"
 
 VPUBLIC void Vbuildband(int *key, int *nx, int *ny, int *nz,
         int *ipc, double *rpc, double *ac,

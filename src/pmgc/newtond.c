@@ -53,7 +53,7 @@
  * @endverbatim
  */
 
-#include "apbs/newtond.h"
+#include "newtond.h"
 
 VPUBLIC void Vfnewton(int *nx,int *ny,int *nz,
         double *x, int *iz,

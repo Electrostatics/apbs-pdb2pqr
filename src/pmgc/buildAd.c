@@ -47,19 +47,16 @@
  * @endverbatim
  */
 
-#include "apbs/buildAd.h"
-#include "apbs/vhal.h"
-
-#include "apbs/vmatrix.h"
+#include "buildAd.h"
 
 VPUBLIC void VbuildA(int* nx, int* ny, int* nz,
-		int* ipkey, int* mgdisc, int* numdia,
-		int* ipc, double* rpc,
-		double* ac, double* cc, double* fc,
-		double* xf, double* yf, double* zf,
-		double* gxcf, double* gycf, double* gzcf,
-		double* a1cf, double* a2cf, double* a3cf,
-		double* ccf, double* fcf) {
+        int* ipkey, int* mgdisc, int* numdia,
+        int* ipc, double* rpc,
+        double* ac, double* cc, double* fc,
+        double* xf, double* yf, double* zf,
+        double* gxcf, double* gycf, double* gzcf,
+        double* a1cf, double* a2cf, double* a3cf,
+        double* ccf, double* fcf) {
 
     MAT2(ac, *nx * *ny * *nz, 14);
 
@@ -89,57 +86,57 @@ VPUBLIC void VbuildA(int* nx, int* ny, int* nz,
                 a1cf, a2cf, a3cf,
                 ccf, fcf);
 
-	} else {
+    } else {
 
-		Vnm_print(2, "VbuildA:  Invalid discretization requested.\n");
+        Vnm_print(2, "VbuildA:  Invalid discretization requested.\n");
         /// @todo: use an APBS/MALOC method to quit/fail
-		exit(EXIT_FAILURE);
+        exit(EXIT_FAILURE);
 
-	}
+    }
 }
 
 
 
 VPUBLIC void VbuildA_fv(int *nx, int *ny, int *nz,
-		int *ipkey, int *numdia,
-		int *ipc, double *rpc,
-		double *oC, double *cc, double *fc, double *oE, double *oN, double *uC,
-		double *xf, double *yf, double *zf,
-		double *gxcf, double *gycf, double *gzcf,
-		double *a1cf, double *a2cf, double *a3cf,
-		double *ccf,  double *fcf) {
+        int *ipkey, int *numdia,
+        int *ipc, double *rpc,
+        double *oC, double *cc, double *fc, double *oE, double *oN, double *uC,
+        double *xf, double *yf, double *zf,
+        double *gxcf, double *gycf, double *gzcf,
+        double *a1cf, double *a2cf, double *a3cf,
+        double *ccf,  double *fcf) {
 
-	int i, j, k;            // @todo Document this function
+    int i, j, k;            // @todo Document this function
 
-	/** @note:  The following variables are temporaries that are not necessarily
-	 *          all needed as explicitly different variables.  They do not
-	 *          persist beyond the scope of this function.  This set could
-	 *          probably be reduced to at most 3 temporary variables.  Well
-	 *          placed comments would go a lot farther in making the semantics
-	 *          of the code plain rather than producing a huge slew of seemingly
-	 *          homogeneous temporaries named using unclear abbreviations
-	 */
-
-
-	int ike, jke, kke;
+    /** @note:  The following variables are temporaries that are not necessarily
+     *          all needed as explicitly different variables.  They do not
+     *          persist beyond the scope of this function.  This set could
+     *          probably be reduced to at most 3 temporary variables.  Well
+     *          placed comments would go a lot farther in making the semantics
+     *          of the code plain rather than producing a huge slew of seemingly
+     *          homogeneous temporaries named using unclear abbreviations
+     */
 
 
-	int nxm1, nym1, nzm1;
+    int ike, jke, kke;
 
 
-	double hx, hy, hz;
+    int nxm1, nym1, nzm1;
 
 
-	double hxm1, hym1, hzm1;
+    double hx, hy, hz;
 
-	double coef_fc;
 
-	double bc_cond_e;
-	double bc_cond_w;
-	double bc_cond_n;
-	double bc_cond_s;
-	double bc_cond_u;
-	double bc_cond_d;
+    double hxm1, hym1, hzm1;
+
+    double coef_fc;
+
+    double bc_cond_e;
+    double bc_cond_w;
+    double bc_cond_n;
+    double bc_cond_s;
+    double bc_cond_u;
+    double bc_cond_d;
     double coef_oE;
     double coef_oN;
     double coef_uC;
@@ -192,105 +189,105 @@ VPUBLIC void VbuildA_fv(int *nx, int *ny, int *nz,
     //fprintf(data, "%s\n", PRINT_FUNC);
     for(k=2; k<=*nz-1; k++) {
 
-    	hzm1 = VAT(zf, k)   - VAT(zf, k-1);
-    	hz   = VAT(zf, k+1) - VAT(zf, k);
+        hzm1 = VAT(zf, k)   - VAT(zf, k-1);
+        hz   = VAT(zf, k+1) - VAT(zf, k);
 
-    	for(j=2; j<=*ny-1; j++) {
+        for(j=2; j<=*ny-1; j++) {
 
-    		hym1 = VAT(yf, j)   - VAT(yf, j-1);
-    		hy   = VAT(yf, j+1) - VAT(yf, j);
+            hym1 = VAT(yf, j)   - VAT(yf, j-1);
+            hy   = VAT(yf, j+1) - VAT(yf, j);
 
-    		for(i=2; i<=*nx-1; i++) {
+            for(i=2; i<=*nx-1; i++) {
 
-    			hxm1 = VAT(xf, i)   - VAT(xf, i-1);
-    			hx   = VAT(xf, i+1) - VAT(xf, i);
+                hxm1 = VAT(xf, i)   - VAT(xf, i-1);
+                hx   = VAT(xf, i+1) - VAT(xf, i);
 
-    			// Calculate some coefficients
-    			/** @note that these and the running OC calculation could
-    			 *        easily be pushed down into the step by step
-    			 *        compuation of neighbors.  That would alleviate some
-    			 *        of the temporary madness
-    			 */
+                // Calculate some coefficients
+                /** @note that these and the running OC calculation could
+                 *        easily be pushed down into the step by step
+                 *        compuation of neighbors.  That would alleviate some
+                 *        of the temporary madness
+                 */
 
-    			coef_oE   = diag * (hym1 + hy) * (hzm1 + hz) / (4.0 * hx);
-    			coef_oEm1 = diag * (hym1 + hy) * (hzm1 + hz) / (4.0 * hxm1);
-    			coef_oN   = diag * (hxm1 + hx) * (hzm1 + hz) / (4.0 * hy);
-    			coef_oNm1 = diag * (hxm1 + hx) * (hzm1 + hz) / (4.0 * hym1);
-    			coef_uC   = diag * (hxm1 + hx) * (hym1 + hy) / (4.0 * hz);
-    			coef_uCm1 = diag * (hxm1 + hx) * (hym1 + hy) / (4.0 * hzm1);
-    			coef_fc   = diag * (hxm1 + hx) * (hym1 + hy) * (hzm1 + hz) / 8.0;
+                coef_oE   = diag * (hym1 + hy) * (hzm1 + hz) / (4.0 * hx);
+                coef_oEm1 = diag * (hym1 + hy) * (hzm1 + hz) / (4.0 * hxm1);
+                coef_oN   = diag * (hxm1 + hx) * (hzm1 + hz) / (4.0 * hy);
+                coef_oNm1 = diag * (hxm1 + hx) * (hzm1 + hz) / (4.0 * hym1);
+                coef_uC   = diag * (hxm1 + hx) * (hym1 + hy) / (4.0 * hz);
+                coef_uCm1 = diag * (hxm1 + hx) * (hym1 + hy) / (4.0 * hzm1);
+                coef_fc   = diag * (hxm1 + hx) * (hym1 + hy) * (hzm1 + hz) / 8.0;
 
                 // Calculate the coefficient and source function
-    			VAT3(fc, i, j, k) = coef_fc * VAT3(fcf, i, j, k);
-    			VAT3(cc, i, j, k) = coef_fc * VAT3(ccf, i, j, k);
+                VAT3(fc, i, j, k) = coef_fc * VAT3(fcf, i, j, k);
+                VAT3(cc, i, j, k) = coef_fc * VAT3(ccf, i, j, k);
                 //fprintf(data, "%19.12E\n", VAT3(cc, i, j, k));
 
-    			// Calculate the diagonal for matvecs and smoothings
-			    VAT3(oC, i, j, k) = coef_oE   * VAT3(a1cf,   i,   j,   k) +
-			    		      coef_oEm1 * VAT3(a1cf, i-1,   j,   k) +
-			    		      coef_oN   * VAT3(a2cf,   i,   j,   k) +
-			    		      coef_oNm1 * VAT3(a2cf,   i, j-1,   k) +
-			    		      coef_uC   * VAT3(a3cf,   i,   j,   k) +
-			    		      coef_uCm1 * VAT3(a3cf,   i,   j, k-1);
+                // Calculate the diagonal for matvecs and smoothings
+                VAT3(oC, i, j, k) = coef_oE   * VAT3(a1cf,   i,   j,   k) +
+                              coef_oEm1 * VAT3(a1cf, i-1,   j,   k) +
+                              coef_oN   * VAT3(a2cf,   i,   j,   k) +
+                              coef_oNm1 * VAT3(a2cf,   i, j-1,   k) +
+                              coef_uC   * VAT3(a3cf,   i,   j,   k) +
+                              coef_uCm1 * VAT3(a3cf,   i,   j, k-1);
 
                 //fprintf(data, "%19.12E\n", VAT3(oC, i, j, k));
 
                 // Calculate the east neighbor
-			    ike = VMIN2(1, VABS(i - nxm1));
-			    VAT3(oE, i, j, k) = ike * coef_oE * VAT3(a1cf, i, j, k);
+                ike = VMIN2(1, VABS(i - nxm1));
+                VAT3(oE, i, j, k) = ike * coef_oE * VAT3(a1cf, i, j, k);
                 //fprintf(data, "%19.12E\n", VAT3(oE, i, j, k));
-			    bc_cond_e = (1 - ike) * coef_oE * VAT3(a1cf, i, j, k) * VAT3(gxcf,  j, k, 2);
-			    VAT3(fc, i, j, k) += bc_cond_e;
+                bc_cond_e = (1 - ike) * coef_oE * VAT3(a1cf, i, j, k) * VAT3(gxcf,  j, k, 2);
+                VAT3(fc, i, j, k) += bc_cond_e;
 
-			    // Calculate the north neighbor
-			    jke = VMIN2(1, VABS(j - nym1));
-			    VAT3(oN, i, j, k) = jke * coef_oN * VAT3(a2cf, i, j, k);
+                // Calculate the north neighbor
+                jke = VMIN2(1, VABS(j - nym1));
+                VAT3(oN, i, j, k) = jke * coef_oN * VAT3(a2cf, i, j, k);
                 //fprintf(data, "%19.12E\n", VAT3(oN, i, j, k));
-			    bc_cond_n = (1 - jke) * coef_oN * VAT3(a2cf, i, j, k) * VAT3(gycf, i, k, 2);
-			    VAT3(fc, i, j, k) += bc_cond_n;
+                bc_cond_n = (1 - jke) * coef_oN * VAT3(a2cf, i, j, k) * VAT3(gycf, i, k, 2);
+                VAT3(fc, i, j, k) += bc_cond_n;
 
-			    // Calculate the up neighbor
-			    kke = VMIN2(1, VABS(k - nzm1));
-			    VAT3(uC, i, j, k) = kke * coef_uC * VAT3(a3cf, i, j, k);
+                // Calculate the up neighbor
+                kke = VMIN2(1, VABS(k - nzm1));
+                VAT3(uC, i, j, k) = kke * coef_uC * VAT3(a3cf, i, j, k);
                 //fprintf(data, "%19.12E\n", VAT3(uC, i, j, k));
-			    bc_cond_u = (1 - kke) * coef_uC * VAT3(a3cf, i, j, k) * VAT3(gzcf, i, j, 2);
-			    VAT3(fc, i, j, k) += bc_cond_u;
+                bc_cond_u = (1 - kke) * coef_uC * VAT3(a3cf, i, j, k) * VAT3(gzcf, i, j, 2);
+                VAT3(fc, i, j, k) += bc_cond_u;
 
-			    // Calculate the west neighbor (just handle b.c.)
-			    ike = VMIN2(1, VABS(i - 2));
-			    bc_cond_w = (1 - ike) * coef_oEm1 * VAT3(a1cf, i-1, j, k) * VAT3(gxcf,  j, k, 1);
-			    VAT3(fc, i, j, k) += bc_cond_w;
+                // Calculate the west neighbor (just handle b.c.)
+                ike = VMIN2(1, VABS(i - 2));
+                bc_cond_w = (1 - ike) * coef_oEm1 * VAT3(a1cf, i-1, j, k) * VAT3(gxcf,  j, k, 1);
+                VAT3(fc, i, j, k) += bc_cond_w;
 
-			    // Calculate the south neighbor (just handle b.c.)
-			    jke = VMIN2(1, VABS(j - 2));
-			    bc_cond_s = (1 - jke) * coef_oNm1 * VAT3(a2cf, i, j-1, k) * VAT3(gycf, i, k, 1);
-			    VAT3(fc, i, j, k) += bc_cond_s;
+                // Calculate the south neighbor (just handle b.c.)
+                jke = VMIN2(1, VABS(j - 2));
+                bc_cond_s = (1 - jke) * coef_oNm1 * VAT3(a2cf, i, j-1, k) * VAT3(gycf, i, k, 1);
+                VAT3(fc, i, j, k) += bc_cond_s;
 
-			    // Calculate the down neighbor (just handle b.c.)
-			    kke = VMIN2(1, VABS(k - 2));
-			    bc_cond_d = (1 - kke) * coef_uCm1 * VAT3(a3cf, i, j, k-1) * VAT3(gzcf, i, j, 1);
-			    VAT3(fc, i, j, k) += bc_cond_d;
+                // Calculate the down neighbor (just handle b.c.)
+                kke = VMIN2(1, VABS(k - 2));
+                bc_cond_d = (1 - kke) * coef_uCm1 * VAT3(a3cf, i, j, k-1) * VAT3(gzcf, i, j, 1);
+                VAT3(fc, i, j, k) += bc_cond_d;
 
                 //fprintf(data, "%19.12E\n", VAT3(fc, i, j, k));
-    		}
-    	}
+            }
+        }
     }
 }
 
 
 
 VPUBLIC void VbuildA_fe(int *nx, int *ny, int *nz,
-		int *ipkey, int *numdia,
-		int *ipc, double *rpc,
-		double *oC, double *cc, double *fc,
+        int *ipkey, int *numdia,
+        int *ipc, double *rpc,
+        double *oC, double *cc, double *fc,
                 double *oE, double *oN, double *uC,
                 double* oNE, double* oNW,
                 double* uE, double* uW,
                 double* uN, double* uS,
                 double* uNE, double* uNW, double* uSE, double* uSW,
-		double *xf, double *yf, double *zf,
-		double *gxcf, double *gycf, double *gzcf,
-		double *a1cf, double *a2cf, double *a3cf,
-		double *ccf,  double *fcf) {
+        double *xf, double *yf, double *zf,
+        double *gxcf, double *gycf, double *gzcf,
+        double *a1cf, double *a2cf, double *a3cf,
+        double *ccf,  double *fcf) {
     VABORT_MSG0("Untranslated Component: from buildAd.f");
 }

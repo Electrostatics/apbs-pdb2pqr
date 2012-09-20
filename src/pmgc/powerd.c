@@ -47,7 +47,7 @@
  * @endverbatim
  */
 
-#include "apbs/powerd.h"
+#include "powerd.h"
 
 VPUBLIC void Vpower(int *nx, int *ny, int *nz,
         int *iz, int *ilev,

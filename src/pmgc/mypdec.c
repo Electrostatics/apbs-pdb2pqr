@@ -47,22 +47,22 @@
  * @endverbatim
  */
 
-#include "apbs/mypdec.h"
+#include "mypdec.h"
 
 VPUBLIC void Vmypdefinitlpbe(int *tnion, double *tcharge, double *tsconc) {
 
-	int i;
+    int i;
 
-	nion = *tnion;
-	if (nion > MAXIONS) {
-		Vnm_print(2, "Vmypde: Warning: Ignoring extra ion species\n");
-		nion = MAXIONS;
-	}
+    nion = *tnion;
+    if (nion > MAXIONS) {
+        Vnm_print(2, "Vmypde: Warning: Ignoring extra ion species\n");
+        nion = MAXIONS;
+    }
 
-	for (i=1; i<=nion; i++) {
-	    VAT(charge, i) = VAT(tcharge, i);
-	    VAT(sconc,  i) = VAT(tsconc,  i);
-	}
+    for (i=1; i<=nion; i++) {
+        VAT(charge, i) = VAT(tcharge, i);
+        VAT(sconc,  i) = VAT(tsconc,  i);
+    }
 }
 
 
@@ -86,7 +86,7 @@ VPUBLIC void Vmypdefinitnpbe(int *tnion, double *tcharge, double *tsconc) {
 
 
 VPUBLIC void Vmypdefinitsmpbe(int *tnion, double *tcharge, double *tsconc,
-		double *smvolume, double *smsize) {
+        double *smvolume, double *smsize) {
 
     int i;
 
@@ -435,7 +435,7 @@ VPUBLIC void Vdc_vecsmpbe(double *coef, double *uin, double *uout,
     double a1_neg, a1_pos, a2_neg, a2_pos;
     double a3_neg, a3_pos, a1, a2, a3;
     double f, g, fprime, gprime, gpark, alpha;
-    
+
     WARN_UNTESTED;
 
     // Find parallel loops (ipara), remainder (ivect)

@@ -47,17 +47,15 @@
  * @endverbatim
  */
 
-#include "apbs/smoothd.h"
-
-
+#include "smoothd.h"
 
 VEXTERNC void Vsmooth(int *nx, int *ny, int *nz,
-		int *ipc, double *rpc,
-		double *ac, double *cc, double *fc,
-		double *x, double *w1, double *w2, double *r,
-		int *itmax, int *iters,
-		double *errtol, double *omega,
-		int *iresid, int *iadjoint, int *meth) {
+        int *ipc, double *rpc,
+        double *ac, double *cc, double *fc,
+        double *x, double *w1, double *w2, double *r,
+        int *itmax, int *iters,
+        double *errtol, double *omega,
+        int *iresid, int *iadjoint, int *meth) {
 
     // Do in one step
     if (*meth == 0) {
@@ -92,12 +90,12 @@ VEXTERNC void Vsmooth(int *nx, int *ny, int *nz,
 
 
 VEXTERNC void Vnsmooth(int *nx, int *ny, int *nz,
-		int *ipc, double *rpc,
-		double *ac, double *cc, double *fc,
-		double *x, double *w1, double *w2, double *r,
-		int *itmax, int *iters,
-		double *errtol, double *omega,
-		int *iresid, int *iadjoint, int *meth) {
+        int *ipc, double *rpc,
+        double *ac, double *cc, double *fc,
+        double *x, double *w1, double *w2, double *r,
+        int *itmax, int *iters,
+        double *errtol, double *omega,
+        int *iresid, int *iadjoint, int *meth) {
 
     WARN_UNTESTED;
 

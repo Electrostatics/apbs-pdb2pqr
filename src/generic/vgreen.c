@@ -14,48 +14,47 @@
  *
  *  Additional contributing authors listed in the code documentation.
  *
- * Copyright (c) 2010-2012 Battelle Memorial Institute. Developed at the 
- * Pacific Northwest National Laboratory, operated by Battelle Memorial 
+ * Copyright (c) 2010-2012 Battelle Memorial Institute. Developed at the
+ * Pacific Northwest National Laboratory, operated by Battelle Memorial
  * Institute, Pacific Northwest Division for the U.S. Department of Energy.
  *
  * Portions Copyright (c) 2002-2010, Washington University in St. Louis.
  * Portions Copyright (c) 2002-2010, Nathan A. Baker.
- * Portions Copyright (c) 1999-2002, The Regents of the University of 
+ * Portions Copyright (c) 1999-2002, The Regents of the University of
  * California.
  * Portions Copyright (c) 1995, Michael Holst.
  * All rights reserved.
  *
- * Redistribution and use in source and binary forms, with or without 
+ * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
- * Redistributions of source code must retain the above copyright notice, this
- * list of conditions and the following disclaimer.  
  *
- * Redistributions in binary form must reproduce the above copyright notice, 
+ * Redistributions of source code must retain the above copyright notice, this
+ * list of conditions and the following disclaimer.
+ *
+ * Redistributions in binary form must reproduce the above copyright notice,
  * this list of conditions and the following disclaimer in the documentation
  * and/or other materials provided with the distribution.
  *
- * Neither the name of the developer nor the names of its contributors may be 
- * used to endorse or promote products derived from this software without 
+ * Neither the name of the developer nor the names of its contributors may be
+ * used to endorse or promote products derived from this software without
  * specific prior written permission.
  *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
- * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE 
- * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE 
- * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE 
- * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR 
- * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF 
- * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS 
- * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN 
- * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) 
- * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF 
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF
  * THE POSSIBILITY OF SUCH DAMAGE.
  *
  * @endverbatim
  */
 
-#include "apbscfg.h"
-#include "apbs/vgreen.h"
+#include "vgreen.h"
 
 /* Define wrappers for F77 treecode routines */
 #ifdef HAVE_TREE
@@ -72,10 +71,10 @@
 /* Some constants associated with the tree code */
 #ifdef HAVE_TREE
     /**
-     * @brief  Lower distance cutoff for electrostatic interactions 
+     * @brief  Lower distance cutoff for electrostatic interactions
      * @ingroup  Vgreen */
 #   define FMM_DIST_TOL VSMALL
-    /** 
+    /**
      * @brief  Flag for energy and force evaluation:
      *         \li 1 =>  evaluate energy only
      *         \li 2 =>  evaluate energy and force
@@ -109,7 +108,7 @@
 
 
 /*
- * @brief  Setup treecode internal structures 
+ * @brief  Setup treecode internal structures
  * @ingroup  Vgreen
  * @author  Nathan Baker
  * @param  thee  Vgreen object
@@ -118,7 +117,7 @@
 VPRIVATE int treesetup(Vgreen *thee);
 
 /*
- * @brief  Clean up treecode internal structures 
+ * @brief  Clean up treecode internal structures
  * @ingroup  Vgreen
  * @author  Nathan Baker
  * @param  thee  Vgreen object
@@ -140,7 +139,7 @@ VPRIVATE int treecalc(Vgreen *thee, double *xtar, double *ytar, double *ztar,
 
 #if !defined(VINLINE_VGREEN)
 
-VPUBLIC Valist* Vgreen_getValist(Vgreen *thee) { 
+VPUBLIC Valist* Vgreen_getValist(Vgreen *thee) {
 
    VASSERT(thee != VNULL);
    return thee->alist;
@@ -165,8 +164,8 @@ VPUBLIC Vgreen* Vgreen_ctor(Valist *alist) {
     return thee;
 }
 
-VPUBLIC int Vgreen_ctor2(Vgreen *thee, Valist *alist) { 
- 
+VPUBLIC int Vgreen_ctor2(Vgreen *thee, Valist *alist) {
+
     VASSERT( thee != VNULL );
 
     /* Memory management object */
@@ -186,7 +185,7 @@ VPUBLIC int Vgreen_ctor2(Vgreen *thee, Valist *alist) {
         return 0;
     }
 #endif /* ifdef HAVE_TREE */
-   
+
     return 1;
 }
 
@@ -198,7 +197,7 @@ VPUBLIC void Vgreen_dtor(Vgreen **thee) {
     }
 }
 
-VPUBLIC void Vgreen_dtor2(Vgreen *thee) { 
+VPUBLIC void Vgreen_dtor2(Vgreen *thee) {
 
 #ifdef HAVE_TREE
     treecleanup(thee);
@@ -222,7 +221,7 @@ VPUBLIC int Vgreen_helmholtzD(Vgreen *thee, int npos, double *x, double *y,
 
 }
 
-VPUBLIC int Vgreen_coulomb_direct(Vgreen *thee, int npos, double *x, 
+VPUBLIC int Vgreen_coulomb_direct(Vgreen *thee, int npos, double *x,
         double *y, double *z, double *val) {
 
     Vatom *atom;
@@ -271,7 +270,7 @@ VPUBLIC int Vgreen_coulomb(Vgreen *thee, int npos, double *x, double *y,
 
     for (ipos=0; ipos<npos; ipos++) val[ipos] = 0.0;
 
-#ifdef HAVE_TREE  
+#ifdef HAVE_TREE
 
     /* Allocate charge array (if necessary) */
     if (Valist_getNumberAtoms(thee->alist) > 1) {
@@ -286,7 +285,7 @@ VPUBLIC int Vgreen_coulomb(Vgreen *thee, int npos, double *x, double *y,
             q = &(qtemp);
         }
         for (ipos=0; ipos<npos; ipos++) q[ipos] = 1.0;
-    
+
         /* Calculate */
         treecalc(thee, x, y, z, q, npos, val, thee->xp, thee->yp, thee->zp,
           thee->qp, thee->np, &fx, &fy, &fz, 1, 1, thee->np);
@@ -294,7 +293,7 @@ VPUBLIC int Vgreen_coulomb(Vgreen *thee, int npos, double *x, double *y,
 
     /* De-allocate charge array (if necessary) */
     if (npos > 1) Vmem_free(thee->vmem, npos, sizeof(double), (void **)&q);
-    
+
     scale = Vunit_ec/(4*Vunit_pi*Vunit_eps0*1.0e-10);
     for (ipos=0; ipos<npos; ipos++) val[ipos] = val[ipos]*scale;
 
@@ -308,8 +307,8 @@ VPUBLIC int Vgreen_coulomb(Vgreen *thee, int npos, double *x, double *y,
 
 }
 
-VPUBLIC int Vgreen_coulombD_direct(Vgreen *thee, int npos, 
-        double *x, double *y, double *z, double *pot, double *gradx, 
+VPUBLIC int Vgreen_coulombD_direct(Vgreen *thee, int npos,
+        double *x, double *y, double *z, double *pot, double *gradx,
         double *grady, double *gradz) {
 
     Vatom *atom;
@@ -345,7 +344,7 @@ VPUBLIC int Vgreen_coulombD_direct(Vgreen *thee, int npos,
                 grady[ipos] -= (charge*dy*idist3);
                 gradz[ipos] -= (charge*dz*idist3);
                 pot[ipos] += (charge/dist);
-            } 
+            }
         }
     }
 
@@ -394,14 +393,14 @@ VPUBLIC int Vgreen_coulombD(Vgreen *thee, int npos, double *x, double *y,
             q = &(qtemp);
         }
         for (ipos=0; ipos<npos; ipos++) q[ipos] = 1.0;
-    
+
         /* Calculate */
         treecalc(thee, x, y, z, q, npos, pot, thee->xp, thee->yp, thee->zp,
                 thee->qp, thee->np, gradx, grady, gradz, 2, npos, thee->np);
-    
+
         /* De-allocate charge array (if necessary) */
         if (npos > 1) Vmem_free(thee->vmem, npos, sizeof(double), (void **)&q);
-    } else return Vgreen_coulombD_direct(thee, npos, x, y, z, pot, 
+    } else return Vgreen_coulombD_direct(thee, npos, x, y, z, pot,
             gradx, grady, gradz);
 
     scale = Vunit_ec/(4*VPI*Vunit_eps0*(1.0e-10));
@@ -416,11 +415,11 @@ VPUBLIC int Vgreen_coulombD(Vgreen *thee, int npos, double *x, double *y,
 
 #else /* ifdef HAVE_TREE */
 
-    return Vgreen_coulombD_direct(thee, npos, x, y, z, pot, 
+    return Vgreen_coulombD_direct(thee, npos, x, y, z, pot,
             gradx, grady, gradz);
 
 #endif
-  
+
 }
 
 VPRIVATE int treesetup(Vgreen *thee) {
@@ -490,7 +489,7 @@ VPRIVATE int treesetup(Vgreen *thee) {
     F77INITLEVELS(&minlevel, &maxlevel);
 
     Vnm_print(0, "treesetup:  Creating tree...\n");
-    F77CREATE_TREE(&one, &(thee->np), thee->xp, thee->yp, thee->zp, thee->qp, 
+    F77CREATE_TREE(&one, &(thee->np), thee->xp, thee->yp, thee->zp, thee->qp,
       &shrink, &maxparnode, xyzminmax, &level, &(thee->np));
 
     return 1;

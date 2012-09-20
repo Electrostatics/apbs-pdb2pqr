@@ -8,9 +8,7 @@
 // rcsid="$Id$"
 /////////////////////////////////////////////////////////////////////////// */
 
-#include "apbscfg.h"
-#include "maloc/maloc.h"
-#include "apbs/apbs.h"  
+#include "apbs.h"
 
 VEMBED(rcsid="$Id$")
 
@@ -37,13 +35,13 @@ int main(int argc, char **argv) {
             file to be written in UHBD format.\n\
     -----------------------------------------------------------------------\n\
     \n";
- 
- 
+
+
   /*** Check Invocation ***/
   Vio_start();
   if (argc != 3) {
     Vnm_print(2, "\n*** Syntax error: got %d arguments, expected 2.\n\n",
-	      argc-1);
+          argc-1);
     Vnm_print(2,"%s\n", usage);
     return -1;
   } else {
@@ -51,12 +49,12 @@ int main(int argc, char **argv) {
     outpath = argv[2];
   }
 
-  /*** Read DX format file ***/ 
+  /*** Read DX format file ***/
   grid = Vgrid_ctor(0, 0, 0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, VNULL);
   Vnm_tprint(1, "Reading DX file ... \n");
   if(Vgrid_readDX(grid, "FILE", "ASC", VNULL, inpath) != 1) {
     Vnm_tprint( 2, "Fatal error while reading from %s\n",
-		inpath);
+        inpath);
     return 0;
   }
   nx = grid->nx;
@@ -70,8 +68,8 @@ int main(int argc, char **argv) {
   zmin = grid->zmin;
   Vnm_tprint(1, "  %d x %d x %d grid\n", nx, ny, nz);
   Vnm_tprint(1, "  (%g, %g, %g) A spacings\n", hx, hy, hzed);
-  Vnm_tprint(1, "  (%g, %g, %g) A lower corner\n", 
-	     xmin, ymin, zmin);
+  Vnm_tprint(1, "  (%g, %g, %g) A lower corner\n",
+         xmin, ymin, zmin);
 
 
 
@@ -79,22 +77,22 @@ int main(int argc, char **argv) {
   sock = Vio_ctor(iodev,iofmt,thost, outpath, "w");
   if (sock == VNULL) {
     Vnm_print(2, "Problem opening virtual socket %s\n",
-	      outpath);
+          outpath);
     return -1;
   }
   if (Vio_connect(sock, 0) < 0) {
     Vnm_print(2, "Problem connecting virtual socket %s\n",
-	      outpath);
+          outpath);
     return -1;
   }
 
   /*** Write potential data in UHBD format ***/
   /*   sprintf(outpath, "%s.%s", writestem, "grd"); */
-  
+
   Vnm_tprint(1, "Writting UHBD file ... \n");
   /* Vnm_tprint(1, "%s\n", outpath); */
   Vgrid_writeUHBD(grid, "FILE", "ASC", VNULL, outpath, title,
-		  grid->data);
+          grid->data);
   Vgrid_dtor(&grid);
 
 

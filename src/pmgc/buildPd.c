@@ -47,17 +47,16 @@
  * @endverbatim
  */
 
-#include "apbs/buildPd.h"
-#include "apbs/vhal.h"
+#include "buildPd.h"
 
 VPUBLIC void VbuildP(int *nxf, int *nyf, int *nzf,
-		int *nxc, int *nyc, int *nzc,
-		int *mgprol,
-		int *ipc, double *rpc,
-		double *pc, double *ac,
-		double *xf, double *yf, double *zf) {
+        int *nxc, int *nyc, int *nzc,
+        int *mgprol,
+        int *ipc, double *rpc,
+        double *pc, double *ac,
+        double *xf, double *yf, double *zf) {
 
-	int numdia;
+    int numdia;
 
     MAT2(pc, *nxc * *nyc * *nzc, 1);
     MAT2(ac, *nxf * *nyf * *nzf, 1);
@@ -90,32 +89,32 @@ VPUBLIC void VbuildP(int *nxf, int *nyf, int *nzf,
 }
 
 VPUBLIC void VbuildP_trilin(int *nxf, int *nyf, int *nzf,
-		int *nxc, int *nyc, int *nzc,
-		double *pc,
-		double *xf, double *yf, double *zf) {
+        int *nxc, int *nyc, int *nzc,
+        double *pc,
+        double *xf, double *yf, double *zf) {
 
     MAT2(pc, *nxc * *nyc * *nzc, 1);
 
     VbuildPb_trilin(nxf, nyf, nzf,
-    		nxc, nyc, nzc,
-    		RAT2(pc, 1,  1),RAT2(pc, 1,  2),RAT2(pc, 1,  3),RAT2(pc, 1,  4),RAT2(pc, 1,  5),
-    		RAT2(pc, 1,  6),RAT2(pc, 1,  7),RAT2(pc, 1,  8),RAT2(pc, 1,  9),
-    		RAT2(pc, 1, 10),RAT2(pc, 1, 11),RAT2(pc, 1, 12),RAT2(pc, 1, 13),RAT2(pc, 1, 14),
-    		RAT2(pc, 1, 15),RAT2(pc, 1, 16),RAT2(pc, 1, 17),RAT2(pc, 1, 18),
-    		RAT2(pc, 1, 19),RAT2(pc, 1, 20),RAT2(pc, 1, 21),RAT2(pc, 1, 22),RAT2(pc, 1, 23),
-    		RAT2(pc, 1, 24),RAT2(pc, 1, 25),RAT2(pc, 1, 26),RAT2(pc, 1, 27),
-    		xf, yf, zf);
+            nxc, nyc, nzc,
+            RAT2(pc, 1,  1),RAT2(pc, 1,  2),RAT2(pc, 1,  3),RAT2(pc, 1,  4),RAT2(pc, 1,  5),
+            RAT2(pc, 1,  6),RAT2(pc, 1,  7),RAT2(pc, 1,  8),RAT2(pc, 1,  9),
+            RAT2(pc, 1, 10),RAT2(pc, 1, 11),RAT2(pc, 1, 12),RAT2(pc, 1, 13),RAT2(pc, 1, 14),
+            RAT2(pc, 1, 15),RAT2(pc, 1, 16),RAT2(pc, 1, 17),RAT2(pc, 1, 18),
+            RAT2(pc, 1, 19),RAT2(pc, 1, 20),RAT2(pc, 1, 21),RAT2(pc, 1, 22),RAT2(pc, 1, 23),
+            RAT2(pc, 1, 24),RAT2(pc, 1, 25),RAT2(pc, 1, 26),RAT2(pc, 1, 27),
+            xf, yf, zf);
 }
 
 VEXTERNC void VbuildPb_trilin(int *nxf, int *nyf, int *nzf,
-		int *nxc, int *nyc, int *nzc,
-		double *oPC, double *oPN, double *oPS, double *oPE, double *oPW,
-		double *oPNE, double *oPNW, double *oPSE, double *oPSW,
-		double *uPC, double *uPN, double *uPS, double *uPE, double *uPW,
-		double *uPNE, double *uPNW, double *uPSE, double *uPSW,
-		double *dPC, double *dPN, double *dPS, double *dPE, double *dPW,
-		double *dPNE, double *dPNW, double *dPSE, double *dPSW,
-		double *xf, double *yf, double *zf) {
+        int *nxc, int *nyc, int *nzc,
+        double *oPC, double *oPN, double *oPS, double *oPE, double *oPW,
+        double *oPNE, double *oPNW, double *oPSE, double *oPSW,
+        double *uPC, double *uPN, double *uPS, double *uPE, double *uPW,
+        double *uPNE, double *uPNW, double *uPSE, double *uPSW,
+        double *dPC, double *dPN, double *dPS, double *dPE, double *dPW,
+        double *dPNE, double *dPNW, double *dPSE, double *dPSW,
+        double *xf, double *yf, double *zf) {
 
     int i, j, k;
 
@@ -193,7 +192,7 @@ for(k=2; k<=*nzc-1; k++) {
                 VAT3(uPSE, i,j,k) = eighth;
                 VAT3(uPSW, i,j,k) = eighth;
             }
-    	}
+        }
     }
 }
 
