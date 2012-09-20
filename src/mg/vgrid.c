@@ -5,7 +5,7 @@
  *  @ingroup Vgrid
  *  @version $Id$
  *  @attention
- *  @verbatim 
+ *  @verbatim
  *
  * APBS -- Adaptive Poisson-Boltzmann Solver
  *
@@ -14,54 +14,53 @@
  *
  *  Additional contributing authors listed in the code documentation.
  *
- * Copyright (c) 2010-2012 Battelle Memorial Institute. Developed at the 
- * Pacific Northwest National Laboratory, operated by Battelle Memorial 
+ * Copyright (c) 2010-2012 Battelle Memorial Institute. Developed at the
+ * Pacific Northwest National Laboratory, operated by Battelle Memorial
  * Institute, Pacific Northwest Division for the U.S. Department of Energy.
  *
  * Portions Copyright (c) 2002-2010, Washington University in St. Louis.
  * Portions Copyright (c) 2002-2010, Nathan A. Baker.
- * Portions Copyright (c) 1999-2002, The Regents of the University of 
+ * Portions Copyright (c) 1999-2002, The Regents of the University of
  * California.
  * Portions Copyright (c) 1995, Michael Holst.
  * All rights reserved.
  *
- * Redistribution and use in source and binary forms, with or without 
+ * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
- * Redistributions of source code must retain the above copyright notice, this
- * list of conditions and the following disclaimer.  
  *
- * Redistributions in binary form must reproduce the above copyright notice, 
+ * Redistributions of source code must retain the above copyright notice, this
+ * list of conditions and the following disclaimer.
+ *
+ * Redistributions in binary form must reproduce the above copyright notice,
  * this list of conditions and the following disclaimer in the documentation
  * and/or other materials provided with the distribution.
  *
- * Neither the name of the developer nor the names of its contributors may be 
- * used to endorse or promote products derived from this software without 
+ * Neither the name of the developer nor the names of its contributors may be
+ * used to endorse or promote products derived from this software without
  * specific prior written permission.
  *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
- * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE 
- * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE 
- * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE 
- * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR 
- * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF 
- * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS 
- * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN 
- * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) 
- * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF 
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF
  * THE POSSIBILITY OF SUCH DAMAGE.
  *
  * @endverbatim
  */
 
-#include "apbscfg.h"
-#include "apbs/vgrid.h"
+#include "vgrid.h"
 
 VEMBED(rcsid="$Id$")
 
 #if !defined(VINLINE_VGRID)
-    VPUBLIC unsigned long int Vgrid_memChk(Vgrid *thee) { 
-        return Vmem_bytes(thee->mem); 
+    VPUBLIC unsigned long int Vgrid_memChk(Vgrid *thee) {
+        return Vmem_bytes(thee->mem);
     }
 #endif
 #define IJK(i,j,k)  (((k)*(nx)*(ny))+((j)*(nx))+(i))
@@ -75,14 +74,14 @@ VPRIVATE char Vprecision[26];
 // Routine:  Vgrid_ctor
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
-VPUBLIC Vgrid* Vgrid_ctor(int nx, 
-                          int ny, 
+VPUBLIC Vgrid* Vgrid_ctor(int nx,
+                          int ny,
                           int nz,
-                          double hx, 
-                          double hy, 
+                          double hx,
+                          double hy,
                           double hzed,
-                          double xmin, 
-                          double ymin, 
+                          double xmin,
+                          double ymin,
                           double zmin,
                           double *data
                          ) {
@@ -154,14 +153,14 @@ VPUBLIC void Vgrid_dtor(Vgrid **thee) {
 // Routine:  Vgrid_dtor2
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
-VPUBLIC void Vgrid_dtor2(Vgrid *thee) { 
+VPUBLIC void Vgrid_dtor2(Vgrid *thee) {
 
     if (thee->readdata) {
         Vmem_free(thee->mem, (thee->nx*thee->ny*thee->nz), sizeof(double),
           (void **)&(thee->data));
     }
     Vmem_dtor(&(thee->mem));
- 
+
 }
 
 /* ///////////////////////////////////////////////////////////////////////////
@@ -198,7 +197,7 @@ VPUBLIC int Vgrid_value(Vgrid *thee, double pt[3], double *value) {
     zmax = thee->zmax;
 
     u = 0;
-   
+
     ifloat = (pt[0] - xmin)/hx;
     jfloat = (pt[1] - ymin)/hy;
     kfloat = (pt[2] - zmin)/hzed;
@@ -209,13 +208,13 @@ VPUBLIC int Vgrid_value(Vgrid *thee, double pt[3], double *value) {
     ilo = (int)floor(ifloat);
     jlo = (int)floor(jfloat);
     klo = (int)floor(kfloat);
-	if (VABS(pt[0] - xmin) < Vcompare) ilo = 0;
-	if (VABS(pt[1] - ymin) < Vcompare) jlo = 0;
-	if (VABS(pt[2] - zmin) < Vcompare) klo = 0;
-	if (VABS(pt[0] - xmax) < Vcompare) ihi = nx-1;
-	if (VABS(pt[1] - ymax) < Vcompare) jhi = ny-1;
-	if (VABS(pt[2] - zmax) < Vcompare) khi = nz-1;
-	
+    if (VABS(pt[0] - xmin) < Vcompare) ilo = 0;
+    if (VABS(pt[1] - ymin) < Vcompare) jlo = 0;
+    if (VABS(pt[2] - zmin) < Vcompare) klo = 0;
+    if (VABS(pt[0] - xmax) < Vcompare) ihi = nx-1;
+    if (VABS(pt[1] - ymax) < Vcompare) jhi = ny-1;
+    if (VABS(pt[2] - zmax) < Vcompare) khi = nz-1;
+
     /* See if we're on the mesh */
     if ((ihi<nx) && (jhi<ny) && (khi<nz) &&
         (ilo>=0) && (jlo>=0) && (klo>=0)) {
@@ -236,31 +235,31 @@ VPUBLIC int Vgrid_value(Vgrid *thee, double pt[3], double *value) {
 
         if (isnan(u)) {
             Vnm_print(2, "Vgrid_value:  Got NaN!\n");
-            Vnm_print(2, "Vgrid_value:  (x, y, z) = (%4.3f, %4.3f, %4.3f)\n", 
+            Vnm_print(2, "Vgrid_value:  (x, y, z) = (%4.3f, %4.3f, %4.3f)\n",
                     pt[0], pt[1], pt[2]);
-            Vnm_print(2, "Vgrid_value:  (ihi, jhi, khi) = (%d, %d, %d)\n", 
+            Vnm_print(2, "Vgrid_value:  (ihi, jhi, khi) = (%d, %d, %d)\n",
                     ihi, jhi, khi);
-            Vnm_print(2, "Vgrid_value:  (ilo, jlo, klo) = (%d, %d, %d)\n", 
+            Vnm_print(2, "Vgrid_value:  (ilo, jlo, klo) = (%d, %d, %d)\n",
                     ilo, jlo, klo);
-            Vnm_print(2, "Vgrid_value:  (nx, ny, nz) = (%d, %d, %d)\n", 
+            Vnm_print(2, "Vgrid_value:  (nx, ny, nz) = (%d, %d, %d)\n",
                     nx, ny, nz);
-            Vnm_print(2, "Vgrid_value:  (dx, dy, dz) = (%4.3f, %4.3f, %4.3f)\n", 
+            Vnm_print(2, "Vgrid_value:  (dx, dy, dz) = (%4.3f, %4.3f, %4.3f)\n",
                     dx, dy, dz);
-            Vnm_print(2, "Vgrid_value:  data[IJK(ihi,jhi,khi)] = %g\n", 
+            Vnm_print(2, "Vgrid_value:  data[IJK(ihi,jhi,khi)] = %g\n",
                     thee->data[IJK(ihi,jhi,khi)]);
-            Vnm_print(2, "Vgrid_value:  data[IJK(ihi,jlo,khi)] = %g\n", 
+            Vnm_print(2, "Vgrid_value:  data[IJK(ihi,jlo,khi)] = %g\n",
                     thee->data[IJK(ihi,jlo,khi)]);
-            Vnm_print(2, "Vgrid_value:  data[IJK(ihi,jhi,klo)] = %g\n", 
+            Vnm_print(2, "Vgrid_value:  data[IJK(ihi,jhi,klo)] = %g\n",
                     thee->data[IJK(ihi,jhi,klo)]);
-            Vnm_print(2, "Vgrid_value:  data[IJK(ihi,jlo,klo)] = %g\n", 
+            Vnm_print(2, "Vgrid_value:  data[IJK(ihi,jlo,klo)] = %g\n",
                     thee->data[IJK(ihi,jlo,klo)]);
-            Vnm_print(2, "Vgrid_value:  data[IJK(ilo,jhi,khi)] = %g\n", 
+            Vnm_print(2, "Vgrid_value:  data[IJK(ilo,jhi,khi)] = %g\n",
                     thee->data[IJK(ilo,jhi,khi)]);
-            Vnm_print(2, "Vgrid_value:  data[IJK(ilo,jlo,khi)] = %g\n", 
+            Vnm_print(2, "Vgrid_value:  data[IJK(ilo,jlo,khi)] = %g\n",
                     thee->data[IJK(ilo,jlo,khi)]);
-            Vnm_print(2, "Vgrid_value:  data[IJK(ilo,jhi,klo)] = %g\n", 
+            Vnm_print(2, "Vgrid_value:  data[IJK(ilo,jhi,klo)] = %g\n",
                     thee->data[IJK(ilo,jhi,klo)]);
-            Vnm_print(2, "Vgrid_value:  data[IJK(ilo,jlo,klo)] = %g\n", 
+            Vnm_print(2, "Vgrid_value:  data[IJK(ilo,jlo,klo)] = %g\n",
                     thee->data[IJK(ilo,jlo,klo)]);
         }
         return 1;
@@ -286,7 +285,7 @@ VPUBLIC int Vgrid_value(Vgrid *thee, double pt[3], double *value) {
 //
 // Authors:  Stephen Bond and Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
-VPUBLIC int Vgrid_curvature(Vgrid *thee, double pt[3], int cflag, 
+VPUBLIC int Vgrid_curvature(Vgrid *thee, double pt[3], int cflag,
   double *value) {
 
     double hx, hy, hzed, curv;
@@ -357,7 +356,7 @@ VPUBLIC int Vgrid_curvature(Vgrid *thee, double pt[3], int cflag,
     return 1;
 
     VERROR1:
-        return 0; 
+        return 0;
 
 }
 
@@ -436,7 +435,7 @@ VPUBLIC int Vgrid_gradient(Vgrid *thee, double pt[3], double grad[3]) {
     return 1;
 
     VERROR1:
-        return 0; 
+        return 0;
 
 }
 
@@ -447,143 +446,143 @@ VPUBLIC int Vgrid_gradient(Vgrid *thee, double pt[3], double grad[3]) {
  /////////////////////////////////////////////////////////////////////////// */
 #ifdef HAVE_ZLIB
 #define off_t long
-#include "../../contrib/zlib/zlib.h"
+#include "zlib.h"
 #endif
 VPUBLIC int Vgrid_readGZ(Vgrid *thee, const char *fname) {
 
 #ifdef HAVE_ZLIB
-	int i, j, k;
-	int len; // Temporary counter variable for loop conditionals
-	int q, itmp, u, header, incr;
-	double *temp;
+    int i, j, k;
+    int len; // Temporary counter variable for loop conditionals
+    int q, itmp, u, header, incr;
+    double *temp;
     double dtmp1, dtmp2, dtmp3;
-	gzFile infile;
-	char line[VMAX_ARGLEN];
+    gzFile infile;
+    char line[VMAX_ARGLEN];
 
-	header = 0;
-	
-	/* Check to see if the existing data is null and, if not, clear it out */
+    header = 0;
+
+    /* Check to see if the existing data is null and, if not, clear it out */
     if (thee->data != VNULL) {
         Vnm_print(1, "%s:  destroying existing data!\n", __func__);
-		Vmem_free(thee->mem, thee->nx * thee->ny * thee->nz, sizeof(double),
-				  (void **)&(thee->data));
+        Vmem_free(thee->mem, thee->nx * thee->ny * thee->nz, sizeof(double),
+                  (void **)&(thee->data));
         }
 
     thee->readdata = 1;
     thee->ctordata = 0;
-	
-	infile = gzopen(fname, "rb");
-	if (infile == Z_NULL) {
-		Vnm_print(2, "%s:  Problem opening compressed file %s\n", __func__, fname);
+
+    infile = gzopen(fname, "rb");
+    if (infile == Z_NULL) {
+        Vnm_print(2, "%s:  Problem opening compressed file %s\n", __func__, fname);
         return VRC_FAILURE;
     }
-	
-	thee->hx = 0.0;
-	thee->hy = 0.0;
-	thee->hzed = 0.0;
-	
-	//read data here
-	while (header < 7) {
-		if(gzgets(infile, line, VMAX_ARGLEN) == Z_NULL){
-			return VRC_FAILURE;
-		}
 
-		// Skip comments and newlines
-		if(strncmp(line, "#", 1) == 0) continue;
-		if(line[0] == '\n') continue; 
-		
-		switch (header) {
-			case 0:
-				sscanf(line, "object 1 class gridpositions counts %d %d %d",
-					   &(thee->nx),&(thee->ny),&(thee->nz));
-				break;
-			case 1:
-				sscanf(line, "origin %lf %lf %lf",
-					   &(thee->xmin),&(thee->ymin),&(thee->zmin));
-				break;
-			case 2:
-			case 3:
-			case 4:
-				sscanf(line, "delta %lf %lf %lf",&dtmp1,&dtmp2,&dtmp3);
-				thee->hx += dtmp1;
-				thee->hy += dtmp2;
-				thee->hzed += dtmp3;
-				break;
-			default:
-				break;
-		}
-		
-		header++;
-	}
-	
-	/* Allocate space for the data */
-	Vnm_print(0, "%s:  allocating %d x %d x %d doubles for storage\n",
-		__func__, thee->nx, thee->ny, thee->nz);
-	len = thee->nx * thee->ny * thee->nz;
+    thee->hx = 0.0;
+    thee->hy = 0.0;
+    thee->hzed = 0.0;
+
+    //read data here
+    while (header < 7) {
+        if(gzgets(infile, line, VMAX_ARGLEN) == Z_NULL){
+            return VRC_FAILURE;
+        }
+
+        // Skip comments and newlines
+        if(strncmp(line, "#", 1) == 0) continue;
+        if(line[0] == '\n') continue;
+
+        switch (header) {
+            case 0:
+                sscanf(line, "object 1 class gridpositions counts %d %d %d",
+                       &(thee->nx),&(thee->ny),&(thee->nz));
+                break;
+            case 1:
+                sscanf(line, "origin %lf %lf %lf",
+                       &(thee->xmin),&(thee->ymin),&(thee->zmin));
+                break;
+            case 2:
+            case 3:
+            case 4:
+                sscanf(line, "delta %lf %lf %lf",&dtmp1,&dtmp2,&dtmp3);
+                thee->hx += dtmp1;
+                thee->hy += dtmp2;
+                thee->hzed += dtmp3;
+                break;
+            default:
+                break;
+        }
+
+        header++;
+    }
+
+    /* Allocate space for the data */
+    Vnm_print(0, "%s:  allocating %d x %d x %d doubles for storage\n",
+        __func__, thee->nx, thee->ny, thee->nz);
+    len = thee->nx * thee->ny * thee->nz;
 
     thee->data = VNULL;
-	thee->data = Vmem_malloc(thee->mem, len, sizeof(double));
+    thee->data = Vmem_malloc(thee->mem, len, sizeof(double));
     if (thee->data == VNULL) {
         Vnm_print(2, "%s:  Unable to allocate space for data!\n", __func__);
         return 0;
     }
-	
-	/* Allocate a temporary buffer to store the compressed 
-	 * data into (column major order). Add 2 to ensure the buffer is
-	 * big enough to take extra data on the final read loop.
-	 */
-	temp = (double *)malloc(len * (2 * sizeof(double)));
 
-	for (i = 0; i < len; i += 3){
-		memset(&line, 0, sizeof(line));
-		gzgets(infile, line, VMAX_ARGLEN);
-		sscanf(line, "%lf %lf %lf", &temp[i], &temp[i+1], &temp[i+2]);
-	}
-	
-	/* Now move the data to row major order */
-	incr = 0;
-	for (i=0; i<thee->nx; i++) {
-		for (j=0; j<thee->ny; j++) {
-			for (k=0; k<thee->nz; k++) {
-				u = k*(thee->nx)*(thee->ny)+j*(thee->nx)+i;
-				(thee->data)[u] = temp[incr++];
-			}
-		}
-	}
-	
-	/* calculate grid maxima */
-	thee->xmax = thee->xmin + (thee->nx-1)*thee->hx;
-	thee->ymax = thee->ymin + (thee->ny-1)*thee->hy;
-	thee->zmax = thee->zmin + (thee->nz-1)*thee->hzed;
-	
-	/* Close off the socket */
-	gzclose(infile);
-	free(temp);
+    /* Allocate a temporary buffer to store the compressed
+     * data into (column major order). Add 2 to ensure the buffer is
+     * big enough to take extra data on the final read loop.
+     */
+    temp = (double *)malloc(len * (2 * sizeof(double)));
+
+    for (i = 0; i < len; i += 3){
+        memset(&line, 0, sizeof(line));
+        gzgets(infile, line, VMAX_ARGLEN);
+        sscanf(line, "%lf %lf %lf", &temp[i], &temp[i+1], &temp[i+2]);
+    }
+
+    /* Now move the data to row major order */
+    incr = 0;
+    for (i=0; i<thee->nx; i++) {
+        for (j=0; j<thee->ny; j++) {
+            for (k=0; k<thee->nz; k++) {
+                u = k*(thee->nx)*(thee->ny)+j*(thee->nx)+i;
+                (thee->data)[u] = temp[incr++];
+            }
+        }
+    }
+
+    /* calculate grid maxima */
+    thee->xmax = thee->xmin + (thee->nx-1)*thee->hx;
+    thee->ymax = thee->ymin + (thee->ny-1)*thee->hy;
+    thee->zmax = thee->zmin + (thee->nz-1)*thee->hzed;
+
+    /* Close off the socket */
+    gzclose(infile);
+    free(temp);
 #else
-	
-	Vnm_print(0, "WARNING\n");
-	Vnm_print(0, "Vgrid_readGZ:  gzip read/write support is disabled in this build\n");
-	Vnm_print(0, "Vgrid_readGZ:  configure and compile without the --disable-zlib flag.\n");
-	Vnm_print(0, "WARNING\n");
-#endif	
-	return VRC_SUCCESS;
-} 
+
+    Vnm_print(0, "WARNING\n");
+    Vnm_print(0, "Vgrid_readGZ:  gzip read/write support is disabled in this build\n");
+    Vnm_print(0, "Vgrid_readGZ:  configure and compile without the --disable-zlib flag.\n");
+    Vnm_print(0, "WARNING\n");
+#endif
+    return VRC_SUCCESS;
+}
 
 /**
  * Load grid from an input file using sockets.
  * @author Nathan Baker
  */
-VPUBLIC int Vgrid_readDX(Vgrid *thee, 
-                         const char *iodev, 
+VPUBLIC int Vgrid_readDX(Vgrid *thee,
+                         const char *iodev,
                          const char *iofmt,
                          const char *thost,
                          const char *fname
                         ) {
 
-    int i, 
+    int i,
         j,
-        k, 
-        itmp, 
+        k,
+        itmp,
         u;
     double dtmp;
     char tok[VMAX_BUFSIZE];
@@ -592,7 +591,7 @@ VPUBLIC int Vgrid_readDX(Vgrid *thee,
     /* Check to see if the existing data is null and, if not, clear it out */
     if (thee->data != VNULL) {
         Vnm_print(1, "Vgrid_readDX:  destroying existing data!\n");
-	Vmem_free(thee->mem, (thee->nx*thee->ny*thee->nz), sizeof(double),
+    Vmem_free(thee->mem, (thee->nx*thee->ny*thee->nz), sizeof(double),
           (void **)&(thee->data)); }
     thee->readdata = 1;
     thee->ctordata = 0;
@@ -637,7 +636,7 @@ VPUBLIC int Vgrid_readDX(Vgrid *thee,
     /* Get nz */
     VJMPERR2(1 == Vio_scanf(sock, "%s", tok));
     VJMPERR1(1 == sscanf(tok, "%d", &(thee->nz)));
-    Vnm_print(0, "Vgrid_readDX:  Grid dimensions %d x %d x %d grid\n", 
+    Vnm_print(0, "Vgrid_readDX:  Grid dimensions %d x %d x %d grid\n",
      thee->nx, thee->ny, thee->nz);
     /* Get "origin" */
     VJMPERR2(1 == Vio_scanf(sock, "%s", tok));
@@ -755,13 +754,13 @@ VPUBLIC int Vgrid_readDX(Vgrid *thee,
     Vnm_print(0, "Vgrid_readDX:  allocating %d x %d x %d doubles for storage\n",
       thee->nx, thee->ny, thee->nz);
     thee->data = VNULL;
-    thee->data = (double*)Vmem_malloc(thee->mem, (thee->nx)*(thee->ny)*(thee->nz), 
+    thee->data = (double*)Vmem_malloc(thee->mem, (thee->nx)*(thee->ny)*(thee->nz),
       sizeof(double));
     if (thee->data == VNULL) {
         Vnm_print(2, "Vgrid_readDX:  Unable to allocate space for data!\n");
         return 0;
     }
-                     
+
     for (i=0; i<thee->nx; i++) {
         for (j=0; j<thee->ny; j++) {
             for (k=0; k<thee->nz; k++) {
@@ -772,7 +771,7 @@ VPUBLIC int Vgrid_readDX(Vgrid *thee,
             }
         }
     }
-	 
+
     /* calculate grid maxima */
     thee->xmax = thee->xmin + (thee->nx-1)*thee->hx;
     thee->ymax = thee->ymin + (thee->ny-1)*thee->hy;
@@ -806,192 +805,192 @@ VPUBLIC int Vgrid_readDX(Vgrid *thee,
  // Author:   Nathan Baker
  /////////////////////////////////////////////////////////////////////////// */
 VPUBLIC void Vgrid_writeGZ(Vgrid *thee, const char *iodev, const char *iofmt,
-							const char *thost, const char *fname, char *title, double *pvec) {
-	
+                            const char *thost, const char *fname, char *title, double *pvec) {
+
 #ifdef HAVE_ZLIB
-	double xmin, ymin, zmin, hx, hy, hzed;
-	
-	int nx, ny, nz;
-	int icol, i, j, k, u, usepart, nxPART, nyPART, nzPART, gotit;
-	double x, y, z, xminPART, yminPART, zminPART;
-	
-	int txyz;
-	double txmin, tymin, tzmin;
-	
-	char header[8196];
-	char footer[8196];
-	char line[80];
-	char newline[] = "\n";
-	gzFile outfile;
-	char precFormat[VMAX_BUFSIZE];
-	
-	if (thee == VNULL) {
-		Vnm_print(2, "Vgrid_writeGZ:  Error -- got VNULL thee!\n");
-		VASSERT(0);
-	}
-	if (!(thee->ctordata || thee->readdata)) {
-		Vnm_print(2, "Vgrid_writeGZ:  Error -- no data available!\n");
-		VASSERT(0);
-	}
-	
-	hx = thee->hx;
-	hy = thee->hy; 
-	hzed = thee->hzed; 
-	nx = thee->nx;
-	ny = thee->ny;
-	nz = thee->nz;
-	xmin = thee->xmin;
-	ymin = thee->ymin;
-	zmin = thee->zmin;
-	
-	if (pvec == VNULL) usepart = 0;
-	else usepart = 1;
-	
-	/* Set up the virtual socket */
-	Vnm_print(0, "Vgrid_writeGZ:  Opening file...\n");
-	outfile = gzopen(fname, "wb");
-	
-	if (usepart) {
-		/* Get the lower corner and number of grid points for the local
-		 * partition */
-		xminPART = VLARGE;
-		yminPART = VLARGE;
-		zminPART = VLARGE;
-		nxPART = 0;
-		nyPART = 0;
-		nzPART = 0;
-		/* First, search for the lower corner */
-		for (k=0; k<nz; k++) {
-			z = k*hzed + zmin;
-			for (j=0; j<ny; j++) {
-				y = j*hy + ymin;
-				for (i=0; i<nx; i++) {
-					x = i*hx + xmin;
-					if (pvec[IJK(i,j,k)] > 0.0) {
-						if (x < xminPART) xminPART = x;
-						if (y < yminPART) yminPART = y;
-						if (z < zminPART) zminPART = z;
-					}
-				}
-			}
-		}
-		/* Now search for the number of grid points in the z direction */
-		for (k=0; k<nz; k++) {
-			gotit = 0;
-			for (j=0; j<ny; j++) {
-				for (i=0; i<nx; i++) {
-					if (pvec[IJK(i,j,k)] > 0.0) {
-						gotit = 1;
-						break;
-					}
-				}
-				if (gotit) break;
-			}
-			if (gotit) nzPART++;
-		}
-		/* Now search for the number of grid points in the y direction */
-		for (j=0; j<ny; j++) {
-			gotit = 0;
-			for (k=0; k<nz; k++) {
-				for (i=0; i<nx; i++) {
-					if (pvec[IJK(i,j,k)] > 0.0) {
-						gotit = 1;
-						break;
-					}
-				}
-				if (gotit) break;
-			}
-			if (gotit) nyPART++;
-		}
-		/* Now search for the number of grid points in the x direction */
-		for (i=0; i<nx; i++) {
-			gotit = 0;
-			for (k=0; k<nz; k++) {
-				for (j=0; j<ny; j++) {
-					if (pvec[IJK(i,j,k)] > 0.0) {
-						gotit = 1;
-						break; 
-					}
-				}
-				if (gotit) break;
-			}
-			if (gotit) nxPART++;
-		}
-		
-		if ((nxPART != nx) || (nyPART != ny) || (nzPART != nz)) {
-			Vnm_print(0, "Vgrid_writeGZ:  printing only subset of domain\n");
-		}
-		
-		txyz = (nxPART*nyPART*nzPART);
-		txmin = xminPART;
-		tymin = yminPART;
-		tzmin = zminPART;
-		
-	}else {
-		
-		txyz = (nx*ny*nz);
-		txmin = xmin;
-		tymin = ymin;
-		tzmin = zmin;
-		
-	}
-	
-	/* Write off the title (if we're not XDR) */
-	sprintf(header,
-			"# Data from %s\n"	\
-			"# \n"							\
-			"# %s\n"			\
-			"# \n"							\
-			"object 1 class gridpositions counts %i %i %i\n"	\
-			"origin %12.6e %12.6e %12.6e\n"	\
-			"delta %12.6e 0.000000e+00 0.000000e+00\n"		\
-			"delta 0.000000e+00 %12.6e 0.000000e+00\n"		\
-			"delta 0.000000e+00 0.000000e+00 %12.6e\n"		\
-			"object 2 class gridconnections counts %i %i %i\n"\
-			"object 3 class array type double rank 0 items %i data follows\n",
-			PACKAGE_STRING,title,nx,ny,nz,txmin,tymin,tzmin,
-			hx,hy,hzed,nx,ny,nz,txyz);
-	gzwrite(outfile, header, strlen(header)*sizeof(char));
-	
-	/* Now write the data */
-	icol = 0;
-	for (i=0; i<nx; i++) {
-		for (j=0; j<ny; j++) {
-			for (k=0; k<nz; k++) {
-				u = k*(nx)*(ny)+j*(nx)+i;
-				if (pvec[u] > 0.0) {
-					sprintf(line, "%12.6e ", thee->data[u]);
-					gzwrite(outfile, line, strlen(line)*sizeof(char));
-					icol++;
-					if (icol == 3) {
-						icol = 0;
-						gzwrite(outfile, newline, strlen(newline)*sizeof(char));
-					}
-				}
-			}
-		}
-	}
-	if(icol < 3){
-		char newline[] = "\n";
-		gzwrite(outfile, newline, strlen(newline)*sizeof(char));
-	}
-	
-	/* Create the field */
-	sprintf(footer, "attribute \"dep\" string \"positions\"\n" \
-			"object \"regular positions regular connections\" class field\n" \
-			"component \"positions\" value 1\n" \
-			"component \"connections\" value 2\n" \
-			"component \"data\" value 3\n");
-	gzwrite(outfile, footer, strlen(footer)*sizeof(char));
-	
-	gzclose(outfile);
+    double xmin, ymin, zmin, hx, hy, hzed;
+
+    int nx, ny, nz;
+    int icol, i, j, k, u, usepart, nxPART, nyPART, nzPART, gotit;
+    double x, y, z, xminPART, yminPART, zminPART;
+
+    int txyz;
+    double txmin, tymin, tzmin;
+
+    char header[8196];
+    char footer[8196];
+    char line[80];
+    char newline[] = "\n";
+    gzFile outfile;
+    char precFormat[VMAX_BUFSIZE];
+
+    if (thee == VNULL) {
+        Vnm_print(2, "Vgrid_writeGZ:  Error -- got VNULL thee!\n");
+        VASSERT(0);
+    }
+    if (!(thee->ctordata || thee->readdata)) {
+        Vnm_print(2, "Vgrid_writeGZ:  Error -- no data available!\n");
+        VASSERT(0);
+    }
+
+    hx = thee->hx;
+    hy = thee->hy;
+    hzed = thee->hzed;
+    nx = thee->nx;
+    ny = thee->ny;
+    nz = thee->nz;
+    xmin = thee->xmin;
+    ymin = thee->ymin;
+    zmin = thee->zmin;
+
+    if (pvec == VNULL) usepart = 0;
+    else usepart = 1;
+
+    /* Set up the virtual socket */
+    Vnm_print(0, "Vgrid_writeGZ:  Opening file...\n");
+    outfile = gzopen(fname, "wb");
+
+    if (usepart) {
+        /* Get the lower corner and number of grid points for the local
+         * partition */
+        xminPART = VLARGE;
+        yminPART = VLARGE;
+        zminPART = VLARGE;
+        nxPART = 0;
+        nyPART = 0;
+        nzPART = 0;
+        /* First, search for the lower corner */
+        for (k=0; k<nz; k++) {
+            z = k*hzed + zmin;
+            for (j=0; j<ny; j++) {
+                y = j*hy + ymin;
+                for (i=0; i<nx; i++) {
+                    x = i*hx + xmin;
+                    if (pvec[IJK(i,j,k)] > 0.0) {
+                        if (x < xminPART) xminPART = x;
+                        if (y < yminPART) yminPART = y;
+                        if (z < zminPART) zminPART = z;
+                    }
+                }
+            }
+        }
+        /* Now search for the number of grid points in the z direction */
+        for (k=0; k<nz; k++) {
+            gotit = 0;
+            for (j=0; j<ny; j++) {
+                for (i=0; i<nx; i++) {
+                    if (pvec[IJK(i,j,k)] > 0.0) {
+                        gotit = 1;
+                        break;
+                    }
+                }
+                if (gotit) break;
+            }
+            if (gotit) nzPART++;
+        }
+        /* Now search for the number of grid points in the y direction */
+        for (j=0; j<ny; j++) {
+            gotit = 0;
+            for (k=0; k<nz; k++) {
+                for (i=0; i<nx; i++) {
+                    if (pvec[IJK(i,j,k)] > 0.0) {
+                        gotit = 1;
+                        break;
+                    }
+                }
+                if (gotit) break;
+            }
+            if (gotit) nyPART++;
+        }
+        /* Now search for the number of grid points in the x direction */
+        for (i=0; i<nx; i++) {
+            gotit = 0;
+            for (k=0; k<nz; k++) {
+                for (j=0; j<ny; j++) {
+                    if (pvec[IJK(i,j,k)] > 0.0) {
+                        gotit = 1;
+                        break;
+                    }
+                }
+                if (gotit) break;
+            }
+            if (gotit) nxPART++;
+        }
+
+        if ((nxPART != nx) || (nyPART != ny) || (nzPART != nz)) {
+            Vnm_print(0, "Vgrid_writeGZ:  printing only subset of domain\n");
+        }
+
+        txyz = (nxPART*nyPART*nzPART);
+        txmin = xminPART;
+        tymin = yminPART;
+        tzmin = zminPART;
+
+    }else {
+
+        txyz = (nx*ny*nz);
+        txmin = xmin;
+        tymin = ymin;
+        tzmin = zmin;
+
+    }
+
+    /* Write off the title (if we're not XDR) */
+    sprintf(header,
+            "# Data from %s\n"	\
+            "# \n"							\
+            "# %s\n"			\
+            "# \n"							\
+            "object 1 class gridpositions counts %i %i %i\n"	\
+            "origin %12.6e %12.6e %12.6e\n"	\
+            "delta %12.6e 0.000000e+00 0.000000e+00\n"		\
+            "delta 0.000000e+00 %12.6e 0.000000e+00\n"		\
+            "delta 0.000000e+00 0.000000e+00 %12.6e\n"		\
+            "object 2 class gridconnections counts %i %i %i\n"\
+            "object 3 class array type double rank 0 items %i data follows\n",
+            PACKAGE_STRING,title,nx,ny,nz,txmin,tymin,tzmin,
+            hx,hy,hzed,nx,ny,nz,txyz);
+    gzwrite(outfile, header, strlen(header)*sizeof(char));
+
+    /* Now write the data */
+    icol = 0;
+    for (i=0; i<nx; i++) {
+        for (j=0; j<ny; j++) {
+            for (k=0; k<nz; k++) {
+                u = k*(nx)*(ny)+j*(nx)+i;
+                if (pvec[u] > 0.0) {
+                    sprintf(line, "%12.6e ", thee->data[u]);
+                    gzwrite(outfile, line, strlen(line)*sizeof(char));
+                    icol++;
+                    if (icol == 3) {
+                        icol = 0;
+                        gzwrite(outfile, newline, strlen(newline)*sizeof(char));
+                    }
+                }
+            }
+        }
+    }
+    if(icol < 3){
+        char newline[] = "\n";
+        gzwrite(outfile, newline, strlen(newline)*sizeof(char));
+    }
+
+    /* Create the field */
+    sprintf(footer, "attribute \"dep\" string \"positions\"\n" \
+            "object \"regular positions regular connections\" class field\n" \
+            "component \"positions\" value 1\n" \
+            "component \"connections\" value 2\n" \
+            "component \"data\" value 3\n");
+    gzwrite(outfile, footer, strlen(footer)*sizeof(char));
+
+    gzclose(outfile);
 #else
-	
-	Vnm_print(0, "WARNING\n");
-	Vnm_print(0, "Vgrid_readGZ:  gzip read/write support is disabled in this build\n");
-	Vnm_print(0, "Vgrid_readGZ:  configure and compile without the --disable-zlib flag.\n");
-	Vnm_print(0, "WARNING\n");
-#endif	
+
+    Vnm_print(0, "WARNING\n");
+    Vnm_print(0, "Vgrid_readGZ:  gzip read/write support is disabled in this build\n");
+    Vnm_print(0, "Vgrid_readGZ:  configure and compile without the --disable-zlib flag.\n");
+    Vnm_print(0, "WARNING\n");
+#endif
 }
 
 /* ///////////////////////////////////////////////////////////////////////////
@@ -1019,8 +1018,8 @@ VPUBLIC void Vgrid_writeDX(Vgrid *thee, const char *iodev, const char *iofmt,
     }
 
     hx = thee->hx;
-    hy = thee->hy; 
-    hzed = thee->hzed; 
+    hy = thee->hy;
+    hzed = thee->hzed;
     nx = thee->nx;
     ny = thee->ny;
     nz = thee->nz;
@@ -1042,7 +1041,7 @@ VPUBLIC void Vgrid_writeDX(Vgrid *thee, const char *iodev, const char *iofmt,
     if (Vio_connect(sock, 0) < 0) {
         Vnm_print(2, "Vgrid_writeDX: Problem connecting virtual socket %s\n",
           fname);
-        return; 
+        return;
     }
 
     Vio_setWhiteChars(sock, MCwhiteChars);
@@ -1109,7 +1108,7 @@ VPUBLIC void Vgrid_writeDX(Vgrid *thee, const char *iodev, const char *iofmt,
                 for (j=0; j<ny; j++) {
                     if (pvec[IJK(i,j,k)] > 0.0) {
                         gotit = 1;
-                        break; 
+                        break;
                     }
                 }
                 if (gotit) break;
@@ -1137,7 +1136,7 @@ VPUBLIC void Vgrid_writeDX(Vgrid *thee, const char *iodev, const char *iofmt,
         /* Write off the DX regular positions */
         Vio_printf(sock, "object 1 class gridpositions counts %d %d %d\n",
           nxPART, nyPART, nzPART);
-        
+
         sprintf(precFormat, Vprecision, xminPART, yminPART, zminPART);
         Vio_printf(sock, "origin %s\n", precFormat);
         sprintf(precFormat, Vprecision, hx, 0.0, 0.0);
@@ -1146,11 +1145,11 @@ VPUBLIC void Vgrid_writeDX(Vgrid *thee, const char *iodev, const char *iofmt,
         Vio_printf(sock, "delta %s\n", precFormat);
         sprintf(precFormat, Vprecision, 0.0, 0.0, hzed);
         Vio_printf(sock, "delta %s\n", precFormat);
-        
+
         /* Write off the DX regular connections */
         Vio_printf(sock, "object 2 class gridconnections counts %d %d %d\n",
           nxPART, nyPART, nzPART);
- 
+
         /* Write off the DX data */
         Vio_printf(sock, "object 3 class array type double rank 0 items %d \
 data follows\n", (nxPART*nyPART*nzPART));
@@ -1207,7 +1206,7 @@ class field\n");
         Vio_printf(sock, "delta %s\n", precFormat);
         sprintf(precFormat, Vprecision, 0.0, 0.0, hzed);
         Vio_printf(sock, "delta %s\n", precFormat);
-    
+
         /* Write off the DX regular connections */
         Vio_printf(sock, "object 2 class gridconnections counts %d %d %d\n",
           nx, ny, nz);
@@ -1217,7 +1216,7 @@ class field\n");
 data follows\n", (nx*ny*nz));
         icol = 0;
         for (i=0; i<nx; i++) {
-            for (j=0; j<ny; j++) { 
+            for (j=0; j<ny; j++) {
                 for (k=0; k<nz; k++) {
                     u = k*(nx)*(ny)+j*(nx)+i;
                     Vio_printf(sock, "%12.6e ", thee->data[u]);
@@ -1230,7 +1229,7 @@ data follows\n", (nx*ny*nz));
             }
         }
         if (icol != 0) Vio_printf(sock, "\n");
-           
+
         /* Create the field */
         Vio_printf(sock, "attribute \"dep\" string \"positions\"\n");
         Vio_printf(sock, "object \"regular positions regular connections\" \
@@ -1323,7 +1322,7 @@ will have significant overlap.\n");
     Vio_printf(sock, "%12.5e%12.5e%7d%7d", 0.0, 0.0, 0, 0);
 
     /* Write out the entries */
-    icol = 0; 
+    icol = 0;
     for (k=0; k<nz; k++) {
         Vio_printf(sock, "\n%7d%7d%7d\n", k+1, thee->nx, thee->ny);
         icol = 0;
@@ -1363,14 +1362,14 @@ VPUBLIC double Vgrid_integrate(Vgrid *thee) {
     sum = 0.0;
 
     for (k=0; k<nz; k++) {
-		w = 1.0;
-		if ((k==0) || (k==(nz-1))) w = w * 0.5;
+        w = 1.0;
+        if ((k==0) || (k==(nz-1))) w = w * 0.5;
         for (j=0; j<ny; j++) {
-			w = 1.0;
-			if ((j==0) || (j==(ny-1))) w = w * 0.5;
+            w = 1.0;
+            if ((j==0) || (j==(ny-1))) w = w * 0.5;
             for (i=0; i<nx; i++) {
-				w = 1.0;
-				if ((i==0) || (i==(nx-1))) w = w * 0.5;
+                w = 1.0;
+                if ((i==0) || (i==(nx-1))) w = w * 0.5;
                 sum = sum + w*(thee->data[IJK(i,j,k)]);
             }
         }
@@ -1521,7 +1520,7 @@ VPUBLIC double Vgrid_normLinf(Vgrid *thee) {
                 if (!gotval) {
                     gotval = 1;
                     sum = val;
-                } 
+                }
                 if (val > sum) sum = val;
             }
         }

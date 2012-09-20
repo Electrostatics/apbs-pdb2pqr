@@ -5,8 +5,7 @@
  *  @version $Id$
  */
 
-#include "apbscfg.h"
-#include "apbs/apbs.h"  
+#include "apbs.h"
 
 #define IJK(i,j,k)  (((k)*(nx)*(ny))+((j)*(nx))+(i))
 #define ERRRC 13
@@ -68,7 +67,7 @@ int main(int argc, char **argv) {
     character # and a new line (in the usual shell script fashion).\n\
     ----------------------------------------------------------------------\n\n";
 
- 
+
     /* *************** CHECK INVOCATION ******************* */
     Vio_start();
     Vnm_print(1, "%s", header);
@@ -77,7 +76,7 @@ int main(int argc, char **argv) {
           argc);
         Vnm_print(2,"%s\n", usage);
         return ERRRC;
-    } 
+    }
     input_path = argv[1];
 
     /* *************** OPEN INPUT FILE ******************* */
@@ -135,7 +134,7 @@ int main(int argc, char **argv) {
               DXM_MAXOP);
             return ERRRC;
         }
-    } 
+    }
     Vio_acceptFree(sock);
 
     /* Spit out what we parsed: */
@@ -144,24 +143,24 @@ int main(int argc, char **argv) {
     for (iop=0; iop<numop; iop++) {
         if (obType[iop+1] == DXM_ISGRID)
           Vnm_print(1, "main:    %s (grid) ", gridPath[iop+1]);
-        else 
+        else
           Vnm_print(1, "main:    %g (scalar) ", scalar[iop+1]);
         switch (op[iop]) {
             case DXM_MUL:
                 Vnm_print(1, "*\n");
-                break; 
+                break;
             case DXM_ADD:
                 Vnm_print(1, "+\n");
-                break; 
+                break;
             case DXM_SUB:
                 Vnm_print(1, "-\n");
-                break; 
+                break;
             case DXM_DIV:
                 Vnm_print(1, "/\n");
-                break; 
+                break;
             case DXM_EQU:
                 Vnm_print(1, "=\n");
-                break; 
+                break;
             case DXM_EXP:
                 Vnm_print(1, "^\n");
                 break;
@@ -190,37 +189,37 @@ int main(int argc, char **argv) {
             Vnm_print(1, "main:  Reading grid from %s...\n", gridPath[iop+1]);
             grid2 = Vgrid_ctor(0, 0, 0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, VNULL);
             if (!Vgrid_readDX(grid2, "FILE", "ASC", VNULL, gridPath[iop+1])) {
-		Vnm_print(2, "main:  Problem reading OpenDX-format grid from \
+        Vnm_print(2, "main:  Problem reading OpenDX-format grid from \
 %s\n", gridPath[0]);
                 return ERRRC;
             }
             if ((grid2->nx != nx) || (grid2->ny != ny) || (grid2->nz != nz)) {
                 Vnm_print(2, "main:  Grid dimension mis-match!\n");
                 Vnm_print(2, "main:  Grid 1 is %d x %d x %d\n", nx, ny, nz);
-                Vnm_print(2, "main:  Grid 2 is %d x %d x %d\n", 
+                Vnm_print(2, "main:  Grid 2 is %d x %d x %d\n",
                   grid2->nx, grid2->ny, grid2->nz);
                 return ERRRC;
             }
-            
+
             switch (op[iop]) {
                 case DXM_ADD:
                     Vnm_print(1, "main:  Adding...\n");
-                    for (i=0; i<len; i++) 
+                    for (i=0; i<len; i++)
                       grid1->data[i] = grid1->data[i] + grid2->data[i];
                     break;
                 case DXM_MUL:
                     Vnm_print(1, "main:  Multiplying...\n");
-                    for (i=0; i<len; i++) 
+                    for (i=0; i<len; i++)
                       grid1->data[i] = grid1->data[i] * grid2->data[i];
                     break;
                 case DXM_SUB:
                     Vnm_print(1, "main:  Subtracting...\n");
-                    for (i=0; i<len; i++) 
+                    for (i=0; i<len; i++)
                       grid1->data[i] = grid1->data[i] - grid2->data[i];
                     break;
                 case DXM_DIV:
                     Vnm_print(1, "main:  Dividing...\n");
-                    for (i=0; i<len; i++) 
+                    for (i=0; i<len; i++)
                       grid1->data[i] = grid1->data[i] / grid2->data[i];
                     break;
                 case DXM_EXP:
@@ -271,10 +270,10 @@ int main(int argc, char **argv) {
             }
         } /* if (obType[iop+1] == DXM_ISGRID) */
     } /* for (iop=0; iop<numop-1; iop++) */
- 
+
     /* The last operation is the = sign, implying that we write out the grid */
     Vnm_print(1, "main:  Writing results to %s...\n", gridPath[numop]);
-    Vgrid_writeDX(grid1, "FILE", "ASC", VNULL, gridPath[numop], 
+    Vgrid_writeDX(grid1, "FILE", "ASC", VNULL, gridPath[numop],
       "DXMATH RESULTS", VNULL);
 
     Vnm_print(1, "main:  All done -- exiting.\n");

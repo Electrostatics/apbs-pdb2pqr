@@ -54,14 +54,7 @@
  * @endverbatim
  */
 
-
-#include "apbscfg.h"
-
-#if defined(HAVE_MC_H)
-#if defined(HAVE_MCX_H)
-
-#include "mc/mc.h"
-#include "apbs/vpee.h"
+#include "vpee.h"
 
 VPRIVATE int Vpee_userDefined(Vpee *thee,
                               SS *sm
@@ -576,6 +569,3 @@ VPRIVATE int Vpee_ourSimp(Vpee *thee,
     return 0;
 
 }
-
-#endif
-#endif

@@ -5,8 +5,7 @@
  *  @version $Id$
  */
 
-#include "apbscfg.h"
-#include "apbs/apbs.h"
+#include "apbs.h"
 
 #define SHORTINT short
 #define IJK(i,j,k)  (((k)*(nx)*(ny))+((j)*(nx))+(i))
@@ -17,7 +16,7 @@ VEMBED(rcsid="$Id$")
 VPRIVATE int Vgrid_readDXhead(Vgrid *thee,
   const char *iodev, const char *iofmt, const char *thost, const char *fname);
 VPRIVATE int Vgrid_value2(Vgrid *thee, double pt[3], double *value);
-VPRIVATE int Char_parseARGV(int argc, char **argv, int *nx, int *ny, int *nz, 
+VPRIVATE int Char_parseARGV(int argc, char **argv, int *nx, int *ny, int *nz,
   int *pad, char ***fnams, int *numfnams, char *outname, int *vflag);
 
 VPRIVATE char *MCwhiteChars = " =,;\t\n";
@@ -49,10 +48,10 @@ int main(int argc, char **argv) {
 
     Vio_start();
     sprintf(outname,"gridmerged.dx");
-	
-	/* **************** OBSOLETE WARNING ***************** */
-	printf("WARNING: mergedx is deprecated. Please consider using mergedx2\n");
-	
+
+    /* **************** OBSOLETE WARNING ***************** */
+    printf("WARNING: mergedx is deprecated. Please consider using mergedx2\n");
+
     /* **************** PARSE INPUT ARGS ***************** */
 
     if ( Char_parseARGV(argc, argv, &nx, &ny, &nz, &pad,
@@ -68,8 +67,8 @@ int main(int argc, char **argv) {
     }
 
     if (vflag == 1) {
-	vlev = 1;
-	vvlev = 0;
+    vlev = 1;
+    vvlev = 0;
     } else if (vflag) {
         vlev = 2;
         vvlev = 2;
@@ -437,7 +436,7 @@ VPUBLIC int Vgrid_value2(Vgrid *thee, double pt[3], double *value) {
         khi = nz - 1;
         klo = khi - 1;
         kfloat = (double)(khi);
-    } 
+    }
 
     /* See if we're on the mesh */
     if ((ihi<nx) && (jhi<ny) && (khi<nz) &&
@@ -464,7 +463,7 @@ VPUBLIC int Vgrid_value2(Vgrid *thee, double pt[3], double *value) {
 }
 
 VPRIVATE int Char_parseARGV(int argc, char **argv,
-  int *nx, int *ny, int *nz, int *pad, char ***fnams, int *numfnams, 
+  int *nx, int *ny, int *nz, int *pad, char ***fnams, int *numfnams,
   char *outname, int *vflag)
 {
     int i, j, hflag, nflags, sflag;
@@ -504,7 +503,7 @@ VPRIVATE int Char_parseARGV(int argc, char **argv,
     }
 
     /* ************* PARSE REMAINING ARGS ****************** */
-    i = 1; 
+    i = 1;
     j = 0;
     hflag = 0;
     sflag = 1;
@@ -520,8 +519,8 @@ VPRIVATE int Char_parseARGV(int argc, char **argv,
             }
         } else {
             if( (i+2) < argc && nflags == j) {
-                (*nx) = atoi(argv[i]); 
-                (*ny) = atoi(argv[i+1]); 
+                (*nx) = atoi(argv[i]);
+                (*ny) = atoi(argv[i+1]);
                 (*nz) = atoi(argv[i+2]);
                 i += 2;
             } else {
@@ -535,7 +534,7 @@ VPRIVATE int Char_parseARGV(int argc, char **argv,
     if (hflag) {
         return 1;
     }
-    
+
     (*fnams) = &(argv[i]);
     (*numfnams) = argc - i;
 

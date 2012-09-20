@@ -47,7 +47,7 @@
  * @endverbatim
  */
 
-#include "apbs/mgfasd.h"
+#include "mgfasd.h"
 
 VPUBLIC void Vfmvfas(int *nx, int *ny, int *nz,
         double *x,

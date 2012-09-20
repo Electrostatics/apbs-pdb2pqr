@@ -5,8 +5,7 @@
  *  @version $Id$
  */
 
-#include "apbscfg.h"
-#include "apbs/apbs.h"
+#include "apbs.h"
 
 #define IJK(i,j,k)  (((k)*(nx)*(ny))+((j)*(nx))+(i))
 #define INTERVAL(x,a,b) (((x) >= (a)) && ((x) <= (b)))
@@ -21,54 +20,54 @@ VPRIVATE char *MCwhiteChars = " =,;\t\n";
 VPRIVATE char *MCcommChars  = "#%";
 
 void usage(){
-	
-	Vnm_print(1,"mergedx2 [FLAGS] file1.dx [file2.dx ...]\n"
-				"\n"
-				"ARGUMENTS:\n"
-				"	file1.dx [file2.dx ...]\n"
-				"			The OpenDX files to be merged\n"
-				"FLAGS:\n"
-				"	-o		Output OpenDX file				(default: gridmerged.dx)\n"
-				"	-r		Resolution of gridpoints			(default: 1.0 Angstroms)\n"
-				"	-b		Bounds of output map as: xmin ymin zmin xmax ymax zmax\n"
-				"									(default: calculates full map)\n"
-				"	-s		Print bounds of merged input dx files. Doesn't generate a merged map.\n"
-				"									(-s is exclusive of the other FLAGS)\n"
-				"	-h		Print this message\n"
-				"\n"
-				"All FLAGS are optional. Flags must be set prior to listing input files. You must provide at least one\n"
-				"OpenDX file. Subsequent files can be listed as a series of names on the command line.\n"
-				"\n"
-				"Specifying -s with all of the input files listed will run a calculation that will print the current minimum\n"
-				"and maximum bounds for all user supplied input files. No output (merged) OpenDX file is produced. The -s\n"
-				"flag will cause all other options to be ignored.\n"
-				"\n"
-				"Specifying -r will allow the user to supply a spacing of grid points in the output OpenDX map. If the\n"
-				"specified resolution is smaller than the actual resolution in the input files, upsampling will occur and a\n"
-				"message printed to stdout will be passed. The default value is 1.0.\n"
-				"\n"
-				"The -b flag allows the user to specify a subvolume of the volume occupied by all input OpenDX files. Ranges\n"
-				"provided that fall outside the available bounds will cause the program to terminate. To determine the bounds\n"
-				"of all input files use the -s option. The order for specifying bounds is:\n"
-				"\n"
-				"	-b xmin ymin zmin xmax ymax zmax\n"
-				"\n"
-				"The default values are the full bounds of all input files.\n"
-				"\n"
-				"Specifying -o will assign an output name to the merged OpenDX file. The default file name is gridmerged.dx.\n"
-				"\n"
-				"Examples:\n"
-				"\n"
-				"	./mergedx2 -r 0.5 file1.dx file2.dx\n"
-				"\n"
-				"	./mergedx2 -b -3.13 -2.0 -2.14 31.0 25.4 22.1 file1.dx file2.dx file3.dx\n"
-				"\n"
-				"	./mergedx2 -o myfile.dx -r 0.5 -b -3.13 -2.0 -2.14 31.0 25.4 22.1 file1.dx file2.dx\n"
-				"\n"
-				"	./mergedx2 -s\n"
-				"\n"
-		   );
-	
+
+    Vnm_print(1,"mergedx2 [FLAGS] file1.dx [file2.dx ...]\n"
+                "\n"
+                "ARGUMENTS:\n"
+                "	file1.dx [file2.dx ...]\n"
+                "			The OpenDX files to be merged\n"
+                "FLAGS:\n"
+                "	-o		Output OpenDX file				(default: gridmerged.dx)\n"
+                "	-r		Resolution of gridpoints			(default: 1.0 Angstroms)\n"
+                "	-b		Bounds of output map as: xmin ymin zmin xmax ymax zmax\n"
+                "									(default: calculates full map)\n"
+                "	-s		Print bounds of merged input dx files. Doesn't generate a merged map.\n"
+                "									(-s is exclusive of the other FLAGS)\n"
+                "	-h		Print this message\n"
+                "\n"
+                "All FLAGS are optional. Flags must be set prior to listing input files. You must provide at least one\n"
+                "OpenDX file. Subsequent files can be listed as a series of names on the command line.\n"
+                "\n"
+                "Specifying -s with all of the input files listed will run a calculation that will print the current minimum\n"
+                "and maximum bounds for all user supplied input files. No output (merged) OpenDX file is produced. The -s\n"
+                "flag will cause all other options to be ignored.\n"
+                "\n"
+                "Specifying -r will allow the user to supply a spacing of grid points in the output OpenDX map. If the\n"
+                "specified resolution is smaller than the actual resolution in the input files, upsampling will occur and a\n"
+                "message printed to stdout will be passed. The default value is 1.0.\n"
+                "\n"
+                "The -b flag allows the user to specify a subvolume of the volume occupied by all input OpenDX files. Ranges\n"
+                "provided that fall outside the available bounds will cause the program to terminate. To determine the bounds\n"
+                "of all input files use the -s option. The order for specifying bounds is:\n"
+                "\n"
+                "	-b xmin ymin zmin xmax ymax zmax\n"
+                "\n"
+                "The default values are the full bounds of all input files.\n"
+                "\n"
+                "Specifying -o will assign an output name to the merged OpenDX file. The default file name is gridmerged.dx.\n"
+                "\n"
+                "Examples:\n"
+                "\n"
+                "	./mergedx2 -r 0.5 file1.dx file2.dx\n"
+                "\n"
+                "	./mergedx2 -b -3.13 -2.0 -2.14 31.0 25.4 22.1 file1.dx file2.dx file3.dx\n"
+                "\n"
+                "	./mergedx2 -o myfile.dx -r 0.5 -b -3.13 -2.0 -2.14 31.0 25.4 22.1 file1.dx file2.dx\n"
+                "\n"
+                "	./mergedx2 -s\n"
+                "\n"
+           );
+
 }
 
 int main(int argc, char **argv) {
@@ -76,108 +75,108 @@ int main(int argc, char **argv) {
     /* *************** VARIABLES ******************* */
     int i, j, k,spec,warn;
     int nx, ny, nz, count, numfnams;
-	
+
     double pt[3],value, res1, res2, res3, resx, resy, resz;
-	
+
     double xmin, ymin, zmin;
-	double xmax, ymax, zmax;
-	
-	double xminb, yminb, zminb;
-	double xmaxb, ymaxb, zmaxb;
-	
+    double xmax, ymax, zmax;
+
+    double xminb, yminb, zminb;
+    double xmaxb, ymaxb, zmaxb;
+
     char fnams[80][1024];
-	short *carray = VNULL;
-	
+    short *carray = VNULL;
+
     char *snam = "# main:  ";
     char outname[80];
 
-	int ch, ind;
-	extern char *optarg;
-	extern int optind, opterr, optopt;
+    int ch, ind;
+    extern char *optarg;
+    extern int optind, opterr, optopt;
 
 
     Vgrid *grid, *mgrid;
-	
-	/* Set the default values */
-	spec = 0;
-	warn = 0;
-	res1 = 1.0;
-	res2 = 1.0;
-	res3 = 1.0;
-	xmin = ymin = zmin = 0.0;
-	xmax = ymax = zmax = 0.0;
-	sprintf(outname,"gridmerged.dx");
-	
-	/* Begin processing command line options */
-	
-	/* Check the invocation */
-	if(argc <= 1){ usage(); return 1; }
-	
-	while ((ch = getopt(argc, argv, "r:b:o:s:h")) != -1) {
-		switch (ch) {
-			case 'r':
-				ind = optind - 1;
-				res1 = atof(argv[ind++]);
-				res2 = atof(argv[ind++]);
-				res3 = atof(argv[ind++]);
-				optind = ind;
-				break;
-			case 'b':
-				ind = optind - 1;
-				xmin = atof(argv[ind++]);
-				ymin = atof(argv[ind++]);
-				zmin = atof(argv[ind++]);
-				
-				xmax = atof(argv[ind++]);
-				ymax = atof(argv[ind++]);
-				zmax = atof(argv[ind++]);
-				
-				optind = ind;
-				break;
-			case 'o':
-				strcpy(outname,optarg);
-				break;
-			case 's':
-				spec = 1;
-				break;
-			case 'h':
-				usage();
-				return 0;
-				break;
-			default:
-				break;
-		}
-	}
-	
-	numfnams = 0;
-	if (optind < argc) {
-		while (optind < argc){
-			strcpy(fnams[numfnams],argv[optind++]);
-			numfnams += 1;
-		}
-	}
-	
-	/* Start the I/O processing */
-	Vio_start();
-	
-	/* For now we only allow one resolution on all three axes */
-	resx = res1;
-	resy = res2;
-	resz = res3;
-	
+
+    /* Set the default values */
+    spec = 0;
+    warn = 0;
+    res1 = 1.0;
+    res2 = 1.0;
+    res3 = 1.0;
+    xmin = ymin = zmin = 0.0;
+    xmax = ymax = zmax = 0.0;
+    sprintf(outname,"gridmerged.dx");
+
+    /* Begin processing command line options */
+
+    /* Check the invocation */
+    if(argc <= 1){ usage(); return 1; }
+
+    while ((ch = getopt(argc, argv, "r:b:o:s:h")) != -1) {
+        switch (ch) {
+            case 'r':
+                ind = optind - 1;
+                res1 = atof(argv[ind++]);
+                res2 = atof(argv[ind++]);
+                res3 = atof(argv[ind++]);
+                optind = ind;
+                break;
+            case 'b':
+                ind = optind - 1;
+                xmin = atof(argv[ind++]);
+                ymin = atof(argv[ind++]);
+                zmin = atof(argv[ind++]);
+
+                xmax = atof(argv[ind++]);
+                ymax = atof(argv[ind++]);
+                zmax = atof(argv[ind++]);
+
+                optind = ind;
+                break;
+            case 'o':
+                strcpy(outname,optarg);
+                break;
+            case 's':
+                spec = 1;
+                break;
+            case 'h':
+                usage();
+                return 0;
+                break;
+            default:
+                break;
+        }
+    }
+
+    numfnams = 0;
+    if (optind < argc) {
+        while (optind < argc){
+            strcpy(fnams[numfnams],argv[optind++]);
+            numfnams += 1;
+        }
+    }
+
+    /* Start the I/O processing */
+    Vio_start();
+
+    /* For now we only allow one resolution on all three axes */
+    resx = res1;
+    resy = res2;
+    resz = res3;
+
     /* *********** PREPARE MERGED GRID OBJECT ************* */
     mgrid = Vgrid_ctor(0, 0, 0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, VNULL);
     mgrid->xmin = VLARGE; mgrid->xmax = -VLARGE;
     mgrid->ymin = VLARGE; mgrid->ymax = -VLARGE;
     mgrid->zmin = VLARGE; mgrid->zmax = -VLARGE;
-	
+
     /* *************** GET FILE HEADERS ******************* */
     Vnm_print(1, "%s Reading Headers...\n",snam);
     grid = Vgrid_ctor(0, 0, 0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, VNULL);
     for(count=0; count<numfnams; count++) {
         Vnm_print(0, "%s  Reading header from %s...\n",snam, fnams[count]);
         Vgrid_readDXhead(grid, "FILE", "ASC", VNULL, fnams[count]);
-		
+
         /* set the merged grid bounds to include all the subgrids */
         if( grid->xmin < mgrid->xmin ) mgrid->xmin = grid->xmin;
         if( grid->xmax > mgrid->xmax ) mgrid->xmax = grid->xmax;
@@ -185,56 +184,56 @@ int main(int argc, char **argv) {
         if( grid->ymax > mgrid->ymax ) mgrid->ymax = grid->ymax;
         if( grid->zmin < mgrid->zmin ) mgrid->zmin = grid->zmin;
         if( grid->zmax > mgrid->zmax ) mgrid->zmax = grid->zmax;
-		
-		if( grid->hx > res1 || grid->hy > res2 || grid->hzed > res3 ) warn = 1;
+
+        if( grid->hx > res1 || grid->hy > res2 || grid->hzed > res3 ) warn = 1;
     }
-	
-	if(warn){
-		Vnm_print(1,"WARNING: The specified output resolution is greater than the\n"
-					"		 resolution of the input DX files. Upsampling.......\n");
-	}
-	
-	/* Cache the bounds for comparison later */
-	xminb = mgrid->xmin; yminb = mgrid->ymin; zminb = mgrid->zmin;
-	xmaxb = mgrid->xmax; ymaxb = mgrid->ymax; zmaxb = mgrid->zmax;
-	
-	/* Adjust the boundaries of the grid to any specified by the user */
-	if(xmin != 0.0) mgrid->xmin = xmin;
-	if(ymin != 0.0) mgrid->ymin = ymin;
-	if(zmin != 0.0) mgrid->zmin = zmin;
-	
-	if(xmax != 0.0) mgrid->xmax = xmax;
-	if(ymax != 0.0) mgrid->ymax = ymax;
-	if(zmax != 0.0) mgrid->zmax = zmax;
-	
-	/* Now check the boundaries the user specified (if any) 
-		to make sure they fit within the original
-	 */
-	if((mgrid->xmin < xminb) ||
-	   (mgrid->ymin < yminb) ||
-	   (mgrid->zmin < zminb) ||
-	   (mgrid->xmax > xmaxb) ||
-	   (mgrid->ymax > ymaxb) ||
-	   (mgrid->zmax > zmaxb))
-	{
-		Vnm_print(1,"\nError: The bounds requested do not fall within the bounds of the specified grid\n"
-					"You specified <xmin> <ymin> <zmin> <xmax> <ymax> <zmax>: %lf\t%lf\t%lf\t%lf\t%lf\t%lf\n"
-					"The input DX files provided                            : %lf\t%lf\t%lf\t%lf\t%lf\t%lf\n",
-					mgrid->xmin,mgrid->ymin,mgrid->zmin,mgrid->xmax,mgrid->ymax,mgrid->zmax,
-					xminb,yminb,zminb,xmaxb,ymaxb,zmaxb
-				  );
-		return 1;
-	}
-	   
+
+    if(warn){
+        Vnm_print(1,"WARNING: The specified output resolution is greater than the\n"
+                    "		 resolution of the input DX files. Upsampling.......\n");
+    }
+
+    /* Cache the bounds for comparison later */
+    xminb = mgrid->xmin; yminb = mgrid->ymin; zminb = mgrid->zmin;
+    xmaxb = mgrid->xmax; ymaxb = mgrid->ymax; zmaxb = mgrid->zmax;
+
+    /* Adjust the boundaries of the grid to any specified by the user */
+    if(xmin != 0.0) mgrid->xmin = xmin;
+    if(ymin != 0.0) mgrid->ymin = ymin;
+    if(zmin != 0.0) mgrid->zmin = zmin;
+
+    if(xmax != 0.0) mgrid->xmax = xmax;
+    if(ymax != 0.0) mgrid->ymax = ymax;
+    if(zmax != 0.0) mgrid->zmax = zmax;
+
+    /* Now check the boundaries the user specified (if any)
+        to make sure they fit within the original
+     */
+    if((mgrid->xmin < xminb) ||
+       (mgrid->ymin < yminb) ||
+       (mgrid->zmin < zminb) ||
+       (mgrid->xmax > xmaxb) ||
+       (mgrid->ymax > ymaxb) ||
+       (mgrid->zmax > zmaxb))
+    {
+        Vnm_print(1,"\nError: The bounds requested do not fall within the bounds of the specified grid\n"
+                    "You specified <xmin> <ymin> <zmin> <xmax> <ymax> <zmax>: %lf\t%lf\t%lf\t%lf\t%lf\t%lf\n"
+                    "The input DX files provided                            : %lf\t%lf\t%lf\t%lf\t%lf\t%lf\n",
+                    mgrid->xmin,mgrid->ymin,mgrid->zmin,mgrid->xmax,mgrid->ymax,mgrid->zmax,
+                    xminb,yminb,zminb,xmaxb,ymaxb,zmaxb
+                  );
+        return 1;
+    }
+
     /* set the grid increment for the merged grid */
-	mgrid->nx	= VFLOOR(((mgrid->xmax - mgrid->xmin) / resx) + 1.5);
-	mgrid->ny	= VFLOOR(((mgrid->ymax - mgrid->ymin) / resy) + 1.5);
-	mgrid->nz	= VFLOOR(((mgrid->zmax - mgrid->zmin) / resz) + 1.5);
-	
-	mgrid->hx   = (mgrid->xmax - mgrid->xmin) / (mgrid->nx-1);
-	mgrid->hy   = (mgrid->ymax - mgrid->ymin) / (mgrid->ny-1);
-	mgrid->hzed = (mgrid->zmax - mgrid->zmin) / (mgrid->nz-1);
-	
+    mgrid->nx	= VFLOOR(((mgrid->xmax - mgrid->xmin) / resx) + 1.5);
+    mgrid->ny	= VFLOOR(((mgrid->ymax - mgrid->ymin) / resy) + 1.5);
+    mgrid->nz	= VFLOOR(((mgrid->zmax - mgrid->zmin) / resz) + 1.5);
+
+    mgrid->hx   = (mgrid->xmax - mgrid->xmin) / (mgrid->nx-1);
+    mgrid->hy   = (mgrid->ymax - mgrid->ymin) / (mgrid->ny-1);
+    mgrid->hzed = (mgrid->zmax - mgrid->zmin) / (mgrid->nz-1);
+
     /* print out the dimensions of the merged grid */
     Vnm_print(1, "%s Dimensions of the merged grid\n",snam);
     Vnm_print(1, "%s nx = %d, ny = %d, nz = %d\n",snam,
@@ -245,16 +244,16 @@ int main(int argc, char **argv) {
               mgrid->xmin, mgrid-> ymin, mgrid->zmin);
     Vnm_print(1, "%s xmax = %lf, ymax = %lf, zmax = %lf\n",snam,
               mgrid->xmax, mgrid-> ymax, mgrid->zmax);
-	
-	if(spec) return 0;
-	
+
+    if(spec) return 0;
+
     mgrid->data = (double *)
        Vmem_malloc(mgrid->mem,(mgrid->nx*mgrid->ny*mgrid->nz),sizeof(double));
     mgrid->ctordata = 1;
-	
+
     carray = (short *)
        Vmem_malloc(VNULL, (mgrid->nx*mgrid->ny*mgrid->nz), sizeof(short) );
-	
+
     /* initialize the data of the merged grid with zeros */
     nx = mgrid->nx;
     ny = mgrid->ny;
@@ -317,7 +316,7 @@ int main(int argc, char **argv) {
                     (mgrid->data)[IJK(i,j,k)] /= carray[IJK(i,j,k)];
                 } else {
                     Vnm_print(2,"%s Warning: Gap in subgrids at point (%g,%g,%g)\n",
-							  snam,
+                              snam,
                               mgrid->xmin + i*mgrid->hx,
                               mgrid->ymin + j*mgrid->hy,
                               mgrid->zmin + k*mgrid->hzed );
@@ -401,7 +400,7 @@ VPUBLIC int Vgrid_value2(Vgrid *thee, double pt[3], double *value) {
         khi = nz - 1;
         klo = khi - 1;
         kfloat = (double)(khi);
-    } 
+    }
 
     /* See if we're on the mesh */
     if ((ihi<nx) && (jhi<ny) && (khi<nz) &&
@@ -433,22 +432,22 @@ VPUBLIC int Vgrid_value2(Vgrid *thee, double pt[3], double *value) {
    // Author:   Nathan Baker and Stephen Bond
    /////////////////////////////////////////////////////////////////////////// */
 VPRIVATE int Vgrid_readDXhead(Vgrid *thee,
-							  const char *iodev, const char *iofmt, const char *thost, const char *fname) {
-	
+                              const char *iodev, const char *iofmt, const char *thost, const char *fname) {
+
     int itmp;
     double dtmp;
     char tok[VMAX_BUFSIZE];
     char *snam = "Vgrid_readDXhead:";
     Vio *sock;
-	
+
     /* Check to see if the existing data is null and, if not, clear it out */
     if (thee->data != VNULL) {
         Vnm_print(1, "%s  destroying existing data!\n",snam);
         Vmem_free(thee->mem, (thee->nx*thee->ny*thee->nz), sizeof(double),
-				  (void **)&(thee->data)); }
+                  (void **)&(thee->data)); }
     thee->readdata = 0;
     thee->ctordata = 0;
-	
+
     /* Set up the virtual socket */
     sock = Vio_ctor(iodev,iofmt,thost,fname,"r");
     if (sock == VNULL) {
@@ -459,10 +458,10 @@ VPRIVATE int Vgrid_readDXhead(Vgrid *thee,
         Vnm_print(2, "%s Problem accepting virtual socket %s\n",snam,fname);
         return 0;
     }
-	
+
     Vio_setWhiteChars(sock, MCwhiteChars);
     Vio_setCommChars(sock, MCcommChars);
-	
+
     /* Read in the DX regular positions */
     /* Get "object" */
     VJMPERR2(1 == Vio_scanf(sock, "%s", tok));
@@ -551,20 +550,20 @@ VPRIVATE int Vgrid_readDXhead(Vgrid *thee,
     thee->xmax = thee->xmin + (thee->nx-1)*thee->hx;
     thee->ymax = thee->ymin + (thee->ny-1)*thee->hy;
     thee->zmax = thee->zmin + (thee->nz-1)*thee->hzed;
-	
+
     /* Close off the socket */
     Vio_acceptFree(sock);
     Vio_dtor(&sock);
-	
+
     return 1;
-	
+
 VERROR1:
-	Vio_dtor(&sock);
+    Vio_dtor(&sock);
     Vnm_print(2, "%s  Format problem with input file <%s>\n",snam,fname);
     return 0;
-	
+
 VERROR2:
-		Vio_dtor(&sock);
+        Vio_dtor(&sock);
     Vnm_print(2, "%s  I/O problem with input file <%s>\n",snam,fname);
     return 0;
 }

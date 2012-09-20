@@ -14,48 +14,47 @@
  *
  *  Additional contributing authors listed in the code documentation.
  *
- * Copyright (c) 2010-2012 Battelle Memorial Institute. Developed at the 
- * Pacific Northwest National Laboratory, operated by Battelle Memorial 
+ * Copyright (c) 2010-2012 Battelle Memorial Institute. Developed at the
+ * Pacific Northwest National Laboratory, operated by Battelle Memorial
  * Institute, Pacific Northwest Division for the U.S. Department of Energy.
  *
  * Portions Copyright (c) 2002-2010, Washington University in St. Louis.
  * Portions Copyright (c) 2002-2010, Nathan A. Baker.
- * Portions Copyright (c) 1999-2002, The Regents of the University of 
+ * Portions Copyright (c) 1999-2002, The Regents of the University of
  * California.
  * Portions Copyright (c) 1995, Michael Holst.
  * All rights reserved.
  *
- * Redistribution and use in source and binary forms, with or without 
+ * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
- * Redistributions of source code must retain the above copyright notice, this
- * list of conditions and the following disclaimer.  
  *
- * Redistributions in binary form must reproduce the above copyright notice, 
+ * Redistributions of source code must retain the above copyright notice, this
+ * list of conditions and the following disclaimer.
+ *
+ * Redistributions in binary form must reproduce the above copyright notice,
  * this list of conditions and the following disclaimer in the documentation
  * and/or other materials provided with the distribution.
  *
- * Neither the name of the developer nor the names of its contributors may be 
- * used to endorse or promote products derived from this software without 
+ * Neither the name of the developer nor the names of its contributors may be
+ * used to endorse or promote products derived from this software without
  * specific prior written permission.
  *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
- * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE 
- * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE 
- * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE 
- * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR 
- * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF 
- * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS 
- * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN 
- * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) 
- * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF 
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF
  * THE POSSIBILITY OF SUCH DAMAGE.
  *
  * @endverbatim
  */
 
-#include "apbscfg.h"
-#include "apbs/vpbe.h"
+#include "vpbe.h"
 
 /* ///////////////////////////////////////////////////////////////////////////
 // Class Vpbe: Private method declaration
@@ -67,127 +66,127 @@
 /////////////////////////////////////////////////////////////////////////// */
 #if !defined(VINLINE_VPBE)
 
-VPUBLIC Valist* Vpbe_getValist(Vpbe *thee) { 
+VPUBLIC Valist* Vpbe_getValist(Vpbe *thee) {
 
    VASSERT(thee != VNULL);
    return thee->alist;
 
 }
 
-VPUBLIC Vacc* Vpbe_getVacc(Vpbe *thee) { 
+VPUBLIC Vacc* Vpbe_getVacc(Vpbe *thee) {
 
    VASSERT(thee != VNULL);
    VASSERT(thee->paramFlag);
-   return thee->acc; 
+   return thee->acc;
 
 }
 
-VPUBLIC double Vpbe_getBulkIonicStrength(Vpbe *thee) { 
+VPUBLIC double Vpbe_getBulkIonicStrength(Vpbe *thee) {
 
    VASSERT(thee != VNULL);
    VASSERT(thee->paramFlag);
-   return thee->bulkIonicStrength; 
+   return thee->bulkIonicStrength;
 }
 
-VPUBLIC double Vpbe_getTemperature(Vpbe *thee) { 
+VPUBLIC double Vpbe_getTemperature(Vpbe *thee) {
 
    VASSERT(thee != VNULL);
    VASSERT(thee->paramFlag);
-   return thee->T; 
+   return thee->T;
 
 }
 
-VPUBLIC double Vpbe_getSoluteDiel(Vpbe *thee) { 
+VPUBLIC double Vpbe_getSoluteDiel(Vpbe *thee) {
 
    VASSERT(thee != VNULL);
    VASSERT(thee->paramFlag);
-   return thee->soluteDiel; 
+   return thee->soluteDiel;
 
 }
 
-VPUBLIC double* Vpbe_getSoluteCenter(Vpbe *thee) { 
+VPUBLIC double* Vpbe_getSoluteCenter(Vpbe *thee) {
 
    VASSERT(thee != VNULL);
-   return thee->soluteCenter; 
+   return thee->soluteCenter;
 }
 
-VPUBLIC double Vpbe_getSolventDiel(Vpbe *thee) { 
-
-   VASSERT(thee != VNULL);
-   VASSERT(thee->paramFlag);
-   return thee->solventDiel; 
-}
-
-VPUBLIC double Vpbe_getSolventRadius(Vpbe *thee) { 
+VPUBLIC double Vpbe_getSolventDiel(Vpbe *thee) {
 
    VASSERT(thee != VNULL);
    VASSERT(thee->paramFlag);
-   return thee->solventRadius; 
+   return thee->solventDiel;
 }
 
-VPUBLIC double Vpbe_getMaxIonRadius(Vpbe *thee) { 
+VPUBLIC double Vpbe_getSolventRadius(Vpbe *thee) {
 
    VASSERT(thee != VNULL);
    VASSERT(thee->paramFlag);
-   return thee->maxIonRadius; 
+   return thee->solventRadius;
 }
 
-VPUBLIC double Vpbe_getXkappa(Vpbe *thee) { 
+VPUBLIC double Vpbe_getMaxIonRadius(Vpbe *thee) {
 
    VASSERT(thee != VNULL);
    VASSERT(thee->paramFlag);
-   return thee->xkappa; 
+   return thee->maxIonRadius;
 }
 
-VPUBLIC double Vpbe_getDeblen(Vpbe *thee) { 
+VPUBLIC double Vpbe_getXkappa(Vpbe *thee) {
 
    VASSERT(thee != VNULL);
    VASSERT(thee->paramFlag);
-   return thee->deblen; 
+   return thee->xkappa;
 }
 
-VPUBLIC double Vpbe_getZkappa2(Vpbe *thee) { 
+VPUBLIC double Vpbe_getDeblen(Vpbe *thee) {
 
    VASSERT(thee != VNULL);
    VASSERT(thee->paramFlag);
-   return thee->zkappa2; 
+   return thee->deblen;
 }
 
-VPUBLIC double Vpbe_getZmagic(Vpbe *thee) { 
+VPUBLIC double Vpbe_getZkappa2(Vpbe *thee) {
 
    VASSERT(thee != VNULL);
    VASSERT(thee->paramFlag);
-   return thee->zmagic; 
+   return thee->zkappa2;
 }
 
-VPUBLIC double Vpbe_getSoluteRadius(Vpbe *thee) { 
+VPUBLIC double Vpbe_getZmagic(Vpbe *thee) {
 
    VASSERT(thee != VNULL);
-   return thee->soluteRadius; 
+   VASSERT(thee->paramFlag);
+   return thee->zmagic;
 }
 
-VPUBLIC double Vpbe_getSoluteXlen(Vpbe *thee) { 
+VPUBLIC double Vpbe_getSoluteRadius(Vpbe *thee) {
 
    VASSERT(thee != VNULL);
-   return thee->soluteXlen; 
+   return thee->soluteRadius;
 }
 
-VPUBLIC double Vpbe_getSoluteYlen(Vpbe *thee) { 
+VPUBLIC double Vpbe_getSoluteXlen(Vpbe *thee) {
 
    VASSERT(thee != VNULL);
-   return thee->soluteYlen; 
+   return thee->soluteXlen;
 }
 
-VPUBLIC double Vpbe_getSoluteZlen(Vpbe *thee) { 
+VPUBLIC double Vpbe_getSoluteYlen(Vpbe *thee) {
 
    VASSERT(thee != VNULL);
-   return thee->soluteZlen; 
+   return thee->soluteYlen;
 }
 
-VPUBLIC double Vpbe_getSoluteCharge(Vpbe *thee) { 
+VPUBLIC double Vpbe_getSoluteZlen(Vpbe *thee) {
 
    VASSERT(thee != VNULL);
-   return thee->soluteCharge; 
+   return thee->soluteZlen;
+}
+
+VPUBLIC double Vpbe_getSoluteCharge(Vpbe *thee) {
+
+   VASSERT(thee != VNULL);
+   return thee->soluteCharge;
 }
 
 /* ///////////////////////////////////////////////////////////////////////////
@@ -196,10 +195,10 @@ VPUBLIC double Vpbe_getSoluteCharge(Vpbe *thee) {
  // Author:  Michael Grabe
  /////////////////////////////////////////////////////////////////////////// */
 VPUBLIC double Vpbe_getzmem(Vpbe *thee) {
-	
-	VASSERT(thee != VNULL);
-	VASSERT(thee->param2Flag);
-	return thee->z_mem;
+
+    VASSERT(thee != VNULL);
+    VASSERT(thee->param2Flag);
+    return thee->z_mem;
 }
 
 /* ///////////////////////////////////////////////////////////////////////////
@@ -208,10 +207,10 @@ VPUBLIC double Vpbe_getzmem(Vpbe *thee) {
  // Author:  Michael Grabe
  /////////////////////////////////////////////////////////////////////////// */
 VPUBLIC double Vpbe_getLmem(Vpbe *thee) {
-	
-	VASSERT(thee != VNULL);
-	VASSERT(thee->param2Flag);
-	return thee->L;
+
+    VASSERT(thee != VNULL);
+    VASSERT(thee->param2Flag);
+    return thee->L;
 }
 
 /* ///////////////////////////////////////////////////////////////////////////
@@ -220,10 +219,10 @@ VPUBLIC double Vpbe_getLmem(Vpbe *thee) {
  // Author:  Michael Grabe
  /////////////////////////////////////////////////////////////////////////// */
 VPUBLIC double Vpbe_getmembraneDiel(Vpbe *thee) {
-	
-	VASSERT(thee != VNULL);
-	VASSERT(thee->param2Flag);
-	return thee->mmembraneDiel;
+
+    VASSERT(thee != VNULL);
+    VASSERT(thee->param2Flag);
+    return thee->membraneDiel;
 }
 
 /* ///////////////////////////////////////////////////////////////////////////
@@ -232,10 +231,10 @@ VPUBLIC double Vpbe_getmembraneDiel(Vpbe *thee) {
  // Author:  Michael Grabe
  /////////////////////////////////////////////////////////////////////////// */
 VPUBLIC double Vpbe_getmemv(Vpbe *thee) {
-	
-	VASSERT(thee != VNULL);
-	VASSERT(thee->param2Flag);
-	return thee->V;
+
+    VASSERT(thee != VNULL);
+    VASSERT(thee->param2Flag);
+    return thee->V;
 }
 
 #endif /* if !defined(VINLINE_VPBE) */
@@ -245,29 +244,29 @@ VPUBLIC double Vpbe_getmemv(Vpbe *thee) {
 /////////////////////////////////////////////////////////////////////////// */
 
 VPUBLIC Vpbe* Vpbe_ctor(Valist *alist, int ionNum, double *ionConc,
-						double *ionRadii, double *ionQ, double T, 
-						double soluteDiel, double solventDiel,
-						double solventRadius, int focusFlag, double sdens,
-						double z_mem, double L, double membraneDiel, double V ) {
-	
+                        double *ionRadii, double *ionQ, double T,
+                        double soluteDiel, double solventDiel,
+                        double solventRadius, int focusFlag, double sdens,
+                        double z_mem, double L, double membraneDiel, double V ) {
+
     /* Set up the structure */
     Vpbe *thee = VNULL;
     thee = (Vpbe*)Vmem_malloc(VNULL, 1, sizeof(Vpbe) );
     VASSERT( thee != VNULL);
-    VASSERT( Vpbe_ctor2(thee, alist, ionNum, ionConc, ionRadii, ionQ, 
-						T, soluteDiel, solventDiel, solventRadius, focusFlag, sdens, 
-						z_mem, L, membraneDiel, V) );
-	
+    VASSERT( Vpbe_ctor2(thee, alist, ionNum, ionConc, ionRadii, ionQ,
+                        T, soluteDiel, solventDiel, solventRadius, focusFlag, sdens,
+                        z_mem, L, membraneDiel, V) );
+
     return thee;
 }
 
 
 VPUBLIC int Vpbe_ctor2(Vpbe *thee, Valist *alist, int ionNum,
-					   double *ionConc, double *ionRadii,
-					   double *ionQ, double T, double soluteDiel,
-					   double solventDiel, double solventRadius, int focusFlag,
-					   double sdens, double z_mem, double L, double membraneDiel,
-					   double V) {
+                       double *ionConc, double *ionRadii,
+                       double *ionQ, double T, double soluteDiel,
+                       double solventDiel, double solventRadius, int focusFlag,
+                       double sdens, double z_mem, double L, double membraneDiel,
+                       double V) {
 
     int i, iatom, inhash[3];
     double atomRadius;
@@ -330,7 +329,7 @@ VPUBLIC int Vpbe_ctor2(Vpbe *thee, Valist *alist, int ionNum,
         disp[0] = (x - center[0]);
         disp[1] = (y - center[1]);
         disp[2] = (z - center[2]);
-        dist = (disp[0]*disp[0]) + (disp[1]*disp[1]) + (disp[2]*disp[2]); 
+        dist = (disp[0]*disp[0]) + (disp[1]*disp[1]) + (disp[2]*disp[2]);
         dist = VSQRT(dist) + atomRadius;
         if (dist > radius) radius = dist;
         charge += Vatom_getCharge(Valist_getAtom(thee->alist, iatom));
@@ -340,7 +339,7 @@ VPUBLIC int Vpbe_ctor2(Vpbe *thee, Valist *alist, int ionNum,
     thee->soluteXlen = xmax - xmin;
     thee->soluteYlen = ymax - ymin;
     thee->soluteZlen = zmax - zmin;
-    Vnm_print(0, "Vpbe_ctor2:  solute dimensions = %g x %g x %g\n", 
+    Vnm_print(0, "Vpbe_ctor2:  solute dimensions = %g x %g x %g\n",
             thee->soluteXlen, thee->soluteYlen, thee->soluteZlen);
     thee->soluteCharge = charge;
     Vnm_print(0, "Vpbe_ctor2:  solute charge = %g\n", charge);
@@ -362,7 +361,7 @@ VPUBLIC int Vpbe_ctor2(Vpbe *thee, Valist *alist, int ionNum,
         thee->ionQ[i] = ionQ[i];
         thee->bulkIonicStrength += (0.5*ionConc[i]*VSQR(ionQ[i]));
         netCharge += (ionConc[i]*ionQ[i]);
-    } 
+    }
 #ifndef VAPBSQUIET
     Vnm_print(1, "  Vpbe_ctor:  Using max ion radius (%g A) for exclusion \
 function\n", thee->maxIonRadius);
@@ -377,13 +376,13 @@ function\n", thee->maxIonRadius);
     thee->solventDiel = solventDiel;
     thee->solventRadius = solventRadius;
 
-    /* Compute parameters: 
+    /* Compute parameters:
      *
      * kappa^2 = (8 pi N_A e_c^2) I_s / (1000 eps_w k_B T)
      * kappa   = 0.325567 * I_s^{1/2}   angstroms^{-1}
      * deblen  = 1 / kappa
      *         = 3.071564378 * I_s^{1/2}   angstroms
-     * \bar{kappa}^2 = eps_w * kappa^2 
+     * \bar{kappa}^2 = eps_w * kappa^2
      * zmagic  = (4 * pi * e_c^2) / (k_B T)   (we scale the diagonal later)
      *         = 7046.528838
      */
@@ -398,13 +397,13 @@ function\n", thee->maxIonRadius);
         thee->zkappa2 = 0.;
     } else {
         thee->xkappa  = VSQRT( thee->bulkIonicStrength * 1.0e-16 *
-            ((8.0 * pi * N_A * e_c*e_c) / 
+            ((8.0 * pi * N_A * e_c*e_c) /
             (1000.0 * thee->solventDiel * k_B * T))
         );
         thee->deblen  = 1. / thee->xkappa;
         thee->zkappa2 = thee->solventDiel * VSQR(thee->xkappa);
     }
-    Vnm_print(0, "Vpbe_ctor2:  bulk ionic strength = %g\n", 
+    Vnm_print(0, "Vpbe_ctor2:  bulk ionic strength = %g\n",
             thee->bulkIonicStrength);
     Vnm_print(0, "Vpbe_ctor2:  xkappa = %g\n", thee->xkappa);
     Vnm_print(0, "Vpbe_ctor2:  Debye length = %g\n", thee->deblen);
@@ -413,56 +412,56 @@ function\n", thee->maxIonRadius);
     Vnm_print(0, "Vpbe_ctor2:  zmagic = %g\n", thee->zmagic);
 
     /* Compute accessibility objects:
-     *   - Allow for extra room in the case of spline windowing 
+     *   - Allow for extra room in the case of spline windowing
      *   - Place some limits on the size of the hash table in the case of very
      *     large molecules
      */
-    if (thee->maxIonRadius > thee->solventRadius) 
+    if (thee->maxIonRadius > thee->solventRadius)
         radius = thee->maxIonRadius + MAX_SPLINE_WINDOW;
     else radius = thee->solventRadius + MAX_SPLINE_WINDOW;
-	
-	nhash[0] = (thee->soluteXlen)/0.5;
-	nhash[1] = (thee->soluteYlen)/0.5;
-	nhash[2] = (thee->soluteZlen)/0.5;
-    for (i=0; i<3; i++) inhash[i] = (int)(nhash[i]);
-	
-	for (i=0;i<3;i++){ 
-        if (inhash[i] < 3) inhash[i] = 3; 
-        if (inhash[i] > MAX_HASH_DIM) inhash[i] = MAX_HASH_DIM;
-	}
-    Vnm_print(0, "Vpbe_ctor2:  Constructing Vclist with %d x %d x %d table\n", 
-            inhash[0], inhash[1], inhash[2]); 
 
-    thee->clist = Vclist_ctor(thee->alist, radius, inhash, 
+    nhash[0] = (thee->soluteXlen)/0.5;
+    nhash[1] = (thee->soluteYlen)/0.5;
+    nhash[2] = (thee->soluteZlen)/0.5;
+    for (i=0; i<3; i++) inhash[i] = (int)(nhash[i]);
+
+    for (i=0;i<3;i++){
+        if (inhash[i] < 3) inhash[i] = 3;
+        if (inhash[i] > MAX_HASH_DIM) inhash[i] = MAX_HASH_DIM;
+    }
+    Vnm_print(0, "Vpbe_ctor2:  Constructing Vclist with %d x %d x %d table\n",
+            inhash[0], inhash[1], inhash[2]);
+
+    thee->clist = Vclist_ctor(thee->alist, radius, inhash,
             CLIST_AUTO_DOMAIN, lower_corner, upper_corner);
-	
+
     VASSERT(thee->clist != VNULL);
     thee->acc = Vacc_ctor(thee->alist, thee->clist, sdens);
-	
+
     VASSERT(thee->acc != VNULL);
 
-	/* SMPBE Added */
-	thee->smsize = 0.0;
-	thee->smvolume = 0.0;
-	thee->ipkey = 0;
-	
+    /* SMPBE Added */
+    thee->smsize = 0.0;
+    thee->smvolume = 0.0;
+    thee->ipkey = 0;
+
     thee->paramFlag = 1;
-	
-	/*-----------------------------------------------------------*/
-	/* added by Michael Grabe                                    */
-	/*-----------------------------------------------------------*/
-	
+
+    /*-----------------------------------------------------------*/
+    /* added by Michael Grabe                                    */
+    /*-----------------------------------------------------------*/
+
     thee->z_mem = z_mem;
     thee->L = L;
     thee->membraneDiel = membraneDiel;
     thee->V = V;
-	
-	//    if (V != VNULL) thee->param2Flag = 1;
-	//    else thee->param2Flag = 0;
-	
-	/*-----------------------------------------------------------*/	
-	
-    return 1; 
+
+    //    if (V != VNULL) thee->param2Flag = 1;
+    //    else thee->param2Flag = 0;
+
+    /*-----------------------------------------------------------*/
+
+    return 1;
 }
 
 VPUBLIC void Vpbe_dtor(Vpbe **thee) {
@@ -473,7 +472,7 @@ VPUBLIC void Vpbe_dtor(Vpbe **thee) {
     }
 }
 
-VPUBLIC void Vpbe_dtor2(Vpbe *thee) { 
+VPUBLIC void Vpbe_dtor2(Vpbe *thee) {
     Vclist_dtor(&(thee->clist));
     Vacc_dtor(&(thee->acc));
     Vmem_dtor(&(thee->vmem));
@@ -488,13 +487,13 @@ VPUBLIC double Vpbe_getCoulombEnergy1(Vpbe *thee) {
     double eps, T;
     Vatom *iatom, *jatom;
     Valist *alist;
- 
+
     VASSERT(thee != VNULL);
     alist = Vpbe_getValist(thee);
     VASSERT(alist != VNULL);
     natoms = Valist_getNumberAtoms(alist);
-  
-    /* Do the sum */ 
+
+    /* Do the sum */
     for (i=0; i<natoms; i++) {
         iatom = Valist_getAtom(alist,i);
         icharge = Vatom_getCharge(iatom);
@@ -514,7 +513,7 @@ VPUBLIC double Vpbe_getCoulombEnergy1(Vpbe *thee) {
     T = Vpbe_getTemperature(thee);
     eps = Vpbe_getSoluteDiel(thee);
     energy = energy*Vunit_ec*Vunit_ec/(4*Vunit_pi*Vunit_eps0*eps*(1.0e-10));
-   
+
     /* Scale by Boltzmann energy */
     energy = energy/(Vunit_kb*T);
 
@@ -522,7 +521,7 @@ VPUBLIC double Vpbe_getCoulombEnergy1(Vpbe *thee) {
 }
 
 VPUBLIC unsigned long int Vpbe_memChk(Vpbe *thee) {
-   
+
     unsigned long int memUse = 0;
 
     if (thee == VNULL) return 0;
@@ -539,7 +538,7 @@ VPUBLIC int Vpbe_getIons(Vpbe *thee, int *nion, double ionConc[MAXION],
     int i;
 
     VASSERT(thee != VNULL);
-  
+
     *nion = thee->numIon;
     for (i=0; i<(*nion); i++) {
         ionConc[i] = thee->ionConc[i];

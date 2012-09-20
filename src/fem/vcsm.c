@@ -54,11 +54,7 @@
  * @endverbatim
  */
 
-
-#include "apbscfg.h"
-
-#if defined(HAVE_MC_H)
-#include "apbs/vcsm.h"
+#include "vcsm.h"
 
 /* Inlineable methods */
 #if !defined(VINLINE_VCSM)
@@ -542,5 +538,3 @@ VPUBLIC int Vcsm_update(Vcsm *thee, SS **simps, int num) {
 
 
 }
-
-#endif

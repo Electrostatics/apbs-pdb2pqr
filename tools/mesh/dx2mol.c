@@ -10,9 +10,7 @@
 // rcsid="$Id$"
 /////////////////////////////////////////////////////////////////////////// */
 
-#include "apbscfg.h"
-#include "maloc/maloc.h"
-#include "apbs/apbs.h"  
+#include "apbs.h"
 
 VEMBED(rcsid="$Id$")
 
@@ -43,8 +41,8 @@ int main(int argc, char **argv) {
             file to be written in MOLMOL format.\n\
     -----------------------------------------------------------------------\n\
     \n";
- 
- 
+
+
     /* *************** CHECK INVOCATION ******************* */
     Vio_start();
     if (argc != 3) {
@@ -56,7 +54,7 @@ int main(int argc, char **argv) {
         outpath = argv[2];
     }
 
-    /* Read DX format file */ 
+    /* Read DX format file */
     grid = Vgrid_ctor(0, 0, 0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, VNULL);
     Vgrid_readDX(grid, "FILE", "ASC", VNULL, inpath);
     nx = grid->nx;
@@ -83,9 +81,9 @@ int main(int argc, char **argv) {
     }
 
     /* Write out data */
-    Vio_printf(sock, "%8.3f %4d %5.3f\n",xmin,nx,hx); 
-    Vio_printf(sock, "%8.3f %4d %5.3f\n",ymin,ny,hy); 
-    Vio_printf(sock, "%8.3f %4d %5.3f\n",zmin,nz,hzed); 
+    Vio_printf(sock, "%8.3f %4d %5.3f\n",xmin,nx,hx);
+    Vio_printf(sock, "%8.3f %4d %5.3f\n",ymin,ny,hy);
+    Vio_printf(sock, "%8.3f %4d %5.3f\n",zmin,nz,hzed);
 
     n = 0;
     for (k=0; k<nz; k++) {

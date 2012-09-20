@@ -1,11 +1,6 @@
-
-#include "apbscfg.h"
-#include "maloc/maloc.h"
-#include "apbs/apbs.h"
-#include "apbs/vhal.h"
-#include "apbs/vmatrix.h"
-
 #include <stdio.h>
+
+#include "apbs.h"
 
 #define MXGRD 129
 
@@ -22,10 +17,10 @@ int main(int argc, char **argv) {
     char flnm[256];
     char title[72];
 
-    FILE *inFile = VNULL;
-    FILE *outFile = VNULL;
+    FILE *inFile = NULL;
+    FILE *outFile = NULL;
 
-    double *grid = (double*)malloc(MXGRD * MXGRD * MXGRD * sizeof(double));
+    double grid[MXGRD * MXGRD * MXGRD];
     MAT3(grid, MXGRD, MXGRD, MXGRD);
 
     printf("Convert UHBD ascii grid to binary\n");
@@ -35,7 +30,11 @@ int main(int argc, char **argv) {
     scanf("%s", flnm);
 
     inFile = fopen(flnm, "r");
-    VASSERT_MSG0(inFile != VNULL, "Couldn't open output file");
+    if( inFile == NULL )
+    {
+        printf("Couldn't open output file: %s\n", flnm);
+        return -1;
+    }
 
 
 
@@ -43,7 +42,11 @@ int main(int argc, char **argv) {
     scanf("%s", newfile);
 
     outFile = fopen(newfile, "wb");
-    VASSERT_MSG0(outFile != VNULL, "Couldn't open input file");
+    if( outFile == NULL )
+    {
+        printf("Couldn't open output file: %s\n", newfile);
+        return -2;
+    }
 
 
     /* Read in the DX regular positions */
@@ -51,10 +54,10 @@ int main(int argc, char **argv) {
     fscanf(inFile, "%s", title);
     fwrite(title, 1, 72, outFile);
 
-    fscanf(inFile, "%f", &scale);
+    fscanf(inFile, "%lf", &scale);
     fwrite(&scale, 1, sizeof(double), outFile);
 
-    fscanf(inFile, "%f", &dum2);
+    fscanf(inFile, "%lf", &dum2);
     fwrite(&dum2, 1, sizeof(double), outFile);
 
     fscanf(inFile, "%d", &grdflg);
@@ -81,34 +84,34 @@ int main(int argc, char **argv) {
     fscanf(inFile, "%d", &km);
     fwrite(&km, 1, sizeof(int), outFile);
 
-    fscanf(inFile, "%f", &h);
+    fscanf(inFile, "%lf", &h);
     fwrite(&h, 1, sizeof(double), outFile);
 
-    fscanf(inFile, "%f", &ox);
+    fscanf(inFile, "%lf", &ox);
     fwrite(&ox, 1, sizeof(double), outFile);
 
-    fscanf(inFile, "%f", &oy);
+    fscanf(inFile, "%lf", &oy);
     fwrite(&oy, 1, sizeof(double), outFile);
 
-    fscanf(inFile, "%f", &oz);
+    fscanf(inFile, "%lf", &oz);
     fwrite(&oz, 1, sizeof(double), outFile);
 
-    fscanf(inFile, "%f", &dum3);
+    fscanf(inFile, "%lf", &dum3);
     fwrite(&dum3, 1, sizeof(double), outFile);
 
-    fscanf(inFile, "%f", &dum4);
+    fscanf(inFile, "%lf", &dum4);
     fwrite(&dum4, 1, sizeof(double), outFile);
 
-    fscanf(inFile, "%f", &dum5);
+    fscanf(inFile, "%lf", &dum5);
     fwrite(&dum5, 1, sizeof(double), outFile);
 
-    fscanf(inFile, "%f", &dum6);
+    fscanf(inFile, "%lf", &dum6);
     fwrite(&dum6, 1, sizeof(double), outFile);
 
-    fscanf(inFile, "%f", &dum7);
+    fscanf(inFile, "%lf", &dum7);
     fwrite(&dum7, 1, sizeof(double), outFile);
 
-    fscanf(inFile, "%f", &dum8);
+    fscanf(inFile, "%lf", &dum8);
     fwrite(&dum8, 1, sizeof(double), outFile);
 
     fscanf(inFile, "%d", &idum3);
@@ -132,7 +135,7 @@ int main(int argc, char **argv) {
 
             for (i=0; i<im; i++ ) {
 
-                fscanf(inFile, "%f", RAT3(grid, i, j, k));
+                fscanf(inFile, "%lf", RAT3(grid, i, j, k));
                 fwrite(RAT3(grid, i, j, k), 1, sizeof(double), outFile);
 
             }

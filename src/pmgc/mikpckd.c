@@ -47,7 +47,7 @@
  * @endverbatim
  */
 
-#include "apbs/mikpckd.h"
+#include "mikpckd.h"
 
 VPUBLIC void Vxcopy(int *nx, int *ny, int *nz, double *x, double *y) {
 
@@ -58,7 +58,7 @@ VPUBLIC void Vxcopy(int *nx, int *ny, int *nz, double *x, double *y) {
     int i, j, k;
 
     /// @todo:  Once the refactor begins, this will need to be unrolled
-	#pragma omp parallel for private(i,j,k)
+    #pragma omp parallel for private(i,j,k)
     for(k=2; k<=*nz-1; k++)
         for(j=2; j<=*ny-1; j++)
             for(i=2; i<=*nx-1; i++)
@@ -85,10 +85,10 @@ VPUBLIC void Vxcopy_small(int *nx, int *ny, int *nz, double *x, double *y) {
 
 VPUBLIC void Vxcopy_large(int *nx, int *ny, int *nz, double *x, double *y) {
 
-	/** @note This function is exactly equivalent to calling xcopy_small with
-	 *        the matrix arguments reversed.
-	 *  @todo Replace this.  it's worthless
-	 */
+    /** @note This function is exactly equivalent to calling xcopy_small with
+     *        the matrix arguments reversed.
+     *  @todo Replace this.  it's worthless
+     */
 
     MAT3(x, *nx - 2, *ny - 2, *nz - 2);
     MAT3(y, *nx, *ny, *nz);
@@ -105,9 +105,9 @@ VPUBLIC void Vxcopy_large(int *nx, int *ny, int *nz, double *x, double *y) {
 
 
 VPUBLIC void Vxaxpy(int *nx, int *ny, int *nz,
-		double *alpha, double *x, double *y) {
+        double *alpha, double *x, double *y) {
 
-	// Create the wrappers
+    // Create the wrappers
     MAT3(x, *nx, *ny, *nz);
     MAT3(y, *nx, *ny, *nz);
 
@@ -124,11 +124,11 @@ VPUBLIC void Vxaxpy(int *nx, int *ny, int *nz,
 
 
 VPUBLIC double Vxnrm1(int *nx, int *ny, int *nz,
-		double *x) {
+        double *x) {
 
-	double xnrm1 = 0.0;  ///< Accumulates the calculated normal value
+    double xnrm1 = 0.0;  ///< Accumulates the calculated normal value
 
-	MAT3(x, *nx, *ny, *nz);
+    MAT3(x, *nx, *ny, *nz);
 
     // The indices used to traverse the matrices
     int i, j, k;
@@ -137,7 +137,7 @@ VPUBLIC double Vxnrm1(int *nx, int *ny, int *nz,
     for(k=2; k<=*nz-1; k++)
         for(j=2; j<=*ny-1; j++)
             for(i=2; i<=*nx-1; i++)
-            	xnrm1 += VABS(VAT3(x, i, j, k));
+                xnrm1 += VABS(VAT3(x, i, j, k));
 
     return xnrm1;
 }
@@ -145,11 +145,11 @@ VPUBLIC double Vxnrm1(int *nx, int *ny, int *nz,
 
 
 VPUBLIC double Vxnrm2(int *nx, int *ny, int *nz,
-		double *x) {
+        double *x) {
 
-	double xnrm2 = 0.0;  ///< Accumulates the calculated normal value
+    double xnrm2 = 0.0;  ///< Accumulates the calculated normal value
 
-	MAT3(x, *nx, *ny, *nz);
+    MAT3(x, *nx, *ny, *nz);
 
     // The indices used to traverse the matrices
     int i, j, k;
@@ -158,7 +158,7 @@ VPUBLIC double Vxnrm2(int *nx, int *ny, int *nz,
     for(k=2; k<=*nz-1; k++)
         for(j=2; j<=*ny-1; j++)
             for(i=2; i<=*nx-1; i++)
-            	xnrm2 += VAT3(x, i, j, k) * VAT3(x, i, j, k);
+                xnrm2 += VAT3(x, i, j, k) * VAT3(x, i, j, k);
 
     return VSQRT(xnrm2);
 }
@@ -166,7 +166,7 @@ VPUBLIC double Vxnrm2(int *nx, int *ny, int *nz,
 
 
 VPUBLIC double Vxdot(int *nx, int *ny, int *nz,
-		double *x, double *y) {
+        double *x, double *y) {
 
     int i, j, k;
 
@@ -189,14 +189,14 @@ VPUBLIC double Vxdot(int *nx, int *ny, int *nz,
 
 VPUBLIC void Vazeros(int *nx, int *ny, int *nz, double *x) {
 
-	int i, n;
-	int nproc = 1;
+    int i, n;
+    int nproc = 1;
 
-	n = *nx * *ny * *nz;
+    n = *nx * *ny * *nz;
 
-	#pragma omp parallel for private(i)
-	for (i=1; i<=n; i++)
-		VAT(x, i) = 0.0;
+    #pragma omp parallel for private(i)
+    for (i=1; i<=n; i++)
+        VAT(x, i) = 0.0;
 }
 
 

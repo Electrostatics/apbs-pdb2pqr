@@ -5,8 +5,7 @@
  *  @version $Id$
  */
 
-#include "apbscfg.h"
-#include "apbs/apbs.h"  
+#include "apbs.h"
 
 #define ERRRC 12
 
@@ -20,7 +19,7 @@ int main(int argc, char **argv) {
     int test_int = 44;
     double test_double = -37.56;
     double test_exp = 5555000.12;
-    char *usage = "\n  benchmark <asc|xdr> nx ny nz\n"; 
+    char *usage = "\n  benchmark <asc|xdr> nx ny nz\n";
     char *iofmt;
     char test_string[VMAX_BUFSIZE];
     char tok[VMAX_BUFSIZE];
@@ -28,7 +27,7 @@ int main(int argc, char **argv) {
     char *MCcommChars  = "#%";
     Vgrid *grid;
     Vio *sock;
- 
+
     /* *************** CHECK INVOCATION ******************* */
     Vio_start();
     Vnm_redirect(0);
@@ -40,7 +39,7 @@ int main(int argc, char **argv) {
     }
     if (Vstring_strcasecmp(argv[1], "XDR") == 0) iofmt = "XDR";
     else if (Vstring_strcasecmp(argv[1], "ASC") == 0) iofmt = "ASC";
-    else { 
+    else {
         Vnm_print(2, "Invalid format (%s)!\n", argv[1]);
         Vnm_print(2,"%s\n", usage);
         return ERRRC;
@@ -48,10 +47,10 @@ int main(int argc, char **argv) {
     sscanf(argv[2], "%d", &nx);
     sscanf(argv[3], "%d", &ny);
     sscanf(argv[4], "%d", &nz);
-    hx = 1;  
+    hx = 1;
     hy = 1;
     hzed = 1;
-    xmin = 0;  
+    xmin = 0;
     ymin = 0;
     zmin = 0;
 
@@ -67,13 +66,13 @@ int main(int argc, char **argv) {
     }
     Vio_setWhiteChars(sock, MCwhiteChars);
     Vio_setCommChars(sock, MCcommChars);
-    sprintf(test_string, "integer %d double %4.3f exponential %12.5e\n", 
+    sprintf(test_string, "integer %d double %4.3f exponential %12.5e\n",
       test_int, test_double, test_exp);
     Vnm_print(1, "Writing '%s' to socket\n", test_string);
     Vio_printf(sock, "%s", test_string);
     Vio_connectFree(sock);
     Vio_dtor(&sock);
-    
+
     sock = Vio_ctor("FILE", iofmt, "localhost", "benchmark.test", "r");
     if (sock == VNULL) {
         Vnm_print(2, "Problem opening virtual socket!\n");

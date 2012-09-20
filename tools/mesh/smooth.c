@@ -5,8 +5,7 @@
  *  @version $Id$
  */
 
-#include "apbscfg.h"
-#include "apbs/apbs.h"  
+#include "apbs.h"
 
 #define IJK(i,j,k)  (((k)*(nx)*(ny))+((j)*(nx))+(i))
 #define ERRRC 2
@@ -47,7 +46,7 @@ int usage(int rc) {
     Vnm_print(2, usage);
 
     exit(rc);
- 
+
     return 0;
 }
 
@@ -110,7 +109,7 @@ int main(int argc, char **argv) {
                 usage(2);
             }
         } else if (strstr(argv[i], "--bandwidth") != NULL) {
-            if (sscanf(argv[i], "--bandwidth=%lf", &bandwidth) == 1) 
+            if (sscanf(argv[i], "--bandwidth=%lf", &bandwidth) == 1)
                 gotBandwidth = 1;
             else {
                 Vnm_print(2, "Error:  %s\n", argv[i]);
@@ -124,7 +123,7 @@ int main(int argc, char **argv) {
     if (!gotFormat) {
         Vnm_print(2, "Error:  --format not specified!\n");
         usage(2);
-    } 
+    }
     if (!gotInPath) {
         Vnm_print(2, "Error:  --input not specified!\n");
         usage(2);
@@ -172,7 +171,7 @@ int main(int argc, char **argv) {
 
     /* *************** READ DATA ******************* */
     Vnm_print(1, "main:  Writing data to %s...\n", outPath);
-    if (format == VDF_DX) 
+    if (format == VDF_DX)
       Vgrid_writeDX(grid, "FILE", "ASC", VNULL, outPath, "Smoothed data",
         VNULL);
 
@@ -206,7 +205,7 @@ int gaussian(Vgrid *grid, double stddev, double bandwidth) {
     if (kband == 0) kband = 1;
     Vnm_print(1, "Bandwidth converted to %d x %d x %d grid units.\n",
       iband, jband, kband);
-    Vnm_print(1, "This means any non-zero data within (%g, %g, %g) of the\n", 
+    Vnm_print(1, "This means any non-zero data within (%g, %g, %g) of the\n",
       (iband+1)*hx, (jband+1)*hy, (kband+1)*hzed);
     Vnm_print(1, "domain boundary will be convolved differently.\n");
 
@@ -219,9 +218,9 @@ int gaussian(Vgrid *grid, double stddev, double bandwidth) {
     oldData = grid->data;
     newData = Vmem_malloc(VNULL, (nx*ny*nz), sizeof(double));
 
-	/* Copy over old data.  All but the boundary values will be replaced in the next step so this is more copying than is strictly
-	   necessary... */
-	for (i=0; i<(nx*ny*nz); i++) newData[i] = oldData[i];
+    /* Copy over old data.  All but the boundary values will be replaced in the next step so this is more copying than is strictly
+       necessary... */
+    for (i=0; i<(nx*ny*nz); i++) newData[i] = oldData[i];
 
     /* Apply filter */
     for (k=1; k<(nz-1); k++) {

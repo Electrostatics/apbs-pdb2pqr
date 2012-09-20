@@ -47,7 +47,7 @@
  * @endverbatim
  */
 
-#include "apbs/newdrvd.h"
+#include "newdrvd.h"
 
 VEXTERNC void Vnewdriv(
         int *iparm, double *rparm,
@@ -117,7 +117,7 @@ VEXTERNC void Vnewdriv(
     mgsolv = VAT(iparm, 21);
 
     Vmgsz(&mgcoar, &mgdisc, &mgsolv,
-    		&nx, &ny, &nz,
+            &nx, &ny, &nz,
             &nlev,
             &nxc, &nyc, &nzc,
             &nf, &nc,

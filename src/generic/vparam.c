@@ -14,63 +14,58 @@
  *
  *  Additional contributing authors listed in the code documentation.
  *
- * Copyright (c) 2010-2012 Battelle Memorial Institute. Developed at the 
- * Pacific Northwest National Laboratory, operated by Battelle Memorial 
+ * Copyright (c) 2010-2012 Battelle Memorial Institute. Developed at the
+ * Pacific Northwest National Laboratory, operated by Battelle Memorial
  * Institute, Pacific Northwest Division for the U.S. Department of Energy.
  *
  * Portions Copyright (c) 2002-2010, Washington University in St. Louis.
  * Portions Copyright (c) 2002-2010, Nathan A. Baker.
- * Portions Copyright (c) 1999-2002, The Regents of the University of 
+ * Portions Copyright (c) 1999-2002, The Regents of the University of
  * California.
  * Portions Copyright (c) 1995, Michael Holst.
  * All rights reserved.
  *
- * Redistribution and use in source and binary forms, with or without 
+ * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
- * Redistributions of source code must retain the above copyright notice, this
- * list of conditions and the following disclaimer.  
  *
- * Redistributions in binary form must reproduce the above copyright notice, 
+ * Redistributions of source code must retain the above copyright notice, this
+ * list of conditions and the following disclaimer.
+ *
+ * Redistributions in binary form must reproduce the above copyright notice,
  * this list of conditions and the following disclaimer in the documentation
  * and/or other materials provided with the distribution.
  *
- * Neither the name of the developer nor the names of its contributors may be 
- * used to endorse or promote products derived from this software without 
+ * Neither the name of the developer nor the names of its contributors may be
+ * used to endorse or promote products derived from this software without
  * specific prior written permission.
  *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
- * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE 
- * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE 
- * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE 
- * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR 
- * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF 
- * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS 
- * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN 
- * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) 
- * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF 
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF
  * THE POSSIBILITY OF SUCH DAMAGE.
  *
  * @endverbatim
  */
 
-#include "apbscfg.h"
-#include "apbs/vparam.h"
-
-#if defined(HAVE_MC_H)
-#include "mc/mc.h"
-#endif
+#include "vparam.h"
 
 VEMBED(rcsid="$Id$")
 
 /**
- * @brief  Whitespace characters for socket reads 
+ * @brief  Whitespace characters for socket reads
  * @ingroup  Vparam
  */
 VPRIVATE char *MCwhiteChars = " =,;\t\n\r";
 
 /**
- * @brief  Comment characters for socket reads 
+ * @brief  Comment characters for socket reads
  * @ingroup  Vparam
  */
 VPRIVATE char *MCcommChars  = "#%";
@@ -126,7 +121,7 @@ VPUBLIC Vparam_AtomData* Vparam_AtomData_ctor() {
 VPUBLIC int Vparam_AtomData_ctor2(Vparam_AtomData *thee) { return 1; }
 
 VPUBLIC void Vparam_AtomData_dtor(Vparam_AtomData **thee) {
-    
+
     if ((*thee) != VNULL) {
         Vparam_AtomData_dtor2(*thee);
         Vmem_free(VNULL, 1, sizeof(Vparam_AtomData), (void **)thee);
@@ -149,8 +144,8 @@ VPUBLIC Vparam_ResData* Vparam_ResData_ctor(Vmem *mem) {
     return thee;
 }
 
-VPUBLIC int Vparam_ResData_ctor2(Vparam_ResData *thee, Vmem *mem) { 
-    
+VPUBLIC int Vparam_ResData_ctor2(Vparam_ResData *thee, Vmem *mem) {
+
     if (thee == VNULL) {
         Vnm_print(2, "Vparam_ResData_ctor2:  Got VNULL thee!\n");
         return 0;
@@ -163,7 +158,7 @@ VPUBLIC int Vparam_ResData_ctor2(Vparam_ResData *thee, Vmem *mem) {
 }
 
 VPUBLIC void Vparam_ResData_dtor(Vparam_ResData **thee) {
-    
+
     if ((*thee) != VNULL) {
         Vparam_ResData_dtor2(*thee);
         Vmem_free((*thee)->vmem, 1, sizeof(Vparam_ResData), (void **)thee);
@@ -172,11 +167,11 @@ VPUBLIC void Vparam_ResData_dtor(Vparam_ResData **thee) {
 
 }
 
-VPUBLIC void Vparam_ResData_dtor2(Vparam_ResData *thee) { 
-    
-    if (thee == VNULL) return; 
+VPUBLIC void Vparam_ResData_dtor2(Vparam_ResData *thee) {
+
+    if (thee == VNULL) return;
     if (thee->nAtomData > 0) {
-        Vmem_free(thee->vmem, thee->nAtomData, sizeof(Vparam_AtomData), 
+        Vmem_free(thee->vmem, thee->nAtomData, sizeof(Vparam_AtomData),
           (void **)&(thee->atomData));
     }
     thee->nAtomData = 0;
@@ -216,7 +211,7 @@ VPUBLIC int Vparam_ctor2(Vparam *thee) {
 }
 
 VPUBLIC void Vparam_dtor(Vparam **thee) {
-    
+
     if ((*thee) != VNULL) {
         Vparam_dtor2(*thee);
         Vmem_free(VNULL, 1, sizeof(Vparam), (void **)thee);
@@ -233,7 +228,7 @@ VPUBLIC void Vparam_dtor2(Vparam *thee) {
 
     /* Destroy the residue data */
     for (i=0; i<thee->nResData; i++) Vparam_ResData_dtor2(&(thee->resData[i]));
-    if (thee->nResData > 0) Vmem_free(thee->vmem, thee->nResData, 
+    if (thee->nResData > 0) Vmem_free(thee->vmem, thee->nResData,
       sizeof(Vparam_ResData), (void **)&(thee->resData));
     thee->nResData = 0;
     thee->resData = VNULL;
@@ -243,7 +238,7 @@ VPUBLIC void Vparam_dtor2(Vparam *thee) {
 
 }
 
-VPUBLIC Vparam_ResData* Vparam_getResData(Vparam *thee, 
+VPUBLIC Vparam_ResData* Vparam_getResData(Vparam *thee,
   char resName[VMAX_ARGLEN]) {
 
     int i;
@@ -269,7 +264,7 @@ VPUBLIC Vparam_ResData* Vparam_getResData(Vparam *thee,
     return res;
 }
 
-VPUBLIC Vparam_AtomData* Vparam_getAtomData(Vparam *thee, 
+VPUBLIC Vparam_AtomData* Vparam_getAtomData(Vparam *thee,
   char resName[VMAX_ARGLEN], char atomName[VMAX_ARGLEN]) {
 
     int i;
@@ -287,15 +282,15 @@ VPUBLIC Vparam_AtomData* Vparam_getAtomData(Vparam *thee,
     res = Vparam_getResData(thee, resName);
     if (res == VNULL) {
         atom = VNULL;
-		Vnm_print(2, "Vparam_getAtomData:  Unable to find residue %s!\n", resName);
+        Vnm_print(2, "Vparam_getAtomData:  Unable to find residue %s!\n", resName);
         return atom;
     }
     for (i=0; i<res->nAtomData; i++) {
         atom = &(res->atomData[i]);
-		if (atom == VNULL) {
-			Vnm_print(2, "Vparam_getAtomData:  got NULL atom!\n");
-			return VNULL;
-		}
+        if (atom == VNULL) {
+            Vnm_print(2, "Vparam_getAtomData:  got NULL atom!\n");
+            return VNULL;
+        }
         if (Vstring_strcasecmp(atomName, atom->atomName) == 0) {
             return atom;
         }
@@ -346,26 +341,26 @@ VPUBLIC int Vparam_readXMLFile(Vparam *thee, const char *iodev,
         for (i=0; i<thee->nResData; i++) {
             Vparam_ResData_dtor2(&(thee->resData[i]));
         }
-        Vmem_free(thee->vmem, thee->nResData, 
+        Vmem_free(thee->vmem, thee->nResData,
           sizeof(Vparam_ResData), (void **)&(thee->resData));
     }
 
     strcpy(endtag,"/");
 
     /* Set up temporary residue list */
-    
+
     ralloc = 50;
     residues = (Vparam_ResData*)Vmem_malloc(thee->vmem, ralloc, sizeof(Vparam_ResData));
 
     /* Read until we run out of entries, allocating space as needed */
     while (1) {
-      
+
         VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
 
         /* The first token should be the start tag */
-      
+
         if (Vstring_strcasecmp(endtag, "/") == 0) strcat(endtag, tok);
-        
+
         if (Vstring_strcasecmp(tok, "residue") == 0) {
           if (thee->nResData >= ralloc) {
                 tresidues = (Vparam_ResData*)Vmem_malloc(thee->vmem, 2*ralloc, sizeof(Vparam_ResData));
@@ -373,9 +368,9 @@ VPUBLIC int Vparam_readXMLFile(Vparam *thee, const char *iodev,
                 for (i=0; i<thee->nResData; i++) {
                     Vparam_ResData_copyTo(&(residues[i]), &(tresidues[i]));
                 }
-                Vmem_free(thee->vmem, ralloc, sizeof(Vparam_ResData), 
+                Vmem_free(thee->vmem, ralloc, sizeof(Vparam_ResData),
                           (void **)&(residues));
-                residues = tresidues; 
+                residues = tresidues;
                 tresidues = VNULL;
                 ralloc = 2*ralloc;
             }
@@ -396,9 +391,9 @@ VPUBLIC int Vparam_readXMLFile(Vparam *thee, const char *iodev,
                 for (i=0; i<natoms; i++) {
                     Vparam_AtomData_copyTo(&(atoms[i]), &(tatoms[i]));
                 }
-                Vmem_free(thee->vmem, nalloc, sizeof(Vparam_AtomData), 
+                Vmem_free(thee->vmem, nalloc, sizeof(Vparam_AtomData),
                           (void **)&(atoms));
-                atoms = tatoms; 
+                atoms = tatoms;
                 tatoms = VNULL;
                 nalloc = 2*nalloc;
             }
@@ -410,7 +405,7 @@ VPUBLIC int Vparam_readXMLFile(Vparam *thee, const char *iodev,
 
           res = &(residues[thee->nResData]);
           Vparam_ResData_ctor2(res, thee->vmem);
-          res->atomData = (Vparam_AtomData*)Vmem_malloc(thee->vmem, natoms, 
+          res->atomData = (Vparam_AtomData*)Vmem_malloc(thee->vmem, natoms,
                                       sizeof(Vparam_AtomData));
           res->nAtomData = natoms;
           strcpy(res->name, currResName);
@@ -425,8 +420,8 @@ VPUBLIC int Vparam_readXMLFile(Vparam *thee, const char *iodev,
     }
 
     /* Initialize and copy the residues into the Vparam object */
-      
-    thee->resData = (Vparam_ResData*)Vmem_malloc(thee->vmem, thee->nResData, 
+
+    thee->resData = (Vparam_ResData*)Vmem_malloc(thee->vmem, thee->nResData,
                                 sizeof(Vparam_ResData));
     for (ires=0; ires<thee->nResData; ires++) {
         Vparam_ResData_copyTo(&(residues[ires]), &(thee->resData[ires]));
@@ -481,7 +476,7 @@ VPUBLIC int Vparam_readFlatFile(Vparam *thee, const char *iodev,
         for (i=0; i<thee->nResData; i++) {
             Vparam_ResData_dtor2(&(thee->resData[i]));
         }
-        Vmem_free(thee->vmem, thee->nResData, 
+        Vmem_free(thee->vmem, thee->nResData,
           sizeof(Vparam_ResData), (void **)&(thee->resData));
     }
 
@@ -498,9 +493,9 @@ VPUBLIC int Vparam_readFlatFile(Vparam *thee, const char *iodev,
             for (i=0; i<natoms; i++) {
                 Vparam_AtomData_copyTo(&(atoms[i]), &(tatoms[i]));
             }
-            Vmem_free(thee->vmem, nalloc, sizeof(Vparam_AtomData), 
+            Vmem_free(thee->vmem, nalloc, sizeof(Vparam_AtomData),
               (void **)&(atoms));
-            atoms = tatoms; 
+            atoms = tatoms;
             tatoms = VNULL;
             nalloc = 2*nalloc;
         }
@@ -521,7 +516,7 @@ VPUBLIC int Vparam_readFlatFile(Vparam *thee, const char *iodev,
     }
 
     /* Create the residues */
-    thee->resData = (Vparam_ResData*)Vmem_malloc(thee->vmem, thee->nResData, 
+    thee->resData = (Vparam_ResData*)Vmem_malloc(thee->vmem, thee->nResData,
       sizeof(Vparam_ResData));
     VASSERT(thee->resData != VNULL);
     for (i=0; i<(thee->nResData); i++) {
@@ -546,7 +541,7 @@ VPUBLIC int Vparam_readFlatFile(Vparam *thee, const char *iodev,
     /* Allocate per-residue space for atoms */
     for (ires=0; ires<thee->nResData; ires++) {
         res = &(thee->resData[ires]);
-		res->atomData = (Vparam_AtomData*)Vmem_malloc(thee->vmem, res->nAtomData, 
+        res->atomData = (Vparam_AtomData*)Vmem_malloc(thee->vmem, res->nAtomData,
           sizeof(Vparam_AtomData));
     }
 
@@ -560,7 +555,7 @@ VPUBLIC int Vparam_readFlatFile(Vparam *thee, const char *iodev,
             iatom++;
         }
     }
-	
+
 
     /* Shut down communication */
     Vio_acceptFree(sock);
@@ -594,18 +589,18 @@ VEXTERNC void Vparam_ResData_copyTo(Vparam_ResData *thee,
 
     VASSERT(thee != VNULL);
     VASSERT(dest != VNULL);
-    
+
     strcpy(dest->name, thee->name);
     dest->vmem = thee->vmem;
     dest->nAtomData = thee->nAtomData;
 
-    dest->atomData = (Vparam_AtomData*)Vmem_malloc(thee->vmem, dest->nAtomData, 
+    dest->atomData = (Vparam_AtomData*)Vmem_malloc(thee->vmem, dest->nAtomData,
                                  sizeof(Vparam_AtomData));
-    
+
     for (i=0; i<dest->nAtomData; i++) {
       Vparam_AtomData_copyTo(&(thee->atomData[i]), &(dest->atomData[i]));
     }
-    Vmem_free(thee->vmem, thee->nAtomData, sizeof(Vparam_AtomData), 
+    Vmem_free(thee->vmem, thee->nAtomData, sizeof(Vparam_AtomData),
               (void **)&(thee->atomData));
 }
 
@@ -613,11 +608,11 @@ VEXTERNC void Vparam_AtomData_copyFrom(Vparam_AtomData *thee,
   Vparam_AtomData *src) {  Vparam_AtomData_copyTo(src, thee); }
 
 VPRIVATE int readXMLFileAtom(Vio *sock, Vparam_AtomData *atom) {
-  
+
     double dtmp;
     char tok[VMAX_BUFSIZE];
     int chgflag, radflag, nameflag;
-   
+
     VASSERT(atom != VNULL);
 
     if (Vio_scanf(sock, "%s", tok) != 1) return 0;
@@ -629,7 +624,7 @@ VPRIVATE int readXMLFileAtom(Vio *sock, Vparam_AtomData *atom) {
     while (1)
       {
           if (Vstring_strcasecmp(tok, "name") == 0) {
-              VJMPERR1(Vio_scanf(sock, "%s", tok) == 1); 
+              VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
               if (strlen(tok) > VMAX_ARGLEN) {
                   Vnm_print(2, "Vparam_readXMLFileAtom:  string (%s) too long \
 (%d)!\n", tok, strlen(tok));
@@ -663,7 +658,7 @@ parsing epsilon!\n", tok);
                   return 0;
               }
               atom->epsilon = dtmp;
-          } else if ((Vstring_strcasecmp(tok, "/atom") == 0) || 
+          } else if ((Vstring_strcasecmp(tok, "/atom") == 0) ||
                      (Vstring_strcasecmp(tok, "atom") == 0)){
                 if (chgflag && radflag && nameflag) return 1;
                 else if (!chgflag) {
@@ -679,10 +674,10 @@ setting the radius!\n");
 setting the name!\n");
                   return 0;
                 }
-          } 
+          }
           VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
       }
- 
+
     /* If we get here something wrong has happened */
 
     VJMPERR1(1);
@@ -702,14 +697,14 @@ VPRIVATE int readFlatFileLine(Vio *sock, Vparam_AtomData *atom) {
 
     if (Vio_scanf(sock, "%s", tok) != 1) return 0;
     if (strlen(tok) > VMAX_ARGLEN) {
-        Vnm_print(2, "Vparam_readFlatFile:  string (%s) too long (%d)!\n", 
+        Vnm_print(2, "Vparam_readFlatFile:  string (%s) too long (%d)!\n",
           tok, strlen(tok));
         return 0;
     }
     strcpy(atom->resName, tok);
     VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
     if (strlen(tok) > VMAX_ARGLEN) {
-        Vnm_print(2, "Vparam_readFlatFile:  string (%s) too long (%d)!\n", 
+        Vnm_print(2, "Vparam_readFlatFile:  string (%s) too long (%d)!\n",
           tok, strlen(tok));
         return 0;
     }

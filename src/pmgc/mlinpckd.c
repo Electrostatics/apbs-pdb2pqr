@@ -47,8 +47,7 @@
  * @endverbatim
  */
 
-#include "apbs/mlinpckd.h"
-#include "apbs/vhal.h"
+#include "mlinpckd.h"
 
 VPUBLIC void Vdpbsl(double *abd, int *lda, int *n, int *m, double *b) {
 
