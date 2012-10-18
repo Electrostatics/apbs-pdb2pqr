@@ -1,8 +1,4 @@
 #!/bin/bash
 
-rm -r CMakeFiles
-rm CMakeCache.txt
-rm cmake_install.cmake
-rm Makefile
-rm -r src
+rm -rf CMakeFiles CMakeCache.txt cmake_install.cmake Makefile src install_manifest.txt apbs.cbp maloc-prefix *~
 

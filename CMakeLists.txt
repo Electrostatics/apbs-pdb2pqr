@@ -10,7 +10,6 @@ cmake_minimum_required (VERSION 2.6)
 # TODO:  Test with FEtk build
 # TODO:  Handle special mac dependencies
 #        (configure.ac:1306)
-# TODO:  Convert MALOC to a CMake build
 ################################################################################
 
 ################################################################################
@@ -54,6 +53,10 @@ set(APBS_ROOT ${PROJECT_SOURCE_DIR})
 set(EXECUTABLE_OUTPUT_PATH ${APBS_ROOT}/bin)
 set(LIBRARY_OUTPUT_PATH ${APBS_ROOT}/lib)
 set(APBS_BINARY ${EXECUTABLE_OUTPUT_PATH}/apbs)
+
+set(LIBRARY_INSTALL_PATH lib)
+set(HEADER_INSTALL_PATH include/apbs)
+set(EXECUTABLE_INSTALL_PATH bin)
 
 find_file(
     CONTRIB_PATH
@@ -365,24 +368,40 @@ endif(FETK_PATH)
 # Handle the MALOC library dependency                                          #
 ################################################################################
 
+CHECK_INCLUDE_FILES(maloc/maloc.h HAVE_MALOC_H)
+
+if(HAVE_MALOC_H)
+    message(STATUS "External maloc headers found")
+else()
+    message(WARNING "External maloc headers not found.")
+endif()
+
 find_library(
     MALOC_LIBRARY
     NAMES maloc
     PATHS ${FETK_PATH}/lib ${CONTRIB_PATH} ${SYS_LIBPATHS}
     DOC   "The fetk/maloc library"
-    )
+)
 
 if(MALOC_LIBRARY)
-    list(APPEND APBS_LIBS ${MALOC_LIBRARY})
-    message(STATUS "The maloc library was found: ${MALOC_LIBRARY}")
-else(MALOC_LIBRARY)
-    message(
-        FATAL_ERROR
-        "The maloc libarary was not found! "
-        "Either install FEtk and check FETK_PATH or "
-        "build it in the contrib/maloc folder first"
-         )
-endif(MALOC_LIBRARY)
+    message(STATUS "External maloc library was found: ${MALOC_LIBRARY}")
+else()
+    message(WARNING "External maloc library was not found.")
+endif()
+
+if(NOT (HAVE_MALOC_H AND MALOC_LIBRARY))
+    message(STATUS "Using internal contributed maloc library")
+    ExternalProject_add(
+        maloc
+        SOURCE_DIR ${CONTRIB_PATH}/maloc
+        CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${APBS_ROOT}
+    )
+    include_directories(${APBS_ROOT}/include)
+    install(FILES ${LIBRARY_OUTPUT_PATH}/libmaloc.so DESTINATION ${LIBRARY_INSTALL_PATH})
+    set(MALOC_LIBRARY libmaloc.so)
+endif()
+
+list(APPEND APBS_LIBS ${MALOC_LIBRARY})
 
 
 
