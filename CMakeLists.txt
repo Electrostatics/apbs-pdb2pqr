@@ -399,7 +399,7 @@ if(NOT (HAVE_MALOC_H AND MALOC_LIBRARY))
     )
     include_directories(${APBS_ROOT}/include)
     install(FILES ${LIBRARY_OUTPUT_PATH}/libmaloc.so DESTINATION ${LIBRARY_INSTALL_PATH})
-    set(MALOC_LIBRARY libmaloc.so)
+    set(MALOC_LIBRARY ${LIBRARY_OUTPUT_PATH}/libmaloc.so)
 endif()
 
 list(APPEND APBS_LIBS ${MALOC_LIBRARY})
@@ -748,8 +748,9 @@ if(ENABLE_MPI)
             message(STATUS "MPI support enabled")
             include_directories(${MPI_INCLUDE_PATH})
             list(APPEND APBS_LIBS ${MPI_LIBRARIES})
+            set(HAVE_MPI_H 1)
         else(MPI_FOUND)
-            message(FATAL_ERROR "MPI was not found.")
+            message(WARNING "MPI was not found; disabling")
         endif(MPI_FOUND)
     else(NOT ENABLE_DEBUG)
         message(WARNING "MPI may not be enabled in debugging mode")
@@ -834,6 +835,22 @@ if(BUILD_TOOLS)
     message(STATUS "Supplemental tools enabled")
     add_subdirectory(tools)
 endif(BUILD_TOOLS)
+
+
+
+################################################################################
+# Configure Python enable APBS testing suite                                   #
+################################################################################
+
+configure_file(
+    ${APBS_ROOT}/tests/apbs_tester.py.in
+    ${APBS_ROOT}/tests/apbs_tester.py
+    )
+
+configure_file(
+    ${APBS_ROOT}/tests/test_cases.cfg.in
+    ${APBS_ROOT}/tests/test_cases.cfg
+    )
 
 
 
