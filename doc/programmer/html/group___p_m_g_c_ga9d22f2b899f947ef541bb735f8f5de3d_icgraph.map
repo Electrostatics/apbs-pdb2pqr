@@ -1,7 +1,0 @@
-<map id="Vmgsz" name="Vmgsz">
-<area shape="rect" id="node3" href="$group___vpmg.html#ga60b35ab9ae779ffa7329589f64a4111e" title="Build a column&#45;compressed matrix in Harwell&#45;Boeing format." alt="" coords="115,5,191,32"/>
-<area shape="rect" id="node7" href="$group___p_m_g_c.html#ga67eecfd194462b66dbad001c2d04234d" title="Multilevel solver driver." alt="" coords="119,56,188,83"/>
-<area shape="rect" id="node11" href="$group___p_m_g_c.html#ga579debc5cc00c2e8e9901fa65e165a12" title="Driver for the Newton Solver." alt="" coords="116,107,191,133"/>
-<area shape="rect" id="node5" href="$group___vpmg.html#gafd544ba4fe172d3f942016cf74e7a31e" title="Print out a column&#45;compressed sparse matrix in Harwell&#45;Boeing format." alt="" coords="240,5,379,32"/>
-<area shape="rect" id="node9" href="$group___vpmg.html#ga86a44c6ef4ada350900ef88e87428082" title="Solve the PBE using PMG." alt="" coords="264,81,355,108"/>
-</map>

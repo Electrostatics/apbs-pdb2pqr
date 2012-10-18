@@ -1,5 +1,0 @@
-<map id="Vpmg_splineSelect" name="Vpmg_splineSelect">
-<area shape="rect" id="node3" href="$group___vpmg.html#ga140aea8dc31832d40a7cfb638464ee67" title="Calculate the osmotic pressure on the specified atom in units of k_B T/AA." alt="" coords="187,5,291,32"/>
-<area shape="rect" id="node7" href="$group___vpmg.html#gae681cc5a764ed8b8f9f869c047af997b" title="Calculate the dielectric boundary forces on the specified atom in units of k_B T/AA." alt="" coords="185,56,293,83"/>
-<area shape="rect" id="node5" href="$group___vpmg.html#gaaedec4be6966e3cee14a0a746ade406c" title="Calculate the total force on the specified atom in units of k_B T/AA." alt="" coords="341,31,432,57"/>
-</map>

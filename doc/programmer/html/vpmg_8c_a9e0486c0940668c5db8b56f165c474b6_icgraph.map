@@ -1,5 +1,0 @@
-<map id="d2bspline4" name="d2bspline4">
-<area shape="rect" id="node3" href="$vpmg_8c.html#a45c2c05ddfc0c4e4aea3be668137d2e0" title="Fill source term charge array for the use of permanent multipoles." alt="" coords="137,5,298,32"/>
-<area shape="rect" id="node5" href="$vpmg_8c.html#ada65af06c9af5bf4ee593cb051bd0b0d" title="Top&#45;level driver to fill source term charge array." alt="" coords="347,5,437,32"/>
-<area shape="rect" id="node7" href="$group___vpmg.html#gaf117af16d5e9c5bd4e557a69ec1eb73a" title="Fill the coefficient arrays prior to solving the equation." alt="" coords="485,5,573,32"/>
-</map>

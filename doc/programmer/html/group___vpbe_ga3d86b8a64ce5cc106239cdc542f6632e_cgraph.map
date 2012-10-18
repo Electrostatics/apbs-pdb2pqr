@@ -1,9 +1,0 @@
-<map id="Vpbe_getCoulombEnergy1" name="Vpbe_getCoulombEnergy1">
-<area shape="rect" id="node3" href="$group___vpbe.html#ga560a44fe3381a0552521c94344b64f9f" title="Get atom list." alt="" coords="253,5,360,32"/>
-<area shape="rect" id="node5" href="$group___valist.html#gaff55ce9b8624255736b0ccf62030f230" title="Get number of atoms in the list." alt="" coords="227,56,386,83"/>
-<area shape="rect" id="node7" href="$group___valist.html#gaf9175f6b6d2c33ad79bd525fc9e0e043" title="Get pointer to particular atom in list." alt="" coords="253,107,361,133"/>
-<area shape="rect" id="node9" href="$group___vatom.html#gad310786c8f4b295fea34c76b9c308ac5" title="Get atomic charge." alt="" coords="244,157,369,184"/>
-<area shape="rect" id="node11" href="$group___vatom.html#ga282b06da5d33678cab1173a6fe5bc89c" title="Get atomic position." alt="" coords="243,208,371,235"/>
-<area shape="rect" id="node13" href="$group___vpbe.html#gae9aa99eb531a803268fc963796c3bba2" title="Get temperature." alt="" coords="231,259,382,285"/>
-<area shape="rect" id="node15" href="$group___vpbe.html#ga54d318d98803a19fa5ea8b13fb73c7b0" title="Get solute dielectric constant." alt="" coords="240,309,373,336"/>
-</map>

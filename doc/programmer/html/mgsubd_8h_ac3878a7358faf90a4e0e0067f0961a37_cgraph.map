@@ -1,9 +1,0 @@
-<map id="G" name="G">
-<area shape="rect" id="node3" href="$build_gd_8h.html#acb8c5c7b632956199f40dbb3c24e65b7" title="VbuildG" alt="" coords="147,69,213,96"/>
-<area shape="rect" id="node11" href="$matvecd_8h.html#aede4c916a1698890f6fdbda54778d491" title="Apply the restriction operator." alt="" coords="149,145,211,172"/>
-<area shape="rect" id="node5" href="$build_gd_8h.html#a97822bdb6ab237b4bc4a89fe7647e34f" title="Computes a 27&#45;point galerkin coarse grid matrix from a 1&#45;point (i.e., diagonal) fine grid matrix..." alt="" coords="266,5,345,32"/>
-<area shape="rect" id="node7" href="$build_gd_8h.html#a78287000cb1a0517e4959c910566c828" title="Compute a 27&#45;point galerkin coarse grid matrix from a 27&#45;point fine grid matrix." alt="" coords="262,56,349,83"/>
-<area shape="rect" id="node9" href="$build_gd_8h.html#a74cbf02bfd4ffcf36ea4b344ee2ea077" title="Computes a 27&#45;point galerkin coarse grid matrix from a 7&#45;point fine grid matrix." alt="" coords="266,107,345,133"/>
-<area shape="rect" id="node13" href="$matvecd_8h.html#ade0953634c3377d24922b80b9351c8b5" title="Vrestrc2" alt="" coords="270,157,341,184"/>
-<area shape="rect" id="node15" href="$mikpckd_8h.html#aa5cd2792bb251ae2ee940d0b7de06a42" title="Initialize a grid function to have a zero boundary value." alt="" coords="398,157,506,184"/>
-</map>

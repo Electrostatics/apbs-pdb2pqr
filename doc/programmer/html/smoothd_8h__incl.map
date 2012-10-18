@@ -1,9 +1,0 @@
-<map id="G" name="G">
-<area shape="rect" id="node5" href="$vhal_8h.html" title="Contains generic macro definitions for APBS." alt="" coords="715,304,803,331"/>
-<area shape="rect" id="node7" href="$gsd_8h.html" title="apbs/gsd.h" alt="" coords="287,80,372,107"/>
-<area shape="rect" id="node11" href="$vmatrix_8h.html" title="Contains inclusions for matrix data wrappers." alt="" coords="184,304,291,331"/>
-<area shape="rect" id="node34" href="$cgd_8h.html" title="A collection of useful low&#45;level routines (timing, etc)." alt="" coords="437,80,523,107"/>
-<area shape="rect" id="node15" href="$matvecd_8h.html" title="apbs/matvecd.h" alt="" coords="377,155,489,181"/>
-<area shape="rect" id="node20" href="$mikpckd_8h.html" title="A collection of useful low&#45;level routines (timing, etc)." alt="" coords="427,229,537,256"/>
-<area shape="rect" id="node26" href="$mypdec_8h_source.html" title="apbs/mypdec.h" alt="" coords="563,229,672,256"/>
-</map>

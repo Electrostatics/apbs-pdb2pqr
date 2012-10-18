@@ -1,9 +1,9 @@
 var searchData=
 [
   ['b',['B',['../structs_vfetk___local_var.html#adf085adbf76beb194ac436d42cd1d725',1,'sVfetk_LocalVar']]],
-  ['bccalc',['bcCalc',['../vpmg_8h.html#a9803b64d96685d27923d899ef6f4c5cd',1,'bcCalc(Vpmg *thee):&#160;vpmg.c'],['../vpmg_8c.html#a9803b64d96685d27923d899ef6f4c5cd',1,'bcCalc(Vpmg *thee):&#160;vpmg.c']]],
+  ['bccalc',['bcCalc',['../vpmg_8c.html#a9803b64d96685d27923d899ef6f4c5cd',1,'bcCalc(Vpmg *thee):&#160;vpmg.c'],['../vpmg_8h.html#a9803b64d96685d27923d899ef6f4c5cd',1,'bcCalc(Vpmg *thee):&#160;vpmg.c']]],
   ['bcfl',['bcfl',['../structs_p_b_eparm.html#a309c773e3e7c928a3e7a7e8e356d85a6',1,'sPBEparm::bcfl()'],['../structs_vopot.html#a309c773e3e7c928a3e7a7e8e356d85a6',1,'sVopot::bcfl()'],['../structs_vpmgp.html#a309c773e3e7c928a3e7a7e8e356d85a6',1,'sVpmgp::bcfl()']]],
-  ['bcfl1',['bcfl1',['../vpmg_8h.html#a787e4bcc6b7ec8a87aed577535268eb3',1,'bcfl1(double size, double *apos, double charge, double xkappa, double pre1, double *gxcf, double *gycf, double *gzcf, double *xf, double *yf, double *zf, int nx, int ny, int nz):&#160;vpmg.c'],['../vpmg_8c.html#a787e4bcc6b7ec8a87aed577535268eb3',1,'bcfl1(double size, double *apos, double charge, double xkappa, double pre1, double *gxcf, double *gycf, double *gzcf, double *xf, double *yf, double *zf, int nx, int ny, int nz):&#160;vpmg.c']]],
+  ['bcfl1',['bcfl1',['../vpmg_8c.html#a787e4bcc6b7ec8a87aed577535268eb3',1,'bcfl1(double size, double *apos, double charge, double xkappa, double pre1, double *gxcf, double *gycf, double *gzcf, double *xf, double *yf, double *zf, int nx, int ny, int nz):&#160;vpmg.c'],['../vpmg_8h.html#a787e4bcc6b7ec8a87aed577535268eb3',1,'bcfl1(double size, double *apos, double charge, double xkappa, double pre1, double *gxcf, double *gycf, double *gzcf, double *xf, double *yf, double *zf, int nx, int ny, int nz):&#160;vpmg.c']]],
   ['bcfl_5ffocus',['BCFL_FOCUS',['../group___vhal.html#gga156281db9d201569da4620821ed24201a072c52c1c2ec4be113a1be5db227ee50',1,'vhal.h']]],
   ['bcfl_5fmap',['BCFL_MAP',['../group___vhal.html#gga156281db9d201569da4620821ed24201a1dcaaa7c99a05f5540ef016b62267470',1,'vhal.h']]],
   ['bcfl_5fmdh',['BCFL_MDH',['../group___vhal.html#gga156281db9d201569da4620821ed24201a27a9bff27804c87341c57807c4be7a67',1,'vhal.h']]],
@@ -19,8 +19,7 @@ var searchData=
   ['bmat_5fprinthb',['Bmat_printHB',['../group___vfetk.html#ga45597a43cf3a2e5997403ef41248e221',1,'Bmat_printHB(Bmat *thee, char *fname):&#160;vfetk.c'],['../group___vfetk.html#ga45597a43cf3a2e5997403ef41248e221',1,'Bmat_printHB(Bmat *thee, char *fname):&#160;vfetk.c']]],
   ['bogus',['bogus',['../structs_n_osh.html#afdd80a1bfafbeff93fef8424576e4b8e',1,'sNOsh']]],
   ['bpts',['bpts',['../structs_vacc_surf.html#ae9cda9090b538a29358b87cb56e5c779',1,'sVaccSurf']]],
-  ['bspline2',['bspline2',['../vpmg_8h.html#a50d8ef438d4a7a76d869fb256b24d372',1,'bspline2(double x):&#160;vpmg.c'],['../vpmg_8c.html#a50d8ef438d4a7a76d869fb256b24d372',1,'bspline2(double x):&#160;vpmg.c']]],
-  ['bspline4',['bspline4',['../vpmg_8h.html#ac953c7091df8e4a1df53463baf8fe7ee',1,'bspline4(double x):&#160;vpmg.c'],['../vpmg_8c.html#ac953c7091df8e4a1df53463baf8fe7ee',1,'bspline4(double x):&#160;vpmg.c']]],
-  ['bug_20list',['Bug List',['../bug.html',1,'']]],
+  ['bspline2',['bspline2',['../vpmg_8c.html#a50d8ef438d4a7a76d869fb256b24d372',1,'bspline2(double x):&#160;vpmg.c'],['../vpmg_8h.html#a50d8ef438d4a7a76d869fb256b24d372',1,'bspline2(double x):&#160;vpmg.c']]],
+  ['bspline4',['bspline4',['../vpmg_8c.html#ac953c7091df8e4a1df53463baf8fe7ee',1,'bspline4(double x):&#160;vpmg.c'],['../vpmg_8h.html#ac953c7091df8e4a1df53463baf8fe7ee',1,'bspline4(double x):&#160;vpmg.c']]],
   ['bulkionicstrength',['bulkIonicStrength',['../structs_vpbe.html#a1f36bb212a9ae81e2d34a2224860af4b',1,'sVpbe']]]
 ];

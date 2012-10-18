@@ -1,6 +1,0 @@
-<map id="VaccSurf_dtor" name="VaccSurf_dtor">
-<area shape="rect" id="node3" href="$group___vacc.html#gafbaff1e0f31889f5a62f084dea36b7f5" title="FORTRAN stub to destroy object." alt="" coords="158,5,245,32"/>
-<area shape="rect" id="node5" href="$group___vacc.html#ga697b07a8288640f4514599476d5a7bcd" title="Destroy object." alt="" coords="294,5,373,32"/>
-<area shape="rect" id="node7" href="$group___vpbe.html#ga27dfbf2db7d106d930703ce518ffa823" title="FORTRAN stub object destructor." alt="" coords="421,5,509,32"/>
-<area shape="rect" id="node9" href="$group___vpbe.html#ga5181e1ad561ce39b8c86dfe280fe40d6" title="Object destructor." alt="" coords="558,5,639,32"/>
-</map>

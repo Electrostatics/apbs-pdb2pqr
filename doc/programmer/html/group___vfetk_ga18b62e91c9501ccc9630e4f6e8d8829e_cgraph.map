@@ -1,6 +1,0 @@
-<map id="Vfetk_externalUpdateFunction" name="Vfetk_externalUpdateFunction">
-<area shape="rect" id="node3" href="$group___vfetk.html#ga863f19c6f83e7b575a227f6869ef6b54" title="Get a pointer to the Vcsm (charge&#45;simplex map) object." alt="" coords="245,5,352,32"/>
-<area shape="rect" id="node5" href="$group___vcsm.html#ga1f198d23c919576813ec2f401ada0f18" title="Update the charge&#45;simplex and simplex&#45;charge maps after refinement." alt="" coords="249,56,348,83"/>
-<area shape="rect" id="node7" href="$group___valist.html#gaf9175f6b6d2c33ad79bd525fc9e0e043" title="Get pointer to particular atom in list." alt="" coords="410,31,518,57"/>
-<area shape="rect" id="node9" href="$group___vatom.html#ga282b06da5d33678cab1173a6fe5bc89c" title="Get atomic position." alt="" coords="400,81,528,108"/>
-</map>

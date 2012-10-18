@@ -1,5 +1,0 @@
-<map id="Vatom_setRadius" name="Vatom_setRadius">
-<area shape="rect" id="node3" href="$group___valist.html#gacfb6dbc66d8671a04bd5032e8f9557cc" title="Fill atom list with information from a PDB file." alt="" coords="178,5,286,32"/>
-<area shape="rect" id="node5" href="$group___valist.html#ga4ab1618d8b6f43684598551d923206dd" title="Fill atom list with information from a PQR file." alt="" coords="177,56,287,83"/>
-<area shape="rect" id="node7" href="$group___valist.html#gabbb8144a756bf803f6a42cd15d9c9021" title="Fill atom list with information from an XML file." alt="" coords="177,107,287,133"/>
-</map>

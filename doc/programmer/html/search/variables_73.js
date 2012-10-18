@@ -1,7 +1,9 @@
 var searchData=
 [
   ['sasa',['sasa',['../structs_a_p_o_lparm.html#af7a4b9f81fba01cef87d4d83ec53bf52',1,'sAPOLparm']]],
+  ['sasaforce',['sasaForce',['../struct_atom_force.html#abd301e59c8e0fef700e9660c70884369',1,'AtomForce']]],
   ['sav',['sav',['../structs_a_p_o_lparm.html#a9ac50e2fccae9698aff69ebde7735ffe',1,'sAPOLparm']]],
+  ['savforce',['savForce',['../struct_atom_force.html#aed216eabbc890e250cc904ce6d856e6e',1,'AtomForce']]],
   ['sdens',['sdens',['../structs_a_p_o_lparm.html#a80a9a9b9e180536a359ca307ad76a26b',1,'sAPOLparm::sdens()'],['../structs_p_b_eparm.html#a80a9a9b9e180536a359ca307ad76a26b',1,'sPBEparm::sdens()']]],
   ['sdie',['sdie',['../structs_p_b_eparm.html#ab3fefdcfcdf3efd017007db2ee4f0a19',1,'sPBEparm']]],
   ['setakeypre',['setakeyPRE',['../structs_f_e_mparm.html#a19064a9bffa8b82a4eee24554f842ec2',1,'sFEMparm']]],

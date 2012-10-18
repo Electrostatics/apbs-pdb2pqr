@@ -1,9 +1,0 @@
-<map id="Vgrid_value" name="Vgrid_value">
-<area shape="rect" id="node3" href="$group___vpmg.html#ga11ed702159c3c6ee7d89c9d0bcdee240" title="Fill the specified array with accessibility values." alt="" coords="144,5,251,32"/>
-<area shape="rect" id="node5" href="$vpmg_8c.html#a35949511a7f2779c8ac7e7c88bdca001" title="Fill operator coefficient arrays from pre&#45;calculated maps." alt="" coords="148,56,247,83"/>
-<area shape="rect" id="node14" href="$vpmg_8c.html#a2fe0074cd016170f829d76a856409185" title="Fill source term charge array from a pre&#45;calculated map." alt="" coords="299,107,413,133"/>
-<area shape="rect" id="node7" href="$vpmg_8c.html#a62617829770eaed11c159947453e457c" title="Fill operator coefficient arrays from a molecular surface calculation." alt="" coords="309,5,403,32"/>
-<area shape="rect" id="node9" href="$vpmg_8c.html#a169088d2631112390e9699d0ff25ab0a" title="Top&#45;level driver to fill all operator coefficient arrays." alt="" coords="469,56,544,83"/>
-<area shape="rect" id="node11" href="$group___vpmg.html#gaf117af16d5e9c5bd4e557a69ec1eb73a" title="Fill the coefficient arrays prior to solving the equation." alt="" coords="600,81,688,108"/>
-<area shape="rect" id="node16" href="$vpmg_8c.html#ada65af06c9af5bf4ee593cb051bd0b0d" title="Top&#45;level driver to fill source term charge array." alt="" coords="462,107,551,133"/>
-</map>

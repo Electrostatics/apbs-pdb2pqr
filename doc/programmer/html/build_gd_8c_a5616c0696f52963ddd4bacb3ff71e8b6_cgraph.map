@@ -1,5 +1,0 @@
-<map id="G" name="G">
-<area shape="rect" id="node3" href="$build_gd_8h.html#a97822bdb6ab237b4bc4a89fe7647e34f" title="Computes a 27&#45;point galerkin coarse grid matrix from a 1&#45;point (i.e., diagonal) fine grid matrix..." alt="" coords="125,5,203,32"/>
-<area shape="rect" id="node5" href="$build_gd_8h.html#a78287000cb1a0517e4959c910566c828" title="Compute a 27&#45;point galerkin coarse grid matrix from a 27&#45;point fine grid matrix." alt="" coords="121,56,207,83"/>
-<area shape="rect" id="node7" href="$build_gd_8h.html#a74cbf02bfd4ffcf36ea4b344ee2ea077" title="Computes a 27&#45;point galerkin coarse grid matrix from a 7&#45;point fine grid matrix." alt="" coords="125,107,203,133"/>
-</map>

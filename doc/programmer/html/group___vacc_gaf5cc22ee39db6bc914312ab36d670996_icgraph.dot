@@ -1,9 +1,0 @@
-digraph "Vacc_totalSAV"
-{
-  edge [fontname="FreeSans",fontsize="10",labelfontname="FreeSans",labelfontsize="10"];
-  node [fontname="FreeSans",fontsize="10",shape=record];
-  rankdir="LR";
-  Node1 [label="Vacc_totalSAV",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled" fontcolor="black"];
-  Node1 -> Node2 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="FreeSans"];
-  Node2 [label="Vacc_totalAtomdSAV",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$group___vacc.html#ga2f0ab2c1092a991c401dca0836a5a084",tooltip="Total solvent accessible volume."];
-}

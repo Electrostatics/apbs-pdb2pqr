@@ -1,4 +1,0 @@
-<map id="VaccSurf_refSphere" name="VaccSurf_refSphere">
-<area shape="rect" id="node3" href="$group___vacc.html#ga4a6d9195773fa7de0e8971ae9ef4c185" title="Allocate and construct the surface object; do not assign surface points to positions." alt="" coords="193,5,295,32"/>
-<area shape="rect" id="node5" href="$group___vacc.html#gad253baa15c0da3af54e7aaf95a3cad14" title="Construct the surface object using previously allocated memory; do not assign surface points to posit..." alt="" coords="344,5,453,32"/>
-</map>

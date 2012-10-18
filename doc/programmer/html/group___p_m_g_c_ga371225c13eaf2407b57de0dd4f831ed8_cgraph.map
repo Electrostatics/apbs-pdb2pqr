@@ -1,9 +1,0 @@
-<map id="Vcghs" name="Vcghs">
-<area shape="rect" id="node3" href="$group___p_m_g_c.html#gaaa7843124ee62ccb6d9469363a8cd6a6" title="Break the matrix data&#45;structure into diagonals and then call the residual routine." alt="" coords="111,5,180,32"/>
-<area shape="rect" id="node5" href="$group___p_m_g_c.html#gac7a7f2c804a247ec8b5aea45058e1d26" title="Norm operation for a grid function with boundary values." alt="" coords="112,56,179,83"/>
-<area shape="rect" id="node7" href="$group___p_m_g_c.html#ga3f117cfb2336b1291164ef351dd2bd69" title="Inner product operation for a grid function with boundary values." alt="" coords="118,107,173,133"/>
-<area shape="rect" id="node9" href="$group___p_m_g_c.html#ga164408694a926f8f9452144cd688e383" title="A collection of useful low&#45;level routines (timing, etc)." alt="" coords="114,157,177,184"/>
-<area shape="rect" id="node11" href="$group___p_m_g_c.html#gac453601512aae1d82a7bf7c14326f0b6" title="saxpy operation for a grid function with boundary values." alt="" coords="114,208,177,235"/>
-<area shape="rect" id="node13" href="$group___p_m_g_c.html#ga678a92f4fb3447e6dbbc97bef28e160e" title="Scale operation for a grid function with boundary values." alt="" coords="116,259,175,285"/>
-<area shape="rect" id="node15" href="$group___p_m_g_c.html#gacda83144fd9d06e3c62a1687933ba010" title="Matrix&#45;vector multiplication routines." alt="" coords="110,309,181,336"/>
-</map>

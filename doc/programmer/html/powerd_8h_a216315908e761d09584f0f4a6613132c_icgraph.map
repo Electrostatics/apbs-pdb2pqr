@@ -1,9 +1,0 @@
-<map id="G" name="G">
-<area shape="rect" id="node3" href="$mgdrvd_8c.html#ad88069b85b98b96bcbfbf4bfab67c661" title="Solves the pde using the multi&#45;grid method." alt="" coords="123,5,199,32"/>
-<area shape="rect" id="node9" href="$newtond_8c.html#a245e790ae6e221440d7090bc58616a75" title="Inexact&#45;newton&#45;multilevel method." alt="" coords="125,56,197,83"/>
-<area shape="rect" id="node5" href="$mgdrvd_8c.html#a67eecfd194462b66dbad001c2d04234d" title="Multilevel solver driver." alt="" coords="380,5,449,32"/>
-<area shape="rect" id="node7" href="$group___vpmg.html#ga86a44c6ef4ada350900ef88e87428082" title="Solve the PBE using PMG." alt="" coords="627,31,717,57"/>
-<area shape="rect" id="node11" href="$newtond_8c.html#af57dd61aeb1cc91a734b7ae494998b45" title="Nested iteration for an inexact&#45;newton&#45;multilevel method." alt="" coords="249,56,325,83"/>
-<area shape="rect" id="node13" href="$newdrvd_8c.html#a8b2877638552af80324173636bf0506a" title="Solves using Newton&#39;s Method." alt="" coords="373,56,456,83"/>
-<area shape="rect" id="node15" href="$newdrvd_8c.html#a579debc5cc00c2e8e9901fa65e165a12" title="Driver for a screaming inexact&#45;newton&#45;multilevel solver." alt="" coords="504,56,579,83"/>
-</map>

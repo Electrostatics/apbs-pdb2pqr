@@ -1,8 +1,0 @@
-<map id="markSphere" name="markSphere">
-<area shape="rect" id="node3" href="$vpmg_8c.html#a9217fdfc8737424d5e5ccc1193f9c3b0" title="Fill ion (nonlinear) operator coefficient array from a molecular surface calculation." alt="" coords="372,5,484,32"/>
-<area shape="rect" id="node11" href="$vpmg_8c.html#adf9fff114eed3d5d94f3adbbf9527483" title="Fill differential operator coefficient arrays from a molecular surface calculation without smoothing..." alt="" coords="147,56,322,83"/>
-<area shape="rect" id="node5" href="$vpmg_8c.html#a62617829770eaed11c159947453e457c" title="Fill operator coefficient arrays from a molecular surface calculation." alt="" coords="534,31,629,57"/>
-<area shape="rect" id="node7" href="$vpmg_8c.html#a169088d2631112390e9699d0ff25ab0a" title="Top&#45;level driver to fill all operator coefficient arrays." alt="" coords="677,31,752,57"/>
-<area shape="rect" id="node9" href="$group___vpmg.html#gaf117af16d5e9c5bd4e557a69ec1eb73a" title="Fill the coefficient arrays prior to solving the equation." alt="" coords="800,31,888,57"/>
-<area shape="rect" id="node13" href="$vpmg_8c.html#a34484f0f2f254b954abf20c5a98ab9d4" title="Fill differential operator coefficient arrays from a molecular surface calculation." alt="" coords="371,56,485,83"/>
-</map>

@@ -1,6 +1,0 @@
-<map id="Vacc_dtor" name="Vacc_dtor">
-<area shape="rect" id="node3" href="$group___vacc.html#gafbaff1e0f31889f5a62f084dea36b7f5" title="FORTRAN stub to destroy object." alt="" coords="134,31,221,57"/>
-<area shape="rect" id="node5" href="$group___valist.html#gaff55ce9b8624255736b0ccf62030f230" title="Get number of atoms in the list." alt="" coords="270,5,429,32"/>
-<area shape="rect" id="node7" href="$group___vacc.html#ga5003e8d450871925b69285ab1e496223" title="Destroy the surface object and free its memory." alt="" coords="298,56,401,83"/>
-<area shape="rect" id="node9" href="$group___vacc.html#ga1df66922b78e3824beb4695c5a84ec45" title="Destroy the surface object." alt="" coords="478,56,589,83"/>
-</map>

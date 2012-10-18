@@ -1,9 +1,0 @@
-<map id="Vpmg_qfEnergy" name="Vpmg_qfEnergy">
-<area shape="rect" id="node3" href="$vpmg_8h.html#a78687d08a4040d18d46337e1345b6dac" title="Calculates charge&#45;potential energy as integral over a volume." alt="" coords="165,31,320,57"/>
-<area shape="rect" id="node7" href="$vpmg_8h.html#a0876512b1ee9f93ee0378334b886938c" title="Calculates charge&#45;potential energy using summation over delta function positions (i.e. something like an Linf norm)" alt="" coords="173,107,313,133"/>
-<area shape="rect" id="node5" href="$group___vpbe.html#ga7fb9c15c98345dccc07853fec763de4e" title="Get charge scaling factor." alt="" coords="389,5,507,32"/>
-<area shape="rect" id="node9" href="$group___valist.html#gaff55ce9b8624255736b0ccf62030f230" title="Get number of atoms in the list." alt="" coords="369,56,527,83"/>
-<area shape="rect" id="node11" href="$group___valist.html#gaf9175f6b6d2c33ad79bd525fc9e0e043" title="Get pointer to particular atom in list." alt="" coords="394,107,502,133"/>
-<area shape="rect" id="node13" href="$group___vatom.html#ga282b06da5d33678cab1173a6fe5bc89c" title="Get atomic position." alt="" coords="384,157,512,184"/>
-<area shape="rect" id="node15" href="$group___vatom.html#gad310786c8f4b295fea34c76b9c308ac5" title="Get atomic charge." alt="" coords="385,208,511,235"/>
-</map>

@@ -1,8 +1,0 @@
-<map id="Vfetk_getVcsm" name="Vfetk_getVcsm">
-<area shape="rect" id="node3" href="$group___vfetk.html#ga3b18d174ce5010093fec223d9d261a42" title="Evaluate a (discretized) delta function source term at the given point." alt="" coords="160,5,275,32"/>
-<area shape="rect" id="node13" href="$group___vfetk.html#ga18b62e91c9501ccc9630e4f6e8d8829e" title="External hook to simplex subdivision routines in Gem. Called each time a simplex is subdivided (we us..." alt="" coords="323,56,515,83"/>
-<area shape="rect" id="node5" href="$group___vfetk.html#gaa47ea995b8a873edd0ef62ee393e0eae" title="Intializes the FEtk PDE object." alt="" coords="361,5,477,32"/>
-<area shape="rect" id="node7" href="$group___vfetk.html#ga63b0d446f4d52dff8c7eb68f7f47eb45" title="Constructs the FEtk PDE object." alt="" coords="563,5,672,32"/>
-<area shape="rect" id="node9" href="$group___vfetk.html#gabc68994e0bb0bdc828252a8c90e422a0" title="FORTRAN stub constructor for Vfetk object." alt="" coords="721,31,807,57"/>
-<area shape="rect" id="node11" href="$group___vfetk.html#ga18cb8270f03b5893108de2ff714386e0" title="Constructor for Vfetk object." alt="" coords="856,31,936,57"/>
-</map>

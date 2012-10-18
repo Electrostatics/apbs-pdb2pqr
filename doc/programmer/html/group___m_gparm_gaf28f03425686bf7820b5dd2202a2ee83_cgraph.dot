@@ -1,9 +1,0 @@
-digraph "MGparm_parseToken"
-{
-  edge [fontname="FreeSans",fontsize="10",labelfontname="FreeSans",labelfontsize="10"];
-  node [fontname="FreeSans",fontsize="10",shape=record];
-  rankdir="LR";
-  Node1 [label="MGparm_parseToken",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled" fontcolor="black"];
-  Node1 -> Node2 [color="midnightblue",fontsize="10",style="solid",fontname="FreeSans"];
-  Node2 [label="Vstring_strcasecmp",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$group___vstring.html#ga8dd2348150c70288ebb00c8eb0b847e0",tooltip="Case-insensitive string comparison (BSD standard)"];
-}

@@ -1,9 +1,0 @@
-digraph G
-{
-  edge [fontname="FreeSans",fontsize="10",labelfontname="FreeSans",labelfontsize="10"];
-  node [fontname="FreeSans",fontsize="10",shape=record];
-  rankdir=LR;
-  Node1 [label="Vmkfine",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled" fontcolor="black"];
-  Node1 -> Node2 [color="midnightblue",fontsize="10",style="solid",fontname="FreeSans"];
-  Node2 [label="Vfiner",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$mgsubd_8c.html#a0c121a2102232ba2c0c7d401cb28d54c",tooltip="Refine a grid Compute the number of grid points in the finer grid, given the number of grid points in..."];
-}

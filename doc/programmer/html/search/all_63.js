@@ -26,6 +26,5 @@ var searchData=
   ['clist_5fmanual_5fdomain',['CLIST_MANUAL_DOMAIN',['../group___vclist.html#gga4efd3ee8fc4f3862c08a8ccd268dfd78a7d10f403f2733d4b215befcba67d2ea1',1,'vclist.h']]],
   ['cmeth',['cmeth',['../structs_m_gparm.html#ad09a4ebed4afdda4c6a30fe81ca31f9a',1,'sMGparm']]],
   ['csm',['csm',['../structs_vfetk.html#ad107d7fa92f38664a9c1d0bcf9a7ed0c',1,'sVfetk']]],
-  ['ctordata',['ctordata',['../structs_vgrid.html#ac4d43b596026d38a63b7b09caeecc171',1,'sVgrid']]],
-  ['c_20translation_20of_20holst_20group_20pmg_20code',['C translation of Holst group PMG code',['../group___p_m_g_c.html',1,'']]]
+  ['ctordata',['ctordata',['../structs_vgrid.html#ac4d43b596026d38a63b7b09caeecc171',1,'sVgrid']]]
 ];

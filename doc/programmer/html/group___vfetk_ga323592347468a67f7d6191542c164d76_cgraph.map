@@ -1,6 +1,0 @@
-<map id="Vfetk_getAtomColor" name="Vfetk_getAtomColor">
-<area shape="rect" id="node3" href="$group___valist.html#gaff55ce9b8624255736b0ccf62030f230" title="Get number of atoms in the list." alt="" coords="190,5,349,32"/>
-<area shape="rect" id="node5" href="$group___vpbe.html#ga560a44fe3381a0552521c94344b64f9f" title="Get atom list." alt="" coords="216,56,323,83"/>
-<area shape="rect" id="node7" href="$group___vatom.html#ga1f813d1b836e478f2a424c9e523e418a" title="Get partition ID." alt="" coords="210,107,329,133"/>
-<area shape="rect" id="node9" href="$group___valist.html#gaf9175f6b6d2c33ad79bd525fc9e0e043" title="Get pointer to particular atom in list." alt="" coords="215,157,323,184"/>
-</map>

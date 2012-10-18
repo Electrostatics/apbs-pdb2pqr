@@ -1,7 +1,0 @@
-<map id="Vparam_readFlatFile" name="Vparam_readFlatFile">
-<area shape="rect" id="node3" href="$group___vparam.html#ga206cf552ad533634a56d277f92ae9336" title="FORTRAN stub to destroy object." alt="" coords="205,5,363,32"/>
-<area shape="rect" id="node5" href="$group___vparam.html#ga434ae4b213d8d0de3c8dde8f1c63088a" title="Copy current atom object to destination." alt="" coords="195,56,373,83"/>
-<area shape="rect" id="node7" href="$group___vparam.html#gaa7d2b71a92ebdbe0b847aec3de8669b4" title="Read a single line of the flat file database." alt="" coords="228,107,340,133"/>
-<area shape="rect" id="node9" href="$group___vstring.html#ga8dd2348150c70288ebb00c8eb0b847e0" title="Case&#45;insensitive string comparison (BSD standard)" alt="" coords="217,157,351,184"/>
-<area shape="rect" id="node11" href="$group___vparam.html#ga6b28c70f61616d5454c926f6ced8514f" title="FORTRAN stub to construct the object." alt="" coords="205,208,363,235"/>
-</map>

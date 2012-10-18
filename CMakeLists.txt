@@ -57,6 +57,7 @@ set(APBS_BINARY ${EXECUTABLE_OUTPUT_PATH}/apbs)
 set(LIBRARY_INSTALL_PATH lib)
 set(HEADER_INSTALL_PATH include/apbs)
 set(EXECUTABLE_INSTALL_PATH bin)
+set(SHARE_INSTALL_PATH share/apbs)
 
 find_file(
     CONTRIB_PATH
@@ -834,6 +835,16 @@ if(BUILD_TOOLS)
     add_subdirectory(tools)
 endif(BUILD_TOOLS)
 
+
+
+################################################################################
+# Set up additional directories to install                                     #
+################################################################################
+
+install(DIRECTORY ${APBS_ROOT}/doc DESTINATION ${SHARE_INSTALL_PATH})
+install(DIRECTORY ${APBS_ROOT}/examples DESTINATION ${SHARE_INSTALL_PATH})
+install(DIRECTORY ${APBS_ROOT}/tests DESTINATION ${SHARE_INSTALL_PATH})
+install(DIRECTORY ${APBS_ROOT}/tools DESTINATION ${SHARE_INSTALL_PATH})
 
 
 ################################################################################

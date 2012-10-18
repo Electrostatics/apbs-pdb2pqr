@@ -1,15 +1,15 @@
 var searchData=
 [
-  ['d2bspline4',['d2bspline4',['../vpmg_8h.html#afa58365e9d16b810f6fe926558650108',1,'d2bspline4(double x):&#160;vpmg.c'],['../vpmg_8c.html#a9e0486c0940668c5db8b56f165c474b6',1,'d2bspline4(double x):&#160;vpmg.c']]],
+  ['d2bspline4',['d2bspline4',['../vpmg_8c.html#a9e0486c0940668c5db8b56f165c474b6',1,'d2bspline4(double x):&#160;vpmg.c'],['../vpmg_8h.html#afa58365e9d16b810f6fe926558650108',1,'d2bspline4(double x):&#160;vpmg.c']]],
   ['d2w',['d2W',['../structs_vfetk___local_var.html#aa210643b09911622273bc1acdf360d80',1,'sVfetk_LocalVar']]],
-  ['d3bspline4',['d3bspline4',['../vpmg_8h.html#a1d34366ccb5b81c8d1ad1826aea7003e',1,'d3bspline4(double x):&#160;vpmg.c'],['../vpmg_8c.html#addf938597bc4a997f8766856d8d59de1',1,'d3bspline4(double x):&#160;vpmg.c']]],
+  ['d3bspline4',['d3bspline4',['../vpmg_8c.html#addf938597bc4a997f8766856d8d59de1',1,'d3bspline4(double x):&#160;vpmg.c'],['../vpmg_8h.html#a1d34366ccb5b81c8d1ad1826aea7003e',1,'d3bspline4(double x):&#160;vpmg.c']]],
   ['data',['data',['../structs_vgrid.html#a23436a7a2b44939627b59df11be7ad75',1,'sVgrid']]],
   ['db',['DB',['../structs_vfetk___local_var.html#aa32cf1e376abc3f6eff831ee987bc7cf',1,'sVfetk_LocalVar']]],
-  ['dbspline2',['dbspline2',['../vpmg_8h.html#a8a4a959a2448c20bfc3660f04077892e',1,'dbspline2(double x):&#160;vpmg.c'],['../vpmg_8c.html#a8a4a959a2448c20bfc3660f04077892e',1,'dbspline2(double x):&#160;vpmg.c']]],
-  ['dbspline4',['dbspline4',['../vpmg_8h.html#a91d1557ecff0ea7809aface06c0c179e',1,'dbspline4(double x):&#160;vpmg.c'],['../vpmg_8c.html#aaefa250362d354e032dd1d104cfea094',1,'dbspline4(double x):&#160;vpmg.c']]],
+  ['dbforce',['dbForce',['../struct_atom_force.html#a5c1f9b893eda0ad33086b82e5b8d0e44',1,'AtomForce']]],
+  ['dbspline2',['dbspline2',['../vpmg_8c.html#a8a4a959a2448c20bfc3660f04077892e',1,'dbspline2(double x):&#160;vpmg.c'],['../vpmg_8h.html#a8a4a959a2448c20bfc3660f04077892e',1,'dbspline2(double x):&#160;vpmg.c']]],
+  ['dbspline4',['dbspline4',['../vpmg_8c.html#aaefa250362d354e032dd1d104cfea094',1,'dbspline4(double x):&#160;vpmg.c'],['../vpmg_8h.html#a91d1557ecff0ea7809aface06c0c179e',1,'dbspline4(double x):&#160;vpmg.c']]],
   ['deblen',['deblen',['../structs_vpbe.html#a798e868fc507a8a940d5915970630fdb',1,'sVpbe']]],
   ['delta',['delta',['../structs_vfetk___local_var.html#a9ea1a8f5ef3e6d20b362385e1288c72c',1,'sVfetk_LocalVar']]],
-  ['deprecated_20list',['Deprecated List',['../deprecated.html',1,'']]],
   ['dfu_5fwv',['DFu_wv',['../structs_vfetk___local_var.html#af5b9b18b441caa6ed1240d9c6f2d0c87',1,'sVfetk_LocalVar']]],
   ['dielfmt',['dielfmt',['../structs_n_osh.html#aee27de4d89da2b409aaf84c27af67f9e',1,'sNOsh']]],
   ['dielmapid',['dielMapID',['../structs_p_b_eparm.html#adfb53802e0bbc85fe4c2bf9c3e5471a8',1,'sPBEparm']]],
@@ -22,6 +22,5 @@ var searchData=
   ['dime',['dime',['../structs_m_gparm.html#aa9a733dea122566c7ac9588866cee547',1,'sMGparm']]],
   ['dpos',['dpos',['../structs_a_p_o_lparm.html#a5f79e4b528b9d7dbd39db13920b49396',1,'sAPOLparm']]],
   ['du',['dU',['../structs_vfetk___local_var.html#af52f64eff587365638b18cc53cd70d61',1,'sVfetk_LocalVar']]],
-  ['dummy_2ec',['dummy.c',['../dummy_8c.html',1,'']]],
   ['dw',['dW',['../structs_vfetk___local_var.html#abb1c9665c3d39d6d8e433305c28f1966',1,'sVfetk_LocalVar']]]
 ];

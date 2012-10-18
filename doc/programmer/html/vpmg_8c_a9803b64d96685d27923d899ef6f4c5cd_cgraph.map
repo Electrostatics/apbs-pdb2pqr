@@ -1,8 +1,0 @@
-<map id="bcCalc" name="bcCalc">
-<area shape="rect" id="node3" href="$group___vpbe.html#ga65394a771afdf72438400665484f713d" title="Get z position of the membrane bottom." alt="" coords="137,5,247,32"/>
-<area shape="rect" id="node5" href="$group___vpbe.html#gaafd907bf54994c337dc3962b8c445e84" title="Get length of the membrane (A)aauthor Michael Grabe." alt="" coords="137,56,247,83"/>
-<area shape="rect" id="node7" href="$group___vpbe.html#gaa92d6d1c93aedbfa059fd52e0be214c5" title="Get membrane dielectric constant." alt="" coords="113,107,271,133"/>
-<area shape="rect" id="node9" href="$group___vpbe.html#ga513e4ba228cbce76d264c76efea1e624" title="Get membrane potential (kT)" alt="" coords="137,157,247,184"/>
-<area shape="rect" id="node11" href="$group___vpbe.html#gaa27f724cd82148fd89335c405c3d80b5" title="Get solvent dielectric constant." alt="" coords="123,208,261,235"/>
-<area shape="rect" id="node13" href="$group___vpbe.html#ga7695a6f94ede72e89779a64b2f7a2217" title="Get Debye&#45;Huckel parameter." alt="" coords="133,259,251,285"/>
-</map>

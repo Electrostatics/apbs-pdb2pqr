@@ -1,6 +1,0 @@
-<map id="Vpbe_getTemperature" name="Vpbe_getTemperature">
-<area shape="rect" id="node3" href="$group___vpbe.html#ga3d86b8a64ce5cc106239cdc542f6632e" title="Calculate coulombic energy of set of charges." alt="" coords="206,5,378,32"/>
-<area shape="rect" id="node5" href="$vpmg_8c.html#ae22a67401cf36cc85b0bd58938587913" title="Determines energy from polarizeable charge and interaction with fixed charges according to Rocchia et..." alt="" coords="223,56,361,83"/>
-<area shape="rect" id="node7" href="$group___vpmg.html#gae681cc5a764ed8b8f9f869c047af997b" title="Calculate the dielectric boundary forces on the specified atom in units of k_B T/AA." alt="" coords="238,107,346,133"/>
-<area shape="rect" id="node9" href="$group___vpmg.html#gaaedec4be6966e3cee14a0a746ade406c" title="Calculate the total force on the specified atom in units of k_B T/AA." alt="" coords="427,107,517,133"/>
-</map>

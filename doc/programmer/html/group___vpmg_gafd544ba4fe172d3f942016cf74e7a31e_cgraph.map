@@ -1,8 +1,0 @@
-<map id="Vpmg_printColComp" name="Vpmg_printColComp">
-<area shape="rect" id="node3" href="$group___vpmg.html#ga60b35ab9ae779ffa7329589f64a4111e" title="Build a column&#45;compressed matrix in Harwell&#45;Boeing format." alt="" coords="193,31,269,57"/>
-<area shape="rect" id="node13" href="$group___vpmg.html#ga08fc3acae8bd36d0ff7c463f3d68988f" title="Print a column&#45;compressed matrix in Harwell&#45;Boeing format." alt="" coords="193,81,269,108"/>
-<area shape="rect" id="node5" href="$group___p_m_g_c.html#ga9d22f2b899f947ef541bb735f8f5de3d" title="This routine computes the required sizes of the real and integer work arrays for the multigrid code..." alt="" coords="329,5,389,32"/>
-<area shape="rect" id="node7" href="$group___vpmg.html#gab5bd1e304d44f0a7721da2181d809f61" title="Build a column&#45;compressed matrix in Harwell&#45;Boeing format." alt="" coords="317,56,400,83"/>
-<area shape="rect" id="node9" href="$group___vpmg.html#gac5fa6f2c37f8a78d0f213cf84abcf8d7" title="Build a column&#45;compressed matrix in Harwell&#45;Boeing format." alt="" coords="448,56,531,83"/>
-<area shape="rect" id="node11" href="$group___vpmg.html#gab2403b9193313b36ec9fa9603e6a8833" title="Build a column&#45;compressed matrix in Harwell&#45;Boeing format." alt="" coords="579,56,661,83"/>
-</map>

@@ -1,0 +1,10 @@
+var searchData=
+[
+  ['loadchargemaps',['loadChargeMaps',['../group___frontend.html#ga745e2f631bc3df272aa84a87d9783f15',1,'loadChargeMaps(NOsh *nosh, Vgrid *map[NOSH_MAXMOL]):&#160;routines.c'],['../group___frontend.html#ga745e2f631bc3df272aa84a87d9783f15',1,'loadChargeMaps(NOsh *nosh, Vgrid *charge[NOSH_MAXMOL]):&#160;routines.c']]],
+  ['loaddielmaps',['loadDielMaps',['../group___frontend.html#gaf490c01e71e19ab221c4c5bf533495f2',1,'loadDielMaps(NOsh *nosh, Vgrid *dielXMap[NOSH_MAXMOL], Vgrid *dielYMap[NOSH_MAXMOL], Vgrid *dielZMap[NOSH_MAXMOL]):&#160;routines.c'],['../group___frontend.html#gaf490c01e71e19ab221c4c5bf533495f2',1,'loadDielMaps(NOsh *nosh, Vgrid *dielXMap[NOSH_MAXMOL], Vgrid *dielYMap[NOSH_MAXMOL], Vgrid *dielZMap[NOSH_MAXMOL]):&#160;routines.c']]],
+  ['loadkappamaps',['loadKappaMaps',['../group___frontend.html#gaeff4c4dd52080d535665227a4f31c1f9',1,'loadKappaMaps(NOsh *nosh, Vgrid *map[NOSH_MAXMOL]):&#160;routines.c'],['../group___frontend.html#gaeff4c4dd52080d535665227a4f31c1f9',1,'loadKappaMaps(NOsh *nosh, Vgrid *kappa[NOSH_MAXMOL]):&#160;routines.c']]],
+  ['loadmeshes',['loadMeshes',['../group___frontend.html#gad0f03b5ad8f22aa7947630f18be44636',1,'routines.h']]],
+  ['loadmolecules',['loadMolecules',['../group___frontend.html#gafcc4ad2e55a0aa044208986898d79f9e',1,'loadMolecules(NOsh *nosh, Vparam *param, Valist *alist[NOSH_MAXMOL]):&#160;routines.c'],['../group___frontend.html#gafcc4ad2e55a0aa044208986898d79f9e',1,'loadMolecules(NOsh *nosh, Vparam *param, Valist *alist[NOSH_MAXMOL]):&#160;routines.c']]],
+  ['loadparameter',['loadParameter',['../group___frontend.html#gaeffbfc221c0722e88b551d987938d41a',1,'loadParameter(NOsh *nosh):&#160;routines.c'],['../group___frontend.html#gaeffbfc221c0722e88b551d987938d41a',1,'loadParameter(NOsh *nosh):&#160;routines.c']]],
+  ['loadpotmaps',['loadPotMaps',['../group___frontend.html#ga0d86d26f1168c5981bb80e87c79f5b5a',1,'loadPotMaps(NOsh *nosh, Vgrid *map[NOSH_MAXMOL]):&#160;routines.c'],['../group___frontend.html#ga0d86d26f1168c5981bb80e87c79f5b5a',1,'loadPotMaps(NOsh *nosh, Vgrid *pot[NOSH_MAXMOL]):&#160;routines.c']]]
+];

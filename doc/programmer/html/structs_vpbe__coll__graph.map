@@ -1,8 +1,0 @@
-<map id="sVpbe" name="sVpbe">
-<area shape="rect" id="node2" href="$structs_vacc.html" title="Oracle for solvent&#45; and ion&#45;accessibility around a biomolecule." alt="" coords="105,291,159,317"/>
-<area shape="rect" id="node4" href="$structs_valist.html" title="Container class for list of atom objects." alt="" coords="172,96,231,123"/>
-<area shape="rect" id="node8" href="$structs_vclist.html" title="Atom cell list." alt="" coords="5,187,64,213"/>
-<area shape="rect" id="node6" href="$structs_vatom.html" title="Contains public data members for Vatom class/module." alt="" coords="119,5,184,32"/>
-<area shape="rect" id="node11" href="$structs_vclist_cell.html" title="Atom cell list cell." alt="" coords="54,96,132,123"/>
-<area shape="rect" id="node14" href="$structs_vacc_surf.html" title="Surface object list of per&#45;atom surface points." alt="" coords="89,187,167,213"/>
-</map>

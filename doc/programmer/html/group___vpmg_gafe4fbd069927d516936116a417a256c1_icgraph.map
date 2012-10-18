@@ -1,5 +1,0 @@
-<map id="G" name="G">
-<area shape="rect" id="node3" href="$vpmg_8c.html#af0c2a5754fbe7a35b083ef600dab299d" title="For focusing, set external energy data members in new Vpmg object based on energy calculations on old..." alt="" coords="158,5,237,32"/>
-<area shape="rect" id="node5" href="$group___vpmg.html#ga44b9a21b48776d5d308a2de3c658f6a7" title="FORTRAN stub constructor for the Vpmg class (uses previously&#45;allocated memory)" alt="" coords="285,5,376,32"/>
-<area shape="rect" id="node7" href="$group___vpmg.html#ga7e280e4beb3cd7dc7ddcf7dda904f481" title="Constructor for the Vpmg class (allocates new memory)" alt="" coords="425,5,509,32"/>
-</map>

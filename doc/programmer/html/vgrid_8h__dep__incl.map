@@ -1,9 +1,0 @@
-<map id="src/mg/apbs/vgrid.h" name="src/mg/apbs/vgrid.h">
-<area shape="rect" id="node3" href="$apbs_8h.html" title="Top&#45;level header for APBS." alt="" coords="153,229,316,256"/>
-<area shape="rect" id="node5" href="$vmgrid_8h.html" title="Multiresolution oracle for Cartesian mesh data." alt="" coords="67,80,216,107"/>
-<area shape="rect" id="node13" href="$vpmg_8h.html" title="Contains declarations for class Vpmg." alt="" coords="240,80,381,107"/>
-<area shape="rect" id="node18" href="$vgrid_8c.html" title="Class Vgrid methods." alt="" coords="457,80,561,107"/>
-<area shape="rect" id="node8" href="$vopot_8h.html" title="Potential oracle for Cartesian mesh data." alt="" coords="5,155,147,181"/>
-<area shape="rect" id="node11" href="$vopot_8c.html" title="Class Vopot methods." alt="" coords="21,229,128,256"/>
-<area shape="rect" id="node16" href="$vpmg_8c.html" title="Class Vpmg methods." alt="" coords="273,155,380,181"/>
-</map>

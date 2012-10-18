@@ -1,9 +1,0 @@
-<map id="src/fem/vcsm.c" name="src/fem/vcsm.c">
-<area shape="rect" id="node5" href="$vcsm_8h.html" title="Contains declarations for the Vcsm class." alt="" coords="401,80,495,107"/>
-<area shape="rect" id="node9" href="$vhal_8h.html" title="Contains generic macro definitions for APBS." alt="" coords="423,379,511,405"/>
-<area shape="rect" id="node13" href="$valist_8h.html" title="Contains declarations for class Valist." alt="" coords="280,155,374,181"/>
-<area shape="rect" id="node17" href="$vatom_8h.html" title="Contains declarations for class Vatom." alt="" coords="34,304,134,331"/>
-<area shape="rect" id="node21" href="$vparam_8h.html" title="Contains declarations for class Vparam." alt="" coords="273,229,380,256"/>
-<area shape="rect" id="node25" href="$vunit_8h.html" title="Contains a collection of useful constants and conversion factors." alt="" coords="210,304,302,331"/>
-<area shape="rect" id="node27" href="$vstring_8h.html" title="Contains declarations for class Vstring." alt="" coords="326,304,428,331"/>
-</map>

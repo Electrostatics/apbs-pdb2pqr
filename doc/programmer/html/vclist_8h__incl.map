@@ -1,8 +1,0 @@
-<map id="src/generic/apbs/vclist.h" name="src/generic/apbs/vclist.h">
-<area shape="rect" id="node5" href="$vhal_8h.html" title="Contains generic macro definitions for APBS." alt="" coords="45,304,133,331"/>
-<area shape="rect" id="node9" href="$valist_8h.html" title="Contains declarations for class Valist." alt="" coords="174,80,268,107"/>
-<area shape="rect" id="node13" href="$vatom_8h.html" title="Contains declarations for class Vatom." alt="" coords="26,155,125,181"/>
-<area shape="rect" id="node21" href="$vunit_8h.html" title="Contains a collection of useful constants and conversion factors." alt="" coords="407,229,499,256"/>
-<area shape="rect" id="node17" href="$vparam_8h.html" title="Contains declarations for class Vparam." alt="" coords="226,155,333,181"/>
-<area shape="rect" id="node23" href="$vstring_8h.html" title="Contains declarations for class Vstring." alt="" coords="229,229,331,256"/>
-</map>

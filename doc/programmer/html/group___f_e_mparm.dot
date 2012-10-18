@@ -1,9 +1,0 @@
-digraph "FEMparm class"
-{
-  edge [fontname="FreeSans",fontsize="10",labelfontname="FreeSans",labelfontsize="10"];
-  node [fontname="FreeSans",fontsize="10",shape=record];
-  rankdir=LR;
-  Node1 [label="APOLparm class",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$group___a_p_o_lparm.html",tooltip="Parameter structure for APOL-specific variables from input files."];
-  Node0 [label="FEMparm class",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled" fontcolor="black"];
-  Node0->Node1 [shape=plaintext, label="femparm.h", color="darkgreen", dir="none", style="dashed"];
-}

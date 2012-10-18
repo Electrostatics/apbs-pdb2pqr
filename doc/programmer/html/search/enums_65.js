@@ -1,8 +1,5 @@
 var searchData=
 [
-  ['eapolparm_5fcalcenergy',['eAPOLparm_calcEnergy',['../group___a_p_o_lparm.html#gade8eac5502415be31317b892edcce787',1,'apolparm.h']]],
-  ['eapolparm_5fcalcforce',['eAPOLparm_calcForce',['../group___a_p_o_lparm.html#ga36e2cc65f89fc2472103954860e6a324',1,'apolparm.h']]],
-  ['eapolparm_5fdocalc',['eAPOLparm_doCalc',['../group___a_p_o_lparm.html#gae7a0451079bc84628079e5949f3d242a',1,'apolparm.h']]],
   ['efemparm_5fcalctype',['eFEMparm_CalcType',['../group___f_e_mparm.html#gac36fc354fe54c03cfec686666e536c48',1,'femparm.h']]],
   ['efemparm_5festtype',['eFEMparm_EstType',['../group___f_e_mparm.html#gabe14c957d66befafe12f371de15893c1',1,'femparm.h']]],
   ['efemparm_5fetoltype',['eFEMparm_EtolType',['../group___f_e_mparm.html#ga087262b9e3b70547352f3e2fbc44cd51',1,'femparm.h']]],

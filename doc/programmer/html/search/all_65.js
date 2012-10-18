@@ -1,8 +1,5 @@
 var searchData=
 [
-  ['eapolparm_5fcalcenergy',['eAPOLparm_calcEnergy',['../group___a_p_o_lparm.html#gade8eac5502415be31317b892edcce787',1,'apolparm.h']]],
-  ['eapolparm_5fcalcforce',['eAPOLparm_calcForce',['../group___a_p_o_lparm.html#ga36e2cc65f89fc2472103954860e6a324',1,'apolparm.h']]],
-  ['eapolparm_5fdocalc',['eAPOLparm_doCalc',['../group___a_p_o_lparm.html#gae7a0451079bc84628079e5949f3d242a',1,'apolparm.h']]],
   ['efemparm_5fcalctype',['eFEMparm_CalcType',['../group___f_e_mparm.html#gac36fc354fe54c03cfec686666e536c48',1,'femparm.h']]],
   ['efemparm_5festtype',['eFEMparm_EstType',['../group___f_e_mparm.html#gabe14c957d66befafe12f371de15893c1',1,'femparm.h']]],
   ['efemparm_5fetoltype',['eFEMparm_EtolType',['../group___f_e_mparm.html#ga087262b9e3b70547352f3e2fbc44cd51',1,'femparm.h']]],
@@ -12,6 +9,9 @@ var searchData=
   ['elecname',['elecname',['../structs_n_osh.html#a40fa3e4184b4483498a4c2bff55135bb',1,'sNOsh']]],
   ['emgparm_5fcalctype',['eMGparm_CalcType',['../group___m_gparm.html#gabaf271dcb16eb54b794cf2d5ffb7383a',1,'mgparm.h']]],
   ['emgparm_5fcentmeth',['eMGparm_CentMeth',['../group___m_gparm.html#ga288c6efdfa01795a46a6cddea98bb2b6',1,'mgparm.h']]],
+  ['energyapol',['energyAPOL',['../group___frontend.html#gabb8e9ca810f94ad24cace93504006469',1,'energyAPOL(APOLparm *apolparm, double sasa, double sav, double atomsasa[], double atomwcaEnergy[], int numatoms):&#160;routines.c'],['../group___frontend.html#gabb8e9ca810f94ad24cace93504006469',1,'energyAPOL(APOLparm *apolparm, double sasa, double sav, double atomsasa[], double atomwcaEnergy[], int numatoms):&#160;routines.c']]],
+  ['energyfe',['energyFE',['../group___frontend.html#gabe6202f77bf0d34278d04e4a1dd011a0',1,'energyFE(NOsh *nosh, int icalc, Vfetk *fetk[NOSH_MAXCALC], int *nenergy, double *totEnergy, double *qfEnergy, double *qmEnergy, double *dielEnergy):&#160;routines.c'],['../group___frontend.html#gabe6202f77bf0d34278d04e4a1dd011a0',1,'energyFE(NOsh *nosh, int icalc, Vfetk *fetk[NOSH_MAXCALC], int *nenergy, double *totEnergy, double *qfEnergy, double *qmEnergy, double *dielEnergy):&#160;routines.c']]],
+  ['energymg',['energyMG',['../group___frontend.html#gabbdfaa563ce5387afe92db0f09b5b8ff',1,'energyMG(NOsh *nosh, int icalc, Vpmg *pmg, int *nenergy, double *totEnergy, double *qfEnergy, double *qmEnergy, double *dielEnergy):&#160;routines.c'],['../group___frontend.html#gabbdfaa563ce5387afe92db0f09b5b8ff',1,'energyMG(NOsh *nosh, int icalc, Vpmg *pmg, int *nenergy, double *totEnergy, double *qfEnergy, double *qmEnergy, double *dielEnergy):&#160;routines.c']]],
   ['enosh_5fcalctype',['eNOsh_CalcType',['../group___n_osh.html#gaac4a6fd12dcd55d9604b7732c586c054',1,'nosh.h']]],
   ['enosh_5fmolformat',['eNOsh_MolFormat',['../group___n_osh.html#ga2f43bdd3707756bd0b45fdfd74b53224',1,'nosh.h']]],
   ['enosh_5fparmformat',['eNOsh_ParmFormat',['../group___n_osh.html#gae6bd4ea85ce72ebbe6deb71ebd9d36d4',1,'nosh.h']]],

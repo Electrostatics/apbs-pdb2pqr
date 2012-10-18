@@ -1,7 +1,0 @@
-<map id="sVacc" name="sVacc">
-<area shape="rect" id="node2" href="$structs_valist.html" title="Container class for list of atom objects." alt="" coords="5,96,64,123"/>
-<area shape="rect" id="node6" href="$structs_vclist.html" title="Atom cell list." alt="" coords="77,187,136,213"/>
-<area shape="rect" id="node4" href="$structs_vatom.html" title="Contains public data members for Vatom class/module." alt="" coords="50,5,115,32"/>
-<area shape="rect" id="node9" href="$structs_vclist_cell.html" title="Atom cell list cell." alt="" coords="89,96,167,123"/>
-<area shape="rect" id="node12" href="$structs_vacc_surf.html" title="Surface object list of per&#45;atom surface points." alt="" coords="161,187,239,213"/>
-</map>

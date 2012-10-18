@@ -8,6 +8,8 @@ var globals_dup =
     [ "f", "globals_0x66.html", null ],
     [ "g", "globals_0x67.html", null ],
     [ "i", "globals_0x69.html", null ],
+    [ "k", "globals_0x6b.html", null ],
+    [ "l", "globals_0x6c.html", null ],
     [ "m", "globals_0x6d.html", null ],
     [ "n", "globals_0x6e.html", null ],
     [ "o", "globals_0x6f.html", null ],
@@ -16,5 +18,6 @@ var globals_dup =
     [ "r", "globals_0x72.html", null ],
     [ "s", "globals_0x73.html", null ],
     [ "v", "globals_0x76.html", null ],
+    [ "w", "globals_0x77.html", null ],
     [ "z", "globals_0x7a.html", null ]
 ];

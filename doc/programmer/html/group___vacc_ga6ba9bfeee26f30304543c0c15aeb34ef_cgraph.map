@@ -1,8 +1,0 @@
-<map id="Vacc_splineAcc" name="Vacc_splineAcc">
-<area shape="rect" id="node3" href="$group___vclist.html#gac90480afcf0e082a4b7bf755cb15d360" title="Get the max probe radius value (in A) the cell list was constructed with." alt="" coords="163,5,285,32"/>
-<area shape="rect" id="node5" href="$group___vclist.html#gaee63e2dac121f3469b10f9f16b999402" title="Return cell corresponding to specified position or return VNULL." alt="" coords="175,56,273,83"/>
-<area shape="rect" id="node7" href="$vacc_8c.html#a2a318b9e1df4d9a97ac47cf55498c4a8" title="Fast spline&#45;based surface computation subroutine." alt="" coords="187,107,261,133"/>
-<area shape="rect" id="node9" href="$group___vacc.html#gafd1dc8f126eed1c8ffea8d81e859c7cd" title="Report spline&#45;based accessibility for a given atom." alt="" coords="333,107,472,133"/>
-<area shape="rect" id="node11" href="$group___vatom.html#ga282b06da5d33678cab1173a6fe5bc89c" title="Get atomic position." alt="" coords="520,81,648,108"/>
-<area shape="rect" id="node13" href="$group___vatom.html#ga9739f811224b6e7219cf6e21e0b4d9b4" title="Get atomic position." alt="" coords="523,132,645,159"/>
-</map>

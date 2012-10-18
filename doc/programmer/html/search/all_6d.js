@@ -1,13 +1,14 @@
 var searchData=
 [
-  ['marksphere',['markSphere',['../vpmg_8h.html#aac867a97b6a1b573c285c846237837a5',1,'markSphere(double rtot, double *tpos, int nx, int ny, int nz, double hx, double hy, double hzed, double xmin, double ymin, double zmin, double *array, double markVal):&#160;vpmg.c'],['../vpmg_8c.html#af4f11e78d20500aa43167eab5e52752f',1,'markSphere(double rtot, double *tpos, int nx, int ny, int nz, double hx, double hy, double hz, double xmin, double ymin, double zmin, double *array, double markVal):&#160;vpmg.c']]],
+  ['main',['main',['../group___frontend.html#ga3c04138a5bfe5d72780bb7e82a18e627',1,'main.c']]],
+  ['main_2ec',['main.c',['../main_8c.html',1,'']]],
+  ['marksphere',['markSphere',['../vpmg_8c.html#af4f11e78d20500aa43167eab5e52752f',1,'markSphere(double rtot, double *tpos, int nx, int ny, int nz, double hx, double hy, double hz, double xmin, double ymin, double zmin, double *array, double markVal):&#160;vpmg.c'],['../vpmg_8h.html#aac867a97b6a1b573c285c846237837a5',1,'markSphere(double rtot, double *tpos, int nx, int ny, int nz, double hx, double hy, double hzed, double xmin, double ymin, double zmin, double *array, double markVal):&#160;vpmg.c']]],
   ['max_5fradius',['max_radius',['../structs_vclist.html#aff073dced0564ca6105e9a66f22d77cf',1,'sVclist']]],
   ['max_5fsphere_5fpts',['MAX_SPHERE_PTS',['../group___vhal.html#ga656dd8651f6ddb231c1e0dfdd738eea8',1,'vhal.h']]],
   ['maxcrd',['maxcrd',['../structs_valist.html#a012ba7376c6e5d018df5e255313218f3',1,'sValist']]],
   ['maxfocus',['MAXFOCUS',['../group___vhal.html#ga27770574efd5ffaefb79a54fcc293df3',1,'vhal.h']]],
   ['maxion',['MAXION',['../group___vhal.html#ga8ec2427efb460890f443d47e210d9b60',1,'vhal.h']]],
   ['maxionradius',['maxIonRadius',['../structs_vpbe.html#ad2c95924e6663fe49fbef89a5ade0248',1,'sVpbe']]],
-  ['maxions',['MAXIONS',['../group___p_m_g_c.html#ga5a1cb87e494bffd20d0f0e91d1ff0db1',1,'mypdec.h']]],
   ['maxmol',['MAXMOL',['../group___vhal.html#ga420edf92998eb68c51972c65726ecca8',1,'vhal.h']]],
   ['maxrad',['maxrad',['../structs_valist.html#a85cc3ff81cebdd08e19664c66b3f6564',1,'sValist']]],
   ['maxsolve',['maxsolve',['../structs_f_e_mparm.html#a403d924c69e54a03b1b17c24ef1ae02a',1,'sFEMparm']]],
@@ -35,7 +36,7 @@ var searchData=
   ['mgcoar',['mgcoar',['../structs_vpmgp.html#af44829cd2374ff0df22f6e0b84cc5d15',1,'sVpmgp']]],
   ['mgdisc',['mgdisc',['../structs_vpmgp.html#a4895390586968668002e176b0883f6a9',1,'sVpmgp']]],
   ['mgkey',['mgkey',['../structs_vpmgp.html#af97ed4881b05725f594da740e63303de',1,'sVpmgp']]],
-  ['mgparm',['mgparm',['../structs_n_osh__calc.html#a906ddf74ce6c6cab99a15a3ab021d15a',1,'sNOsh_calc::mgparm()'],['../group___m_gparm.html#ga0a4ec1528c052492a68ef95099bd6028',1,'MGparm():&#160;mgparm.h'],['../group___m_gparm.html',1,'(Global Namespace)']]],
+  ['mgparm',['mgparm',['../structs_n_osh__calc.html#a906ddf74ce6c6cab99a15a3ab021d15a',1,'sNOsh_calc::mgparm()'],['../group___m_gparm.html#ga0a4ec1528c052492a68ef95099bd6028',1,'MGparm():&#160;mgparm.h']]],
   ['mgparm_2ec',['mgparm.c',['../mgparm_8c.html',1,'']]],
   ['mgparm_2eh',['mgparm.h',['../mgparm_8h.html',1,'']]],
   ['mgparm_5fcalctype',['MGparm_CalcType',['../group___m_gparm.html#gacf31be9905f8e0ba1e083e1119b7cd1d',1,'mgparm.h']]],
@@ -69,6 +70,5 @@ var searchData=
   ['molid',['molid',['../structs_a_p_o_lparm.html#ae2b837562f7605f66a1c7817a1c820ef',1,'sAPOLparm::molid()'],['../structs_p_b_eparm.html#ae2b837562f7605f66a1c7817a1c820ef',1,'sPBEparm::molid()']]],
   ['molpath',['molpath',['../structs_n_osh.html#ab77ae35c5951f54369d4238c29f61700',1,'sNOsh']]],
   ['msimp',['msimp',['../structs_vcsm.html#a8ba04ef2735b51fa03bd1958c130609e',1,'sVcsm']]],
-  ['multipolebc',['multipolebc',['../vpmg_8h.html#a0f71bb1c4fe48352092a82c88c5eac3e',1,'multipolebc(double r, double kappa, double eps_p, double eps_w, double rad, double tsr[3]):&#160;vpmg.c'],['../vpmg_8c.html#a0f71bb1c4fe48352092a82c88c5eac3e',1,'multipolebc(double r, double kappa, double eps_p, double eps_w, double rad, double tsr[3]):&#160;vpmg.c']]],
-  ['matrix_20wrapper_20class',['Matrix wrapper class',['../group___vmatrix.html',1,'']]]
+  ['multipolebc',['multipolebc',['../vpmg_8c.html#a0f71bb1c4fe48352092a82c88c5eac3e',1,'multipolebc(double r, double kappa, double eps_p, double eps_w, double rad, double tsr[3]):&#160;vpmg.c'],['../vpmg_8h.html#a0f71bb1c4fe48352092a82c88c5eac3e',1,'multipolebc(double r, double kappa, double eps_p, double eps_w, double rad, double tsr[3]):&#160;vpmg.c']]]
 ];

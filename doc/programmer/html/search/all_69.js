@@ -1,9 +1,13 @@
 var searchData=
 [
+  ['ibforce',['ibForce',['../struct_atom_force.html#a0f47f725b41123dc6618bd9af6abf616',1,'AtomForce']]],
   ['id',['id',['../structs_vatom.html#a7441ef0865bcb3db9b8064dd7375c1ea',1,'sVatom']]],
   ['iinfo',['iinfo',['../structs_vpmgp.html#ac3465c920e73bb3096d213e8a19740ee',1,'sVpmgp']]],
+  ['initapol',['initAPOL',['../group___frontend.html#ga99649d9f55deada6f8474c80d014ecfb',1,'initAPOL(NOsh *nosh, Vmem *mem, Vparam *param, APOLparm *apolparm, int *nforce, AtomForce **atomForce, Valist *alist):&#160;routines.c'],['../group___frontend.html#ga99649d9f55deada6f8474c80d014ecfb',1,'initAPOL(NOsh *nosh, Vmem *mem, Vparam *param, APOLparm *apolparm, int *nforce, AtomForce **atomForce, Valist *alist):&#160;routines.c']]],
+  ['initfe',['initFE',['../group___frontend.html#ga26b7b5c63692c5254c769f0f6c40b972',1,'routines.c']]],
   ['initflag',['initFlag',['../structs_vcsm.html#a1fa18df106a71df86f7ce9780b65e88b',1,'sVcsm']]],
   ['initgreen',['initGreen',['../structs_vfetk___local_var.html#a9fbc02bbb04a5843e53d7d989f554df9',1,'sVfetk_LocalVar']]],
+  ['initmg',['initMG',['../group___frontend.html#ga893bfeb69b8ec4941a5f4a65378c76b7',1,'initMG(int icalc, NOsh *nosh, MGparm *mgparm, PBEparm *pbeparm, double realCenter[3], Vpbe *pbe[NOSH_MAXCALC], Valist *alist[NOSH_MAXMOL], Vgrid *dielXMap[NOSH_MAXMOL], Vgrid *dielYMap[NOSH_MAXMOL], Vgrid *dielZMap[NOSH_MAXMOL], Vgrid *kappaMap[NOSH_MAXMOL], Vgrid *chargeMap[NOSH_MAXMOL], Vpmgp *pmgp[NOSH_MAXCALC], Vpmg *pmg[NOSH_MAXCALC], Vgrid *potMap[NOSH_MAXMOL]):&#160;routines.c'],['../group___frontend.html#ga893bfeb69b8ec4941a5f4a65378c76b7',1,'initMG(int icalc, NOsh *nosh, MGparm *mgparm, PBEparm *pbeparm, double realCenter[3], Vpbe *pbe[NOSH_MAXCALC], Valist *alist[NOSH_MAXMOL], Vgrid *dielXMap[NOSH_MAXMOL], Vgrid *dielYMap[NOSH_MAXMOL], Vgrid *dielZMap[NOSH_MAXMOL], Vgrid *kappaMap[NOSH_MAXMOL], Vgrid *chargeMap[NOSH_MAXMOL], Vpmgp *pmgp[NOSH_MAXCALC], Vpmg *pmg[NOSH_MAXCALC], Vgrid *potMap[NOSH_MAXMOL]):&#160;routines.c']]],
   ['ionc',['ionc',['../structs_p_b_eparm.html#af611cc40b302f977a0fcb30622bb080b',1,'sPBEparm']]],
   ['ionconc',['ionConc',['../structs_vfetk___local_var.html#ae33e45044c553dd172e46c302ffeb0c8',1,'sVfetk_LocalVar::ionConc()'],['../structs_vpbe.html#ae33e45044c553dd172e46c302ffeb0c8',1,'sVpbe::ionConc()']]],
   ['ionq',['ionQ',['../structs_vfetk___local_var.html#afaf48998eac66e6e67c15ea20e41f22f',1,'sVfetk_LocalVar::ionQ()'],['../structs_vpbe.html#afaf48998eac66e6e67c15ea20e41f22f',1,'sVpbe::ionQ()'],['../structs_p_b_eparm.html#afe9257c6322b57aec30692997b8321fc',1,'sPBEparm::ionq()']]],

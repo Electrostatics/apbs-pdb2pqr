@@ -1,7 +1,0 @@
-<map id="G" name="G">
-<area shape="rect" id="node3" href="$vpmg_8c.html#ad55928ed41b43f65ba1c494b2c577353" title="For focusing, fill in the boundaries of the new mesh based on the potential values in the old mesh..." alt="" coords="209,31,311,57"/>
-<area shape="rect" id="node5" href="$vpmg_8c.html#a9803b64d96685d27923d899ef6f4c5cd" title="Fill boundary condition arrays." alt="" coords="376,5,435,32"/>
-<area shape="rect" id="node9" href="$group___vpmg.html#ga44b9a21b48776d5d308a2de3c658f6a7" title="FORTRAN stub constructor for the Vpmg class (uses previously&#45;allocated memory)" alt="" coords="360,56,451,83"/>
-<area shape="rect" id="node7" href="$group___vpmg.html#gaf117af16d5e9c5bd4e557a69ec1eb73a" title="Fill the coefficient arrays prior to solving the equation." alt="" coords="499,5,587,32"/>
-<area shape="rect" id="node11" href="$group___vpmg.html#ga7e280e4beb3cd7dc7ddcf7dda904f481" title="Constructor for the Vpmg class (allocates new memory)" alt="" coords="501,56,585,83"/>
-</map>
