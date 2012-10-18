@@ -1,7 +1,7 @@
 cmake_minimum_required (VERSION 2.6)
 
 ################################################################################
-# TODO:  
+# TODO:
 ################################################################################
 
 ################################################################################
@@ -224,10 +224,10 @@ if(ENABLE_READLINE)
         )
 
     if(READLINE_LIBRARY)
-    
+
         CHECK_INCLUDE_FILES("readline/readline.h" HAVE_READLINE_READLINE_H)
         CHECK_INCLUDE_FILES("readline/history.h" HAVE_READLINE_HISTORY_H)
-    
+
         list(APPEND MALOC_LIBS ${READLINE_LIBRARY})
         set(HAVE_LIBREADLINE 1)
         message(STATUS "The readline library was found: ${READLINE_LIBRARY}")
@@ -295,7 +295,7 @@ endif(NOT HAVE_PID_T)
 if(NOT HAVE_SIZE_T)
     set(size_t "unsigned int")
 endif(NOT HAVE_SIZE_T)
-    
+
 CHECK_INCLUDE_FILES("stdlib.h;stdarg.h;string.h;float.h" STDC_HEADERS)
 
 if(NOT CYGWIN)
@@ -314,53 +314,53 @@ if(NOT CYGWIN)
     if(NOT HAVE_UNISTD_H)
         message(FATAL_ERROR "Missing required sys/socket.h header")
     endif(NOT HAVE_UNISTD_H)
-    
+
     CHECK_INCLUDE_FILES("sys/time.h" HAVE_SYS_TIME_H)
     if(NOT HAVE_UNISTD_H)
         message(FATAL_ERROR "Missing required sys/time.h header")
     endif(NOT HAVE_UNISTD_H)
-    
+
     CHECK_INCLUDE_FILES("sys/types.h" HAVE_SYS_TYPES_H)
     if(NOT HAVE_UNISTD_H)
         message(FATAL_ERROR "Missing required sys/types.h header")
     endif(NOT HAVE_UNISTD_H)
-    
+
     CHECK_INCLUDE_FILES("sys/un.h" HAVE_SYS_UN_H)
     if(NOT HAVE_UNISTD_H)
         message(FATAL_ERROR "Missing required sys/un.h header")
     endif(NOT HAVE_UNISTD_H)
-    
+
     CHECK_INCLUDE_FILES("sys/wait.h" HAVE_SYS_WAIT_H)
     if(NOT HAVE_UNISTD_H)
         message(FATAL_ERROR "Missing required sys/wait.h header")
     endif(NOT HAVE_UNISTD_H)
-    
+
     CHECK_INCLUDE_FILES("fcntl.h" HAVE_FCNTL_H)
     if(NOT HAVE_UNISTD_H)
         message(FATAL_ERROR "Missing required rcntl.h header")
     endif(NOT HAVE_UNISTD_H)
-    
+
     CHECK_INCLUDE_FILES("rpc/rpc.h" HAVE_RPC_RPC_H)
     if(NOT HAVE_UNISTD_H)
         message(FATAL_ERROR "Missing required rpc/rpc.h header")
     endif(NOT HAVE_UNISTD_H)
-    
+
     CHECK_INCLUDE_FILES("netinet/in.h" HAVE_NETINET_IN_H)
     if(NOT HAVE_UNISTD_H)
         message(FATAL_ERROR "Missing required netinet/in.h header")
     endif(NOT HAVE_UNISTD_H)
-    
+
     CHECK_INCLUDE_FILES("arpa/inet.h" HAVE_ARPA_INET_H)
     if(NOT HAVE_UNISTD_H)
         message(FATAL_ERROR "Missing required arpa/inet.h header")
     endif(NOT HAVE_UNISTD_H)
-    
+
     CHECK_INCLUDE_FILES("netdb.h" HAVE_NETDB_H)
     if(NOT HAVE_UNISTD_H)
         message(FATAL_ERROR "Missing required netdb.h header")
     endif(NOT HAVE_UNISTD_H)
     list(APPEND MALOC_REQUIRED_HEADERS "netdb.h")
-    
+
 endif(NOT CYGWIN)
 
 
@@ -435,9 +435,10 @@ if(ENABLE_MPI)
         if(MPI_FOUND)
             message(STATUS "MPI support enabled")
             include_directories(${MPI_INCLUDE_PATH})
-            list(APPEND MALOC_LIBS ${MPI_LIBRARIES})
+            list(APPEND APBS_LIBS ${MPI_LIBRARIES})
+            set(HAVE_MPI_H 1)
         else(MPI_FOUND)
-            message(FATAL_ERROR "MPI was not found.")
+            message(WARNING "MPI was not found; disabling")
         endif(MPI_FOUND)
     else(NOT ENABLE_DEBUG)
         message(WARNING "MPI may not be enabled in debugging mode")
@@ -499,7 +500,7 @@ if(CYGWIN)
     else(CYGWIN_WSOCK32)
         message(FATAL_ERROR "The wsock32 library was not fond")
     endif(CYGWIN_WSOCK32)
-    
+
     set(MSDOS 1)
     set(WIN32 1)
 endif(CYGWIN)
