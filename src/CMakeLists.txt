@@ -1,22 +1,62 @@
-add_executable(apbs main.c routines.c)
+macro(add_items TYPE)
+
+    # Make sure the TYPE argument is valid
+    set(ALLOWABLE_TYPES SOURCES EXTERNAL_HEADERS INTERNAL_HEADERS)
+    list(FIND ALLOWABLE_TYPES ${TYPE} VALID_TYPE)
+    if(VALID_TYPE EQUAL -1)
+        message(
+            FATAL_ERROR
+            "Passed an invalid type to add_items macro.  "
+            "Must be one of SOURCES, EXTERNAL_HEADERS, or INTERNAL_HEADERS.  "
+            "Was ${TYPE}"
+        )
+    endif()
+
+    # The items to add will be any additional parameters beyond TYPE
+    set(ITEMS ${ARGN})
+
+    # Add each item successively to the appropriately typed list
+    foreach(ITEM ${ITEMS})
+        list(APPEND ${TYPE} "${ITEM}")
+    endforeach()
+
+endmacro()
+
+
+
+macro(add_sublibrary LIBRARY)
+    set(LIBRARY_NAME "apbs_${LIBRARY}")
+    set(LIBRARY_DEPENDENCIES ${APBS_LIBS} ${ARGN})
+    message(STATUS "Adding ${LIBRARY_NAME}")
+    message(STATUS "With source files ${SOURCES}")
+    message(STATUS "With external header files ${EXTERNAL_HEADERS}")
+    message(STATUS "With internal header files ${INTERNAL_HEADERS}")
+    message(STATUS "With library dependencies ${LIBRARY_DEPENDENCIES}")
+    add_library(${LIBRARY_NAME} SHARED ${SOURCES} ${EXTERNAL_HEADERS} ${INTERNAL_HEADERS})
+    target_link_libraries(${LIBRARY_NAME} ${LIBRARY_DEPENDENCIES})
+    INSTALL(FILES ${EXTERNAL_HEADERS} DESTINATION ${LIBRARY}/${HEADER_INSTALL_PATH})
+    INSTALL(TARGETS ${LIBRARY_NAME} DESTINATION ${LIBRARY_INSTALL_PATH})
+    list(APPEND APBS_INTERNAL_LIBS ${LIBRARY_NAME})
+    set(APBS_INTERNAL_LIBS ${APBS_INTERNAL_LIBS} PARENT_SCOPE)
+    message(STATUS "Added ${LIBRARY_NAME}")
+endmacro()
+
+
 
 add_subdirectory(generic)
-target_link_libraries(apbs apbs_generic)
-
 add_subdirectory(pmgc)
-target_link_libraries(apbs apbs_pmgc)
-
-target_link_libraries(apbs apbs_mg)
 add_subdirectory(mg)
-
 if(ENABLE_FETK)
-   target_link_libraries(apbs apbs_fem)
    add_subdirectory(fem)
 endif(ENABLE_FETK)
 
-target_link_libraries(apbs ${APBS_LIBS})
+add_executable(apbs main.c apbs.h routines.c routines.h)
+target_link_libraries(apbs ${APBS_LIBS} ${APBS_INTERNAL_LIBS})
 
 configure_file(
     ${APBS_ROOT}/src/config/apbscfg.h.in
     ${APBS_ROOT}/src/apbscfg.h
     )
+
+INSTALL(FILES apbs.h routines.h DESTINATION ${HEADER_INSTALL_PATH})
+INSTALL(TARGETS apbs DESTINATION ${EXECUTABLE_INSTALL_PATH})

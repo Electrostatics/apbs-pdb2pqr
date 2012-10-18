@@ -1,22 +1,15 @@
-set(LIBRARY_NAME "apbs_fem")
+add_items(
+    SOURCES
+    vcsm.c
+    vfetk.c
+    vpee.c
+)
 
-message(STATUS "Adding ${LIBRARY_NAME}")
+add_items(
+    EXTERNAL_HEADERS
+    vcsm.h
+    vfetk.h
+    vpee.h
+)
 
-set(SOURCES "")
-list(APPEND SOURCES vfetk.c)
-list(APPEND SOURCES vcsm.c)
-list(APPEND SOURCES vpee.c)
-
-message(STATUS "With source files ${SOURCES}")
-
-set(LIB_DEPS "")
-#ist(APPEND LIB_DEPS _lib)
-list(APPEND LIB_DEPS ${APBS_LIBS})
-
-message(STATUS "With library dependencies ${LIB_DEPS}")
-
-add_library(${LIBRARY_NAME} SHARED ${SOURCES})
-
-target_link_libraries(${LIBRARY_NAME} ${LIB_DEPS})
-
-message(STATUS "Added ${LIBRARY_NAME}")
+add_sublibrary(fem)
