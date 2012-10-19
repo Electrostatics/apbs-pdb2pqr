@@ -51,6 +51,15 @@ __author__ = "Todd Dolinsky, Yong Huang"
 import string, sys
 import copy  ### PC
 
+lineParsers = {}
+
+def RegisterLineParser(klass):
+    lineParsers[klass.__name__] = klass
+    return klass
+
+
+
+@RegisterLineParser
 class END:
     """ END class
 
@@ -64,6 +73,7 @@ class END:
         """
         pass
 
+@RegisterLineParser
 class MASTER:
     """ MASTER class
 
@@ -108,6 +118,7 @@ class MASTER:
         else:  raise ValueError, record
 
 
+@RegisterLineParser
 class CONECT:
     """ CONECT class
 
@@ -163,6 +174,7 @@ class CONECT:
             except ValueError:  self.serial10 = None
         else:  raise ValueError, record
 
+@RegisterLineParser
 class ENDMDL:
     """ ENDMDL class
 
@@ -176,6 +188,7 @@ class ENDMDL:
         """
         pass
 
+@RegisterLineParser
 class TER:
     """ TER class
 
@@ -210,6 +223,7 @@ class TER:
                 self.iCode = None
         else:  raise ValueError, record
 
+@RegisterLineParser
 class SIGUIJ:
     """ SIGUIJ class
 
@@ -260,6 +274,7 @@ class SIGUIJ:
         else: raise ValueError, record
 
 
+@RegisterLineParser
 class ANISOU:
     """ ANISOU class
 
@@ -309,6 +324,7 @@ class ANISOU:
             self.charge = string.strip(line[78:80])
         else: raise ValueError, record
 
+@RegisterLineParser
 class SIGATM:
     """ SIGATM class
 
@@ -360,6 +376,7 @@ class SIGATM:
             self.charge = string.strip(line[78:80])
         else: raise ValueError, record
 
+@RegisterLineParser
 class HETATM:
     """ HETATM class
 
@@ -650,7 +667,8 @@ class MOL2MOLECULE:
                  self.resName, ' L',          self.resSeq, 
                  self.x,self.y, self.z)) 
 ### PC        
-        
+
+@RegisterLineParser        
 class ATOM:
     """ ATOM class
 
@@ -778,7 +796,8 @@ class ATOM:
         tstr = self.charge
         str = str + string.ljust(tstr, 2)[:2]
         return str
-        
+
+@RegisterLineParser        
 class MODEL:
     """ MODEL class
 
@@ -800,6 +819,7 @@ class MODEL:
             self.serial = int(string.strip(line[10:14]))
         else:  raise ValueError, record
 
+@RegisterLineParser
 class TVECT:
     """ TVECT class
 
@@ -828,6 +848,7 @@ class TVECT:
             self.text = string.strip(line[40:70])
         else:  raise ValueError, record
 
+@RegisterLineParser
 class MTRIX3:
     """ MTRIX3 class
 
@@ -861,6 +882,7 @@ class MTRIX3:
             self.iGiven = int(string.strip(line[59]))
         else:  raise ValueError, record
 
+@RegisterLineParser
 class MTRIX2:
     """ MTRIX2 class
 
@@ -894,6 +916,7 @@ class MTRIX2:
             self.iGiven = int(string.strip(line[59]))
         else:  raise ValueError, record
 
+@RegisterLineParser
 class MTRIX1:
     """ MTRIX1 class
 
@@ -928,6 +951,7 @@ class MTRIX1:
             except (ValueError, IndexError):  self.iGiven = None
         else:  raise ValueError, record
 
+@RegisterLineParser
 class SCALE3:
     """ SCALE3 class
 
@@ -956,6 +980,7 @@ class SCALE3:
             self.un = float(string.strip(line[45:55]))
         else:  raise ValueError, record
 
+@RegisterLineParser
 class SCALE2:
     """ SCALE2 class
 
@@ -984,6 +1009,7 @@ class SCALE2:
             self.un = float(string.strip(line[45:55]))
         else:  raise ValueError, record
 
+@RegisterLineParser
 class SCALE1:
     """ SCALE1 class
 
@@ -1012,6 +1038,8 @@ class SCALE1:
             self.un = float(string.strip(line[45:55]))
         else:  raise ValueError, record
 
+
+@RegisterLineParser
 class ORIGX2:
     """ ORIGX2 class
 
@@ -1039,6 +1067,7 @@ class ORIGX2:
             self.tn = float(string.strip(line[45:55]))
         else:  raise ValueError, record
 
+@RegisterLineParser
 class ORIGX3:
     """ ORIGX3 class
 
@@ -1066,6 +1095,7 @@ class ORIGX3:
             self.tn = float(string.strip(line[45:55]))
         else:  raise ValueError, record
 
+@RegisterLineParser
 class ORIGX1:
     """ ORIGX1 class
 
@@ -1093,6 +1123,7 @@ class ORIGX1:
             self.tn = float(string.strip(line[45:55]))
         else:  raise ValueError, record
 
+@RegisterLineParser
 class CRYST1:
     """ CRYST1 class
 
@@ -1129,6 +1160,7 @@ class CRYST1:
         else:  raise ValueError, record
 
 
+@RegisterLineParser
 class SITE:
     """ SITE class
 
@@ -1346,6 +1378,7 @@ class HYDBND:
             self.sym2 = string.strip(line[66:72])
         else:  raise ValueError, record
 
+@RegisterLineParser
 class LINK:
     """ LINK field
 
@@ -1395,6 +1428,7 @@ class LINK:
         else:  raise ValueError, record
 
 
+@RegisterLineParser
 class SSBOND:
     """ SSBOND field
 
@@ -1432,6 +1466,7 @@ class SSBOND:
             self.sym2 = string.strip(line[66:72])
         else:  raise ValueError, record
 
+@RegisterLineParser
 class TURN:
     """ TURN field
 
@@ -1481,6 +1516,7 @@ class TURN:
             self.comment = string.strip(line[40:70])
         else:  raise ValueError, record
 
+@RegisterLineParser
 class SHEET:
     """ SHEET field
 
@@ -1576,6 +1612,7 @@ class SHEET:
                 self.prevICode = None
         else:  raise ValueError, record
 
+@RegisterLineParser
 class HELIX:
     """ HELIX field
 
@@ -1630,6 +1667,7 @@ class HELIX:
             except ValueError:  self.length = None
         else:  raise ValueError, record
 
+@RegisterLineParser
 class FORMUL:
     """ FORMUL field
 
@@ -1656,6 +1694,7 @@ class FORMUL:
             self.text = string.strip(line[19:70])
         else:  raise ValueError, record
 
+@RegisterLineParser
 class HETSYN:
     """ HETSYN field
 
@@ -1679,6 +1718,7 @@ class HETSYN:
             self.hetSynonyms = string.strip(line[15:70])
         else:  raise ValueError, record
 
+@RegisterLineParser
 class HETNAM:
     """ HETNAM field
 
@@ -1701,6 +1741,7 @@ class HETNAM:
             self.text = string.strip(line[15:70])
         else:  raise ValueError, record
 
+@RegisterLineParser
 class HET:
     """ HET field
 
@@ -1741,6 +1782,7 @@ class HET:
             self.text = string.strip(line[30:70])
         else:  raise ValueError, record
 
+@RegisterLineParser
 class MODRES:
     """ MODRES field
 
@@ -1775,6 +1817,7 @@ class MODRES:
             string.comment = string.strip(line[29:70])
         else:  raise ValueError, record
 
+@RegisterLineParser
 class SEQRES:
     """ SEQRES field
        
@@ -1832,6 +1875,7 @@ class SEQRES:
             self.resName.append(string.strip(line[67:70]))
         else:  raise ValueError, record
 
+@RegisterLineParser
 class SEQADV:
     """ SEQADV field
 
@@ -1877,6 +1921,7 @@ class SEQADV:
             self.conflict = string.strip(line[49:70])
         else:  raise ValueError, record
 
+@RegisterLineParser
 class DBREF:
     """ DBREF field
 
@@ -1942,6 +1987,7 @@ class DBREF:
             except IndexError:  self.dbinsEnd = None
         else:  raise ValueError, record
 
+@RegisterLineParser
 class REMARK:
     """ REMARK field
 
@@ -1959,6 +2005,7 @@ class REMARK:
         """
         record = string.strip(line[0:6])
         if record == "REMARK":
+            self.text = line.rstrip('\r\n')
             self.remarkNum = int(string.strip(line[7:10]))
             self.remarkDict = {}
             remarkText = line[11:70]
@@ -1986,7 +2033,10 @@ class REMARK:
             else:
                 self.remarkDict["text"] = string.strip(line[11:70])
  
+    def __str__(self):
+        return self.text
 
+@RegisterLineParser
 class JRNL:
     """ JRNL field
 
@@ -2008,8 +2058,13 @@ class JRNL:
         record = string.strip(line[0:6])
         if record == "JRNL":
             self.text = string.strip(line[12:70])
+            self.text = line.rstrip('\r\n')
         else:  raise ValueError, record
+        
+    def __str__(self):
+        return self.text
 
+@RegisterLineParser
 class SPRSDE:
     """ SPRSDE field
 
@@ -2050,8 +2105,13 @@ class SPRSDE:
             self.sIdCodes.append(string.strip(line[56:60]))
             self.sIdCodes.append(string.strip(line[61:65]))
             self.sIdCodes.append(string.strip(line[66:70]))
+            self.text = line.rstrip('\r\n')
         else:  raise ValueError, record
+        
+    def __str__(self):
+        return self.text
 
+@RegisterLineParser
 class REVDAT:
     """ REVDAT field
 
@@ -2092,8 +2152,13 @@ class REVDAT:
             self.records.append(string.strip(line[46:52]))
             self.records.append(string.strip(line[53:59]))
             self.records.append(string.strip(line[60:66]))
+            self.text = line.rstrip('\r\n')
         else:  raise ValueError, record
+        
+    def __str__(self):
+        return self.text
 
+@RegisterLineParser
 class AUTHOR:
     """ AUTHOR field
   
@@ -2113,8 +2178,13 @@ class AUTHOR:
         record = string.strip(line[0:6])
         if record == "AUTHOR":
             self.authorList = string.strip(line[10:70])
+            self.text = line.rstrip('\r\n')
         else:  raise ValueError, record
+        
+    def __str__(self):
+        return self.text
 
+@RegisterLineParser
 class EXPDTA:
     """ EXPDTA field
   
@@ -2144,8 +2214,13 @@ class EXPDTA:
         record = string.strip(line[0:6])
         if record == "EXPDTA":
             self.technique = string.strip(line[10:70])
+            self.text = line.rstrip('\r\n')
         else:  raise ValueError, record
+        
+    def __str__(self):
+        return self.text
 
+@RegisterLineParser
 class KEYWDS:
     """ KEYWDS field
   
@@ -2169,8 +2244,13 @@ class KEYWDS:
         record = string.strip(line[0:6])
         if record == "KEYWDS":
             self.keywds = string.strip(line[10:70])
+            self.text = line.rstrip('\r\n')
         else:  raise ValueError, record
+        
+    def __str__(self):
+        return self.text
 
+@RegisterLineParser
 class SOURCE:
     """ SOURCE field
    
@@ -2193,9 +2273,13 @@ class SOURCE:
         record = string.strip(line[0:6])
         if record == "SOURCE":
             self.source = string.strip(line[10:70])
+            self.text = line.rstrip('\r\n')
         else:  raise ValueError, record
+        
+    def __str__(self):
+        return self.text
 
-
+@RegisterLineParser
 class COMPND:
     """ COMPND field
        
@@ -2223,8 +2307,13 @@ class COMPND:
         record = string.strip(line[0:6])
         if record == "COMPND":
             self.compound = string.strip(line[10:70])
+            self.text = line.rstrip('\r\n')
         else:  raise ValueError, record
+        
+    def __str__(self):
+        return self.text
 
+@RegisterLineParser
 class CAVEAT:
     """ CAVEAT field
 
@@ -2248,6 +2337,7 @@ class CAVEAT:
             self.comment = string.strip(line[19:70])
         else:  raise ValueError, record
 
+@RegisterLineParser
 class TITLE:
     """ TITLE field
  
@@ -2267,8 +2357,13 @@ class TITLE:
         record = string.strip(line[0:6])
         if record == "TITLE":
             self.title = string.strip(line[10:70])
+            self.text = line.rstrip('\r\n')
         else:  raise ValueError, record
-    
+        
+    def __str__(self):
+        return self.text
+
+@RegisterLineParser    
 class OBSLTE:
     """ OBSLTE field
 
@@ -2320,6 +2415,7 @@ class OBSLTE:
             self.rIdCodes.append(string.strip(line[67:70]))
         else:  raise ValueError, record
 
+@RegisterLineParser
 class HEADER:
     """ HEADER field 
 
@@ -2345,7 +2441,11 @@ class HEADER:
             self.classification = string.strip(line[10:50])
             self.depDate = string.strip(line[50:59])
             self.IDcode = string.strip(line[62:66])
+            self.text = line.rstrip('\r\n')
         else:  raise ValueError, record
+        
+    def __str__(self):
+        return self.text
 
 def readAtom(line):
     """
@@ -2404,8 +2504,8 @@ def readAtom(line):
     newline = newline + string.rjust(words[size-i+2],8)
     newline = newline + string.rjust(words[size-i+3],6)
     newline = newline + string.rjust(words[size-i+4],6)
-    cmdstr = "%s(newline)" % record
-    obj = eval(cmdstr)
+    klass = lineParsers[record]
+    obj = klass(newline)
     return obj
 
 def readPDB(file):
@@ -2433,12 +2533,15 @@ def readPDB(file):
         try:
             record = string.strip(line[0:6])
             if record not in errlist:
-                cmdstr = "%s(line)" % record
-                obj = eval(cmdstr)
+                klass = lineParsers[record]
+                obj = klass(line)
                 pdblist.append(obj)
-        except NameError, details:
+        except KeyError as details:
             errlist.append(record)
-        except StandardError, details:
+            sys.stderr.write("Error parsing line: %s\n" % details)
+            sys.stderr.write("<%s>\n" % string.strip(line))
+            sys.stderr.write("Truncating remaining errors for record type:%s\n" % record)
+        except StandardError as details:
             if record == "ATOM" or record == "HETATM":
                 try:
                     obj = readAtom(line)
