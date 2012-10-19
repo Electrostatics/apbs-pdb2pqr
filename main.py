@@ -72,10 +72,23 @@ from src.server import *
 from src.hydrogens import *
 from src.aconf import *
 from StringIO import *
+from src.errors import PDB2PQRError
 
 import extensions
 
-def printPQRHeader(atomlist, reslist, charge, ff, warnings, pH, ffout):
+def getOldHeader(pdblist):
+    oldHeader = StringIO()
+    headerTypes = (HEADER, TITLE, COMPND, SOURCE, KEYWDS, EXPDTA, AUTHOR, REVDAT, JRNL, REMARK, SPRSDE)
+    for pdbObj in pdblist:
+        if not isinstance(pdbObj,headerTypes):
+            break
+        
+        oldHeader.write(str(pdbObj))
+        oldHeader.write('\n')
+        
+    return oldHeader.getvalue()
+
+def printPQRHeader(pdblist, atomlist, reslist, charge, ff, warnings, pH, ffout):
     """
         Print the header for the PQR file
 
@@ -132,7 +145,11 @@ def printPQRHeader(atomlist, reslist, charge, ff, warnings, pH, ffout):
         header += "REMARK   5\n"
     header += "REMARK   6 Total charge on this protein: %.4f e\n" % charge
     header += "REMARK   6\n"
-
+#    header += "REMARK   6 Original PDB header follows\n"
+#    header += "REMARK   6\n"
+#
+#    header += getOldHeader(pdblist)
+    
     return header
 
 def runPDB2PQR(pdblist, ff,
@@ -379,7 +396,7 @@ def runPDB2PQR(pdblist, ff,
             myNameScheme = myForcefield
         myRoutines.applyNameScheme(myNameScheme)
 
-    header = printPQRHeader(misslist, reslist, charge, ff, myRoutines.getWarnings(), ph, ffout)
+    header = printPQRHeader(pdblist, misslist, reslist, charge, ff, myRoutines.getWarnings(), ph, ffout)
     lines = myProtein.printAtoms(hitlist, chain)
 
     # Determine if any of the atoms in misslist were ligands
@@ -600,26 +617,30 @@ def mainCommand(argv):
     # get rid of the userff and username arguments to this function.
     # This would also do away with the redundent checks and such in 
     # the Forcefield constructor.
-    header, lines, missedligands = runPDB2PQR(pdblist, 
-                                              options.ff, 
-                                              outname = options.outname,
-                                              ph = options.pH,
-                                              verbose = options.verbose,
-                                              selectedExtensions = options.active_extensions,
-                                              propkaOptions = propkaOpts,
-                                              extensionOptions = extensionOpts,
-                                              clean = options.clean,
-                                              neutraln = options.neutraln,
-                                              neutralc = options.neutralc,
-                                              ligand = options.ligand,
-                                              assign_only = options.assign_only,
-                                              chain = options.chain,
-                                              debump = options.debump,
-                                              opt = options.opt,
-                                              typemap = options.typemap,
-                                              userff = userfffile,
-                                              usernames = usernamesfile,
-                                              ffout = options.ffout)
+    try:
+        header, lines, missedligands = runPDB2PQR(pdblist, 
+                                                  options.ff, 
+                                                  outname = options.outname,
+                                                  ph = options.pH,
+                                                  verbose = options.verbose,
+                                                  selectedExtensions = options.active_extensions,
+                                                  propkaOptions = propkaOpts,
+                                                  extensionOptions = extensionOpts,
+                                                  clean = options.clean,
+                                                  neutraln = options.neutraln,
+                                                  neutralc = options.neutralc,
+                                                  ligand = options.ligand,
+                                                  assign_only = options.assign_only,
+                                                  chain = options.chain,
+                                                  debump = options.debump,
+                                                  opt = options.opt,
+                                                  typemap = options.typemap,
+                                                  userff = userfffile,
+                                                  usernames = usernamesfile,
+                                                  ffout = options.ffout)
+    except PDB2PQRError as er:
+        print er
+        sys.exit(1)
     
     # Print the PQR file
     outfile = open(outpath,"w")
