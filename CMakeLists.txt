@@ -839,22 +839,6 @@ endif(BUILD_TOOLS)
 
 
 ################################################################################
-# Configure Python enable APBS testing suite                                   #
-################################################################################
-
-configure_file(
-    ${APBS_ROOT}/tests/apbs_tester.py.in
-    ${APBS_ROOT}/tests/apbs_tester.py
-    )
-
-configure_file(
-    ${APBS_ROOT}/tests/test_cases.cfg.in
-    ${APBS_ROOT}/tests/test_cases.cfg
-    )
-
-
-
-################################################################################
 # Set up additional directories to install                                     #
 ################################################################################
 
@@ -862,6 +846,7 @@ install(DIRECTORY ${APBS_ROOT}/doc DESTINATION ${SHARE_INSTALL_PATH})
 install(DIRECTORY ${APBS_ROOT}/examples DESTINATION ${SHARE_INSTALL_PATH})
 install(DIRECTORY ${APBS_ROOT}/tests DESTINATION ${SHARE_INSTALL_PATH})
 install(DIRECTORY ${APBS_ROOT}/tools DESTINATION ${SHARE_INSTALL_PATH})
+
 
 
 ################################################################################

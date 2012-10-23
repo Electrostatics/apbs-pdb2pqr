@@ -150,7 +150,7 @@ int main(
     char header[] = {"\n\n\
 ----------------------------------------------------------------------\n\
     APBS -- Adaptive Poisson-Boltzmann Solver\n\
-    Version 1.3\n\
+    Version " PACKAGE_STRING "\n\
     \n\
     Nathan A. Baker (nathan.baker@pnnl.gov)\n\
     Pacific Northwest National Laboratory\n\
