@@ -1,11 +1,11 @@
 cmake_minimum_required (VERSION 2.6)
 
 ################################################################################
+# TODO:  Handle ZLib dependency more elegantly
 # TODO:  Add licensing and authorship information
 # TODO:  Make sure license information is in doc
 # TODO:  Make sure install documenteation is in doc
 # TODO:  Make sure authors documenteation is in doc
-# TODO:  Add Test module support
 # TODO:  Test Cygwin and Mingw builds on virtual machine build farm
 # TODO:  Test with FEtk build
 # TODO:  Handle special mac dependencies

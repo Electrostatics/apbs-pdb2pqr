@@ -22,7 +22,7 @@ def test_binary():
         pass
 
     try:
-        binary = "../bin/apbs"
+        binary = os.path.abspath( "../bin/apbs" )
         subprocess.call( [binary, "--version"] )
         return binary
     except OSError:
