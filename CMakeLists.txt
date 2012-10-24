@@ -2,6 +2,7 @@ cmake_minimum_required (VERSION 2.6)
 
 ################################################################################
 # TODO:  Handle ZLib dependency more elegantly
+# TODO:  Add option to build documentation at compile time
 # TODO:  Add licensing and authorship information
 # TODO:  Make sure license information is in doc
 # TODO:  Make sure install documenteation is in doc
@@ -540,7 +541,7 @@ option(ENABLE_ZLIB "Enable use of zlib library" ON)
 
 if(ENABLE_ZLIB)
     message(STATUS "Checking for zlib")
-    find_package(ZLIB REQUIRED)
+    find_package(ZLIB)
     if(ZLIB_FOUND)
         message(STATUS "The zlib library was found: ${ZLIB_LIBRARIES}")
         include_directories(${ZLIB_INCLUDE_DIRS})
@@ -829,7 +830,7 @@ add_subdirectory(src)
 # Handle conditional building with verbose debugging information printouts     #
 ################################################################################
 
-option(BUILD_TOOLS "Build supplemental tools" OFF)
+option(BUILD_TOOLS "Build supplemental tools" ON)
 
 if(BUILD_TOOLS)
     message(STATUS "Supplemental tools enabled")

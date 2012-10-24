@@ -51,7 +51,7 @@ def process_parallel( binary, input_file, procs, logger ):
 
     base_name = input_file.split('.')[0]
     splitInput( input_file )
-    result = None
+    results = None
 
     for proc in range( procs ):
         proc_input_file = '%s-PE%d.in' % ( base_name, proc )
@@ -62,7 +62,7 @@ def process_parallel( binary, input_file, procs, logger ):
             logger.message( '  %.12E' % proc_result )
         logger.message( '' )
 
-        if result == None:
+        if results == None:
             results = proc_results
         else:
             results = [ r + p for ( r, p ) in zip( results, proc_results ) ]
