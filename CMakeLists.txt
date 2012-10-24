@@ -1,13 +1,11 @@
 cmake_minimum_required (VERSION 2.6)
 
 ################################################################################
-# TODO:  Handle ZLib dependency more elegantly
 # TODO:  Add option to build documentation at compile time
 # TODO:  Add licensing and authorship information
 # TODO:  Make sure license information is in doc
 # TODO:  Make sure install documenteation is in doc
 # TODO:  Make sure authors documenteation is in doc
-# TODO:  Test Cygwin and Mingw builds on virtual machine build farm
 # TODO:  Test with FEtk build
 # TODO:  Handle special mac dependencies
 #        (configure.ac:1306)
@@ -31,6 +29,8 @@ cmake_minimum_required (VERSION 2.6)
 # [ ] Mac OSX
 # [ ] Windows 7 x86_64
 # [ ] Windows 7 i386
+# [ ] Windows 7 x86_64 with Cygwin
+# [ ] Windows 7 x86_64 with Mingw
 ################################################################################
 
 include(CheckIncludeFiles)
@@ -827,6 +827,19 @@ add_subdirectory(src)
 
 
 ################################################################################
+# Build APBS documentation                                                     #
+################################################################################
+
+option(BUILD_DOC "Build/Rebuild documentation using doxygen" OFF)
+
+if(BUILD_DOC)
+    message(STATUS "Building documentation enabled")
+    add_subdirectory(doc)
+endif()
+
+
+
+################################################################################
 # Handle conditional building with verbose debugging information printouts     #
 ################################################################################
 
@@ -843,10 +856,28 @@ endif(BUILD_TOOLS)
 # Set up additional directories to install                                     #
 ################################################################################
 
-install(DIRECTORY ${APBS_ROOT}/doc DESTINATION ${SHARE_INSTALL_PATH})
-install(DIRECTORY ${APBS_ROOT}/examples DESTINATION ${SHARE_INSTALL_PATH})
-install(DIRECTORY ${APBS_ROOT}/tests DESTINATION ${SHARE_INSTALL_PATH})
-install(DIRECTORY ${APBS_ROOT}/tools DESTINATION ${SHARE_INSTALL_PATH})
+install(
+    DIRECTORY ${APBS_ROOT}/doc
+    DESTINATION ${SHARE_INSTALL_PATH}
+)
+
+install(
+    DIRECTORY ${APBS_ROOT}/examples
+    DESTINATION ${SHARE_INSTALL_PATH}
+)
+
+install(
+    DIRECTORY ${APBS_ROOT}/tests
+    DESTINATION ${SHARE_INSTALL_PATH}
+    FILES_MATCHING
+        PATTERN "*.py"
+        PATTERN "README"
+)
+install(
+    DIRECTORY ${APBS_ROOT}/tools
+    DESTINATION ${SHARE_INSTALL_PATH}
+    PATTERN "CMakeLists.txt" EXCLUDE
+)
 
 
 
