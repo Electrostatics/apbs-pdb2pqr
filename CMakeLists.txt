@@ -22,8 +22,8 @@ cmake_minimum_required (VERSION 2.6)
 ################################################################################
 # Test platforms
 # --------------
-# [ ] Ubuntu x86_64
-# [ ] Ubuntu i386
+# [x] Ubuntu x86_64
+# [x] Ubuntu i386
 # [ ] Redhat 5
 # [ ] ArchLinux x86_64
 # [ ] Mac OSX
@@ -705,7 +705,7 @@ if(ENABLE_PYTHON)
 
 
     configure_file(
-        ${APBS_ROOT}/src/ApbsClient.py.in
+        ${APBS_ROOT}/src/config/ApbsClient.py.in
         ${EXECUTABLE_OUTPUT_PATH}/ApbsClient.py
     )
 
@@ -728,7 +728,7 @@ if(ENABLE_OPENMP)
             add_definitions("${OpenMP_C_FLAGS}")
             list(APPEND APBS_LIBS ${OpenMP_C_FLAGS})
         else(OPENMP_FOUND)
-            message(FATAL_ERROR "OpenMP was not found.")
+            message(WARNING "OpenMP was not found.  OpenMP support disabled")
         endif(OPENMP_FOUND)
     else(NOT ENABLE_DEBUG)
         message(WARNING "OpenMP may not be enabled in debugging mode")
@@ -874,6 +874,7 @@ install(
         PATTERN "*.py"
         PATTERN "README"
 )
+
 install(
     DIRECTORY ${APBS_ROOT}/tools
     DESTINATION ${SHARE_INSTALL_PATH}
