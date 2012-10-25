@@ -798,6 +798,8 @@ if(CYGWIN)
     else()
         message(FATAL_ERROR "The wsock32 library was not fond")
     endif()
+    
+    set(HAVE_CYGWIN 1)
 endif()
 
 
