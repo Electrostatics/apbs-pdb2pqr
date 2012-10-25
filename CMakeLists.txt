@@ -794,7 +794,7 @@ if(CYGWIN)
 
     if(CYGWIN_WSOCK32)
         message(STATUS "The wsock32 library was found: ${CYGWIN_WSOCK32}")
-        list(APPPEND APBS_LIBS ${CYGWIN_WSOCK32})
+        list(APPEND APBS_LIBS ${CYGWIN_WSOCK32})
     else()
         message(FATAL_ERROR "The wsock32 library was not fond")
     endif()
