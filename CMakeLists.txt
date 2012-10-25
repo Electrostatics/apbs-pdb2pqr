@@ -784,22 +784,6 @@ endif()
 
 
 if(CYGWIN)
-    message(STATUS "Checking fore rpclib in Cygwin environment")
-    find_library(
-        CYGWIN_RPCLIB
-        NAMES rpclib
-        PATHS ${SYS_LIBPATHS}
-        DOC   "The rpclib library"
-        )
-
-    if(CYGWIN_RPCLIB)
-        message(STATUS "The rpclib library was found: ${CYGWIN_HAS_RPCLIB}")
-    else()
-        message(FATAL_ERROR "The rpclib library was not found")
-    endif()
-
-
-
     message(STATUS "Checking for wsock32 in Cygwin environment")
     find_library(
         CYGWIN_WSOCK32
