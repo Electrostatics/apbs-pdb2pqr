@@ -396,6 +396,7 @@ if(NOT (HAVE_MALOC_H AND MALOC_LIBRARY))
     message(STATUS "Using internal contributed maloc library")
     ExternalProject_add(
         maloc
+        URL file://${CONTRIB_PATH}/maloc.tar.gz
         SOURCE_DIR ${CONTRIB_PATH}/maloc
         CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${APBS_ROOT}
     )
