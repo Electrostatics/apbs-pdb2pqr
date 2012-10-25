@@ -7,7 +7,7 @@
 ##########################################################################
 
 read 
-  mol pqr complex.pqr 
+  mol pqr 1d7h-dmso-complex.pqr 
   mol pqr dmso-min.pqr 
   mol pqr 1d7h-min.pqr
 end
