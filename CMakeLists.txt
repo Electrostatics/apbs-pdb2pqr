@@ -102,7 +102,7 @@ option(ENABLE_PEDANTIC "Enable the pedantic ansi compilation" OFF)
 if(ENABLE_PEDANTIC)
     ADD_DEFINITIONS("-Wall -pedantic -ansi")
     message(STATUS "Pedantic compilation enabled")
-endif(ENABLE_PEDANTIC)
+endif()
 
 
 
@@ -123,9 +123,9 @@ try_run(
 if(FLOAT_EPSILON_COMPUTED)
     message(STATUS "Floating point epsilon is ${FLOAT_EPSILON_OUTPUT}")
     set(FLOAT_EPSILON ${FLOAT_EPSILON_OUTPUT})
-else(FLOAT_EPSILON_COMPUTED)
+else()
     message(FATAL_ERROR "Couldn't compute floating point machine epsilon")
-endif(FLOAT_EPSILON_COMPUTED)
+endif()
 
 
 
@@ -140,9 +140,9 @@ try_run(
 if(DOUBLE_EPSILON_COMPUTED)
     message(STATUS "Double precision epsilon is ${DOUBLE_EPSILON_OUTPUT}")
     set(DOUBLE_EPSILON ${DOUBLE_EPSILON_OUTPUT})
-else(DOUBLE_EPSILON_COMPUTED)
+else()
     message(FATAL_ERROR "Couldn't compute double precision machine epsilon")
-endif(DOUBLE_EPSILON_COMPUTED)
+endif()
 
 
 
@@ -162,9 +162,9 @@ find_library(
 if(MATH_LIBRARY)
     list(APPEND APBS_LIBS ${MATH_LIBRARY})
     message(STATUS "The math library was found: ${MATH_LIBRARY}")
-else(MATH_LIBRARY)
+else()
     message(FATAL_ERROR "The math library (libm) is required for apbs")
-endif(MATH_LIBRARY)
+endif()
 
 
 
@@ -185,9 +185,9 @@ find_library(
 if(LIBERTY_LIBRARY)
     list(APPEND APBS_LIBS ${LIBERTY_LIBRARY})
     message(STATUS "The liberty library was found: ${LIBERTY_LIBRARY}")
-else(LIBERTY_LIBRARY)
+else()
     message(WARNING "Liberty library not found")
-endif(LIBERTY_LIBRARY)
+endif()
 
 # TODO: Determine if the liberty library is ever needed any more
 
@@ -207,9 +207,9 @@ find_library(
 if(NSL_LIBRARY)
     list(APPEND APBS_LIBS ${NSL_LIBRARY})
     message(STATUS "The nsl library was found: ${NSL_LIBRARY}")
-else(NSL_LIBRARY)
+else()
     message(WARNING "The nsl library was not found")
-endif(NSL_LIBRARY)
+endif()
 
 # TODO: Determine if nsl library is ever needed any more
 
@@ -229,9 +229,9 @@ find_library(
 if(SOCKET_LIBRARY)
     list(APPEND APBS_LIBS ${SOCKET_LIBRARY})
     message(STATUS "The socket library was found: ${SOCKET_LIBRARY}")
-else(SOCKET_LIBRARY)
+else()
     message(WARNING "The socket library was not found")
-endif(SOCKET_LIBRARY)
+endif()
 
 # TODO: Determine if socket library is ever needed any more
 
@@ -251,9 +251,9 @@ find_library(
 if(THREAD_LIBRARY)
     list(APPEND APBS_LIBS ${THREAD_LIBRARY})
     message(STATUS "The thread library was found: ${THREAD_LIBRARY}")
-else(THREAD_LIBRARY)
+else()
     message(WARNING "The thread library was not found")
-endif(THREAD_LIBRARY)
+endif()
 
 # TODO: Determine if thread library is ever needed any more
 
@@ -290,13 +290,13 @@ if(ENABLE_READLINE)
         if(NCURSES_LIBRARY)
             list(APPEND APBS_LIBS ${NCURSES_LIBRARY})
             message(STATUS "The ncurses library was found: ${NCURSES_LIBRARY}")
-        else(NCURSES_LIBRARY)
+        else()
             message(WARNING "The ncurses library was not found")
-        endif(NCURSES_LIBRARY)
-    else(READLINE_LIBRARY)
+        endif()
+    else()
         message(WARNING "The readline library was not found.  Did not enable readline")
-    endif(READLINE_LIBRARY)
-endif(ENABLE_READLINE)
+    endif()
+endif()
 
 
 
@@ -312,10 +312,10 @@ if(ENABLE_EFENCE)
     if(EFENCE_LIBRARY)
         list(APPEND APBS_LIBS ${EFENCE_LIBRARY})
         message(STATUS "The efence library was found: ${EFENCE_LIBRARY}")
-    else(EFENCE_LIBRARY)
+    else()
         message(WARNING "The efence library was not found. Did not enable efence")
-    endif(EFENCE_LIBRARY)
-endif(ENABLE_EFENCE)
+    endif()
+endif()
 
 
 
@@ -327,7 +327,7 @@ CHECK_FUNCTION_EXISTS(time HAVE_TIME_FUNC)
 
 if(NOT HAVE_TIME_FUNC)
     message(FATAL_ERROR "Required time function not found")
-endif(NOT HAVE_TIME_FUNC)
+endif()
 
 
 
@@ -335,7 +335,7 @@ CHECK_FUNCTION_EXISTS(rand HAVE_RAND_FUNC)
 
 if(NOT HAVE_RAND_FUNC)
     message(FATAL_ERROR "Required rand function not found")
-endif(NOT HAVE_RAND_FUNC)
+endif()
 
 
 
@@ -343,7 +343,7 @@ CHECK_FUNCTION_EXISTS(srand HAVE_SRAND_FUNC)
 
 if(NOT HAVE_SRAND_FUNC)
     message(FATAL_ERROR "Required srand function not found")
-endif(NOT HAVE_SRAND_FUNC)
+endif()
 
 
 
@@ -361,9 +361,9 @@ find_file(
 if(FETK_PATH)
     include_directories(${FETK_PATH}/include)
     message(STATUS "Found fetk: ${FETK_PATH}")
-else(FETK_PATH)
+else()
     message(WARNING "Did not find fetk")
-endif(FETK_PATH)
+endif()
 
 
 
@@ -430,9 +430,9 @@ if(ENABLE_FETK)
         list(APPEND APBS_LIBS ${PUNC_LIBRARY})
         set(HAVE_PUNC_H 1)
         message(STATUS "The punc library was found: ${PUNC_LIBRARY}")
-    else(PUNC_LIBRARY)
+    else()
         message(FATAL_ERROR "The punc library was not found")
-    endif(PUNC_LIBRARY)
+    endif()
 
 
 
@@ -447,9 +447,9 @@ if(ENABLE_FETK)
         list(APPEND APBS_LIBS ${MC_LIBRARY})
         set(HAVE_MC_H 1)
         message(STATUS "The mc library was found: ${MC_LIBRARY}")
-    else(MC_LIBRARY)
+    else()
         message(FATAL_ERROR "The mc library was not found")
-    endif(MC_LIBRARY)
+    endif()
 
 
 
@@ -464,9 +464,9 @@ if(ENABLE_FETK)
         list(APPEND APBS_LIBS ${MCX_LIBRARY})
         set(HAVE_MCX_H 1)
         message(STATUS "The mcx library was found: ${MCX_LIBRARY}")
-    else(MCX_LIBRARY)
+    else()
         message(FATAL_ERROR "The mcx library was not found")
-    endif(MCX_LIBRARY)
+    endif()
 
 
 
@@ -481,9 +481,9 @@ if(ENABLE_FETK)
         list(APPEND APBS_LIBS ${GAMER_LIBRARY})
         set(HAVE_BIOM_H 1)
         message(STATUS "The gamer library was found: ${GAMER_LIBRARY}")
-    else(GAMER_LIBRARY)
+    else()
         message(FATAL_ERROR "The gamer library was not found")
-    endif(GAMER_LIBRARY)
+    endif()
 
 
 
@@ -496,9 +496,9 @@ if(ENABLE_FETK)
 
     if(SUPERLU_LIBRARY)
         list(APPEND APBS_LIBS ${SUPERLU_LIBRARY})
-    else(SUPERLU_LIBRARY)
+    else()
         message(FATAL_ERROR "The superlu library was not found")
-    endif(SUPERLU_LIBRARY)
+    endif()
 
 
 
@@ -511,9 +511,9 @@ if(ENABLE_FETK)
 
     if(UMFPACK_LIBRARY)
         list(APPEND APBS_LIBS ${UMFPACK_LIBRARY})
-    else(UMFPACK_LIBRARY)
+    else()
         message(FATAL_ERROR "The umfpack library was not found")
-    endif(UMFPACK_LIBRARY)
+    endif()
 
 
 
@@ -526,11 +526,11 @@ if(ENABLE_FETK)
 
     if(BLAS_LIBRARY)
         list(APPEND APBS_LIBS ${BLAS_LIBRARY})
-    else(BLAS_LIBRARY)
+    else()
         message(FATAL_ERROR "The blas library was not found")
-    endif(BLAS_LIBRARY)
+    endif()
 
-endif(ENABLE_FETK)
+endif()
 
 
 
@@ -548,10 +548,10 @@ if(ENABLE_ZLIB)
         include_directories(${ZLIB_INCLUDE_DIRS})
         list(APPEND APBS_LIBS ${ZLIB_LIBRARIES})
         set(HAVE_ZLIB 1)
-    else(ZLIB_FOUND)
+    else()
         message(WARNING "The zlib library was not found.")
-    endif(ZLIB_FOUND)
-endif(ENABLE_ZLIB)
+    endif()
+endif()
 
 
 
@@ -564,7 +564,7 @@ option(ENABLE_FAST "Enable fast mode" OFF)
 if(ENABLE_FAST)
     set(APBS_FAST 1)
     message(STATUS "Fast mode enabled")
-endif(ENABLE_FAST)
+endif()
 
 
 
@@ -577,7 +577,7 @@ option(ENABLE_TINKER "Enable TINKER support" OFF)
 if(ENABLE_TINKER)
     set(WITH_TINKER 1)
     message(STATUS "Tinker enabled")
-endif(ENABLE_TINKER)
+endif()
 
 
 
@@ -605,7 +605,7 @@ if(ENABLE_DEBUG)
     set(CMAKE_BUILD_TYPE Debug)
     set(DEBUG 1)
     message(STATUS "Debugging compilation enabled")
-endif(ENABLE_DEBUG)
+endif()
 
 
 
@@ -619,7 +619,7 @@ option(ENABLE_INLINE "Enable inline functions" ON)
 if(ENABLE_INLINE)
     set(APBS_NOINLINE 1)
     message(STATUS "Inline functions enabled")
-endif(ENABLE_INLINE)
+endif()
 
 
 
@@ -632,7 +632,7 @@ option(ENABLE_QUIET "Enable quiet mode" OFF)
 if(ENABLE_QUIET)
     set(VAPBSQUIET 1)
     message(STATUS "Quiet mode enabled")
-endif(ENABLE_QUIET)
+endif()
 
 
 
@@ -645,7 +645,7 @@ option(ENABLE_VERBOSE_DEBUG "Enable verbose debugging mode" OFF)
 if(ENABLE_VERBOSE_DEBUG)
     set(VERBOSE_DEBUG 1)
     message(STATUS "Verbose debugging mode enabled")
-endif(ENABLE_VERBOSE_DEBUG)
+endif()
 
 
 
@@ -662,18 +662,18 @@ if(ENABLE_PYTHON)
 
     if(NOT CMAKE_COMPILER_IS_GNUCC)
         message(FATAL_ERROR "Python wrappers require GNU compilers")
-    endif(NOT CMAKE_COMPILER_IS_GNUCC)
+    endif()
 
 
     find_package(PythonInterp)
     if(NOT PYTHON_EXECUTABLE)
         message(FATAL_ERROR "Couldn't find python interpreter")
-    endif(NOT PYTHON_EXECUTABLE)
+    endif()
 
     find_package(PythonLibs)
     if(NOT PYTHON_LIBRARY)
         message(FATAL_ERROR "Couldn't find python libraries")
-    endif(NOT PYTHON_LIBRARY)
+    endif()
 
     # TODO: Handle special flags for Python linking on different platforms
     # TODO: Handle special flags for Python linking with intel compiler
@@ -691,11 +691,11 @@ if(ENABLE_PYTHON)
 
     if(NOT PYTHON_MODULES)
         message(FATAL_ERROR "Coudln't determine location of python modules")
-    endif(NOT PYTHON_MODULES)
+    endif()
 
     if(NOT MAX_MEMORY)
         set(MAX_MEMORY "-1")
-    endif(NOT MAX_MEMORY)
+    endif()
 
 
     # TODO:  these can't e right...
@@ -709,7 +709,7 @@ if(ENABLE_PYTHON)
         ${EXECUTABLE_OUTPUT_PATH}/ApbsClient.py
     )
 
-endif(ENABLE_PYTHON)
+endif()
 
 
 
@@ -727,13 +727,13 @@ if(ENABLE_OPENMP)
             message(STATUS "OpenMP support enabled")
             add_definitions("${OpenMP_C_FLAGS}")
             list(APPEND APBS_LIBS ${OpenMP_C_FLAGS})
-        else(OPENMP_FOUND)
+        else()
             message(WARNING "OpenMP was not found.  OpenMP support disabled")
-        endif(OPENMP_FOUND)
-    else(NOT ENABLE_DEBUG)
+        endif()
+    else()
         message(WARNING "OpenMP may not be enabled in debugging mode")
-    endif(NOT ENABLE_DEBUG)
-endif(ENABLE_OPENMP)
+    endif()
+endif()
 
 
 
@@ -751,13 +751,13 @@ if(ENABLE_MPI)
             message(STATUS "MPI support enabled")
             include_directories(${MPI_INCLUDE_PATH})
             list(APPEND APBS_LIBS ${MPI_LIBRARIES})
-        else(MPI_FOUND)
+        else()
             message(WARNING "MPI was not found; disabling")
-        endif(MPI_FOUND)
-    else(NOT ENABLE_DEBUG)
+        endif()
+    else()
         message(WARNING "MPI may not be enabled in debugging mode")
-    endif(NOT ENABLE_DEBUG)
-endif(ENABLE_MPI)
+    endif()
+endif()
 
 
 
@@ -776,10 +776,10 @@ if(MINGW)
 
     if(MINGW_WSOCK32)
         message(STATUS "The wsock32 library was found: ${MINGW_HAS_WSOCK32}")
-    else(MINGW_WSOCK32)
+    else()
         message(FATAL_ERROR "The wsock32 library was not fond")
-    endif(MINGW_WSOCK32)
-endif(MINGW)
+    endif()
+endif()
 
 
 
@@ -794,9 +794,9 @@ if(CYGWIN)
 
     if(CYGWIN_RPCLIB)
         message(STATUS "The rpclib library was found: ${CYGWIN_HAS_RPCLIB}")
-    else(CYGWIN_RPCLIB)
+    else()
         message(FATAL_ERROR "The rpclib library was not found")
-    endif(NOT CYGWIN_RPCLIB)
+    endif()
 
 
 
@@ -811,10 +811,10 @@ if(CYGWIN)
     if(CYGWIN_WSOCK32)
         message(STATUS "The wsock32 library was found: ${CYGWIN_WSOCK32}")
         list(APPPEND APBS_LIBS ${CYGWIN_WSOCK32})
-    else(CYGWIN_WSOCK32)
+    else()
         message(FATAL_ERROR "The wsock32 library was not fond")
-    endif(CYGWIN_WSOCK32)
-endif(CYGWIN)
+    endif()
+endif()
 
 
 
@@ -849,7 +849,7 @@ option(BUILD_TOOLS "Build supplemental tools" ON)
 if(BUILD_TOOLS)
     message(STATUS "Supplemental tools enabled")
     add_subdirectory(tools)
-endif(BUILD_TOOLS)
+endif()
 
 
 
