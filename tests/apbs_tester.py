@@ -119,15 +119,17 @@ def run_test( binary, test_files, test_name, test_directory, logger, ocd ):
         end_time = datetime.datetime.now()
         elapsed_time = end_time - start_time
         net_time += elapsed_time
-
-        logger.message( "Elapsed time: %f seconds" % elapsed_time.total_seconds() )
+        stopwatch = elapsed_time.seconds + elapsed_time.microseconds / 1e6
+        
+        logger.message( "Elapsed time: %f seconds" % stopwatch )
         logger.message( '-' * 80 )
 
-    logger.message( "Total elapsed time: %d seconds" % net_time.total_seconds() )
+    stopwatch = net_time.seconds + net_time.microseconds / 1e6
+    logger.message( "Total elapsed time: %f seconds" % stopwatch )
     logger.message( "Test results have been logged" )
     logger.message( '-' * 80 )
 
-    logger.log( "Time:           %d seconds" % net_time.total_seconds() )
+    logger.log( "Time:           %d seconds" % stopwatch )
 
 
 def main():
