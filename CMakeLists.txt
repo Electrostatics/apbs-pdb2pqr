@@ -82,7 +82,11 @@ file(MAKE_DIRECTORY ${EXECUTABLE_OUTPUT_PATH}/temp)
 # Set the lookup paths for external library dependencies                       #
 ################################################################################
 
-message(STATUS "Setting lookup paths for libraries")
+message(STATUS "Setting lookup paths for headers and libraries")
+
+set(CMAKE_INCLUDE_PATH "${CMAKE_INCLUDE_PATH}")
+list(APPEND CMAKE_INCLUDE_PATH /usr/include)
+list(APPEND CMAKE_INCLUDE_PATH /usr/local/include)
 
 set(SYS_LIBPATHS "")
 list(APPEND SYS_LIBPATHS /usr/lib)
@@ -403,7 +407,7 @@ if(NOT (HAVE_MALOC_H AND MALOC_LIBRARY))
     include_directories(${APBS_ROOT}/include)
     set(
         MALOC_LIBRARY_BASENAME
-        ${CMAKE_SHARED_LIBRARY_PREFIX}maloc${CMAKE_SHARED_LIBRARY_SUFFIX}
+        ${CMAKE_SHARED_LIBRARY_PREFIX}maloc${CMAKE_SHARED_LIBRARY_SUFFIX}z
     )
     install(
         FILES ${LIBRARY_OUTPUT_PATH}/${MALOC_LIBRARY_BASENAME}
@@ -805,7 +809,7 @@ if(CYGWIN)
     else()
         message(FATAL_ERROR "The wsock32 library was not fond")
     endif()
-    
+
     set(HAVE_CYGWIN 1)
 endif()
 
