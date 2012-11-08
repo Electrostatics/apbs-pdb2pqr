@@ -223,6 +223,7 @@ VPUBLIC void VbuildA_fv(int *nx, int *ny, int *nz,
                 //fprintf(data, "%19.12E\n", VAT3(cc, i, j, k));
 
                 // Calculate the diagonal for matvecs and smoothings
+                
                 VAT3(oC, i, j, k) = coef_oE   * VAT3(a1cf,   i,   j,   k) +
                               coef_oEm1 * VAT3(a1cf, i-1,   j,   k) +
                               coef_oN   * VAT3(a2cf,   i,   j,   k) +

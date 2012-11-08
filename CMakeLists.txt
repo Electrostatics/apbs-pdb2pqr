@@ -25,19 +25,24 @@ cmake_minimum_required (VERSION 2.6)
 # [x] Ubuntu x86_64
 # [x] Ubuntu i386
 # [ ] Redhat 5
-# [ ] ArchLinux x86_64
-# [ ] Mac OSX
+# [x] Mac OSX
 # [ ] Windows 7 x86_64
 # [ ] Windows 7 i386
-# [ ] Windows 7 x86_64 with Cygwin
-# [ ] Windows 7 x86_64 with Mingw
+# [ ] Windows 7 with Cygwin
+# [ ] Windows 7 with Mingw
+################################################################################
+
+
+
+################################################################################
+# Set up basic project stuff                                                   #
 ################################################################################
 
 include(CheckIncludeFiles)
 include(CheckFunctionExists)
 include(ExternalProject)
 
-set(APBS_VERSION "1.4.1")
+set(APBS_VERSION "1.4")
 set(PACKAGE_STRING ${APBS_VERSION})
 
 project(apbs)
