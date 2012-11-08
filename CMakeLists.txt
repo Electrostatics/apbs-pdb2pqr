@@ -125,7 +125,7 @@ try_run(
     FLOAT_EPSILON_COMPILED
     FLOAT_EPSILON_COMPUTED
     ${EXECUTABLE_OUTPUT_PATH}/temp
-    ${APBS_ROOT}/src/config/float_epsilon.c
+    ${APBS_ROOT}/src/.config/float_epsilon.c
     RUN_OUTPUT_VARIABLE FLOAT_EPSILON_OUTPUT
     )
 
@@ -142,7 +142,7 @@ try_run(
     DOUBLE_EPSILON_COMPILED
     DOUBLE_EPSILON_COMPUTED
     ${EXECUTABLE_OUTPUT_PATH}/temp
-    ${APBS_ROOT}/src/config/double_epsilon.c
+    ${APBS_ROOT}/src/.config/double_epsilon.c
     RUN_OUTPUT_VARIABLE DOUBLE_EPSILON_OUTPUT
     )
 
@@ -604,7 +604,7 @@ endif()
 try_compile(
     HAVE_EMBED
     ${APBS_ROOT}/build
-    ${APBS_ROOT}/src/config/embed_test.c
+    ${APBS_ROOT}/src/.config/embed_test.c
     )
 
 # TODO: Determine if the EMBED macro is even used
@@ -721,7 +721,7 @@ if(ENABLE_PYTHON)
 
 
     configure_file(
-        ${APBS_ROOT}/src/config/ApbsClient.py.in
+        ${APBS_ROOT}/src/.config/ApbsClient.py.in
         ${EXECUTABLE_OUTPUT_PATH}/ApbsClient.py
     )
 

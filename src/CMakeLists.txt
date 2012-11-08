@@ -54,7 +54,7 @@ add_executable(apbs main.c apbs.h routines.c routines.h)
 target_link_libraries(apbs ${APBS_LIBS} ${APBS_INTERNAL_LIBS})
 
 configure_file(
-    ${APBS_ROOT}/src/config/apbscfg.h.in
+    ${APBS_ROOT}/src/.config/apbscfg.h.in
     ${APBS_ROOT}/src/apbscfg.h
     )
 
