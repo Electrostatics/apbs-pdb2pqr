@@ -883,6 +883,14 @@ install(
     PATTERN "CMakeLists.txt" EXCLUDE
 )
 
+if(NOT HAVE_MALOC_H)
+    message(STATUS "Installing maloc headers")
+    install(
+        DIRECTORY ${APBS_ROOT}/include/maloc
+        DESTINATION ${HEADER_INSTALL_PATH}/..
+    )
+endif()
+
 
 
 ################################################################################
