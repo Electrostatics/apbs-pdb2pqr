@@ -9,16 +9,14 @@
  *  $Id: apbs_driver.c 556 2012-01-10 03:03:33Z rok $
  *
  */
-
-#include "apbs/apbs.h"  
-#include "apbs/nosh.h"  
-#include "apbs/mgparm.h"  
-#include "apbs/pbeparm.h"  
-#include "apbs/femparm.h"  
-
-#include "apbs/routines.h"
-
+  
 #include "apbs_driver.h"
+#include "apbs/apbs.h"  
+#include "apbs/routines.h"
+#include "apbs/generic/nosh.h"  
+#include "apbs/generic/mgparm.h"  
+#include "apbs/generic/pbeparm.h"  
+#include "apbs/generic/femparm.h"
 
 
 /*! \def MAX_BUF_SIZE
