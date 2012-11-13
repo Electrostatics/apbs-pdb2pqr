@@ -1,11 +1,7 @@
 cmake_minimum_required (VERSION 2.6)
 
 ################################################################################
-# TODO:  Add option to build documentation at compile time
 # TODO:  Add licensing and authorship information
-# TODO:  Make sure license information is in doc
-# TODO:  Make sure install documenteation is in doc
-# TODO:  Make sure authors documenteation is in doc
 # TODO:  Test with FEtk build
 # TODO:  Handle special mac dependencies
 #        (configure.ac:1306)
@@ -28,7 +24,7 @@ cmake_minimum_required (VERSION 2.6)
 # [x] Mac OSX
 # [ ] Windows 7 x86_64
 # [ ] Windows 7 i386
-# [ ] Windows 7 with Cygwin
+# [x] Windows 7 with Cygwin
 # [ ] Windows 7 with Mingw
 ################################################################################
 

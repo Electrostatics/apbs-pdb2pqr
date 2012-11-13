@@ -179,6 +179,7 @@ VPUBLIC void Vmatvec27_1s(int *nx, int *ny, int *nz,
     MAT3(uSW, *nx, *ny, *nz);
 
     // Do it
+    VABORT_MSG0("Quitting");
 
     #pragma omp parallel for private(i, j, k, tmpO, tmpU, tmpD)
     for (k=2; k<=*nz-1; k++) {
