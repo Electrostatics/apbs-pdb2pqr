@@ -155,22 +155,23 @@ endif()
 # Handle the math library dependency                                           #
 ################################################################################
 
-message(STATUS "Checking for math library")
+if(NOT WIN32)
+    message(STATUS "Checking for math library")
 
-find_library(
-    MATH_LIBRARY
-    NAMES m
-    PATHS ${SYS_LIBPATHS}
-    DOC   "The math library"
-    )
+    find_library(
+        MATH_LIBRARY
+        NAMES m
+        PATHS ${SYS_LIBPATHS}
+        DOC   "The math library"
+        )
 
-if(MATH_LIBRARY)
-    list(APPEND APBS_LIBS ${MATH_LIBRARY})
-    message(STATUS "The math library was found: ${MATH_LIBRARY}")
-else()
-    message(FATAL_ERROR "The math library (libm) is required for apbs")
+    if(MATH_LIBRARY)
+        list(APPEND APBS_LIBS ${MATH_LIBRARY})
+        message(STATUS "The math library was found: ${MATH_LIBRARY}")
+    else()
+        message(FATAL_ERROR "The math library (libm) is required for apbs")
+    endif()
 endif()
-
 
 
 
