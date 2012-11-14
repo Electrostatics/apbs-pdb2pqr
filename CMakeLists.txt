@@ -115,7 +115,7 @@ endif()
 # Determine Machine Epsilon values                                             #
 ################################################################################
 
-message(STATUS "Computing machien epsilon values")
+message(STATUS "Computing machine epsilon values")
 
 try_run(
     FLOAT_EPSILON_COMPILED
