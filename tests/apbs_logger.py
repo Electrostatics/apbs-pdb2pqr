@@ -1,5 +1,11 @@
 #! /usr/bin/env python
 
+"""
+Provides a logger that prints regular messages and logger messages.
+Logged messages are typically written to a log file, while regular messages
+typically are printed to stdout
+"""
+
 import sys
      
 class Logger:
