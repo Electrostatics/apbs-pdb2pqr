@@ -1,21 +1,35 @@
 #! /usr/bin/env python
 
+"""
+Checks computed forces from an apbs run
+"""
+
 import sys, re
 from apbs_logger import Logger
 
 error_tolerance = 1e-6
 
 class PolarForce:
+    """
+    Exctracts and compares computations of polar forces
+    """
     
+    # A crazy regex pattern used to match label/value sets
     pattern=r'\s+(?P<label>[a-zA-Z]+)\s+(?P<x>[+-]?\d\.\d+E[+-]\d+)\s+(?P<y>[+-]?\d\.\d+E[+-]\d+)\s+(?P<z>[+-]?\d\.\d+E[+-]\d+)'
 
     def __init__( self, label, x, y, z ):
+        """
+        Constructs a polar force result from supplied values
+        """
         self.label = label
         self.x = x
         self.y = y
         self.z = z
         
     def __init__( self, line ):
+        """
+        Extracts ploar force results from a file at a given line
+        """
         m = re.search( self.pattern, line )
         self.label = m.group( 'label' )
         self.x = float( m.group( 'x' ) )
@@ -23,6 +37,10 @@ class PolarForce:
         self.z = float( m.group( 'z' ) )
         
     def diff( self, other ):
+        """
+        Compares the value of two polar force field results
+        """
+        
         diff_dict = {}
         for d in ( 'x', 'y', 'z' ):
             diff_dict[ d ] = abs( getattr( self, d ) - getattr( other, d ) )
@@ -37,14 +55,24 @@ class PolarForce:
         
 
 class ApolarForce( PolarForce ):
+    """
+    Exctracts and compares computations of apolar forces
+    """
 
+    # A crazy regex pattern used to match label/value sets
     pattern=r'\s+(?P<label>[a-zA-Z]+)\s+(?P<atom>\w+)\s+(?P<x>[+-]?\d\.\d+E[+-]\d+)\s+(?P<y>[+-]?\d\.\d+E[+-]\d+)\s+(?P<z>[+-]?\d\.\d+E[+-]\d+)'
 
     def __init__( self, label, atom, x, y, z ):
+        """
+        Constructs an apolar force result from supplied values
+        """
         super( ApolarForce, self ).__init__( self, x, y, z )
         self.label = label
         
     def __init__( self, line ):
+        """
+        Extracts aploar force results from a file at a given line
+        """
         m = re.search( self.pattern, line )
         self.label = m.group( 'label' )
         self.atom = m.group( 'atom' )
@@ -62,6 +90,9 @@ class ApolarForce( PolarForce ):
         
         
 def extract_forces( force_class, lines, start_pattern, ):
+    """
+    Extracts force results
+    """
     force_dict = {}
     in_section = False
     in_forces = False
@@ -93,6 +124,10 @@ def parse_forces( force_class, lines ):
         
 
 def compare_force_dicts( test_force_dict, true_force_dict ):
+    """
+    Compares force dictionaries
+    """
+    
     for force_key in test_force_dict.keys():
         test_force = test_force_dict[ force_key ]
         true_force = true_force_dict[ force_key ]
