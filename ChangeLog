@@ -7,6 +7,8 @@ Please see http://www.poissonboltzmann.org/pdb2pqr/release-history
  * Improved error reporting.
  * Added support for reference command line option for PROPKA.
  * Added newresinter plugin.
+ * Mol2 file handling is now case insensitive with atom names. 
+ * PROPKA with a pH of 7 is now specified by default on the web service.
  
 - BUG FIXES
  * Rolled back change that prevented plugins from interfering with each other. Large proteins would cause a stack overflow when trying to do a deep copy.
@@ -16,3 +18,4 @@ Please see http://www.poissonboltzmann.org/pdb2pqr/release-history
  * Fixed user specified mobile ion species not being passed to apbs input file.
  * Removed ambiguous A, ADE, C, CYT, G, GUA, T, THY, U, URA as possible residue names.
  * Removed eval from pdb parsing routines.
+ * Updated web links to refer to http://www.poissonboltzmann.org where appropriate. 

@@ -267,6 +267,10 @@ ParseRadiiDict = {"C": 1.70,
                    "P": 1.90,
                    "Cl": 1.75}
 
+#Add lower case keys to more lenient matching.
+ParseRadiiDictLower = dict((key.lower(), value) for key, value in ParseRadiiDict.items()) 
+ParseRadiiDict.update(ParseRadiiDictLower)
+
 class ligand_charge_handler(MOL2MOLECULE):
     """Make sure that we are up to date with respect to the charge calculation"""
 
