@@ -213,15 +213,16 @@ Available options:
 <HR>
 The PDB2PQR application and web server was written by:
 <blockquote>
-<a href="http://enzyme.ucd.ie//group_members/jens/">Jens Erik Nielsen</a><BR>
+<a href="http://enzyme.ucd.ie/main/index.php/Main_Page">Jens Erik Nielsen</a><BR>
 <a href="http://agave.wustl.edu">Todd Dolinsky</a><BR>
-<a href="http://agave.wustl.edu">Nathan Baker</a><P>
+<a href="http://nabaker.me/">Nathan Baker</a><BR>
+Kyle Monson<P>
 </blockquote>
 PDB2PQR Opal integration by:
 <blockquote>
 <a href="http://nbcr.net">Wes Goodman</a><BR>
-<a href="http://agave.wustl.edu">Samir Unni</a><BR>
-<a href="http://agave.wustl.edu">Yong Huang</a><P>
+Samir Unni<BR>
+Yong Huang<P>
 </blockquote>
 JMol visualization scripts and applets provided by:
 <blockquote>
