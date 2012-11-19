@@ -19,3 +19,4 @@ Please see http://www.poissonboltzmann.org/pdb2pqr/release-history
  * Removed ambiguous A, ADE, C, CYT, G, GUA, T, THY, U, URA as possible residue names.
  * Removed eval from pdb parsing routines.
  * Updated web links to refer to http://www.poissonboltzmann.org where appropriate. 
+ * Fixed hbond extension output to include insertion code in residue name. 
