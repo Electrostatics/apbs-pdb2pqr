@@ -1,4 +1,4 @@
-cmake_minimum_required (VERSION 2.6)
+cmake_minimum_required (VERSION 2.8.8)
 
 ################################################################################
 # TODO:  Add licensing and authorship information
@@ -21,6 +21,7 @@ cmake_minimum_required (VERSION 2.6)
 # [x] Ubuntu x86_64
 # [x] Ubuntu i386
 # [ ] Redhat 5
+# [x] Redhat 6
 # [x] Mac OSX
 # [ ] Windows 7 x86_64
 # [ ] Windows 7 i386
