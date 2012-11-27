@@ -9,6 +9,7 @@ Please see http://www.poissonboltzmann.org/pdb2pqr/release-history
  * Added newresinter plugin.
  * Mol2 file handling is now case insensitive with atom names. 
  * PROPKA with a pH of 7 is now specified by default on the web service.
+ * Compilation is now done with scons.
  
 - BUG FIXES
  * Rolled back change that prevented plugins from interfering with each other. Large proteins would cause a stack overflow when trying to do a deep copy.

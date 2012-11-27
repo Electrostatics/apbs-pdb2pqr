@@ -46,8 +46,6 @@
 
 __date__  = "5 April 2010"
 __author__ = "Todd Dolinsky, Nathan Baker, Jens Nielsen, Paul Czodrowski, Jan Jensen, Samir Unni, Yong Huang"
-__version__ = "1.8"
-
 
 import string
 import sys
@@ -73,6 +71,8 @@ from src.hydrogens import *
 from src.aconf import *
 from StringIO import *
 from src.errors import PDB2PQRError
+
+__version__ = PDB2PQR_VERSION
 
 import extensions
 
@@ -518,17 +518,11 @@ def mainCommand(argv):
     
     extensions.setupExtensionsOptions(parser)
     
-    (options, args) = parser.parse_args() 
+    (options, args) = parser.parse_args(argv[1:]) 
     
     if len(args) != 2:
-        parser.error('Incorrect number (%d) of arguments!\nargv: %s, args: %s' % (len(args),argv, args))   
+        parser.error('Incorrect number (%d) of arguments!\nargs: %s' % (len(args), args))   
 
-    # Append Numeric/Numpy path to sys.path if the user specified a non-standard location during configuration
-    sys.argv=argv
-    package_path = PACKAGE_PATH
-    if package_path != "":
-        sys.path.extend(package_path.split(":"))
-       
     propkaOpts = None 
     if (not options.pH is None): 
         if(options.pH < 0.0 or options.pH > 14.0):
