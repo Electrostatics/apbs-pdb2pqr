@@ -46,8 +46,6 @@
 
 __date__  = "5 April 2010"
 __author__ = "Todd Dolinsky, Nathan Baker, Jens Nielsen, Paul Czodrowski, Jan Jensen, Samir Unni, Yong Huang"
-__version__ = "1.8"
-
 
 import glob
 import os
@@ -80,7 +78,10 @@ from src.aconf import (STYLESHEET,
                        HAVE_PDB2PQR_OPAL,
                        INSTALLDIR,
                        TMPDIR,
-                       MAXATOMS)
+                       MAXATOMS, 
+                       PDB2PQR_VERSION)
+
+__version__ = PDB2PQR_VERSION
 
 
 from main import runPDB2PQR

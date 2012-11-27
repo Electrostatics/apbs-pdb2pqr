@@ -9,6 +9,7 @@ __author__="Jens Erik Nielsen, Todd Dolinsky, Yong Huang, Tommy Carstensen"
 
 debug=False
 import optparse
+import math
 import sys, os
 from pKa_base import *
 
@@ -583,8 +584,7 @@ class pKaRoutines:
                     #
                     atomlist=[]
                     for atomname in atomnames:
-                        if residue.getAtom(atomname) in atomlist: pass
-                        else:
+                        if residue.getAtom(atomname) not in atomlist: 
                             atomlist.append(residue.getAtom(atomname))
 
                     energy=0.0
@@ -1020,9 +1020,8 @@ class pKaRoutines:
                 continue
             charge, radius = self.forcefield.getParams1(residue, atomname)
             sum=sum+charge
-        if abs(sum)>0.05:
-            return 1
-        return 0
+
+        return abs(sum)>0.05
 
     #
     # ----------------------------------
@@ -1345,7 +1344,6 @@ class pKaRoutines:
                     # Add corrections for Asp and Glu trans states.
                     # His tautomers etc.
                     #
-                    import math
                     print self.get_state_name(titration.name,state)
                     if self.get_state_name(titration.name,state) in ['ASH1t','ASH2t','GLH1t','GLH2t']:
                         energy=energy+math.log(10)*1.99
@@ -1984,7 +1982,7 @@ class pKaRoutines:
                 print atomname,charge
                 print residue.isCterm
                 raise 'Charge on atom is None'
-            sum=sum+charge
+            sum+=charge
         if abs(sum)<0.001:
             neutral_state=start_state
         #

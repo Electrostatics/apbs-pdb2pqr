@@ -1,0 +1,35 @@
+Import('env')
+Import('pdb2pqr')
+import sys
+import os
+
+commandLineStart = sys.executable + ' ' + str(pdb2pqr[0])
+nullTarget = '/dev/null'    
+if os.name == 'nt':
+    nullTarget = 'nul'
+    
+testList = []
+testParams = []
+with open('lst') as f:
+    for inName in f.readlines():
+    	name = inName.strip()
+    	testParams.append((name,'out/'+name+'.pqr','out/'+name+'.err'))
+        
+testCount = GetOption('longTestCount')
+if not GetOption("clean") and testCount is not None and testCount > 0:
+    testParams = testParams[:testCount]
+    
+#Long Test
+for param in testParams:
+    testCommand = commandLineStart + ' --ff=PARSE %s ${TARGETS[0]} 1>%s 2>${TARGETS[1]}' % (param[0],nullTarget)
+    runTest = env.Command([param[1],param[2]], 'lst', testCommand)
+
+    if GetOption("clean"):
+        env.Default(runTest)
+    else:
+        Depends(runTest, DEFAULT_TARGETS)
+    
+    AlwaysBuild(runTest)
+    testList.append(runTest)
+
+Alias('long-test', testList )

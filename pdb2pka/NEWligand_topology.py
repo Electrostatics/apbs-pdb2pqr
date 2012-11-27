@@ -5,7 +5,7 @@
 #
 try:
     import Numeric
-except:
+except ImportError:
     import numpy as Numeric
     
 #from sets import Set
