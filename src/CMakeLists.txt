@@ -32,7 +32,7 @@ macro(add_sublibrary LIBRARY)
     message(STATUS "With external header files ${EXTERNAL_HEADERS}")
     message(STATUS "With internal header files ${INTERNAL_HEADERS}")
     message(STATUS "With library dependencies ${LIBRARY_DEPENDENCIES}")
-    add_library(${LIBRARY_NAME} SHARED ${SOURCES} ${EXTERNAL_HEADERS} ${INTERNAL_HEADERS})
+    add_library(${LIBRARY_NAME} ${SOURCES} ${EXTERNAL_HEADERS} ${INTERNAL_HEADERS})
     target_link_libraries(${LIBRARY_NAME} ${LIBRARY_DEPENDENCIES})
     INSTALL(FILES ${EXTERNAL_HEADERS} DESTINATION ${HEADER_INSTALL_PATH}/${LIBRARY})
     INSTALL(TARGETS ${LIBRARY_NAME} DESTINATION ${LIBRARY_INSTALL_PATH})
@@ -51,7 +51,10 @@ if(ENABLE_FETK)
 endif(ENABLE_FETK)
 
 add_executable(apbs main.c apbs.h routines.c routines.h)
-target_link_libraries(apbs ${APBS_LIBS} ${APBS_INTERNAL_LIBS})
+message(STATUS " ")
+message(STATUS "${APBS_LIBS} ${APBS_INTERNAL_LIBS}")
+message(STATUS " ")
+target_link_libraries(apbs ${APBS_LIBS} ${APBS_INTERNAL_LIBS}  ${APBS_LIBS})
 
 configure_file(
     ${APBS_ROOT}/src/.config/apbscfg.h.in
@@ -60,3 +63,5 @@ configure_file(
 
 INSTALL(FILES apbs.h routines.h DESTINATION ${HEADER_INSTALL_PATH})
 INSTALL(TARGETS apbs DESTINATION ${EXECUTABLE_INSTALL_PATH})
+
+message(STATUS ${CMAKE_C_FLAGS})
