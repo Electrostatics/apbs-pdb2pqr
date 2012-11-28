@@ -43,8 +43,6 @@ set(PACKAGE_STRING ${APBS_VERSION})
 
 project(apbs)
 
-
-
 ################################################################################
 # Set project paths                                                            #
 ################################################################################
@@ -62,10 +60,7 @@ set(HEADER_INSTALL_PATH include/apbs)
 set(EXECUTABLE_INSTALL_PATH bin)
 set(SHARE_INSTALL_PATH share/apbs)
 
-find_file(
-    CONTRIB_PATH
-    NAMES contrib
-    PATHS ${APBS_ROOT}
+find_file(CONTRIB_PATH "contrib" PATHS "${APBS_ROOT}"
     DOC "The path to contributed modules for apbs"
     )
 
@@ -89,13 +84,7 @@ set(CMAKE_INCLUDE_PATH "${CMAKE_INCLUDE_PATH}")
 list(APPEND CMAKE_INCLUDE_PATH /usr/include)
 list(APPEND CMAKE_INCLUDE_PATH /usr/local/include)
 
-set(SYS_LIBPATHS "")
-list(APPEND SYS_LIBPATHS /usr/lib)
-list(APPEND SYS_LIBPATHS /usr/local/lib)
-list(APPEND SYS_LIBPATHS /lib/x86_64-linux-gnu)
-
 set(APBS_LIBS "")
-
 
 
 ################################################################################
@@ -149,178 +138,13 @@ else()
     message(FATAL_ERROR "Couldn't compute double precision machine epsilon")
 endif()
 
-
-
 ################################################################################
-# Handle the math library dependency                                           #
+# Find some libraries                                                          #
 ################################################################################
 
 if(NOT WIN32)
-    message(STATUS "Checking for math library")
-
-    find_library(
-        MATH_LIBRARY
-        NAMES m
-        PATHS ${SYS_LIBPATHS}
-        DOC   "The math library"
-        )
-
-    if(MATH_LIBRARY)
-        list(APPEND APBS_LIBS ${MATH_LIBRARY})
-        message(STATUS "The math library was found: ${MATH_LIBRARY}")
-    else()
-        message(FATAL_ERROR "The math library (libm) is required for apbs")
-    endif()
-endif()
-
-
-
-################################################################################
-# Handle the liberty library dependency                                        #
-################################################################################
-
-message(STATUS "Checking for the liberty library")
-
-find_library(
-    LIBERTY_LIBRARY
-    NAMES iberty
-    PATHS ${SYS_LIBPATHS}
-    DOC   "The liberty library"
-    )
-
-if(LIBERTY_LIBRARY)
-    list(APPEND APBS_LIBS ${LIBERTY_LIBRARY})
-    message(STATUS "The liberty library was found: ${LIBERTY_LIBRARY}")
-else()
-    message(WARNING "Liberty library not found")
-endif()
-
-# TODO: Determine if the liberty library is ever needed any more
-
-
-
-################################################################################
-# Handle the nsl library dependency                                            #
-################################################################################
-
-find_library(
-    NSL_LIBRARY
-    NAMES nsl
-    PATHS ${SYS_LIBPATHS}
-    DOC   "The nsl library"
-    )
-
-if(NSL_LIBRARY)
-    list(APPEND APBS_LIBS ${NSL_LIBRARY})
-    message(STATUS "The nsl library was found: ${NSL_LIBRARY}")
-else()
-    message(WARNING "The nsl library was not found")
-endif()
-
-# TODO: Determine if nsl library is ever needed any more
-
-
-
-################################################################################
-# Handle the socket library dependency                                         #
-################################################################################
-
-find_library(
-    SOCKET_LIBRARY
-    NAMES socket
-    PATHS ${SYS_LIBPATHS}
-    DOC   "The socket library"
-    )
-
-if(SOCKET_LIBRARY)
-    list(APPEND APBS_LIBS ${SOCKET_LIBRARY})
-    message(STATUS "The socket library was found: ${SOCKET_LIBRARY}")
-else()
-    message(WARNING "The socket library was not found")
-endif()
-
-# TODO: Determine if socket library is ever needed any more
-
-
-
-################################################################################
-# Handle the thread library dependency                                         #
-################################################################################
-
-find_library(
-    THREAD_LIBRARY
-    NAMES thread
-    PATHS ${SYS_LIBPATHS}
-    DOC   "The thread library"
-    )
-
-if(THREAD_LIBRARY)
-    list(APPEND APBS_LIBS ${THREAD_LIBRARY})
-    message(STATUS "The thread library was found: ${THREAD_LIBRARY}")
-else()
-    message(WARNING "The thread library was not found")
-endif()
-
-# TODO: Determine if thread library is ever needed any more
-
-
-
-################################################################################
-# Handle conditional inclusion of the readline library                         #
-################################################################################
-
-option(ENABLE_READLINE "Enable the readline library" OFF)
-
-if(ENABLE_READLINE)
-    message(STATUS "Checking for realine library")
-    find_library(
-        READLINE_LIBRARY
-        NAMES readline
-        PATHS ${SYS_LIBPATHS}
-        )
-
-    if(READLINE_LIBRARY)
-        list(APPEND APBS_LIBS ${READLINE_LIBRARY})
-        set(HAVE_LIBREADLINE 1)
-        message(STATUS "The readline library was found: ${READLINE_LIBRARY}")
-
-
-
-        message(STATUS "Checking fore ncurses library")
-        find_library(
-            NCURSES_LIBRARY
-            NAMES ncurses
-            PATHS ${SYS_LIBPATHS}
-            )
-
-        if(NCURSES_LIBRARY)
-            list(APPEND APBS_LIBS ${NCURSES_LIBRARY})
-            message(STATUS "The ncurses library was found: ${NCURSES_LIBRARY}")
-        else()
-            message(WARNING "The ncurses library was not found")
-        endif()
-    else()
-        message(WARNING "The readline library was not found.  Did not enable readline")
-    endif()
-endif()
-
-
-
-################################################################################
-# Handle conditional inclusion of the electric fence library                   #
-################################################################################
-
-option(ENABLE_EFENCE "Enable the electric fence library" OFF)
-
-if(ENABLE_EFENCE)
-    message(STATUS "Checking for efence library")
-    find_library(EFENCE_LIBRARY NAMES efence PATHS ${SYS_LIBPATHS})
-    if(EFENCE_LIBRARY)
-        list(APPEND APBS_LIBS ${EFENCE_LIBRARY})
-        message(STATUS "The efence library was found: ${EFENCE_LIBRARY}")
-    else()
-        message(WARNING "The efence library was not found. Did not enable efence")
-    endif()
+    find_library(MATH_LIBRARY "m")
+    list(APPEND APBS_LIBS ${MATH_LIBRARY})
 endif()
 
 
@@ -385,10 +209,8 @@ else()
     message(WARNING "External maloc headers not found.")
 endif()
 
-find_library(
-    MALOC_LIBRARY
-    NAMES maloc
-    PATHS ${FETK_PATH}/lib ${CONTRIB_PATH} ${SYS_LIBPATHS}
+find_library(MALOC_LIBRARY  "maloc"
+    PATHS "${FETK_PATH}/lib" "${CONTRIB_PATH}"
     DOC   "The fetk/maloc library"
 )
 
@@ -401,23 +223,26 @@ endif()
 if(NOT (HAVE_MALOC_H AND MALOC_LIBRARY))
     message(STATUS "Using internal contributed maloc library")
     ExternalProject_add(
-        maloc
+        "maloc"
         URL file://${CONTRIB_PATH}/maloc.tar.gz
         SOURCE_DIR ${CONTRIB_PATH}/maloc
         CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${APBS_ROOT}
+-DBUILD_SHARED_LIBS=${BUILD_SHARED_LIBS}
     )
     include_directories(${APBS_ROOT}/include)
-    set(
-        MALOC_LIBRARY_BASENAME
-        ${CMAKE_SHARED_LIBRARY_PREFIX}maloc${CMAKE_SHARED_LIBRARY_SUFFIX}
-    )
+    if(BUILD_SHARED_LIBS)
+        set(MALOC_LIBRARY_BASENAME ${CMAKE_SHARED_LIBRARY_PREFIX}maloc${CMAKE_SHARED_LIBRARY_SUFFIX})
+    else()
+        set(MALOC_LIBRARY_BASENAME
+${CMAKE_STATIC_LIBRARY_PREFIX}maloc${CMAKE_STATIC_LIBRARY_SUFFIX})
+    endif()
     install(
         FILES ${LIBRARY_OUTPUT_PATH}/${MALOC_LIBRARY_BASENAME}
         DESTINATION ${LIBRARY_INSTALL_PATH}
     )
     set(MALOC_LIBRARY ${LIBRARY_OUTPUT_PATH}/${MALOC_LIBRARY_BASENAME})
 endif()
-
+message(STATUS "External maloc library was found: ${MALOC_LIBRARY}")
 list(APPEND APBS_LIBS ${MALOC_LIBRARY})
 
 
@@ -551,20 +376,20 @@ endif()
 # Handle conditional inclusion/compilation of the contrib libz                 #
 ################################################################################
 
-option(ENABLE_ZLIB "Enable use of zlib library" ON)
+#option(ENABLE_ZLIB "Enable use of zlib library" ON)
 
-if(ENABLE_ZLIB)
-    message(STATUS "Checking for zlib")
-    find_package(ZLIB)
-    if(ZLIB_FOUND)
-        message(STATUS "The zlib library was found: ${ZLIB_LIBRARIES}")
-        include_directories(${ZLIB_INCLUDE_DIRS})
-        list(APPEND APBS_LIBS ${ZLIB_LIBRARIES})
-        set(HAVE_ZLIB 1)
-    else()
-        message(WARNING "The zlib library was not found.")
-    endif()
-endif()
+#if(ENABLE_ZLIB)
+#    message(STATUS "Checking for zlib")
+#    find_package(ZLIB)
+#    if(ZLIB_FOUND)
+#        message(STATUS "The zlib library was found: ${ZLIB_LIBRARIES}")
+#        include_directories(${ZLIB_INCLUDE_DIRS})
+#        list(APPEND APBS_LIBS ${ZLIB_LIBRARIES})
+#        set(HAVE_ZLIB 1)
+#    else()
+#        message(WARNING "The zlib library was not found.")
+#    endif()
+#endif()
 
 
 
