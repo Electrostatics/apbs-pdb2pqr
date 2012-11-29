@@ -123,6 +123,7 @@ def run_test( binary, test_files, test_name, test_directory, logger, ocd ):
     net_time = datetime.timedelta( 0 )
 
     # Change the current working directory to the test directory
+    print os.getcwd() #this makes ion-pmf work... dunno why
     os.chdir( test_directory )
 
     for ( base_name, expected_results ) in test_files:
