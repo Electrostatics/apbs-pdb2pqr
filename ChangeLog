@@ -10,6 +10,7 @@ Please see http://www.poissonboltzmann.org/pdb2pqr/release-history
  * Mol2 file handling is now case insensitive with atom names. 
  * PROPKA with a pH of 7 is now specified by default on the web service.
  * Compilation is now done with scons.
+ * Verbose output now includes information on all patches applied during a run.
  
 - BUG FIXES
  * Rolled back change that prevented plugins from interfering with each other. Large proteins would cause a stack overflow when trying to do a deep copy.
@@ -21,6 +22,8 @@ Please see http://www.poissonboltzmann.org/pdb2pqr/release-history
  * Removed eval from pdb parsing routines.
  * Updated web links to refer to http://www.poissonboltzmann.org where appropriate. 
  * Fixed hbond extension output to include insertion code in residue name.
+ * Fixed debumping routines not including water in their checks. Fixes bad debump of ASN B 20 in 1gm9 when run with pH 7.0.
+ * Fixed debumping failing to use best angle for a specific dihedral angle when no tested angles are without conflict.
  
 - CHANGES
  * Removed numpy from contrib. The user is expected to have numpy installed and available to python at configuration.
