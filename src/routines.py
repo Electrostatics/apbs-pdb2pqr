@@ -325,6 +325,8 @@ class Routines:
         """
         if patchname not in self.protein.patchmap:
             raise PDBInternalError("Unable to find patch %s!" % patchname)
+        
+        self.write('PATCH INFO: %s patched with %s\n' % (residue,patchname),1)
 
         # Make a copy of the reference, i.e. a new reference for
         # this patch.  Two examples:
@@ -1087,66 +1089,6 @@ class Routines:
 
         self.write("Done.\n")
 
-    def debumpProteinTopology(self):
-        """
-            Make sure that none of the added atoms in testtop.py were 
-            rebuilt on top of existing atoms.  See each called function
-            for more information.
-        """
-
-        self.write("Checking if we must debump any residues... \n")
-
-        # Do some setup
-
-        self.cells = Cells(CELL_SIZE)
-        self.cells.assignCells(self.protein)
-
-        self.calculateDihedralAngles()
-        self.setDonorsAndAcceptors()
-        self.updateInternalBonds()
-        self.setReferenceDistance()
-
-        # Determine which residues to debump
-
-        for residue in self.protein.getResidues():
-            if not isinstance(residue, Amino): continue
-
-            # Initialize variables
-
-            conflictnames = []
-
-            for atom in residue.getAtoms():
-                atomname = atom.name
-                if not atom.added: continue
-                if atomname == "H": continue
-                if atom.optimizeable: continue
-
-                nearatoms = self.findNearbyAtoms(atom)
-
-                # If something is too close, we must debump the residue
-
-                if nearatoms != {}:
-                    conflictnames.append(atomname)
-                    for repatom in nearatoms:
-                        self.write("%s %s is too close to %s %s\n" % \
-                                  (residue, atomname, repatom.residue, repatom.name), 1)
-
-            # If there are no conflicting atoms, move on
-
-            if conflictnames == []: continue
-
-            # Otherwise debump the residue
-
-            self.write("Starting to debump %s...\n" % residue, 1)
-            if self.debumpResidueTopology(residue, conflictnames):
-                self.write("Debumping Successful!\n\n", 1)
-            else:
-                text = "WARNING: Unable to debump %s\n" % residue
-                self.write("********\n%s********\n\n" % text)
-                self.warnings.append(text)
-
-        self.write("Done.\n")
-
     def debumpResidue(self, residue, conflictnames):
         """
             Debump a specific residue.  Only should be called
@@ -1175,7 +1117,7 @@ class Routines:
 
             anglenum = self.pickDihedralAngle(residue, conflictnames, anglenum)
 
-            if anglenum == -1: return 0
+            if anglenum == -1: return False
 
             self.write("Using dihedral angle number %i to debump the residue.\n" % anglenum, 1)
 
@@ -1197,11 +1139,12 @@ class Routines:
 
                 if score == 0:
                     self.write("No conflicts found at angle %.2f.\n" % newangle, 1)
-                    return 1
+                    return True
 
                 # Set the best angle
 
                 if score < bestscore:
+                    bestscore = score
                     bestangle = newangle
 
             self.setDihedralAngle(residue, anglenum, bestangle)
@@ -1210,72 +1153,7 @@ class Routines:
 
         # If we're here, debumping was unsuccessful
 
-        return 0
-
-    def debumpResidueTopology(self, residue, conflictnames):
-        """
-            Debump a specific residue for testtop.  Only should 
-            be called if the residue has been detected to have a
-            conflict. If called, try to rotate about dihedral 
-            angles to resolve the conflict.
-
-            Parameters
-                residue:  The residue in question
-                conflictnames:  A list of atomnames that were
-                                rebuilt too close to other atoms
-            Returns
-                1 if successful, 0 otherwise
-        """
-
-        # Initialize some variables
-
-        step = 0
-        bestscore = 100
-        anglenum = -1
-        newcauses = []
-
-        # Try (up to 10 times) to find a workable solution
-
-        while step < 10:
-
-            anglenum = self.pickDihedralAngle(residue, conflictnames, anglenum)
-
-            if anglenum == -1: return 0
-
-            self.write("Using dihedral angle number %i to debump the residue.\n" % anglenum, 1)
-
-            for i in range(72):
-                newangle = residue.dihedrals[anglenum] + 5.0
-                self.setDihedralAngle(residue, anglenum, newangle)
-
-                # Check for conflicts
-
-                score = 0
-
-                atomnames = residue.reference.dihedrals[anglenum].split()
-                pivot = atomnames[2]
-                moveablenames = self.getMoveableNames(residue, pivot)
-                for name in moveablenames:
-                    nearatoms = self.findNearbyAtomsTopology(residue.getAtom(name))
-                    for atom in nearatoms:
-                        score += nearatoms[atom]
-
-                if score == 0:
-                    self.write("No conflicts found at angle %.2f.\n" % newangle, 1)
-                    return 1
-
-                # Set the best angle
-
-                if score < bestscore:
-                    bestangle = newangle
-
-            self.setDihedralAngle(residue, anglenum, bestangle)
-            step += 1
-
-
-        # If we're here, debumping was unsuccessful
-
-        return 0
+        return False
 
     def calculateDihedralAngles(self):
         """
@@ -1358,7 +1236,7 @@ class Routines:
             Parameters
                 atom:  Find nearby atoms to this atom (Atom)
             Returns
-                nearatoms:  A list of atoms close to the atom.
+                nearatoms:  A dictionary of <Atom too close> to <amount of overlap for that atom>.
         """
         # Initialize some variables
 
@@ -1375,69 +1253,29 @@ class Routines:
 
         for closeatom in closeatoms:
             closeresidue = closeatom.residue
-            if closeresidue == residue: continue
-            if not isinstance(closeresidue, Amino): continue
-            if isinstance(residue, CYS):
-                if residue.SSbondedpartner == closeatom: continue
+            if closeresidue == residue: 
+                continue
+            if not isinstance(closeresidue, (Amino, WAT)): 
+                continue
+            if isinstance(residue, CYS) and residue.SSbondedpartner == closeatom: 
+                continue
 
             # Also ignore if this is a donor/acceptor pair
 
-            if atom.isHydrogen() and len(atom.bonds) != 0 and atom.bonds[0].hdonor \
-               and closeatom.hacceptor: continue
-            if closeatom.isHydrogen() and len(closeatom.bonds) != 0 and closeatom.bonds[0].hdonor \
-                   and atom.hacceptor:
+            if (atom.isHydrogen() and len(atom.bonds) != 0 and 
+                atom.bonds[0].hdonor and closeatom.hacceptor): 
+                continue
+            
+            if (closeatom.isHydrogen() and len(closeatom.bonds) != 0 and 
+                closeatom.bonds[0].hdonor and atom.hacceptor):
                 continue
 
             dist = distance(atom.getCoords(), closeatom.getCoords())
             if dist < cutoff:
-                nearatoms[closeatom] = dist
+                nearatoms[closeatom] = cutoff - dist
 
         return nearatoms
 
-    def findNearbyAtomsTopology(self, atom):
-        """
-            Find nearby atoms for conflict-checking in testtop.  
-            Uses neighboring cells to compare atoms rather than 
-            an all versus all O(n^2) algorithm.
-
-            Parameters
-                atom:  Find nearby atoms to this atom (Atom)
-            Returns
-                nearatoms:  A list of atoms close to the atom.
-        """
-        # Initialize some variables
-
-        nearatoms = {}
-        residue = atom.residue
-        cutoff = BUMP_DIST
-        if atom.isHydrogen(): cutoff = BUMP_HDIST
-
-        # Get atoms from nearby cells
-
-        closeatoms = self.cells.getNearCells(atom)
-
-        # Loop through and see if any are within the cutoff
-
-        for closeatom in closeatoms:
-            closeresidue = closeatom.residue
-            if closeresidue == residue and "H" not in atom.name: continue
-            if not isinstance(closeresidue, Amino): continue
-            if isinstance(residue, CYS):
-                if residue.SSbondedpartner == closeatom: continue
-
-            # Also ignore if this is a donor/acceptor pair
-
-            if atom.isHydrogen() and closeatom.name == atom.bonds[0].name: continue
-
-            if closeatom.isHydrogen() and closeatom.bonds[0].hdonor \
-                   and atom.hacceptor:
-                continue
-
-            dist = distance(atom.getCoords(), closeatom.getCoords())
-            if dist < cutoff:
-                nearatoms[closeatom] = dist
-
-        return nearatoms
 
     def pickDihedralAngle(self, residue, conflictnames, oldnum=None):
         """ 
@@ -1463,7 +1301,7 @@ class Routines:
         best = 0
         for i in range(len(residue.dihedrals)):
             if i == oldnum: continue
-            if residue.dihedrals[i] == None: continue
+            if residue.dihedrals[i] is None: continue
 
             score = 0
             atomnames = residue.reference.dihedrals[i].split()
@@ -1799,15 +1637,25 @@ class Cells:
                 atom:  The atom to add (atom)
         """
         size = self.cellsize
+        
         x = atom.get("x")
-        if x < 0: x = (int(x) - 1) / size * size
-        else: x = int(x) / size * size
+        if x < 0: 
+            x = (int(x) - 1) / size * size
+        else: 
+            x = int(x) / size * size
+            
         y = atom.get("y")
-        if y < 0: y = (int(y) - 1) / size * size
-        else: y = int(y) / size * size
+        if y < 0: 
+            y = (int(y) - 1) / size * size
+        else: 
+            y = int(y) / size * size
+            
         z = atom.get("z")
-        if z < 0: z = (int(z) - 1) / size * size
-        else: z = int(z) / size * size
+        if z < 0: 
+            z = (int(z) - 1) / size * size
+        else: 
+            z = int(z) / size * size
+            
         key = (x, y, z)
         try:
             self.cellmap[key].append(atom)

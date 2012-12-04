@@ -319,7 +319,6 @@ def runPDB2PQR(pdblist, ff,
             myhydRoutines.initializeFullOptimization()
             myhydRoutines.optimizeHydrogens()
         else:
-            #myhydRoutines = hydrogenRoutines(myRoutines)
             myhydRoutines.initializeWaterOptimization()
             myhydRoutines.optimizeHydrogens()
 
