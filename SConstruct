@@ -85,11 +85,12 @@ AddOption('--rebuild-swig-bindings',
         default=False,
         help='Rebuild swig bindings for pdb2pka. Requires swig be installed. In Windows swig must be in your PATH.')
 
-AddOption('--rebuild-docs',
-        dest='docs',
-        action='store_true',
-        default=False,
-        help='Rebuild pydocs.')
+#TODO: setup rebuilding of docs.
+#AddOption('--rebuild-docs',
+#        dest='docs',
+#        action='store_true',
+#        default=False,
+#        help='Rebuild pydocs.')
 
 AddOption('--long-test-count',
         dest='longTestCount',
@@ -211,6 +212,8 @@ def print_default_message(target_list):
         return
     if GetOption("clean"):
         return
+    if GetOption("help"):
+        return
     print
     print 'TARGETS:', target_list
     print
@@ -227,8 +230,8 @@ def print_default_message(target_list):
     else:
         print 'PDB2PQR jobs run via the web interface will be run via opal at', GetOption('opal') 
     print
-    print 'Run "./scons.py install" to install pdb2pqr in', prefix
-    print 'Run "./scons.py test", "./scons.py advtest", or "./scons.py completetest" to run various pdb2pqr tests.'
-    print 'To setup a web service create a symbolic link to', prefix, 'that enables you to view', url,'after running "./scons.py install"'
+    print 'Run "scons/scons.py install" to install pdb2pqr in', prefix
+    print 'Run "scons/scons.py test", "scons/scons.py advtest", or "scons/scons.py completetest" to run various pdb2pqr tests.'
+    print 'To setup a web service create a symbolic link to', prefix, 'that enables you to view', url,'after running "scons/scons.py install"'
     
 atexit.register(print_default_message, BUILD_TARGETS)
