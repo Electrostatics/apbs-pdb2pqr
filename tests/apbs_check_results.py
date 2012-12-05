@@ -36,7 +36,7 @@ def check_results( computed_result, expected_result, input_file, logger, ocd ):
         expected_result = round_sigfigs( expected_result, 6 )
     
     # Compute the error in the calculation
-    error = abs( ( computed_result - expected_result ) * 100.0 / 2.0 )
+    error = abs(computed_result - expected_result)/expected_result*100.0
     
     # An exact match after rounding to specifiec precision means the test passed
     if computed_result == expected_result:

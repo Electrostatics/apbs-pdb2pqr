@@ -41,6 +41,7 @@ include(ExternalProject)
 
 set(APBS_VERSION "1.4")
 set(PACKAGE_STRING ${APBS_VERSION})
+set(CMAKE_BUILD_TYPE "RELWITHDEBINFO")
 
 project(apbs)
 
