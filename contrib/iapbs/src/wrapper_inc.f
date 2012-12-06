@@ -20,7 +20,7 @@ c      INTEGER(kind=4) NPROC,MPIINFO4,MPICOMM4,ME4,MPISELF,MPIERRS(1)
 c      INTEGER(kind=4) ME,NP,MPIDP,MEROOT,IONE,IERR
 
       integer :: MAXION, NATOMS
-      parameter (MAXION = 10, NATOMS = MAXAIM)
+      parameter (MAXION = 10, NATOMS = 1000)
 
 c-----------------------------------------------------------------------
 c     int ispara;          /**< 1 => is a parallel calculation,

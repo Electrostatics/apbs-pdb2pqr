@@ -14,16 +14,16 @@ c
       character*80 rcsid, finput, pqr
       data rcsid /'$Id: wrapper.f 556 2012-01-10 03:03:33Z rok $'/
 
-      integer MAXAIM
-      parameter (MAXAIM = 150000)
+c      integer MAXAIM
+c      parameter (MAXAIM = 150000)
 
       integer ierr
       include "wrapper_inc.f"
 
-
-#ifdef HAVE_MPI_H
-      include "mpif.h"
-#endif
+c disabled for now, rok 2012.12.4
+c#ifdef HAVE_MPI_H
+c      include "mpif.h"
+c#endif
       double precision x(NATOMS), y(NATOMS), z(NATOMS)
       double precision radius(NATOMS), charge(NATOMS)
 
@@ -57,9 +57,9 @@ c local
       character dummyc
       double precision dummyr, maxx, minx, maxy, miny, maxz, minz
 
-#ifdef HAVE_MPI_H
-      call MPI_INIT(ierr)
-#endif
+c#ifdef HAVE_MPI_H
+c      call MPI_INIT(ierr)
+c#endif
 
 c     initialization of input data
       do i=1, 3
@@ -138,7 +138,7 @@ c     read in PQR data
       print *, 'Reading PQR file ...'
       open(1, file=pqr, status="old")
       natom = 0
-      do i = 1, MAXAIM
+      do i = 1, 1000
          read(1,*, end=120) dummyc, dummyi, dummyc, dummyc, dummyi,
      +    x(i), y(i), z(i),
      +    charge(i), radius(i)
@@ -358,8 +358,8 @@ c OK, now we are ready to call the apbs_driver and start the show
       end if
 
 
-#ifdef HAVE_MPI_H
-      call MPI_FINALIZE(ierr)
-#endif
+c#ifdef HAVE_MPI_H
+c      call MPI_FINALIZE(ierr)
+c#endif
 
       end
