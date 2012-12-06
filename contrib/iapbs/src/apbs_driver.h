@@ -58,7 +58,7 @@
  * @param apbsdby Dielectric boundary force (y)
  * @param apbsdbz Dielectric boundary force (z)
  * @return  1 if successful, 0 otherwise */
-VEXTERNC int apbsdrv_(int *nat, 
+VEXTERNC int apbsdrv_(int *nat,
 		      double x[NATOMS], 
 		      double y[NATOMS], 
 		      double z[NATOMS], 
