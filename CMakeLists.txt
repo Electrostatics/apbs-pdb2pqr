@@ -106,38 +106,41 @@ endif()
 # Determine Machine Epsilon values                                             #
 ################################################################################
 
-message(STATUS "Computing machine epsilon values")
-
-try_run(
-    FLOAT_EPSILON_COMPILED
-    FLOAT_EPSILON_COMPUTED
-    ${EXECUTABLE_OUTPUT_PATH}/temp
-    ${APBS_ROOT}/src/.config/float_epsilon.c
-    RUN_OUTPUT_VARIABLE FLOAT_EPSILON_OUTPUT
+OPTION(CHECK_EPSILON "" YES)
+if(CHECK_EPSILON)
+    message(STATUS "Computing machine epsilon values")
+    try_run(
+        FLOAT_EPSILON_COMPILED
+        FLOAT_EPSILON_COMPUTED
+        ${EXECUTABLE_OUTPUT_PATH}/temp
+        ${APBS_ROOT}/src/.config/float_epsilon.c
+        RUN_OUTPUT_VARIABLE FLOAT_EPSILON_OUTPUT
     )
 
-if(FLOAT_EPSILON_COMPUTED)
-    message(STATUS "Floating point epsilon is ${FLOAT_EPSILON_OUTPUT}")
-    set(FLOAT_EPSILON ${FLOAT_EPSILON_OUTPUT})
-else()
-    message(FATAL_ERROR "Couldn't compute floating point machine epsilon")
-endif()
+    if(FLOAT_EPSILON_COMPUTED)
+        message(STATUS "Floating point epsilon is ${FLOAT_EPSILON_OUTPUT}")
+        set(FLOAT_EPSILON ${FLOAT_EPSILON_OUTPUT})
+    else()
+        message(FATAL_ERROR "Couldn't compute floating point machine epsilon")
+    endif()
 
-
-
-try_run(
-    DOUBLE_EPSILON_COMPILED
-    DOUBLE_EPSILON_COMPUTED
-    ${EXECUTABLE_OUTPUT_PATH}/temp
-    ${APBS_ROOT}/src/.config/double_epsilon.c
-    RUN_OUTPUT_VARIABLE DOUBLE_EPSILON_OUTPUT
+    try_run(
+        DOUBLE_EPSILON_COMPILED
+        DOUBLE_EPSILON_COMPUTED
+        ${EXECUTABLE_OUTPUT_PATH}/temp
+        ${APBS_ROOT}/src/.config/double_epsilon.c
+        RUN_OUTPUT_VARIABLE DOUBLE_EPSILON_OUTPUT
     )
 
-if(DOUBLE_EPSILON_COMPUTED)
-    message(STATUS "Double precision epsilon is ${DOUBLE_EPSILON_OUTPUT}")
-    set(DOUBLE_EPSILON ${DOUBLE_EPSILON_OUTPUT})
+    if(DOUBLE_EPSILON_COMPUTED)
+        message(STATUS "Double precision epsilon is ${DOUBLE_EPSILON_OUTPUT}")
+        set(DOUBLE_EPSILON ${DOUBLE_EPSILON_OUTPUT})
+    else()
+        message(FATAL_ERROR "Couldn't compute double precision machine epsilon")
+    endif()
 else()
-    message(FATAL_ERROR "Couldn't compute double precision machine epsilon")
+        set(FLOAT_EPSILON "1.19209290e-7")
+        set(DOUBLE_EPSILON "2.2204460492503131e-16")
 endif()
 
 ################################################################################
@@ -260,7 +263,7 @@ if(ENABLE_FETK)
 
     find_library(
         PUNC_LIBRARY
-        NAMES punk
+        NAMES "punk"
         PATHS ${FETK_PATH}/lib ${SYS_LIBPATHS}
         DOC   "The fetk/punc library"
         )
@@ -277,7 +280,7 @@ if(ENABLE_FETK)
 
     find_library(
         MC_LIBRARY
-        NAMES mc
+        NAMES "mc"
         PATHS ${FETK_PATH}/lib ${SYS_LIBPATHS}
         DOC   "The fetk/mc library"
         )
@@ -294,7 +297,7 @@ if(ENABLE_FETK)
 
     find_library(
         MCX_LIBRARY
-        NAMES mcx
+        NAMES "mcx"
         PATHS ${FETK_PATH}/lib ${SYS_LIBPATHS}
         DOC   "The fetk/mcx library"
         )
@@ -311,7 +314,7 @@ if(ENABLE_FETK)
 
     find_library(
         GAMER_LIBRARY
-        NAMES gamer
+        NAMES "gamer"
         PATHS ${FETK_PATH}/lib ${SYS_LIBPATHS}
         DOC   "The fetk/gamer library"
         )
@@ -328,7 +331,7 @@ if(ENABLE_FETK)
 
     find_library(
         SUPERLU_LIBRARY
-        NAMES superlu
+        NAMES "superlu"
         PATHS ${SYS_LIBPATHS}
         DOC "The superlu library"
     )
@@ -343,7 +346,7 @@ if(ENABLE_FETK)
 
     find_library(
         UMFPACK_LIBRARY
-        NAMES umfpack
+        NAMES "umfpack"
         PATHS ${SYS_LIBPATHS}
         DOC "The umfpack library"
     )
@@ -358,7 +361,7 @@ if(ENABLE_FETK)
 
     find_library(
         BLAS_LIBRARY
-        NAMES blas
+        NAMES "blas"
         PATHS ${SYS_LIBPATHS}
         DOC "The blas library"
     )
@@ -370,28 +373,6 @@ if(ENABLE_FETK)
     endif()
 
 endif()
-
-
-
-################################################################################
-# Handle conditional inclusion/compilation of the contrib libz                 #
-################################################################################
-
-#option(ENABLE_ZLIB "Enable use of zlib library" ON)
-
-#if(ENABLE_ZLIB)
-#    message(STATUS "Checking for zlib")
-#    find_package(ZLIB)
-#    if(ZLIB_FOUND)
-#        message(STATUS "The zlib library was found: ${ZLIB_LIBRARIES}")
-#        include_directories(${ZLIB_INCLUDE_DIRS})
-#        list(APPEND APBS_LIBS ${ZLIB_LIBRARIES})
-#        set(HAVE_ZLIB 1)
-#    else()
-#        message(WARNING "The zlib library was not found.")
-#    endif()
-#endif()
-
 
 
 ################################################################################
