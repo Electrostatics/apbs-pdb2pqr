@@ -22,8 +22,8 @@ target_link_libraries(dxmath ${LIBS})
 add_executable(mergedx mergedx.c)
 target_link_libraries(mergedx ${LIBS})
 
-add_executable(mergedx2 mergedx2.c)
-target_link_libraries(mergedx2 ${LIBS})
+#add_executable(mergedx2 mergedx2.c)
+#target_link_libraries(mergedx2 ${LIBS})
 
 add_executable(value value.c)
 target_link_libraries(value ${LIBS})
