@@ -1101,7 +1101,7 @@ class Routines:
                 conflictnames:  A list of atomnames that were
                                 rebuilt too close to other atoms
             Returns
-                1 if successful, 0 otherwise
+                True if successful, False otherwise
         """
 
         # Initialize some variables
@@ -1109,17 +1109,22 @@ class Routines:
         step = 0
         bestscore = 100
         anglenum = -1
-        newcauses = []
+        currentConflictNames = conflictnames
+        
 
         # Try (up to 10 times) to find a workable solution
 
         while step < 10:
 
-            anglenum = self.pickDihedralAngle(residue, conflictnames, anglenum)
+            anglenum = self.pickDihedralAngle(residue, currentConflictNames, anglenum)
 
             if anglenum == -1: return False
 
             self.write("Using dihedral angle number %i to debump the residue.\n" % anglenum, 1)
+            
+            foundImprovement = False
+            bestangle = 0.0
+            originalAngle = residue.dihedrals[anglenum] 
 
             for i in range(72):
                 newangle = residue.dihedrals[anglenum] + 5.0
@@ -1129,13 +1134,17 @@ class Routines:
 
                 score = 0
 
+                newcauses = []
                 atomnames = residue.reference.dihedrals[anglenum].split()
                 pivot = atomnames[2]
                 moveablenames = self.getMoveableNames(residue, pivot)
                 for name in moveablenames:
                     nearatoms = self.findNearbyAtoms(residue.getAtom(name))
-                    for atom in nearatoms:
-                        score += nearatoms[atom]
+                    for v in nearatoms.values():
+                        score += v
+                        
+                    if len(nearatoms) > 0:
+                        newcauses.append(name)
 
                 if score == 0:
                     self.write("No conflicts found at angle %.2f.\n" % newangle, 1)
@@ -1146,8 +1155,17 @@ class Routines:
                 if score < bestscore:
                     bestscore = score
                     bestangle = newangle
-
-            self.setDihedralAngle(residue, anglenum, bestangle)
+                    currentConflictNames = newcauses
+                    foundImprovement = True
+        
+            if foundImprovement:   
+                self.write("Best score of %.2f at angle %.2f. New conflict set: " % (bestscore, bestangle), 1)
+                self.write(str(currentConflictNames)+"\n", 1)    
+                self.setDihedralAngle(residue, anglenum, bestangle)
+            else:
+                self.write("No improvement found for this dihedral angle.\n", 1)
+                self.setDihedralAngle(residue, anglenum, originalAngle)
+                
             step += 1
 
 
@@ -1299,7 +1317,16 @@ class Routines:
         """
         bestnum = -1
         best = 0
-        for i in range(len(residue.dihedrals)):
+        
+        iList = range(len(residue.dihedrals))
+        #Make sure our testing is done round robin.
+        if oldnum is not None and oldnum >= 0 and len(iList) > 0:
+            del iList[oldnum]
+            testDihedralIndecies = iList[oldnum:] + iList[:oldnum]
+        else:
+            testDihedralIndecies = iList
+                                     
+        for i in testDihedralIndecies:
             if i == oldnum: continue
             if residue.dihedrals[i] is None: continue
 
