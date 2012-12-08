@@ -13,7 +13,7 @@ testParams = []
 with open('lst') as f:
     for inName in f.readlines():
     	name = inName.strip()
-    	testParams.append((name,'out/'+name+'.pqr','out/'+name+'.err'))
+    	testParams.append((name,'out/'+name+'.pqr','out/'+name+'.std','out/'+name+'.err'))
         
 testCount = GetOption('longTestCount')
 if not GetOption("clean") and testCount is not None and testCount > 0:
@@ -21,8 +21,8 @@ if not GetOption("clean") and testCount is not None and testCount > 0:
     
 #Long Test
 for param in testParams:
-    testCommand = commandLineStart + ' --ff=PARSE %s ${TARGETS[0]} 1>%s 2>${TARGETS[1]}' % (param[0],nullTarget)
-    runTest = env.Command([param[1],param[2]], 'lst', testCommand)
+    testCommand = commandLineStart + ' --verbose --ff=PARSE %s ${TARGETS[0]} 1>${TARGETS[1]} 2>${TARGETS[2]}' % param[0]
+    runTest = env.Command([param[1],param[2],param[3]], 'lst', testCommand)
 
     if GetOption("clean"):
         env.Default(runTest)
