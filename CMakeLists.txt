@@ -546,7 +546,7 @@ if(ENABLE_OPENMP)
         if(OPENMP_FOUND)
             message(STATUS "OpenMP support enabled")
             add_definitions("${OpenMP_C_FLAGS}")
-            list(APPEND APBS_LIBS ${OpenMP_C_FLAGS})
+            #list(APPEND APBS_LIBS ${OpenMP_C_FLAGS})
         else()
             message(WARNING "OpenMP was not found.  OpenMP support disabled")
         endif()
@@ -620,6 +620,11 @@ if(CYGWIN)
     endif()
 
     set(HAVE_CYGWIN 1)
+endif()
+
+if(NOT CYGWIN AND NOT MINGW AND WIN32)
+    list(APPEND APBS_LIBS wsock32)
+    ADD_DEFINITIONS("/D _CRT_SECURE_NO_WARNINGS")
 endif()
 
 
