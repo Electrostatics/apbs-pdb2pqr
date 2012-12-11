@@ -10,13 +10,15 @@
  *
  */
   
+#include "apbs.h"  
+#include "routines.h"
+#include "generic/nosh.h"  
+#include "generic/mgparm.h"  
+#include "generic/pbeparm.h"  
+#include "generic/femparm.h"
+#include "generic/vhal.h"
+
 #include "apbs_driver.h"
-#include "apbs/apbs.h"  
-#include "apbs/routines.h"
-#include "apbs/generic/nosh.h"  
-#include "apbs/generic/mgparm.h"  
-#include "apbs/generic/pbeparm.h"  
-#include "apbs/generic/femparm.h"
 
 
 /*! \def MAX_BUF_SIZE
