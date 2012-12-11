@@ -6,6 +6,19 @@
 #
 #######################################################################
 
+Release 2.3.0, December 6, 2012
+
+- Converted to use cmake
+- Tighter intergation with APBS build process. Now builds with
+  "cmake -DENABLE_iAPBS=ON .."
+
+----------------------------------------------------------------------
+
+Release 2.2.0, October 10, 2012
+
+- Updated to work with the latest APBS git code
+
+----------------------------------------------------------------------
 
 Release 2.1.0, January 11, 2012
 
