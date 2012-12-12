@@ -12,8 +12,8 @@ if(BUILD_WRAPPER)
    ENABLE_LANGUAGE(Fortran)
    ADD_EXECUTABLE(wrapper wrapper.f)
    TARGET_LINK_LIBRARIES(wrapper 
-    ${CMAKE_BINARY_DIR}/src/CMakeFiles/apbs.dir/routines.c.o
      iapbs
+     apbs_routines
      apbs_mg
      apbs_generic
      apbs_pmgc)
