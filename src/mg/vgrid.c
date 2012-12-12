@@ -65,6 +65,14 @@ VEMBED(rcsid="$Id$")
 #endif
 #define IJK(i,j,k)  (((k)*(nx)*(ny))+((j)*(nx))+(i))
 
+#ifdef _WIN32
+#include <float.h>
+int isnan(double d)
+{
+    return _isnan(d);
+}
+#endif
+
 VPRIVATE char *MCwhiteChars = " =,;\t\n";
 VPRIVATE char *MCcommChars  = "#%";
 VPRIVATE double Vcompare;
