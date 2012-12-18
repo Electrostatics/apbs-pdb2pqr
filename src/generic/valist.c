@@ -650,7 +650,6 @@ VPUBLIC Vrc_Codes Valist_readPQR(Valist *thee, Vparam *params, Vio *sock) {
         /* Parse only ATOM/HETATOM fields */
         if ((Vstring_strcasecmp(tok, "ATOM") == 0) ||
             (Vstring_strcasecmp(tok, "HETATM") == 0)) {
-            printf("ATOM || HETATM\n");
 
             /* Read ATOM/HETATM field of PDB through the X/Y/Z fields */
             if (Valist_readPDB_throughXYZ(thee, sock, &serial, atomName,
@@ -701,11 +700,8 @@ atom = %s, residue = %s\n", atomName, resName);
         } /* if ATOM or HETATM */
         //if the line doesn't start with ATOM or HETATM, then throw it away
         else {
-            //we've only have scanf to work with from maloc, so use that
-            c = 'a';
-            while (c != '\n') {
-                Vio_scanf(sock, "%c", &c);
-            }
+            //if we didn't see ATOM or HETATM then skip to the next line
+            while (Vio_getc(sock) != '\n');
         }
     } /* while we haven't run out of tokens */
 
