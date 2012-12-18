@@ -1,4 +1,4 @@
-cmake_minimum_required (VERSION 2.8.8)
+cmake_minimum_required (VERSION 2.8)
 
 ################################################################################
 # TODO:  Add licensing and authorship information
@@ -716,6 +716,18 @@ if(NOT HAVE_MALOC_H)
         DIRECTORY ${APBS_ROOT}/include/maloc
         DESTINATION ${HEADER_INSTALL_PATH}/..
     )
+endif()
+
+################################################################################
+# Optionally build iAPBS interface                                             #
+################################################################################
+
+option(ENABLE_iAPBS "Enable iAPBS" OFF)
+
+if(ENABLE_iAPBS)
+    message(STATUS "Building of iAPBS interface enabled")
+    add_subdirectory(contrib/iapbs/src)
+    list(APPEND APBS_LIBS ${iAPBS_LIBRARY})
 endif()
 
 
