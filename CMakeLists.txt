@@ -409,7 +409,7 @@ try_compile(
     HAVE_EMBED
     ${APBS_ROOT}/build
     ${APBS_ROOT}/src/.config/embed_test.c
-    )
+)
 
 # TODO: Determine if the EMBED macro is even used
 
@@ -546,7 +546,7 @@ if(ENABLE_OPENMP)
         if(OPENMP_FOUND)
             message(STATUS "OpenMP support enabled")
             add_definitions("${OpenMP_C_FLAGS}")
-            #list(APPEND APBS_LIBS ${OpenMP_C_FLAGS})
+            list(APPEND APBS_LIBS ${OpenMP_C_FLAGS})
         else()
             message(WARNING "OpenMP was not found.  OpenMP support disabled")
         endif()
@@ -561,7 +561,7 @@ endif()
 # Handle conditional building with MPI Support                                 #
 ################################################################################
 
-option(ENABLE_MPI "Enable MPI parallelism" ON)
+option(ENABLE_MPI "Enable MPI parallelism" OFF)
 
 if(ENABLE_MPI)
     if(NOT ENABLE_DEBUG)
