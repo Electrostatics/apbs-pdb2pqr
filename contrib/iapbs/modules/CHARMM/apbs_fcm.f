@@ -17,7 +17,7 @@ c APBS Programmer's Guide.
 c
 c-----------------------------------------------------------------------
 
-      integer MAXION, NATOMS
+      integer*4 MAXION, NATOMS
       parameter (MAXION = 2, NATOMS = MAXAIM)
 
 c-----------------------------------------------------------------------
@@ -85,7 +85,7 @@ c                           *  0 => is not */
 !24 int rkappa            : read kappa map
 !25 int rdiel             : read diel maps (x, y and z)
 
-      integer i_param(25)
+      integer*4 i_param(25)
 c-----------------------------------------------------------------------
 c     r_pbeparm members
 c
@@ -183,7 +183,7 @@ c   int dime[3];               /**< Grid dimensions */
 c   int pdime[3];              /**< Grid of processors to be used in
 c                               * calculation */
 c
-      integer dime(3), pdime(3)
+      integer*4 dime(3), pdime(3)
 
 c-----------------------------------------------------------------------
 c   double grid[3];            /**< Grid spacings */
@@ -238,7 +238,7 @@ c napbs - how often we calculate APBS forces during MD/minimization
 c umeth - forces update method
 c a_debug - debug/verbosity value [0-5]
 c
-      integer napbs, umeth, apbs_debug
+      integer*4 napbs, umeth, apbs_debug
 
 c-----------------------------------------------------------------------
 c logical variables

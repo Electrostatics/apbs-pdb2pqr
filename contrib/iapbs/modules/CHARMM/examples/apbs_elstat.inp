@@ -53,9 +53,8 @@ PBEQ
   stream @0radius.str
 
 ! first APBS calculation is done at solvent, sdie = 80.0
-  APBS mgauto lpbe dimx 65 dimy 65 dimz 65 -
-  cglx 30 cgly 30 cglz 30 fglx 15 fgly 15 fglz 15 -
-  srfm 2 debug 0 sdie 80.0 gamma 0.2 nlev 4 -
+  APBS mgmanual lpbe grdx 0.5 grdy 0.5 grdz 0.5 -
+  srfm 2 debug 0 sdie 80.0 gamma 0.2 -
   calcene 1 -
   sele all END
 
@@ -63,9 +62,8 @@ PBEQ
   set apolarEN = ?ennp
 
 ! second calculation is done in sdie = 1.0
-  APBS mgauto lpbe dimx 65 dimy 65 dimz 65 -
-  cglx 30 cgly 30 cglz 30 fglx 15 fgly 15 fglz 15 -
-  srfm 2 debug 0 sdie 1.0 gamma 0.2 nlev 4 -
+  APBS mgmanual lpbe grdx 0.5 grdy 0.5 grdz 0.5 -
+  srfm 2 debug 0 sdie 1.0 gamma 0.2 -
   calcene 1 -
   sele all END
 

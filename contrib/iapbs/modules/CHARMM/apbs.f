@@ -46,17 +46,17 @@ c
 ##INCLUDE '~/charmm_fcm/parallel.fcm'
 c-----------------------------------------------------------------
 c local variables
-      integer rc, apbsdrv
+      integer*4 rc, apbsdrv
 !      integer ncalc(1)
       logical skip, sp_apbs
 
-      INTEGER nonlin, bcfl, nion, srfm, calcenergy, calcforce
-      INTEGER calc_type, nlev, cmeth, ccmeth, fcmeth, chgm
-      INTEGER calcnpenergy, wpot, wchg, wsmol, wkappa, wdiel
-      integer watompot, rpot
-      integer calcnpforce
-      INTEGER rchg, rkappa, rdiel
-      INTEGER apbs_print, radiopt
+      INTEGER*4 nonlin, bcfl, nion, srfm, calcenergy, calcforce
+      INTEGER*4 calc_type, nlev, cmeth, ccmeth, fcmeth, chgm
+      INTEGER*4 calcnpenergy, wpot, wchg, wsmol, wkappa, wdiel
+      integer*4 watompot, rpot
+      integer*4 calcnpforce
+      INTEGER*4 rchg, rkappa, rdiel
+      INTEGER*4 apbs_print, radiopt
 
       double precision pdie, sdie, srad, swinapbs, tempapbs, gamma
       double precision sdens,smvolume, smsize
@@ -568,6 +568,12 @@ c go over atomic coordinates and figure out optimal grid size
      +         *dime(3)*200.0/1024/1024
        end if
 
+       if (apbs_debug .gt. 5) then
+          do i = 1, 25
+             write(outu, '(3x, a, i4, i4)') 'iAPBS debug i_param(): ', 
+     +            i, i_param(i)
+          end do
+       end if
 
        do i = 1, 3
           if (grid(i) * dime(i) < fglen(i)) then
@@ -691,7 +697,7 @@ c local variables
       double precision vacnpx(natom), vacnpy(natom), vacnpz(natom)
       double precision vacdbx(natom), vacdby(natom), vacdbz(natom)
 
-      integer f_natom, i, apbsdrv, icall, rc
+      integer*4 f_natom, i, apbsdrv, icall, rc
       logical qprin
 c--------------------------------------------------------------------
 c
