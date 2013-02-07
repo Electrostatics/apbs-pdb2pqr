@@ -69,6 +69,8 @@ c local variables
       double precision apbsnpx(NATOM), apbsnpy(NATOM), apbsnpz(NATOM)
       double precision apbsdbx(NATOM), apbsdby(NATOM), apbsdbz(NATOM)
 
+      double precision apbsgrid_meta(13), apbsgrid(3*NATOM)
+
 c      character*80 rcsid
 c      data rcsid /'$Id: apbs.f 554 2012-01-10 02:45:26Z rok $'/
 c-----------------------------------------------------------------
@@ -607,7 +609,8 @@ c OK, now we are ready to call the apbs_driver and start the show
      +       esenerg, npenerg, 
      +       apbsdx, apbsdy, apbsdz, 
      +       apbsqfx, apbsqfy, apbsqfz, apbsibx, apbsiby, apbsibz, 
-     +       apbsnpx, apbsnpy, apbsnpz, apbsdbx, apbsdby, apbsdbz)
+     +       apbsnpx, apbsnpy, apbsnpz, apbsdbx, apbsdby, apbsdbz,
+     +       apbsgrid_meta, apbsgrid)
 
          if (apbs_debug .gt. 0) then
             write(outu, '(3x, a, i3)') "APBS> APBS return code: ", rc
@@ -696,6 +699,8 @@ c local variables
       double precision vacibx(natom), vaciby(natom), vacibz(natom)
       double precision vacnpx(natom), vacnpy(natom), vacnpz(natom)
       double precision vacdbx(natom), vacdby(natom), vacdbz(natom)
+
+      double precision apbsgrid_meta(13), apbsgrid(3*natom)
 
       integer*4 f_natom, i, apbsdrv, icall, rc
       logical qprin
@@ -788,7 +793,8 @@ c first calculation - in solvent
      +       esenerg, npenerg, 
      +       apbsdx, apbsdy, apbsdz, 
      +       apbsqfx, apbsqfy, apbsqfz, apbsibx, apbsiby, apbsibz, 
-     +       apbsnpx, apbsnpy, apbsnpz, apbsdbx, apbsdby, apbsdbz)
+     +       apbsnpx, apbsnpy, apbsnpz, apbsdbx, apbsdby, apbsdbz,
+     +       apbsgrid_meta, apbsgrid)
 
 c         write(*,*)'APBSFRC> after apbsdrv...,ncalc=',ncalc(1)
 
@@ -850,7 +856,8 @@ c second calculation, now in vacuum
      +       esenerg, npenerg, 
      +       apbsdx, apbsdy, apbsdz, 
      +       apbsqfx, apbsqfy, apbsqfz, apbsibx, apbsiby, apbsibz, 
-     +       apbsnpx, apbsnpy, apbsnpz, apbsdbx, apbsdby, apbsdbz)
+     +       apbsnpx, apbsnpy, apbsnpz, apbsdbx, apbsdby, apbsdbz,
+     +       apbsgrid_meta, apbsgrid)
 
 
 

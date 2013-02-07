@@ -704,7 +704,8 @@ void GlobalMasterAPBS::call_apbs(int in_vacuum) {
       qfForce[0], qfForce[1], qfForce[2],
       ibForce[0], ibForce[1], ibForce[2],
       npForce[0], npForce[1], npForce[2],
-      dbForce[0], dbForce[1], dbForce[2]
+      dbForce[0], dbForce[1], dbForce[2],
+      apbsgrid_meta[13], apbsgrid[]
         );
 
 /** obsolete
