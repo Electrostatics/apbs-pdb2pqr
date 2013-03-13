@@ -53,8 +53,8 @@ c local variables
       INTEGER*4 nonlin, bcfl, nion, srfm, calcenergy, calcforce
       INTEGER*4 calc_type, nlev, cmeth, ccmeth, fcmeth, chgm
       INTEGER*4 calcnpenergy, wpot, wchg, wsmol, wkappa, wdiel
-      integer*4 watompot, rpot
-      integer*4 calcnpforce
+      INTEGER*4 watompot, rpot
+      INTEGER*4 calcnpforce
       INTEGER*4 rchg, rkappa, rdiel
       INTEGER*4 apbs_print, radiopt
 
@@ -262,11 +262,11 @@ c defaults to per atom forces calculation
 
 c calcnpenergy :: NP energy calculation
 c defaults to per atom energy calculation
-      calcenergy = gtrmi(comlyn, comlen, 'CALNE', calcnpenergy)
+      calcnpenergy = gtrmi(comlyn, comlen, 'CALNE', calcnpenergy)
 
 c calcnpforce :: NP atomic forces I/O
 c defaults to per atom forces calculation
-      calcforce = gtrmi(comlyn, comlen, 'CALNF', calcnpforce)
+      calcnpforce = gtrmi(comlyn, comlen, 'CALNF', calcnpforce)
 
 c dielMap :: read dielectric maps (x, y and z)
       if (indxa(comlyn, comlen, 'RDIEL') .gt. 0) then
@@ -569,6 +569,26 @@ c go over atomic coordinates and figure out optimal grid size
      +         'APBS> Required memory (in MB): ',dime(1)*dime(2)
      +         *dime(3)*200.0/1024/1024
        end if
+
+c sanity checks
+       do i = 1, natom
+          if (ABS(a_radius(i)) .gt. 4.0) then
+             write(outu, '(3x, 2a, i6 , a, f8.3)') 
+     +            'APBS> WARNING: ',
+     +            'Radius of this atom is larger than 4.0 A. Atom: ', 
+     +            i, ' Radius: ', a_radius(i)
+          end if
+          if (ABS(cg(i)) .gt. 5.0) then
+             write(outu, '(3x, 2a, i6 ,a, f8.3)') 
+     +            'APBS> WARNING: ',
+     +            'Charge of this atom is larger than 5 e. Atom: ', 
+     +            i, ' Charge: ', cg(i)
+          end if
+          if (apbs_debug .gt. 10) then
+             write(outu, '(3x, i6, 5f8.3)') 
+     +            i, x(i), y(i), z(i), cg(i), a_radius(i)
+          end if
+       end do
 
        if (apbs_debug .gt. 5) then
           do i = 1, 25
