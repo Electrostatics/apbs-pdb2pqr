@@ -1,12 +1,21 @@
 #######################################################################
 #
 #
-#  iAPBS Release 3.0.0 ChangleLog
+#  iAPBS Release 3.1.0 ChangleLog
 #
 #
 #######################################################################
 
-Release 3.0.0 February 7, 2012
+Release 3.1.0 March 15, 2013
+
+- The NAMD module has been updated to work with NAMD version 2.9.
+
+- Several small bug fixes in the CHARMM module.
+
+
+----------------------------------------------------------------------
+
+Release 3.0.0 February 7, 2013
 
 - The API has been extended, support for grid data writing and reading
   on the fly added.
