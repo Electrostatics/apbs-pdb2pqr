@@ -475,6 +475,10 @@ GlobalMasterAPBS::GlobalMasterAPBS() {
       npForce[i] = new double[numAtoms];
     }
   }
+  for (int i=0; i<13; i++) {
+    apbsgrid_meta[i] = 0;
+      }
+  apbsgrid[0] = 0;
 
   // we always read charges and radii from a pqr file
   // NAMD stores vdw parameters for _pairs_ of atoms, and I don't
