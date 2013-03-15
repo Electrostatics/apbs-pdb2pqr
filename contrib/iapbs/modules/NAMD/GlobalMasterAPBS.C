@@ -36,7 +36,8 @@
 
 #include "apbs/apbs.h"
 #include "apbs/routines.h" 
-#include "apbs/apbs_driver.h"
+#include "apbs/apbscfg.h" 
+#include "iapbs/apbs_driver.h"
 
 //#define DEBUGM
 #define MIN_DEBUG_LEVEL 1
@@ -307,6 +308,8 @@ void APBSParameters::check_config(ParseOptions &opts, ConfigList &config) {
     iout << "APBS: Temperature: " << temp << " K\n";
     iout << "APBS: Surface sphere density (sdens): " << sdens << " grid points/A^2\n";
     iout << "APBS: Surface tension: " << gamma << " kJ/mol/A\n";
+    iout << "APBS: Verbosity level: " << verbose << "\n";
+    iout << "APBS: Debug level: " << debug << "\n";
 
     if (recalculateGrid) {
       iout << "APBS: Requesting grid size re-calculation on the fly. \n"  << endi;
@@ -487,7 +490,7 @@ GlobalMasterAPBS::GlobalMasterAPBS() {
     modifyRequestedAtoms().add(i);
     totalcharge += charges[i];
   }
-  iout << "APBS: total charge: " << totalcharge << "\n" << endi;
+  iout << "APBS: Total charge: " << totalcharge << "\n" << endi;
 }
 
 GlobalMasterAPBS::~GlobalMasterAPBS() {
@@ -581,14 +584,14 @@ void GlobalMasterAPBS::call_apbs(int in_vacuum) {
   double **forcePtr = in_vacuum ? vacuum_forces : solvent_forces;
 
   double r_param[9];
-  memcpy(r_param, params->r_param, 7*sizeof(double));
+  memcpy(r_param, params->r_param, 9*sizeof(double));
   if (in_vacuum) {
     // set solvent dielectric to 1.0
     r_param[1] = 1.0;
   }
 
   int dime [3];
-  double grid[3], cglen[3], fglen[3];
+  double grid[3], cglen[3], fglen[3], glen[3], center[3], ccenter[3], fcenter[3];
   double maxx = 0, minx = 0, maxy = 0, miny = 0, maxz = 0, minz = 0;
 
   for (int i=0; i<3; i++) {
@@ -596,6 +599,10 @@ void GlobalMasterAPBS::call_apbs(int in_vacuum) {
     grid[i]  = params->grid[i];
     cglen[i] = params->cglen[i];
     fglen[i] = params->fglen[i];
+    glen[i] = params->glen[i];
+    center[i] = params->center[i];
+    ccenter[i] = params->ccenter[i];
+    fcenter[i] = params->fcenter[i];
   }
 
   for (int i=0; i<numAtoms; i++) {
@@ -610,7 +617,7 @@ void GlobalMasterAPBS::call_apbs(int in_vacuum) {
   if (params->verbose > 1) {
     iout << "APBS: Molecular dimensions: " << maxx-minx << " "
 	 << maxy-miny << " "
-	 << maxz-minz << "\n";
+	 << maxz-minz << "\n" << endi;
   }
 
   // for mg-auto calculate missing grid parameters if dime = 0
@@ -645,31 +652,67 @@ void GlobalMasterAPBS::call_apbs(int in_vacuum) {
   }
 
   if (params->verbose > 1) {
-    iout << "APBS: Grid values: \n";
+    iout << "APBS: Grid values: \n" << endi;
     if (params->i_param[0] == 1 || params->i_param[0] == 2){
       iout << "APBS: Grid lengths (fglen): " << fglen[0] << " "
-	   << fglen[1] << " "  << fglen[2] << "\n";
+	   << fglen[1] << " "  << fglen[2] << "\n" << endi;
       iout << "APBS: Grid lenghts (cglen): " << cglen[0] << " "
-	   << cglen[1]  << " " << cglen[2] << "\n";
+	   << cglen[1]  << " " << cglen[2] << "\n" << endi;
     } else {
       iout << "APBS: Grid lengths: " << dime[0]*grid[0]-grid[0] << " "
            << dime[1]*grid[1]-grid[1] << " "  
-	   << dime[2]*grid[2]-grid[2] << "\n";  
+	   << dime[2]*grid[2]-grid[2] << "\n" << endi;  
     }
     iout << "APBS: Grid dimensions: "  << dime[0] << " "
-	 << dime[1]   << " " << dime[2] << "\n";
+	 << dime[1]   << " " << dime[2] << "\n" << endi;
     if (grid[0] > 0) {
       iout << "APBS: Grid spacings (in A): "  << grid[0] << " "
-	   << grid[1]   << " " << grid[2] << "\n";
+	   << grid[1]   << " " << grid[2] << "\n" << endi;
     } else {
 	iout << "APBS: Grid spacings (in A): "  <<
 	  fglen[0]/(dime[0]-1) << " " << fglen[1]/(dime[1]-1) 
-	     << " " << fglen[2]/(dime[2]-1) << "\n";   
+	     << " " << fglen[2]/(dime[2]-1) << "\n" << endi;   
       }
     iout << "APBS: Required memory: " <<
-      dime[0]*dime[1]*dime[2]*200.0/1024/1024 << " MB\n";
+      dime[0]*dime[1]*dime[2]*200.0/1024/1024 << " MB\n" << endi;
   }
 
+  if (params->verbose > 5) { iout << "APBS: Calling apbsdrv_ \n" << endi; }
+
+  if (params->verbose > 9) {
+    iout << "APBS: apbsdrv_ input params:\n" << endi;
+    iout << numAtoms << "\n" << endi;
+    for (int i=0; i<numAtoms; i++) {
+      iout << positionx[i] << " " << positiony[i] << " " 
+	   << positionz[i] << " " << radii[i] << " " 
+	   << charges[i] << "\n" << endi;
+    }
+    for (int i=0; i<3; i++) {
+      iout << grid[i] << " " 
+	   << dime[i] << " "
+	   << glen[i] << " "
+	   << cglen[i] << " "
+	   << fglen[i] << " "
+	   << center[i] << " "
+	   << ccenter[i] << " "
+	   << fcenter[i] << "\n" << endi;
+    }
+    for (int i=0; i<9; i++) {
+      iout << r_param[i] << " " << endi;
+    }
+    iout << "\n" << endi;
+    for (int i=0; i<25; i++) {
+      iout << params->i_param[i] << " " << endi;
+    }
+    iout << "\n" << endi;
+    for (int i=0; i<params->i_param[21]; i++) {
+      iout << params->ionq[i] << " "
+	   << ionc[i] << " "
+	   << params->ionq[i] << "\n" << endi;
+    }
+    iout << params->debug << "\n" << endi;
+
+  }
 
   int result = apbsdrv_(
       &numAtoms,
@@ -680,19 +723,23 @@ void GlobalMasterAPBS::call_apbs(int in_vacuum) {
       charges,
       r_param,
       params->i_param,
-      //      (double *)&params->grid,
+      //(double *)&params->grid,
       grid,
       //params->dime,
       dime,
       params->pdime,
-      (double *)&params->glen,
-      (double *)&params->center,
+      //(double *)&params->glen,
+      glen,
+      //(double *)&params->center,
+      center,
       //(double *)&params->cglen,
       cglen,
       //(double *)&params->fglen,
       fglen,
-      (double *)&params->ccenter,
-      (double *)&params->fcenter,
+      //(double *)&params->ccenter,
+      ccenter,
+      //(double *)&params->fcenter,
+      fcenter,
       &params->ofrac,
       &params->debug,
       params->ionq,
@@ -705,47 +752,8 @@ void GlobalMasterAPBS::call_apbs(int in_vacuum) {
       ibForce[0], ibForce[1], ibForce[2],
       npForce[0], npForce[1], npForce[2],
       dbForce[0], dbForce[1], dbForce[2],
-      apbsgrid_meta[13], apbsgrid[]
-        );
-
-/** obsolete
-  int result = apbsdrv_(
-      &numAtoms,
-      &ispara,
-      params->i_pbeparm,
-      params->set_pbeparm,
-      r_pbeparm,
-      params->ionq,
-      ionc,
-      params->ionr,
-      params->i_mgparm,
-      params->set_mgparm,
-      params->dime,
-      params->pdime,
-      (double *)&params->grid,
-      (double *)&params->glen,
-      (double *)&params->center,
-      (double *)&params->cglen,
-      (double *)&params->fglen,
-      (double *)&params->ccenter,
-      (double *)&params->fcenter,
-      &params->ofrac,
-      positionx,
-      positiony,
-      positionz,
-      radii,
-      charges,
-      &params->debug,
-      ncalc,
-      esEnergy,
-      npEnergy,
-      forcePtr[0], forcePtr[1], forcePtr[2],
-      qfForce[0], qfForce[1], qfForce[2],
-      ibForce[0], ibForce[1], ibForce[2],
-      npForce[0], npForce[1], npForce[2],
-      dbForce[0], dbForce[1], dbForce[2]
-        );
-**/
+      apbsgrid_meta, apbsgrid
+			);
 
   if (in_vacuum) {
     vacuum_elec_energy = esEnergy[0] * APBS_ENERGY_UNITS;
@@ -758,7 +766,7 @@ void GlobalMasterAPBS::call_apbs(int in_vacuum) {
 static void parsePQRFile(const char *path, int numAtoms, 
     double *charges, double *radii) {
   
-    iout << "APBS: reading PQR file " << path << "\n" << endi;
+    iout << "APBS: Reading PQR file " << path << "\n" << endi;
     FILE *fd = fopen(path, "rt");
     if (!fd) {
         NAMD_die("Error opening PQR file.\n");
