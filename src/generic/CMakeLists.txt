@@ -34,6 +34,7 @@ add_items(
     vgreen.h
     vmatrix.h
     vhal.h
+    vunit.h
 )
 
 add_sublibrary(generic)
