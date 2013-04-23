@@ -66,6 +66,9 @@ find_file(CONTRIB_PATH "contrib" PATHS "${APBS_ROOT}"
     DOC "The path to contributed modules for apbs"
     )
 
+set(SYS_LIBPATHS /usr/lib64)
+#list(APPEND SYS_LIBPATHS /usr/lib64)
+
 
 
 ################################################################################
@@ -189,7 +192,7 @@ endif()
 find_file(
     FETK_PATH
     NAMES fetk
-    PATHS ${SYS_LIBPATHS} /data/work/source
+    PATHS ${SYS_LIBPATHS} /data/work/source . ..
     DOC "Use an external fetk library"
     )
 
@@ -206,23 +209,27 @@ endif()
 # Handle the MALOC library dependency                                          #
 ################################################################################
 
-CHECK_INCLUDE_FILES(maloc/maloc.h HAVE_MALOC_H)
+find_library(MALOC_LIBRARY  "maloc"
+    PATHS ${FETK_PATH}/lib ${CONTRIB_PATH}
+    DOC   "The fetk/maloc library"
+)
+if(MALOC_LIBRARY)
+    message(STATUS "External maloc library was found: ${MALOC_LIBRARY}")
+else()
+    message(WARNING "External maloc library was not found.")
+endif()
+
+if(MALOC_LIBRARY AND ENABLE_FETK)
+    include_directories(${FETK_PATH}/include/maloc)
+    SET(HAVE_MALOC_H YES)
+else()
+    CHECK_INCLUDE_FILES(maloc/maloc.h HAVE_MALOC_H)
+endif()
 
 if(HAVE_MALOC_H)
     message(STATUS "External maloc headers found")
 else()
     message(WARNING "External maloc headers not found.")
-endif()
-
-find_library(MALOC_LIBRARY  "maloc"
-    PATHS "${FETK_PATH}/lib" "${CONTRIB_PATH}"
-    DOC   "The fetk/maloc library"
-)
-
-if(MALOC_LIBRARY)
-    message(STATUS "External maloc library was found: ${MALOC_LIBRARY}")
-else()
-    message(WARNING "External maloc library was not found.")
 endif()
 
 if(NOT (HAVE_MALOC_H AND MALOC_LIBRARY))
@@ -246,7 +253,6 @@ if(NOT (HAVE_MALOC_H AND MALOC_LIBRARY))
     )
     set(MALOC_LIBRARY ${LIBRARY_OUTPUT_PATH}/${MALOC_LIBRARY_BASENAME})
 endif()
-message(STATUS "External maloc library was found: ${MALOC_LIBRARY}")
 list(APPEND APBS_LIBS ${MALOC_LIBRARY})
 
 
@@ -261,116 +267,10 @@ if(ENABLE_FETK)
     message(STATUS "Checking for fetk components")
     set(FETK_ENALBED 1)
 
-    find_library(
-        PUNC_LIBRARY
-        NAMES "punk"
-        PATHS ${FETK_PATH}/lib ${SYS_LIBPATHS}
-        DOC   "The fetk/punc library"
-        )
-
-    if(PUNC_LIBRARY)
-        list(APPEND APBS_LIBS ${PUNC_LIBRARY})
-        set(HAVE_PUNC_H 1)
-        message(STATUS "The punc library was found: ${PUNC_LIBRARY}")
-    else()
-        message(FATAL_ERROR "The punc library was not found")
-    endif()
-
-
-
-    find_library(
-        MC_LIBRARY
-        NAMES "mc"
-        PATHS ${FETK_PATH}/lib ${SYS_LIBPATHS}
-        DOC   "The fetk/mc library"
-        )
-
-    if(MC_LIBRARY)
-        list(APPEND APBS_LIBS ${MC_LIBRARY})
-        set(HAVE_MC_H 1)
-        message(STATUS "The mc library was found: ${MC_LIBRARY}")
-    else()
-        message(FATAL_ERROR "The mc library was not found")
-    endif()
-
-
-
-    find_library(
-        MCX_LIBRARY
-        NAMES "mcx"
-        PATHS ${FETK_PATH}/lib ${SYS_LIBPATHS}
-        DOC   "The fetk/mcx library"
-        )
-
-    if(MCX_LIBRARY)
-        list(APPEND APBS_LIBS ${MCX_LIBRARY})
-        set(HAVE_MCX_H 1)
-        message(STATUS "The mcx library was found: ${MCX_LIBRARY}")
-    else()
-        message(FATAL_ERROR "The mcx library was not found")
-    endif()
-
-
-
-    find_library(
-        GAMER_LIBRARY
-        NAMES "gamer"
-        PATHS ${FETK_PATH}/lib ${SYS_LIBPATHS}
-        DOC   "The fetk/gamer library"
-        )
-
-    if(GAMER_LIBRARY)
-        list(APPEND APBS_LIBS ${GAMER_LIBRARY})
-        set(HAVE_BIOM_H 1)
-        message(STATUS "The gamer library was found: ${GAMER_LIBRARY}")
-    else()
-        message(FATAL_ERROR "The gamer library was not found")
-    endif()
-
-
-
-    find_library(
-        SUPERLU_LIBRARY
-        NAMES "superlu"
-        PATHS ${SYS_LIBPATHS}
-        DOC "The superlu library"
-    )
-
-    if(SUPERLU_LIBRARY)
-        list(APPEND APBS_LIBS ${SUPERLU_LIBRARY})
-    else()
-        message(FATAL_ERROR "The superlu library was not found")
-    endif()
-
-
-
-    find_library(
-        UMFPACK_LIBRARY
-        NAMES "umfpack"
-        PATHS ${SYS_LIBPATHS}
-        DOC "The umfpack library"
-    )
-
-    if(UMFPACK_LIBRARY)
-        list(APPEND APBS_LIBS ${UMFPACK_LIBRARY})
-    else()
-        message(FATAL_ERROR "The umfpack library was not found")
-    endif()
-
-
-
-    find_library(
-        BLAS_LIBRARY
-        NAMES "blas"
-        PATHS ${SYS_LIBPATHS}
-        DOC "The blas library"
-    )
-
-    if(BLAS_LIBRARY)
-        list(APPEND APBS_LIBS ${BLAS_LIBRARY})
-    else()
-        message(FATAL_ERROR "The blas library was not found")
-    endif()
+    list(APPEND APBS_LIBS "-lstdc++")
+    list(APPEND APBS_LIBS "-L${FETK_PATH}/lib")
+    list(APPEND APBS_LIBS -lamd -lpunc -lmc -lgamer -lsuperlu -lumfpack
+-lblas -lvf2c -ltetgen -ltriangle -lg2c -lreadline )
 
 endif()
 
