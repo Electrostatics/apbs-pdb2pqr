@@ -50,6 +50,8 @@ if(ENABLE_FETK)
    add_subdirectory(fem)
 endif(ENABLE_FETK)
 
+message(STATUS ${EXTERNAL_HEADERS})
+
 add_executable(apbs main.c apbs.h routines.c routines.h)
 message(STATUS " ")
 message(STATUS "${APBS_LIBS} ${APBS_INTERNAL_LIBS}")

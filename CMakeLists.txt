@@ -271,7 +271,8 @@ if(ENABLE_FETK)
     list(APPEND APBS_LIBS "-L${FETK_PATH}/lib")
     list(APPEND APBS_LIBS -lamd -lpunc -lmc -lgamer -lsuperlu -lumfpack
 -lblas -lvf2c -ltetgen -ltriangle -lg2c -lreadline )
-
+    
+    SET(HAVE_MC_H YES)
 endif()
 
 

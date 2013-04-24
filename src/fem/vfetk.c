@@ -2516,4 +2516,3 @@ VPUBLIC int Vfetk_write(Vfetk *thee,  const char *iodev, const char *iofmt,
     return 1;
 }
 
-#endif
