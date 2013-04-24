@@ -65,7 +65,7 @@
 
 #ifdef HAVE_MC_H
 #    include "mc/mc.h"
-#    include "apbs/vfetk.h"
+#    include "fem/vfetk.h"
 #endif
 #ifdef HAVE_MCX_H
 #    include "mcx/mcx.h"
@@ -540,7 +540,7 @@ VEXTERNC int initAPOL(
 
 
 #ifdef HAVE_MC_H
-#include "apbs/vfetk.h"
+#include "fem/vfetk.h"
 
 /**
  * @brief  Print out FE-specific params loaded from input
