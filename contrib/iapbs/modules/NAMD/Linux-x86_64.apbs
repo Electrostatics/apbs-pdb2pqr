@@ -1,10 +1,13 @@
 APBSDIR=${APBS_PREFIX}
-APBSINCL=-I$(APBSDIR)/include 
+APBSINCL=-I$(APBSDIR)/include -I$(APBSDIR)/include/apbs
+
 # the following line works with the Intel 11 compiler
-#APBSLIB=-L$(APBSDIR)/lib -liapbs -lapbsmainroutines -lapbs \
-# -lmaloc -lapbsblas -lz -lifcore
-# for gcc/g++/gfortran uncomment the following
-APBSLIB=-L$(APBSDIR)/lib -liapbs -lapbsmainroutines -lapbs \
- -lmaloc -lapbsblas -lz -lgfortran
+#APBSLIB=-L$(APBSDIR)/lib -liapbs -lapbs_routines -lapbs_mg \
+# -lapbs_generic -lapbs_pmgc -lmaloc -lz -lifcore
+
+# gcc/g++
+APBSLIB=-L$(APBSDIR)/lib -liapbs -lapbs_routines -lapbs_mg \
+ -lapbs_generic -lapbs_pmgc -lmaloc -lz
+
 APBSFLAGS=-DNAMD_APBS
 APBS=$(APBSINCL) $(APBSFLAGS)

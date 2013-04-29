@@ -569,6 +569,7 @@ CONTAINS
     _REAL_ :: apbsibx(natom), apbsiby(natom), apbsibz(natom)
     _REAL_ :: apbsnpx(natom), apbsnpy(natom), apbsnpz(natom)
     _REAL_ :: apbsdbx(natom), apbsdby(natom), apbsdbz(natom)
+    _REAL_ :: apbsgrid_meta(13), apbsgrid(3*natom)
 
     !    eelt = 0.d0; enpol = 0.d0 rokFIXME ?
 
@@ -660,7 +661,8 @@ CONTAINS
          esenerg, npenerg, &
          apbsdx, apbsdy, apbsdz, &
          apbsqfx, apbsqfy, apbsqfz, apbsibx, apbsiby, apbsibz, &
-         apbsnpx, apbsnpy, apbsnpz, apbsdbx, apbsdby, apbsdbz)
+         apbsnpx, apbsnpy, apbsnpz, apbsdbx, apbsdby, apbsdbz, &
+         apbsgrid_meta, apbsgrid)
 
     IF (apbs_debug > 1) WRITE(6, '(a, i2)') '  iAPBS> apbs return code: ', rc
     IF (rc > 0) THEN
@@ -741,6 +743,9 @@ CONTAINS
     _REAL_ :: vacibx(natom), vaciby(natom), vacibz(natom)
     _REAL_ :: vacnpx(natom), vacnpy(natom), vacnpz(natom)
     _REAL_ :: vacdbx(natom), vacdby(natom), vacdbz(natom)
+
+    _REAL_ :: apbsgrid_meta(13), apbsgrid(3*natom)
+
 
     !    eelt = 0.d0; enpol = 0.d0 rokFIXME??
 
@@ -893,7 +898,8 @@ CONTAINS
             esenerg, npenerg, &
             apbsdx, apbsdy, apbsdz, &
             apbsqfx, apbsqfy, apbsqfz, apbsibx, apbsiby, apbsibz, &
-            apbsnpx, apbsnpy, apbsnpz, apbsdbx, apbsdby, apbsdbz)
+            apbsnpx, apbsnpy, apbsnpz, apbsdbx, apbsdby, apbsdbz, &
+            apbsgrid_meta, apbsgrid)
 
 
        IF (apbs_debug > 2) WRITE(6, '(a, i2)') &
@@ -976,7 +982,8 @@ CONTAINS
             esenerg, npenerg, &
             apbsdx, apbsdy, apbsdz, &
             apbsqfx, apbsqfy, apbsqfz, apbsibx, apbsiby, apbsibz, &
-            apbsnpx, apbsnpy, apbsnpz, apbsdbx, apbsdby, apbsdbz)
+            apbsnpx, apbsnpy, apbsnpz, apbsdbx, apbsdby, apbsdbz, &
+            apbsgrid_meta, apbsgrid)
 
        IF (apbs_debug > 2) WRITE(6, '(a, i2)') &
             'iAPBS: apbs return code: ', rc

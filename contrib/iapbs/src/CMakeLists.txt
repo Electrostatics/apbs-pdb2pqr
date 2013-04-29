@@ -22,3 +22,4 @@ endif()
 
 INSTALL(TARGETS iapbs DESTINATION lib)
 
+install(FILES apbs_driver.h DESTINATION include/iapbs)
