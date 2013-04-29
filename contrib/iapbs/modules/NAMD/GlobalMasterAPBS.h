@@ -55,6 +55,9 @@ class GlobalMasterAPBS : public GlobalMaster {
   double *ibForce[3];
   double *dbForce[3];
   double *npForce[3];
+  // in-memory grid data, ignored now
+  double apbsgrid_meta[13];
+  double *apbsgrid[0];
 
   // perform the actual APBS call.  If in_vacuum is true, ion concentrations
   // will be set to zero, and solvent dielectric will be set to the value of
