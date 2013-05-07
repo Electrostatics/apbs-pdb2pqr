@@ -15,6 +15,11 @@ VEMBED(rcsid="$Id$")
 VPRIVATE int Vgrid_readDXhead(Vgrid *thee,
   const char *iodev, const char *iofmt, const char *thost, const char *fname);
 VPRIVATE int Vgrid_value2(Vgrid *thee, double pt[3], double *value);
+VPRIVATE int Char_parseARGV(int argc, char **argv,
+  double *res1, double *res2, double *res3, 
+  double *xmin, double *ymin, double *zmin,
+  double *xmax, double *ymax, double *zmax,
+  int *spec, char *outname, char **fnams, int *numfnams);
 
 VPRIVATE char *MCwhiteChars = " =,;\t\n";
 VPRIVATE char *MCcommChars  = "#%";
@@ -90,10 +95,6 @@ int main(int argc, char **argv) {
     char *snam = "# main:  ";
     char outname[80];
 
-    int ch, ind;
-    extern char *optarg;
-    extern int optind, opterr, optopt;
-
 
     Vgrid *grid, *mgrid;
 
@@ -112,48 +113,11 @@ int main(int argc, char **argv) {
     /* Check the invocation */
     if(argc <= 1){ usage(); return 1; }
 
-    while ((ch = getopt(argc, argv, "r:b:o:s:h")) != -1) {
-        switch (ch) {
-            case 'r':
-                ind = optind - 1;
-                res1 = atof(argv[ind++]);
-                res2 = atof(argv[ind++]);
-                res3 = atof(argv[ind++]);
-                optind = ind;
-                break;
-            case 'b':
-                ind = optind - 1;
-                xmin = atof(argv[ind++]);
-                ymin = atof(argv[ind++]);
-                zmin = atof(argv[ind++]);
-
-                xmax = atof(argv[ind++]);
-                ymax = atof(argv[ind++]);
-                zmax = atof(argv[ind++]);
-
-                optind = ind;
-                break;
-            case 'o':
-                strcpy(outname,optarg);
-                break;
-            case 's':
-                spec = 1;
-                break;
-            case 'h':
-                usage();
-                return 0;
-                break;
-            default:
-                break;
-        }
-    }
-
-    numfnams = 0;
-    if (optind < argc) {
-        while (optind < argc){
-            strcpy(fnams[numfnams],argv[optind++]);
-            numfnams += 1;
-        }
+    if(Char_parseARGV(argc, argv, &res1, &res2, &res3, &xmin, &ymin, &zmin,
+                      &xmax, &ymax, &zmax, &spec, outname, fnams, &numfnams))
+    {
+        usage();
+        return 0;
     }
 
     /* Start the I/O processing */
@@ -226,9 +190,9 @@ int main(int argc, char **argv) {
     }
 
     /* set the grid increment for the merged grid */
-    mgrid->nx	= VFLOOR(((mgrid->xmax - mgrid->xmin) / resx) + 1.5);
-    mgrid->ny	= VFLOOR(((mgrid->ymax - mgrid->ymin) / resy) + 1.5);
-    mgrid->nz	= VFLOOR(((mgrid->zmax - mgrid->zmin) / resz) + 1.5);
+    mgrid->nx	= (int)VFLOOR(((mgrid->xmax - mgrid->xmin) / resx) + 1.5);
+    mgrid->ny	= (int)VFLOOR(((mgrid->ymax - mgrid->ymin) / resy) + 1.5);
+    mgrid->nz	= (int)VFLOOR(((mgrid->zmax - mgrid->zmin) / resz) + 1.5);
 
     mgrid->hx   = (mgrid->xmax - mgrid->xmin) / (mgrid->nx-1);
     mgrid->hy   = (mgrid->ymax - mgrid->ymin) / (mgrid->ny-1);
@@ -567,3 +531,45 @@ VERROR2:
     Vnm_print(2, "%s  I/O problem with input file <%s>\n",snam,fname);
     return 0;
 }
+
+
+VPRIVATE int Char_parseARGV(int argc, char **argv,
+  double *res1, double *res2, double *res3, 
+  double *xmin, double *ymin, double *zmin, 
+  double *xmax, double *ymax, double *zmax, 
+  int* spec, char *outname, char **fnams, int *numfnams)
+{
+    int i;
+    i = 0;
+    *numfnams = 0;
+    while( i < argc ) {
+        if( argv[i][0] == '-' ) {
+            i++;
+            if (!strcmp(argv[i],"-r")) {
+                *res1 = atof(argv[i++]);
+                *res2 = atof(argv[i++]);
+                *res3 = atof(argv[i++]);
+            } else if (!strcmp(argv[i],"-b")) {
+                *xmin = atof(argv[i++]);
+                *ymin = atof(argv[i++]);
+                *zmin = atof(argv[i++]);
+
+                *xmax = atof(argv[i++]);
+                *ymax = atof(argv[i++]);
+                *zmax = atof(argv[i++]);
+            } else if (!strcmp(argv[i],"-o")) {
+                strcpy(outname,argv[i++]);
+            } else if (!strcmp(argv[i],"-s")) {
+                *spec = 1;
+            } else if (!strcmp(argv[i],"-h")) {
+                return 1;
+            }
+        } else {
+            strcpy(fnams[*numfnams],argv[i++]);
+            (*numfnams)++;
+        }
+    }
+
+    return 0;
+}
+

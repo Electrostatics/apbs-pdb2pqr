@@ -34,6 +34,8 @@ c#endif
       double precision apbsnpx(NATOMS), apbsnpy(NATOMS), apbsnpz(NATOMS)
       double precision apbsibx(NATOMS), apbsiby(NATOMS), apbsibz(NATOMS)
       double precision apbsnp(3)
+      double precision apbsgrid_meta(13), apbsgrid(3*NATOMS)
+
 
       integer apbs_debug
 c local
@@ -309,7 +311,8 @@ c OK, now we are ready to call the apbs_driver and start the show
      +     apbsqfx, apbsqfy, apbsqfz,
      +     apbsibx, apbsiby, apbsibz,
      +     apbsnpx, apbsnpy, apbsnpz,
-     +     apbsdbx, apbsdby, apbsdbz)
+     +     apbsdbx, apbsdby, apbsdbz,
+     +     apbsgrid_meta, apbsgrid)
 
       print *, "main.f: apbs return code: ", rc
 
