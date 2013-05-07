@@ -62,9 +62,25 @@ int apbsdrv_(
 	     double apbsqfx[NATOMS], double apbsqfy[NATOMS], double apbsqfz[NATOMS],
 	     double apbsibx[NATOMS], double apbsiby[NATOMS], double apbsibz[NATOMS],
 	     double apbsnpx[NATOMS], double apbsnpy[NATOMS], double apbsnpz[NATOMS],
-	     double apbsdbx[NATOMS], double apbsdby[NATOMS], double apbsdbz[NATOMS]
+	     double apbsdbx[NATOMS], double apbsdby[NATOMS], double apbsdbz[NATOMS],
+	     double apbsgrid_meta[13],
+	     double *apbsgrid[]
 	     )
 {
+    int i,k,j;
+
+    // 1 if grid data to be written to files (traditional), 0 to return via apbsgrid**.
+    int is_grid2file = 1;
+
+    // Memory must be allocated for the outputs if they are to be returned in-memory.
+    if( apbsgrid_meta[0] > 0 ) {
+        is_grid2file = 0;
+        VASSERT( apbsgrid != VNULL );
+        for(i=0; i<apbsgrid_meta[0]; i++) {
+            VASSERT( apbsgrid[i] != VNULL );
+        }
+    }
+
     NOsh *nosh = VNULL;
 
     MGparm *mgparm = VNULL;
@@ -93,13 +109,13 @@ int apbsdrv_(
     Vgrid *chargeMap[NOSH_MAXMOL];
     //    char *input_path = VNULL;
     char *output_path = VNULL;
-    int i, rank, size, isolve, k, debug, natom;
+    int rank, size, isolve, debug, natom;
     //    unsigned long int bytesTotal, highWater;
     size_t bytesTotal, highWater;
     Voutput_Format outputformat;
 
     int bufsize = MAX_BUF_SIZE;
-    int rc = 0, j;
+    int rc = 0;
     double coord[3];
     char *inputString;
 
@@ -285,24 +301,31 @@ int apbsdrv_(
     }
 
     /* *************** Initialization ******************* */
-    for (i=0; i < natom; i++) {
-      apbsdx[i] = 0.0;
-      apbsdy[i] = 0.0;
-      apbsdz[i] = 0.0;
-      apbsqfx[i] = 0.0;
-      apbsqfy[i] = 0.0;
-      apbsqfz[i] = 0.0;
-      apbsibx[i] = 0.0;
-      apbsiby[i] = 0.0;
-      apbsibz[i] = 0.0;
-      apbsdbx[i] = 0.0;
-      apbsdby[i] = 0.0;
-      apbsdbz[i] = 0.0;
-      apbsnpx[i] = 0.0;
-      apbsnpy[i] = 0.0;
-      apbsnpz[i] = 0.0;
+    // Do this initialization only if calcforce is requested.
+    for (i=0; i<nosh->ncalc; i++){
+        pbeparm = nosh->calc[i]->pbeparm;
+        if(pbeparm->calcforce >0) {
+            for (i=0; i < natom; i++) {
+                apbsdx[i] = 0.0;
+                apbsdy[i] = 0.0;
+                apbsdz[i] = 0.0;
+                apbsqfx[i] = 0.0;
+                apbsqfy[i] = 0.0;
+                apbsqfz[i] = 0.0;
+                apbsibx[i] = 0.0;
+                apbsiby[i] = 0.0;
+                apbsibz[i] = 0.0;
+                apbsdbx[i] = 0.0;
+                apbsdby[i] = 0.0;
+                apbsdbz[i] = 0.0;
+                apbsnpx[i] = 0.0;
+                apbsnpy[i] = 0.0;
+                apbsnpz[i] = 0.0;
+            }
+            // once is enough
+            break;
+        }
     }
-
 
     /* *************** DO THE CALCULATIONS ******************* */
     if(debug>1) Vnm_tprint( 1, "Preparing to run %d PBE calculations.\n",
@@ -447,9 +470,79 @@ int apbsdrv_(
 		    }
 		    //		    if(debug>3) printElecForce(com, nosh, nforce, atomForce, i);
 		}
-		/* Write out data folks might want */
-		writedataMG(rank, nosh, pbeparm, pmg[i]);
+		/* Write grid-dimensioned data to file if that's what user wants*/
+		if( is_grid2file ) {
+		  writedataMG(rank, nosh, pbeparm, pmg[i]);
+		}
+		/* Return in-memeory instead */
+		else {		
+		  for( k=0; k<pbeparm->numwrite; k++ ) {
+		    int nx = pmg[i]->pmgp->nx;
+		    int ny = pmg[i]->pmgp->ny;
+		    int nz = pmg[i]->pmgp->nz;
+		    double hx = pmg[i]->pmgp->hx;
+		    double hy = pmg[i]->pmgp->hy;
+		    double hz = pmg[i]->pmgp->hzed;
+		    double centx = pmg[i]->pmgp->xcent;
+		    double centy = pmg[i]->pmgp->ycent;
+		    double centz = pmg[i]->pmgp->zcent;
+		    double parm;
+		    Vdata_Type data_type = pbeparm->writetype[k];
+		    switch(data_type) {
+		    case VDT_SMOL:
+		      parm = pbeparm->srad;
+		      break;
+		    case VDT_SSPL:
+		      parm = pbeparm->swin;
+		      break;
+		    case VDT_IVDW:
+		      parm = pmg[i]->pbe->maxIonRadius;
+		      break;
+		    case VDT_DIELX:
+		      centx +=0.5*hz;
+		      parm = 0;
+		      break;
+		    case VDT_DIELY:
+		      centy +=0.5*hz;
+		      parm = 0;
+		      break;
+		    case VDT_DIELZ:
+		      centz +=0.5*hz;
+		      parm = 0;
+		      break;
+		    case VDT_CHARGE:
+		    case VDT_POT:
+		    case VDT_VDW:
+		    case VDT_LAP:
+		    case VDT_EDENS:
+		    case VDT_NDENS:
+		    case VDT_QDENS:
+		    case VDT_KAPPA:
+		    case VDT_ATOMPOT:
+		      parm = 0;
+		      break;
+		    default:
+		      Vnm_print(2, "Warning!  Skipping invalid data type for writing: %d\n", k);
+		      continue;
+		    }
 
+		    apbsgrid_meta[1] = nx;
+		    apbsgrid_meta[2] = ny;
+		    apbsgrid_meta[3] = nz;
+		    apbsgrid_meta[4] = hx;
+		    apbsgrid_meta[5] = hy;
+		    apbsgrid_meta[6] = hz;
+		    apbsgrid_meta[7] = centx;
+		    apbsgrid_meta[8] = centy;
+		    apbsgrid_meta[9] = centz;
+		    apbsgrid_meta[10] = centx - 0.5*(nx-1)*hx;
+		    apbsgrid_meta[11] = centy - 0.5*(ny-1)*hy;
+		    apbsgrid_meta[12] = centz - 0.5*(nz-1)*hz;
+
+		    Vpmg_fillArray(pmg[i], apbsgrid[k], data_type, parm,
+				   pbeparm->pbetype, pbeparm);
+		  }
+		}
 		/* Write matrix */
 		writematMG(rank, nosh, pbeparm, pmg[i]);
 
@@ -843,7 +936,8 @@ temp %.3f\nsdens %.3f\nmol 1\n", r_param[0], r_param[1], r_param[2],
     strcat(string, mybuf);
 
     if(i_param[11] == 1){
-      strcat(string, "write pot dx iapbs-pot\n");
+//      strcat(string, "write pot dx iapbs-pot\n");
+      sprintf(string, "%swrite pot dx iapbs-pot-%d\n", string, getpid());
     }
     if(i_param[12] == 1){
       strcat(string, "write charge dx iapbs-charge\n");

@@ -1,4 +1,4 @@
-cmake_minimum_required (VERSION 2.8.8)
+cmake_minimum_required (VERSION 2.8)
 
 ################################################################################
 # TODO:  Add licensing and authorship information
@@ -409,7 +409,7 @@ try_compile(
     HAVE_EMBED
     ${APBS_ROOT}/build
     ${APBS_ROOT}/src/.config/embed_test.c
-    )
+)
 
 # TODO: Determine if the EMBED macro is even used
 
@@ -561,7 +561,7 @@ endif()
 # Handle conditional building with MPI Support                                 #
 ################################################################################
 
-option(ENABLE_MPI "Enable MPI parallelism" ON)
+option(ENABLE_MPI "Enable MPI parallelism" OFF)
 
 if(ENABLE_MPI)
     if(NOT ENABLE_DEBUG)
@@ -620,6 +620,11 @@ if(CYGWIN)
     endif()
 
     set(HAVE_CYGWIN 1)
+endif()
+
+if(NOT CYGWIN AND NOT MINGW AND WIN32)
+    list(APPEND APBS_LIBS wsock32)
+    ADD_DEFINITIONS("/D _CRT_SECURE_NO_WARNINGS")
 endif()
 
 
@@ -693,6 +698,18 @@ if(NOT HAVE_MALOC_H)
         DIRECTORY ${APBS_ROOT}/include/maloc
         DESTINATION ${HEADER_INSTALL_PATH}/..
     )
+endif()
+
+################################################################################
+# Optionally build iAPBS interface                                             #
+################################################################################
+
+option(ENABLE_iAPBS "Enable iAPBS" OFF)
+
+if(ENABLE_iAPBS)
+    message(STATUS "Building of iAPBS interface enabled")
+    add_subdirectory(contrib/iapbs/src)
+    list(APPEND APBS_LIBS ${iAPBS_LIBRARY})
 endif()
 
 

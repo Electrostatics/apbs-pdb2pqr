@@ -62,7 +62,7 @@
 // TODO: Rename this to HAVE_GAMER in source and ${APBS_ROOT}/CMakeLists.txt
 #cmakedefine HAVE_BIOM_H
 
-
+#cmakedefine HAVE_MPI_H
 
 // The floating point epsilon for the current machine
 #cmakedefine FLOAT_EPSILON @FLOAT_EPSILON@

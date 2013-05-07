@@ -9,11 +9,12 @@ include(CheckSymbolExists)
 include(CheckTypeSize)
 include(ExternalProject)
 
-set(iAPBS_VERSION "2.1.0")
+set(iAPBS_VERSION "3.0.0")
 #set(PACKAGE_STRING ${iAPBS_VERSION})
 
-PROJECT(iAPBS C Fortran)
-ENABLE_LANGUAGE(Fortran)
+PROJECT(iAPBS)
+#PROJECT(iAPBS C Fortran)
+#ENABLE_LANGUAGE(Fortran)
 ################################################################################
 # Set project paths                                                            #
 ################################################################################

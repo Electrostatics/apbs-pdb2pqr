@@ -46,17 +46,17 @@ c
 ##INCLUDE '~/charmm_fcm/parallel.fcm'
 c-----------------------------------------------------------------
 c local variables
-      integer rc, apbsdrv
+      integer*4 rc, apbsdrv
 !      integer ncalc(1)
       logical skip, sp_apbs
 
-      INTEGER nonlin, bcfl, nion, srfm, calcenergy, calcforce
-      INTEGER calc_type, nlev, cmeth, ccmeth, fcmeth, chgm
-      INTEGER calcnpenergy, wpot, wchg, wsmol, wkappa, wdiel
-      integer watompot, rpot
-      integer calcnpforce
-      INTEGER rchg, rkappa, rdiel
-      INTEGER apbs_print, radiopt
+      INTEGER*4 nonlin, bcfl, nion, srfm, calcenergy, calcforce
+      INTEGER*4 calc_type, nlev, cmeth, ccmeth, fcmeth, chgm
+      INTEGER*4 calcnpenergy, wpot, wchg, wsmol, wkappa, wdiel
+      INTEGER*4 watompot, rpot
+      INTEGER*4 calcnpforce
+      INTEGER*4 rchg, rkappa, rdiel
+      INTEGER*4 apbs_print, radiopt
 
       double precision pdie, sdie, srad, swinapbs, tempapbs, gamma
       double precision sdens,smvolume, smsize
@@ -68,6 +68,8 @@ c local variables
       double precision apbsibx(NATOM), apbsiby(NATOM), apbsibz(NATOM)
       double precision apbsnpx(NATOM), apbsnpy(NATOM), apbsnpz(NATOM)
       double precision apbsdbx(NATOM), apbsdby(NATOM), apbsdbz(NATOM)
+
+      double precision apbsgrid_meta(13), apbsgrid(3*NATOM)
 
 c      character*80 rcsid
 c      data rcsid /'$Id: apbs.f 554 2012-01-10 02:45:26Z rok $'/
@@ -260,11 +262,11 @@ c defaults to per atom forces calculation
 
 c calcnpenergy :: NP energy calculation
 c defaults to per atom energy calculation
-      calcenergy = gtrmi(comlyn, comlen, 'CALNE', calcnpenergy)
+      calcnpenergy = gtrmi(comlyn, comlen, 'CALNE', calcnpenergy)
 
 c calcnpforce :: NP atomic forces I/O
 c defaults to per atom forces calculation
-      calcforce = gtrmi(comlyn, comlen, 'CALNF', calcnpforce)
+      calcnpforce = gtrmi(comlyn, comlen, 'CALNF', calcnpforce)
 
 c dielMap :: read dielectric maps (x, y and z)
       if (indxa(comlyn, comlen, 'RDIEL') .gt. 0) then
@@ -568,6 +570,32 @@ c go over atomic coordinates and figure out optimal grid size
      +         *dime(3)*200.0/1024/1024
        end if
 
+c sanity checks
+       do i = 1, natom
+          if (ABS(a_radius(i)) .gt. 4.0) then
+             write(outu, '(3x, 2a, i6 , a, f8.3)') 
+     +            'APBS> WARNING: ',
+     +            'Radius of this atom is larger than 4.0 A. Atom: ', 
+     +            i, ' Radius: ', a_radius(i)
+          end if
+          if (ABS(cg(i)) .gt. 5.0) then
+             write(outu, '(3x, 2a, i6 ,a, f8.3)') 
+     +            'APBS> WARNING: ',
+     +            'Charge of this atom is larger than 5 e. Atom: ', 
+     +            i, ' Charge: ', cg(i)
+          end if
+          if (apbs_debug .gt. 10) then
+             write(outu, '(3x, i6, 5f8.3)') 
+     +            i, x(i), y(i), z(i), cg(i), a_radius(i)
+          end if
+       end do
+
+       if (apbs_debug .gt. 5) then
+          do i = 1, 25
+             write(outu, '(3x, a, i4, i4)') 'iAPBS debug i_param(): ', 
+     +            i, i_param(i)
+          end do
+       end if
 
        do i = 1, 3
           if (grid(i) * dime(i) < fglen(i)) then
@@ -601,7 +629,8 @@ c OK, now we are ready to call the apbs_driver and start the show
      +       esenerg, npenerg, 
      +       apbsdx, apbsdy, apbsdz, 
      +       apbsqfx, apbsqfy, apbsqfz, apbsibx, apbsiby, apbsibz, 
-     +       apbsnpx, apbsnpy, apbsnpz, apbsdbx, apbsdby, apbsdbz)
+     +       apbsnpx, apbsnpy, apbsnpz, apbsdbx, apbsdby, apbsdbz,
+     +       apbsgrid_meta, apbsgrid)
 
          if (apbs_debug .gt. 0) then
             write(outu, '(3x, a, i3)') "APBS> APBS return code: ", rc
@@ -691,7 +720,9 @@ c local variables
       double precision vacnpx(natom), vacnpy(natom), vacnpz(natom)
       double precision vacdbx(natom), vacdby(natom), vacdbz(natom)
 
-      integer f_natom, i, apbsdrv, icall, rc
+      double precision apbsgrid_meta(13), apbsgrid(3*natom)
+
+      integer*4 f_natom, i, apbsdrv, icall, rc
       logical qprin
 c--------------------------------------------------------------------
 c
@@ -782,7 +813,8 @@ c first calculation - in solvent
      +       esenerg, npenerg, 
      +       apbsdx, apbsdy, apbsdz, 
      +       apbsqfx, apbsqfy, apbsqfz, apbsibx, apbsiby, apbsibz, 
-     +       apbsnpx, apbsnpy, apbsnpz, apbsdbx, apbsdby, apbsdbz)
+     +       apbsnpx, apbsnpy, apbsnpz, apbsdbx, apbsdby, apbsdbz,
+     +       apbsgrid_meta, apbsgrid)
 
 c         write(*,*)'APBSFRC> after apbsdrv...,ncalc=',ncalc(1)
 
@@ -844,7 +876,8 @@ c second calculation, now in vacuum
      +       esenerg, npenerg, 
      +       apbsdx, apbsdy, apbsdz, 
      +       apbsqfx, apbsqfy, apbsqfz, apbsibx, apbsiby, apbsibz, 
-     +       apbsnpx, apbsnpy, apbsnpz, apbsdbx, apbsdby, apbsdbz)
+     +       apbsnpx, apbsnpy, apbsnpz, apbsdbx, apbsdby, apbsdbz,
+     +       apbsgrid_meta, apbsgrid)
 
 
 
