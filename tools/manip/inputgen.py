@@ -334,7 +334,7 @@ def main():
     import getopt
     filename = ""
     shortOptList = ""
-    longOptList = ["help","split","potdx","method=","cfac=","space=","gmemceil=","gmemfac=","ofrac=","redfac=","istrng="]
+    longOptList = ["help","split","potdx","method=","cfac=","space=","gmemceil=","gmemfac=","ofrac=","redfac=","istrng=","fadd="]
 
     try:
         opts, args = getopt.getopt(sys.argv[1:], shortOptList, longOptList)
@@ -389,6 +389,8 @@ def main():
             size.setConstant("ofrac", float(a))
         if o == "--redfac":
             size.setConstant("redfac", float(a))
+		if o == "--fadd":
+            size.setConstant("fadd", int(a))
         if o == "--istrng":
             istrng = float(a)
 
