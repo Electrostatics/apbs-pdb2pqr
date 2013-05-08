@@ -1056,6 +1056,8 @@ class Routines:
 
             conflictnames = []
 
+            #TODO: put this loop in it's own funtion for reuse in debumpResidue.
+            #See APBS-152 #2.
             for atom in residue.getAtoms():
                 atomname = atom.name
                 if not atom.added: continue
@@ -1211,7 +1213,9 @@ class Routines:
         # Initialize some variables
 
         bestdist = 999.99
+        bestwatdist = 999.99
         bestatom = None
+        bestwatatom = None
         residue = atom.residue
 
         # Get atoms from nearby cells
@@ -1223,7 +1227,7 @@ class Routines:
         for closeatom in closeatoms:
             closeresidue = closeatom.residue
             if closeresidue == residue: continue
-            if not isinstance(closeresidue, Amino): continue
+            if not isinstance(closeresidue, (Amino,WAT)): continue
             if isinstance(residue, CYS):
                 if residue.SSbondedpartner == closeatom: continue
 
@@ -1234,11 +1238,24 @@ class Routines:
             if closeatom.isHydrogen() and closeatom.bonds[0].hdonor \
                    and atom.hacceptor:
                 continue
-
+            
             dist = distance(atom.getCoords(), closeatom.getCoords())
-            if dist < bestdist:
-                bestdist = dist
-                bestatom = closeatom
+            
+            if isinstance(closeresidue, WAT):
+                if dist < bestwatdist:
+                    bestwatdist = dist
+                    bestwatatom = closeatom
+            else:
+                if dist < bestdist:
+                    bestdist = dist
+                    bestatom = closeatom
+                    
+        if bestdist > bestwatdist:
+            txt = "Warning: %s in %s skipped when optimizing %s in %s\n" % (bestwatatom.name, 
+                                                                           bestwatatom.residue,
+                                                                           atom.name, residue)
+            if txt not in self.warnings:
+                self.warnings.append(txt)
 
         return bestatom
 
