@@ -491,11 +491,11 @@ def mainCommand(argv):
                       help='Create Typemap output.')
     
     group.add_option('--neutraln', dest='neutraln', action='store_true', default=False,
-                      help='Make the N-terminus of this protein neutral (default is charged). ' +
+                      help='Make the N-terminus of this protein neutral (default is charged). '
                            'Requires PARSE force field.')  
     
     group.add_option('--neutralc', dest='neutralc', action='store_true', default=False,
-                      help='Make the C-terminus of this protein neutral (default is charged). ' +
+                      help='Make the C-terminus of this protein neutral (default is charged). '
                            'Requires PARSE force field.') 
 
     group.add_option('-v', '--verbose', dest='verbose', action='store_true', default=False,
@@ -503,7 +503,7 @@ def mainCommand(argv):
     parser.add_option_group(group)
     
     
-    propkaroup = OptionGroup(parser,"propka options")
+    propkaroup = OptionGroup(parser,"proPKA options")
     
     propkaroup.add_option('--with-ph', dest='pH', action='store', type='float',
                       help='Use propka to calculate pKas and apply them to the molecule given the pH value. ' +
@@ -511,6 +511,10 @@ def mainCommand(argv):
     
     propkaroup.add_option("--reference", dest="reference", default="neutral", choices=('neutral','low-pH'), 
            help="setting which reference to use for stability calculations")
+    
+    propkaroup.add_option('--propka-verbose', dest='propka_verbose', action='store_true', default=False,
+                      help='Print extra proPKA information to stdout. '
+                            'WARNING: This produces an incredible level of output.')
     
     parser.add_option_group(propkaroup)
     
@@ -529,7 +533,7 @@ def mainCommand(argv):
         
         #build propka options
         propkaOpts = utilities.createPropkaOptions(options.pH, 
-                                                   verbose=options.verbose, 
+                                                   verbose=options.propka_verbose, 
                                                    reference=options.reference)
         
     if options.assign_only or options.clean:

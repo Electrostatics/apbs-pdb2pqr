@@ -1470,7 +1470,9 @@ class Routines:
 
         from propka30.Source.protein import Protein as pkaProtein
         from propka30.Source.pdb import readPDB as pkaReadPDB
-        from propka30.Source.lib import residueList
+        from propka30.Source.lib import residueList, setVerbose
+        
+        setVerbose(options.verbose)
 
         # Initialize some variables
 
