@@ -1090,16 +1090,15 @@ VPUBLIC int Vpmg_fillArray(Vpmg *thee, double *vec, Vdata_Type type,
                         position[1] = j*hy + ymin;
                         position[2] = k*hzed + zmin;
                         vec[IJK(i,j,k)] = 0.0;
+                        double u = thee->u[IJK(i,j,k)];
                         if ( VABS(Vacc_ivdwAcc(acc,
-                               position, pbe->maxIonRadius) - 1.0) < VSMALL) {
+                                position, pbe->maxIonRadius) - 1.0) < VSMALL) {
                             for (l=0; l<pbe->numIon; l++) {
+                                double q = pbe->ionQ[l];
                                 if (pbetype == PBE_NPBE || pbetype == PBE_SMPBE /*  SMPBE Added */) {
-                                    vec[IJK(i,j,k)] += (pbe->ionConc[l]
-                                        * Vcap_exp(-pbe->ionQ[l]*thee->u[IJK(i,j,k)],
-                                        &ichop));
+                                    vec[IJK(i,j,k)] += pbe->ionConc[l]*Vcap_exp(-q*u, &ichop);
                                 } else if (pbetype == PBE_LPBE){
-                                    vec[IJK(i,j,k)] += (pbe->ionConc[l]
-                                        * (1 - pbe->ionQ[l]*thee->u[IJK(i,j,k)]));
+                                    vec[IJK(i,j,k)] += pbe->ionConc[l]*(1 - q*u + 0.5*q*q*u*u); 
                                 }
                             }
                         }
@@ -1111,31 +1110,25 @@ VPUBLIC int Vpmg_fillArray(Vpmg *thee, double *vec, Vdata_Type type,
         case VDT_QDENS:
 
             for (k=0; k<nz; k++) {
-                for (j=0; j<ny; j++) {
-                    for (i=0; i<nx; i++) {
-
-                        position[0] = i*hx + xmin;
-                        position[1] = j*hy + ymin;
-                        position[2] = k*hzed + zmin;
-                        vec[IJK(i,j,k)] = 0.0;
-                        if ( VABS(Vacc_ivdwAcc(acc,
-                               position, pbe->maxIonRadius) - 1.0) < VSMALL) {
-                            for (l=0; l<pbe->numIon; l++) {
-                                if (pbetype == PBE_NPBE || pbetype == PBE_SMPBE /*  SMPBE Added */) {
-                                    vec[IJK(i,j,k)] += (pbe->ionConc[l]
-                                        * pbe->ionQ[l]
-                                        * Vcap_exp(-pbe->ionQ[l]*thee->u[IJK(i,j,k)],
-                                        &ichop));
-                                } else if (pbetype == PBE_LPBE) {
-                                    vec[IJK(i,j,k)] += (pbe->ionConc[l]
-                                        * pbe->ionQ[l]
-                                        * (1 - pbe->ionQ[l]*thee->u[IJK(i,j,k)]));
-                                }
-                            }
+            for (j=0; j<ny; j++) {
+            for (i=0; i<nx; i++) {
+                position[0] = i*hx + xmin;
+                position[1] = j*hy + ymin;
+                position[2] = k*hzed + zmin;
+                vec[IJK(i,j,k)] = 0.0;
+                double u = thee->u[IJK(i,j,k)];
+                if ( VABS(Vacc_ivdwAcc(acc,
+                                position, pbe->maxIonRadius) - 1.0) < VSMALL) {
+                    for (l=0; l<pbe->numIon; l++) {
+                        double q = pbe->ionQ[l];
+                        if (pbetype == PBE_NPBE || pbetype == PBE_SMPBE /*  SMPBE Added */) {
+                            vec[IJK(i,j,k)] += pbe->ionConc[l]*q*Vcap_exp(-q*u, &ichop);
+                        } else if (pbetype == PBE_LPBE) {
+                            vec[IJK(i,j,k)] += pbe->ionConc[l]*q*(1 - q*u + 0.5*q*q*u*u);
                         }
                     }
                 }
-            }
+            }}}
             break;
 
         default:
