@@ -13,6 +13,7 @@ Please see http://www.poissonboltzmann.org/pdb2pqr/release-history
  * Verbose output now includes information on all patches applied during a run.
  * Added stderr and stdout to web error page. 
  * Added warning to water optimization when other water is ignored.
+ * Command line used to generate a pqr is now duplicated in the comments of the output.
  
 - BUG FIXES
  * Rolled back change that prevented plugins from interfering with each other. Large proteins would cause a stack overflow when trying to do a deep copy.

@@ -559,6 +559,7 @@ def handleNonOpal(weboptions):
             header, lines, missedligands = runPDB2PQR(pdblist, 
                                                       weboptions.ff,
                                                       outname = pqrpath,
+                                                      commandLine = weboptions.getCommandLine(),
                                                       **weboptions.getRunArguments())
             
             sys.stdout.close()
