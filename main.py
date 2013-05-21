@@ -78,7 +78,9 @@ import extensions
 
 def getOldHeader(pdblist):
     oldHeader = StringIO()
-    headerTypes = (HEADER, TITLE, COMPND, SOURCE, KEYWDS, EXPDTA, AUTHOR, REVDAT, JRNL, REMARK, SPRSDE)
+    headerTypes = (HEADER, TITLE, COMPND, SOURCE, 
+                   KEYWDS, EXPDTA, AUTHOR, REVDAT, 
+                   JRNL, REMARK, SPRSDE, NUMMDL)
     for pdbObj in pdblist:
         if not isinstance(pdbObj,headerTypes):
             break

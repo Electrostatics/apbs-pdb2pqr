@@ -70,6 +70,7 @@ from structures import *
 from protein import *
 from definitions import *
 from StringIO import StringIO
+from errors import PDBInputError, PDBInternalError
 
 class Routines:
     def __init__(self, protein, verbose, definition=None):
