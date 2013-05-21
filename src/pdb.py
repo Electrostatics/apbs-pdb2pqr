@@ -50,6 +50,7 @@ __author__ = "Todd Dolinsky, Yong Huang"
 
 import string, sys
 import copy  ### PC
+from errors import PDBInputError, PDBInternalError
 
 lineParsers = {}
 
@@ -172,6 +173,27 @@ class CONECT:
             except ValueError:  self.serial9 = None
             try:  self.serial10 = int(string.strip(line[56:61]))
             except ValueError:  self.serial10 = None
+        else:  raise ValueError, record
+
+@RegisterLineParser
+class NUMMDL:
+    """ NUMMDL class
+
+        The NUMMDL record indicates total number of models in a PDB entry.
+    """
+
+    def __init__(self, line):
+        """
+            Initialize by parsing line
+
+            COLUMNS  TYPE      FIELD         DEFINITION                           
+            -----------------------------------------------------------              
+            11-14    int       modelNumber   Number of models.     
+        """
+        record = string.strip(line[0:6])
+        if record == "NUMMDL":
+            try: self.modelNumber = int(string.strip(line[10:14]))
+            except ValueError:  self.modelNumber = None
         else:  raise ValueError, record
 
 @RegisterLineParser
