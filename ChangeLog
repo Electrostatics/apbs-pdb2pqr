@@ -27,6 +27,8 @@ Please see http://www.poissonboltzmann.org/pdb2pqr/release-history
  * Fixed hbond extension output to include insertion code in residue name.
  * Fixed debumping routines not including water in their checks. Fixes bad debump of ASN B 20 in 1gm9 when run with pH 7.0.
  * Fixed debumping failing to use best angle for a specific dihedral angle when no tested angles are without conflict.
+ * Fixed debumping using asymmetrical cutoffs and too large cutoffs in many checks involving hydrogen.
+ * Fixed debumping accumulating rounding error while checking angles.
  
 - CHANGES
  * Removed numpy from contrib. The user is expected to have numpy installed and available to python at configuration.

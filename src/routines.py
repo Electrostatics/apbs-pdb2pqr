@@ -51,6 +51,8 @@ __author__ = "Jens Erik Nielsen, Todd Dolinsky, Yong Huang"
 CELL_SIZE = 2
 BUMP_DIST = 2.0
 BUMP_HDIST = 1.5
+BUMP_HYDROGEN_SIZE = 0.5
+BUMP_HEAVY_SIZE = 1.0
 BONDED_SS_LIMIT = 2.5
 PEPTIDE_DIST = 1.7
 REPAIR_LIMIT = 10
@@ -1055,34 +1057,18 @@ class Routines:
 
             # Initialize variables
 
-            conflictnames = []
+            conflictnames = self.findResidueConflicts(residue, True)
 
-            #TODO: put this loop in it's own funtion for reuse in debumpResidue.
-            #See APBS-152 #2.
-            for atom in residue.getAtoms():
-                atomname = atom.name
-                if not atom.added: continue
-                if atomname == "H": continue
-                if atom.optimizeable: continue
-
-                nearatoms = self.findNearbyAtoms(atom)
-
-                # If something is too close, we must debump the residue
-
-                if nearatoms != {}:
-                    conflictnames.append(atomname)
-                    for repatom in nearatoms:
-                        self.write("%s %s is too close to %s %s\n" % \
-                                  (residue, atomname, repatom.residue, repatom.name), 1)
-
-            # If there are no conflicting atoms, move on
-
-            if conflictnames == []: continue
+            if not conflictnames: 
+                continue
 
             # Otherwise debump the residue
 
             self.write("Starting to debump %s...\n" % residue, 1)
-            self.write("Debumping cutoffs: %2.1f for heavy atoms, %2.1f for hydrogens.\n" % (BUMP_DIST, BUMP_HDIST), 1)
+            self.write("Debumping cutoffs: %2.1f for heavy-heavy, %2.1f for hydrogen-heavy, and %2.1f for hydrogen-hydrogen.\n" % 
+                       (BUMP_HYDROGEN_SIZE*2, 
+                        BUMP_HYDROGEN_SIZE+BUMP_HEAVY_SIZE, 
+                        BUMP_HEAVY_SIZE*2), 1)
             if self.debumpResidue(residue, conflictnames):
                 self.write("Debumping Successful!\n\n", 1)
             else:
@@ -1091,7 +1077,41 @@ class Routines:
                 self.warnings.append(text)
 
         self.write("Done.\n")
+        
+    def findResidueConflicts(self, residue, writeConflictInfo=False):
+        conflictnames = []
+        for atom in residue.getAtoms():
+            atomname = atom.name
+            if not atom.added: continue
+            if atomname == "H": continue
+            if atom.optimizeable: continue
 
+            nearatoms = self.findNearbyAtoms(atom)
+
+            # If something is too close, we must debump the residue
+
+            if nearatoms != {}:
+                conflictnames.append(atomname)
+                if writeConflictInfo:
+                    for repatom in nearatoms:
+                        self.write("%s %s is too close to %s %s\n" % \
+                                   (residue, atomname, repatom.residue, repatom.name), 1)
+                    
+        return conflictnames
+    
+    def scoreDihedralAngle(self, residue, anglenum):
+        score = 0
+        atomnames = residue.reference.dihedrals[anglenum].split()
+        pivot = atomnames[2]
+        moveablenames = self.getMoveableNames(residue, pivot)
+        for name in moveablenames:
+            nearatoms = self.findNearbyAtoms(residue.getAtom(name))
+            for v in nearatoms.values():
+                score += v
+                
+        return score
+    
+    
     def debumpResidue(self, residue, conflictnames):
         """
             Debump a specific residue.  Only should be called
@@ -1108,16 +1128,18 @@ class Routines:
         """
 
         # Initialize some variables
-
-        step = 0
-        bestscore = 100
-        anglenum = -1
-        currentConflictNames = conflictnames
         
+        ANGLE_STEPS = 72
+        ANGLE_STEP_SIZE = float(360 // ANGLE_STEPS)
+        
+        ANGLE_TEST_COUNT = 10
+
+        anglenum = -1
+        currentConflictNames = conflictnames        
 
         # Try (up to 10 times) to find a workable solution
 
-        while step < 10:
+        for _ in range(ANGLE_TEST_COUNT):
 
             anglenum = self.pickDihedralAngle(residue, currentConflictNames, anglenum)
 
@@ -1125,52 +1147,44 @@ class Routines:
 
             self.write("Using dihedral angle number %i to debump the residue.\n" % anglenum, 1)
             
+            bestscore = self.scoreDihedralAngle(residue, anglenum)
             foundImprovement = False
-            bestangle = 0.0
-            originalAngle = residue.dihedrals[anglenum] 
+            bestangle = originalAngle = residue.dihedrals[anglenum] 
 
-            for i in range(72):
-                newangle = residue.dihedrals[anglenum] + 5.0
+            #Skip the first angle as it's already known.
+            for i in xrange(1, ANGLE_STEPS):
+                newangle = originalAngle + (ANGLE_STEP_SIZE * i)
                 self.setDihedralAngle(residue, anglenum, newangle)
 
                 # Check for conflicts
 
-                score = 0
+                score = self.scoreDihedralAngle(residue, anglenum)
+                currentConflictNames = self.findResidueConflicts(residue)
 
-                newcauses = []
-                atomnames = residue.reference.dihedrals[anglenum].split()
-                pivot = atomnames[2]
-                moveablenames = self.getMoveableNames(residue, pivot)
-                for name in moveablenames:
-                    nearatoms = self.findNearbyAtoms(residue.getAtom(name))
-                    for v in nearatoms.values():
-                        score += v
-                        
-                    if len(nearatoms) > 0:
-                        newcauses.append(name)
-
-                if score == 0:
-                    self.write("No conflicts found at angle %.2f.\n" % newangle, 1)
-                    return True
+                if score == 0:                    
+                    if not currentConflictNames:
+                        self.write("No conflicts found at angle %.2f.\n" % newangle, 1)
+                        return True
+                    else:
+                        bestangle = newangle
+                        foundImprovement = True
+                        break
 
                 # Set the best angle
 
-                if score < bestscore:
+                elif score < bestscore:
                     bestscore = score
                     bestangle = newangle
-                    currentConflictNames = newcauses
                     foundImprovement = True
         
+            self.setDihedralAngle(residue, anglenum, bestangle)
+            currentConflictNames = self.findResidueConflicts(residue)
+                        
             if foundImprovement:   
                 self.write("Best score of %.2f at angle %.2f. New conflict set: " % (bestscore, bestangle), 1)
-                self.write(str(currentConflictNames)+"\n", 1)    
-                self.setDihedralAngle(residue, anglenum, bestangle)
+                self.write(str(currentConflictNames)+"\n", 1)
             else:
                 self.write("No improvement found for this dihedral angle.\n", 1)
-                self.setDihedralAngle(residue, anglenum, originalAngle)
-                
-            step += 1
-
 
         # If we're here, debumping was unsuccessful
 
@@ -1278,8 +1292,7 @@ class Routines:
 
         nearatoms = {}
         residue = atom.residue
-        cutoff = BUMP_DIST
-        if atom.isHydrogen(): cutoff = BUMP_HDIST
+        atom_size = BUMP_HYDROGEN_SIZE if atom.isHydrogen() else BUMP_HEAVY_SIZE
 
         # Get atoms from nearby cells
 
@@ -1307,6 +1320,8 @@ class Routines:
                 continue
 
             dist = distance(atom.getCoords(), closeatom.getCoords())
+            other_size = BUMP_HYDROGEN_SIZE if closeatom.isHydrogen() else BUMP_HEAVY_SIZE
+            cutoff = atom_size + other_size
             if dist < cutoff:
                 nearatoms[closeatom] = cutoff - dist
 
