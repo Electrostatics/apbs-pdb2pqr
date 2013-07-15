@@ -434,7 +434,7 @@ def mainCommand(argv):
         Main driver for running program from the command line.
     """
     
-    fieldNames = ('amber','charmm','parse', 'ty106','peopb','swanson')
+    fieldNames = ('amber','charmm','parse', 'tyl06','peoepb','swanson')
     
     validForcefields = []
     validForcefields.extend(fieldNames)
@@ -520,11 +520,11 @@ def mainCommand(argv):
                            'Actual PropKa results will be output to <output-path>.propka.')
     
     propkaroup.add_option("--reference", dest="reference", default="neutral", choices=('neutral','low-pH'), 
-           help="setting which reference to use for stability calculations")
+           help="Setting which reference to use for stability calculations. See PROPKA 3.0 documentation.")
     
     propkaroup.add_option('--propka-verbose', dest='propka_verbose', action='store_true', default=False,
                       help='Print extra proPKA information to stdout. '
-                            'WARNING: This produces an incredible level of output.')
+                           'WARNING: This produces an incredible level of output.')
     
     parser.add_option_group(propkaroup)
     
@@ -584,20 +584,23 @@ def mainCommand(argv):
         except IOError:
             parser.error('Unable to find ligand file %s!' % options.ligand)
 
-    if options.neutraln and (options.ff != 'parse' or not options.userff is None):
+    if options.neutraln and (options.ff is None or options.ff.lower() != 'parse'):
         parser.error('--neutraln option only works with PARSE forcefield!')
         
-    if options.neutralc and (options.ff != 'parse' or not options.userff is None):
+    if options.neutralc and (options.ff is None or options.ff.lower() != 'parse'):
         parser.error('--neutralc option only works with PARSE forcefield!')
 
-    text =  "\n--------------------------\n"
-    text += "PDB2PQR - a Python-based structural conversion utility\n"
-    text += "--------------------------\n"
-    text += "Please cite your use of PDB2PQR as:\n"
-    text += "  Dolinsky TJ, Nielsen JE, McCammon JA, Baker NA.\n"
-    text += "  PDB2PQR: an automated pipeline for the setup, execution,\n"
-    text += "  and analysis of Poisson-Boltzmann electrostatics calculations.\n"
-    text += "  Nucleic Acids Research 32 W665-W667 (2004).\n\n"
+    text =  """
+--------------------------
+PDB2PQR - a Python-based structural conversion utility
+--------------------------
+Please cite your use of PDB2PQR as:
+  Dolinsky TJ, Nielsen JE, McCammon JA, Baker NA.
+  PDB2PQR: an automated pipeline for the setup, execution,
+  and analysis of Poisson-Boltzmann electrostatics calculations.
+  Nucleic Acids Research 32 W665-W667 (2004).
+
+"""
     sys.stdout.write(text)
             
     path = args[0]
