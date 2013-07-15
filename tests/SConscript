@@ -59,3 +59,4 @@ env.Clean(runTest, 'adv-test/test-output-user.propka')
 aliasObj = setupTest('advtest', runTest, [validatePQRResult, validatePROPKAResult])
 
 SConscript('test-long/SConscript')
+SConscript('complete-test/SConscript')
