@@ -6,7 +6,7 @@ def isAtomLine(line):
     except IndexError:
         return False
     
-def parsePQRAtomLine(line):
+def parsePQRAtomLine(line, has_chain):
     #Parses ATOM line into a more comparable tuple
     #First peel off the element type
     #This will keep us from running into problems with tests
@@ -14,16 +14,23 @@ def parsePQRAtomLine(line):
     # the record type.
     recordType = line[:6].strip()
     sLine = line[6:].split()
-    strings = (recordType, sLine[1], sLine[2])
-    ints = (int(sLine[0]), int(sLine[3]))
-    floats = tuple(float(x) for x in sLine[4:])
+    
+    if has_chain:
+        strings = (recordType, sLine[1], sLine[2],sLine[3])
+        ints = (int(sLine[0]), int(sLine[4]))
+        floats = tuple(float(x) for x in sLine[5:])
+    else:
+        strings = (recordType, sLine[1], sLine[2])
+        ints = (int(sLine[0]), int(sLine[3]))
+        floats = tuple(float(x) for x in sLine[4:])
+    
     
     return strings,ints,floats
 
 def compareParsedAtoms(atom1, atom2):
     return atom1[0:1] == atom2[0:1] and all(abs(x-y)<0.1 for x,y in izip(atom1[2],atom2[2]))
 
-def ComparePQRAction(outputFileName, testFileName, correctFileName):
+def ComparePQRAction(outputFileName, testFileName, correctFileName, has_chain=False):
     failure = False
     results = []
     with open(testFileName) as testFile:
@@ -38,8 +45,8 @@ def ComparePQRAction(outputFileName, testFileName, correctFileName):
                     results.append('TEST ERROR: Result file is the wrong length!\n')
                     failure = True
                     break
-                parsedTest = parsePQRAtomLine(testAtom)
-                parsedCorrect = parsePQRAtomLine(correctAtom)
+                parsedTest = parsePQRAtomLine(testAtom, has_chain)
+                parsedCorrect = parsePQRAtomLine(correctAtom, has_chain)
                 
                 if not compareParsedAtoms(parsedTest,parsedCorrect):
                     results.append('WARNING: Mismatch ->\n%s%s\n' % (testAtom, correctAtom))
@@ -113,7 +120,7 @@ def ComparePROPKAAction(outputFileName, testFileName, correctFileName):
             
     return failure
 
-def CompareStringFunc(outputFileName, targetfile, sourcefile):
+def CompareStringFunc(outputFileName, targetfile, sourcefile, has_chain=None):
     return 'Comparing files ("%s", "%s") -> %s' % (targetfile, sourcefile, outputFileName)
 
 
