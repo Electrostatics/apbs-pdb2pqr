@@ -2548,7 +2548,8 @@ def readPDB(file):
 
     while 1: 
         line = string.strip(file.readline())
-        if line == '':  break
+        if line == '':  
+            break
 
         # We assume we have a method for each PDB record and can therefore
         # parse them automatically
