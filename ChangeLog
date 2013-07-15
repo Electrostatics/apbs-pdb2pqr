@@ -15,6 +15,7 @@ Please see http://www.poissonboltzmann.org/pdb2pqr/release-history
  * Added warning to water optimization when other water is ignored.
  * Command line used to generate a pqr is now duplicated in the comments of the output.
  * Added support for NUMMDL in parser.
+ * Added complete commandline feature test. Use complete-test target.
  
 - BUG FIXES
  * Rolled back change that prevented plugins from interfering with each other. Large proteins would cause a stack overflow when trying to do a deep copy.
