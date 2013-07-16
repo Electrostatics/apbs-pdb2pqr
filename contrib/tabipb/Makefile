@@ -1,8 +1,13 @@
 # makefile for bimpb
 F90= ifort
 flag= -fast -c  
-#F90 = gfortran
-#flag= -O2 -c 
+
+ifeq ($(shell uname -n), akira)
+        F90=gfortran
+	flag=-O3 -c
+#        FCFLAGS+=-std=legacy -ffree-form -ffree-line-length-200
+endif
+
 tabipb.out: var_modules.o treecode3d_pb.o main.o readin.o dgmres_dep.o
 	$(F90)  -o tabipb.out *.o 
 var_modules.o:	var_modules.f90

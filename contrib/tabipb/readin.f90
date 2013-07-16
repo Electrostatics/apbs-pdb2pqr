@@ -77,7 +77,7 @@ CHARACTER(100) :: FHEAD
 	!chrpos(1,1)=(ichrpos-1)*0.1d0                               ! For multiple runs
 	
 
-    rslt=system('msms -if '//pathname(1:lenpath)//fname(1:lenfname)//".xyzr"//' -prob 1.4 -de ' &
+    rslt=system('./msms -if '//pathname(1:lenpath)//fname(1:lenfname)//".xyzr"//' -prob 1.4 -de ' &
     //den(1:5)//' -of '//pathname(1:lenpath)//fname(1:lenfname))    
       ! read the surface points
       OPEN(2,FILE=pathname(1:lenpath)//FNAME(1:lenfname)//".vert")
