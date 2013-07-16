@@ -8,7 +8,37 @@
 ! 7. Extension from spherical cavity to real molecules
 ! 8. Preconditioning: Diagnal Scalling 
 
-program TABIPB 
+subroutine apbs2tabipb(apbs_pqr_filename, nion, ionc, ionq, ionr, pdie, sdie, sdens, temp)
+use comdata
+use molecule
+implicit double precision (a-h,o-z)
+
+character  apbs_pqr_filename(100)
+integer nion
+real*8 pdie, sdie, sdens, temp, ionc(nion), ionq(nion), ionr(nion)
+
+!local variables
+real*8 bulk_strength
+
+! passing parameters 
+fname=apbs_pqr_filename
+eps0=pdie
+eps1=sdie
+dens=sdens
+bulk_strength=0.d0
+do i=1,nion
+    bulk_strength=bulk_strenth+ionc(i)*ionq(i)**2
+enddo
+kappa2=8.430325455*bulk_strength/eps1     !kappa2 in 300K
+kappa=sqrt(kappa2)
+
+end subroutine apbs2tabipb
+
+
+
+
+! the main subroutine of TABIPB
+subroutine TABIPB 
 use molecule
 use comdata
 use bicg
@@ -180,7 +210,7 @@ IF (ierr .NE. 0) THEN
     STOP
 END IF
 
-end program TABIPB 
+end subroutine TABIPB 
 
 !###########################################################################
 !-----------------------------------------------
