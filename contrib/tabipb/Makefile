@@ -12,25 +12,25 @@ else
 	CFLAGS+=-fast
 endif
 
-OBJS = stub.o var_modules.o treecode3d_pb.o readin.o dgmres_dep.o
+OBJS = var_modules.o treecode3d_pb.o readin.o dgmres_dep.o
 NAME = tabipb
 EXECUTABLE = $(NAME)
 LIBNAME = lib$(EXECUTABLE)
 
 .PHONY: all
-all: tabipb
+all: $(LIBNAME).a
 
 $(LIBNAME).a: $(OBJS)
 	ar cr $@ $?
 
-$(EXECUTABLE): $(LIBNAME).a $(EXECUTABLE).o
-	$(FC) -o$@ $(EXECUTABLE).o -l$(NAME) $(CFLAGS)
+#$(EXECUTABLE): $(LIBNAME).a $(EXECUTABLE).o
+#	$(FC) -o$@ $(EXECUTABLE).o -l$(NAME) $(CFLAGS)
 
 %.o:%.f*
-	$(FC) $(CFLAGS) -c $<
+	$(FC) -c $< $(CFLAGS)
 
 %.o:%.c
-	$(CC) $(CFLAGS) -c $<
+	$(CC) -c $< $(CFLAGS)
 
 clean: 
 	-rm *.o *.mod $(EXECUTABLE) $(LIBNAME).* 

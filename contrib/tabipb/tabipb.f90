@@ -18,13 +18,13 @@ integer nion
 real*8 pdie, sdie, sdens, temp, ionc(nion), ionq(nion), ionr(nion)
 
 !local variables
-real*8 bulk_strength
+real*8 bulk_strength, kappa2
 
 ! passing parameters and some calculation when necessary 
-fname=apbs_pqr_filename
+!fname=apbs_pqr_filename
 eps0=pdie
 eps1=sdie
-den=sdens
+!den=sdens
 bulk_strength=0.d0
 do i=1,nion
     bulk_strength=bulk_strenth+ionc(i)*ionq(i)**2
