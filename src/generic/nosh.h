@@ -114,6 +114,7 @@ enum eNOsh_CalcType {
     NCT_MG=0,  /**< Multigrid */
     NCT_FEM=1, /**< Finite element */
     NCT_APOL=2 /**< non-polar */
+    NCT_BEM=3 /**< Boundary element (TABI)*/
 };
 
 /**
