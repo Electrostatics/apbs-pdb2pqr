@@ -6,7 +6,9 @@ implicit double precision(a-h,o-z)
 real*8 pos(3),vector(3)
 integer nind(5)
 CHARACTER(100) :: FHEAD
-
+character(10) :: c1,c2,c3,c4,c5
+integer i,iflag,lenpath,lenfname,nremark,MEOF
+real*4 xyzqr(5)
 
 !Obtain path
     pathname='test_proteins/'
