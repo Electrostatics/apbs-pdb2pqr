@@ -317,17 +317,26 @@ VPUBLIC NOsh_calc* NOsh_calc_ctor(
             thee->mgparm = MGparm_ctor(MCT_NONE);
             thee->femparm = VNULL;
             thee->apolparm = VNULL;
+            //thee->bemparm = VNULL;
             break;
         case NCT_FEM:
             thee->mgparm = VNULL;
             thee->femparm = FEMparm_ctor(FCT_NONE);
             thee->apolparm = VNULL;
+            //thee->bemparm = VNULL;
             break;
         case NCT_APOL:
             thee->mgparm = VNULL;
             thee->femparm = VNULL;
             thee->apolparm = APOLparm_ctor();
+            //thee->bemparm = VNULL;
             break;
+        case NCT_BEM:
+            thee->mgparm = VNULL;
+            thee->femparm = VNULL;
+            thee->apolparm = VNULL;
+            //thee->bemparm = BEMparm_ctor()
+            break
         default:
             Vnm_print(2, "NOsh_calc_ctor:  unknown calculation type (%d)!\n",
                       calctype);
@@ -356,6 +365,9 @@ VPUBLIC void NOsh_calc_dtor(
         case NCT_APOL:
             APOLparm_dtor(&(calc->apolparm));
             break;
+//        case NCT_BEM:
+//            BEMparm_dtor(&(calc->bemparm));
+//            break;
         default:
             Vnm_print(2, "NOsh_calc_ctor:  unknown calculation type (%d)!\n",
                       calc->calctype);
@@ -1138,6 +1150,12 @@ ELEC section!\n");
             (thee->nelec)++;
             calc->femparm->type = FCT_MANUAL;
             return NOsh_parseFEM(thee, sock, calc);
+//        } else if (Vstring_strcasecmp(tok, "bem") == 0) {
+//            thee->elec[thee->nelec] = NOsh_calc_ctor(NCT_BEM);
+//            calc = thee->elec[thee->nelec];
+//            (thee->nelec)++;
+//            calc->bemparm->type = FCT_MANUAL;
+//            return NOsh_parseBEM(thee, sock, calc);
         } else {
             Vnm_print(2, "NOsh_parseELEC: The method (\"mg\" or \"fem\") or \
 \"name\" must be the first keyword in the ELEC section\n");
@@ -1270,6 +1288,9 @@ map is used!\n");
             case NCT_FEM:
                 NOsh_setupCalcFEM(thee, elec);
                 break;
+//            case NCT_BEM:
+//                NOsh_setupCalcBEM(thee, elec);
+//                break;
             default:
                 Vnm_print(2, "NOsh_setupCalc:  Invalid calculation type (%d)!\n",
                           elec->calctype);
