@@ -20,11 +20,11 @@ real*8 pdie, sdie, sdens, temp, ionc(nion), ionq(nion), ionr(nion)
 !local variables
 real*8 bulk_strength
 
-! passing parameters 
+! passing parameters and some calculation when necessary 
 fname=apbs_pqr_filename
 eps0=pdie
 eps1=sdie
-dens=sdens
+den=sdens
 bulk_strength=0.d0
 do i=1,nion
     bulk_strength=bulk_strenth+ionc(i)*ionq(i)**2
@@ -33,8 +33,6 @@ kappa2=8.430325455*bulk_strength/eps1     !kappa2 in 300K
 kappa=sqrt(kappa2)
 
 end subroutine apbs2tabipb
-
-
 
 
 ! the main subroutine of TABIPB
@@ -60,7 +58,8 @@ common // pi,one_over_4pi
 eps0=1.d0;            !the dielectric constant in molecule 
 eps1=80.d0;           !the dielectric constant in solvent
 bulk_strength=0.d0  !ion_strength with units (M)$I=\sum\limits_{i=1}^nc_iz_i^2$
-
+fname='1a63'
+den='10'
 
 !Treecode
 order=1               !The order of taylor expansion
@@ -78,13 +77,13 @@ tol=1.d-4
 
 pi=acos(-1.d0)
 one_over_4pi=0.25d0/pi
-kappa2=8.430325455*bulk_strength/eps1     !kappa2 in 300K
-kappa=sqrt(kappa2)                        !kappa
+!kappa2=8.430325455*bulk_strength/eps1     !kappa2 in 300K
+!kappa=sqrt(kappa2)                        !kappa
 para=332.0716d0
 eps=eps1/eps0;
 call cpu_time(cpu1)
 
-call readin(idens,ichrpos)
+call readin
 
 print *,'Begin to form linear algebraic matrix...'
 
