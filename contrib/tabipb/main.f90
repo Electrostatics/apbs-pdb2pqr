@@ -39,7 +39,6 @@ end subroutine apbs2tabipb
 subroutine TABIPB 
 use molecule
 use comdata
-use bicg
 use treecode
 use treecode3d_procedures
 implicit double precision(a-h,o-z)
@@ -318,7 +317,6 @@ End
 !--------------------------------------------------------------------------
 subroutine treecode_initialization
 use molecule
-use bicg
 use comdata
 use treecode
 use treecode3d_procedures
@@ -455,7 +453,6 @@ End subroutine
 
 !----------------------------------
 subroutine MATVEC(N, XX, bb)
-use bicg
 use molecule
 use comdata
 !use treecode
