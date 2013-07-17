@@ -13,7 +13,7 @@ use comdata
 use molecule
 implicit double precision (a-h,o-z)
 
-character  apbs_pqr_filename(100)
+character(100)  apbs_pqr_filename
 integer nion
 real*8 pdie, sdie, sdens, temp, ionc(nion), ionq(nion), ionr(nion)
 
@@ -21,10 +21,10 @@ real*8 pdie, sdie, sdens, temp, ionc(nion), ionq(nion), ionr(nion)
 real*8 bulk_strength, kappa2
 
 ! passing parameters and some calculation when necessary 
-!fname=apbs_pqr_filename
+fname=apbs_pqr_filename
 eps0=pdie
 eps1=sdie
-!den=sdens
+write (den, "(f16.8)") sdens 
 bulk_strength=0.d0
 do i=1,nion
     bulk_strength=bulk_strenth+ionc(i)*ionq(i)**2

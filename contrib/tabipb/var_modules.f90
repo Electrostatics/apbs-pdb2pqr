@@ -8,7 +8,6 @@ MODULE MOLECULE
     real*8,  dimension(:),     allocatable :: atmrad, atmchr
     real*8,  dimension(:,:),   allocatable :: atmpos , sptpos ,sptnrm, chrpos, chrpos_sph 
     real*8,  dimension(:,:,:), allocatable :: chgmnx
-	
     integer, dimension(:),     allocatable :: natmaff, nsftype, mface !, natmsf, nsfatm,  npture, nsptno
     integer, dimension(:,:),   allocatable :: nvert
 

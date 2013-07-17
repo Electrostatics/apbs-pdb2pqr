@@ -1,15 +1,9 @@
 # makefile for bimpb
-FC=ifort
 CFLAGS=-I. -L.
+FC=gfortran
 
 ifndef DEBUG
-endif
-	
-ifeq ($(shell uname -n), akira)
-        FC=gfortran
 	CFLAGS+=-O3
-else
-	CFLAGS+=-fast
 endif
 
 OBJS = var_modules.o treecode3d_pb.o readin.o dgmres_dep.o
