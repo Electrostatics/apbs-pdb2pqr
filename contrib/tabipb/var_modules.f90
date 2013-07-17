@@ -31,13 +31,6 @@ real*8,allocatable,dimension(:):: rwork,sb,sx,RGWK
 END MODULE COMDATA 
 
 
-module bicg
-integer nmax
-real*8, dimension(:), allocatable:: sa
-integer, dimension(:), allocatable:: ijka
-end module bicg
-
-
 !------------------------------------------------------------------
 module treecode
 

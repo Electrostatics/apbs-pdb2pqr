@@ -8,10 +8,37 @@
 ! 7. Extension from spherical cavity to real molecules
 ! 8. Preconditioning: Diagnal Scalling 
 
-program TABIPB 
+subroutine apbs2tabipb(apbs_pqr_filename, nion, ionc, ionq, ionr, pdie, sdie, sdens, temp)
+use comdata
+use molecule
+implicit double precision (a-h,o-z)
+
+character  apbs_pqr_filename(100)
+integer nion
+real*8 pdie, sdie, sdens, temp, ionc(nion), ionq(nion), ionr(nion)
+
+!local variables
+real*8 bulk_strength
+
+! passing parameters and some calculation when necessary 
+fname=apbs_pqr_filename
+eps0=pdie
+eps1=sdie
+den=sdens
+bulk_strength=0.d0
+do i=1,nion
+    bulk_strength=bulk_strenth+ionc(i)*ionq(i)**2
+enddo
+kappa2=8.430325455*bulk_strength/eps1     !kappa2 in 300K
+kappa=sqrt(kappa2)
+
+end subroutine apbs2tabipb
+
+
+! the main subroutine of TABIPB
+subroutine TABIPB 
 use molecule
 use comdata
-use bicg
 use treecode
 use treecode3d_procedures
 implicit double precision(a-h,o-z)
@@ -30,7 +57,8 @@ common // pi,one_over_4pi
 eps0=1.d0;            !the dielectric constant in molecule 
 eps1=80.d0;           !the dielectric constant in solvent
 bulk_strength=0.d0  !ion_strength with units (M)$I=\sum\limits_{i=1}^nc_iz_i^2$
-
+fname='1a63'
+den='10'
 
 !Treecode
 order=1               !The order of taylor expansion
@@ -48,13 +76,13 @@ tol=1.d-4
 
 pi=acos(-1.d0)
 one_over_4pi=0.25d0/pi
-kappa2=8.430325455*bulk_strength/eps1     !kappa2 in 300K
-kappa=sqrt(kappa2)                        !kappa
+!kappa2=8.430325455*bulk_strength/eps1     !kappa2 in 300K
+!kappa=sqrt(kappa2)                        !kappa
 para=332.0716d0
 eps=eps1/eps0;
 call cpu_time(cpu1)
 
-call readin(idens,ichrpos)
+call readin
 
 print *,'Begin to form linear algebraic matrix...'
 
@@ -180,7 +208,7 @@ IF (ierr .NE. 0) THEN
     STOP
 END IF
 
-end program TABIPB 
+end subroutine TABIPB 
 
 !###########################################################################
 !-----------------------------------------------
@@ -289,7 +317,6 @@ End
 !--------------------------------------------------------------------------
 subroutine treecode_initialization
 use molecule
-use bicg
 use comdata
 use treecode
 use treecode3d_procedures
@@ -426,7 +453,6 @@ End subroutine
 
 !----------------------------------
 subroutine MATVEC(N, XX, bb)
-use bicg
 use molecule
 use comdata
 !use treecode
