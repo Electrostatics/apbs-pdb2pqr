@@ -314,7 +314,8 @@ extern "C" {
 /*----------------------------------------------------------------------------/
  *   cerr << "Discrete Algorithms Module " << VERSION
  *	 << " [Build "   << TIMESTAMP << "]" << endl 
- *	 << "Send complaints to: Nils Weskamp < weskamp@informatik.uni-marburg.de >" << endl;               *----------------------------------------------------------------------------*/
+ *	 << "Send complaints to: Nils Weskamp < weskamp@informatik.uni-marburg.de >" << endl;               
+ *----------------------------------------------------------------------------*/
  
   };
 }
