@@ -8,7 +8,7 @@
  *  @ingroup  BEMparm
  *  @brief    Contains declarations for class BEMparm
  *  @version  $Id$
- *  @author   Nathan A. Baker, Weihua Geng and Andrew J. Stevens
+ *  @author   Nathan A. Baker, Weihua Geng, and Andrew J. Stevens
  *
  *  @attention
  *  @verbatim
@@ -76,7 +76,7 @@
  */
 enum eBEMparm_CalcType {
     BCT_MANUAL=0,  /**< be-manual */
-	BCT_NONE=1 /**< not defined */
+    BCT_NONE=1 /**< not defined */
 };
 
 /**
@@ -103,10 +103,10 @@ struct sBEMparm {
                       * NL Induced.  Not currently implemented but should be relatively easy to add in the future (cf Pengyu Ren) */
     int tree_order;  /**< User-defined order for the treecode expansion */
     int settree_order;  /**< Flag, @see tree_order */
-	int tree_npart; /**< Number of particles per leaf of the tree */
-	int settree_npart; /**< Flag, @see tree_npart */
-	double mac;  /**< Multipole acceptance criterion (should be between 0 and 1) */
-	int setmac; /**< Flag, @see mac */
+    int tree_n0; /**< Number of particles per leaf of the tree */
+    int settree_n0; /**< Flag, @see tree_npart */
+    double mac;  /**< Multipole acceptance criterion (should be between 0 and 1) */
+    int setmac; /**< Flag, @see mac */
     int nonlintype; /**< Linearity Type Method to be used */
     int setnonlintype; /**< Flag, @see nonlintype */
 
@@ -115,7 +115,7 @@ struct sBEMparm {
 /** @brief   Construct BEMparm object
  *  @ingroup BEMparm
  *  @author  Nathan Baker
- *  @param   type Type of MG calculation
+ *  @param   type Type of BEM calculation
  *  @returns Newly allocated and initialized BEMparm object
  */
 VEXTERNC BEMparm*  BEMparm_ctor(BEMparm_CalcType type);
