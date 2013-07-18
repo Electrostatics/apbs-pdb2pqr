@@ -4,6 +4,7 @@ add_items(
     mgparm.c
     femparm.c
     pbeparm.c
+    bemparm.c
     apolparm.c
     vacc.c
     valist.c
@@ -22,6 +23,7 @@ add_items(
     mgparm.h
     femparm.h
     pbeparm.h
+    bemparm.h
     apolparm.h
     vacc.h
     valist.h
