@@ -75,7 +75,7 @@
  * @ingroup BEMparm
  */
 enum eBEMparm_CalcType {
-    BCT_MANUAL=0,  /**< be-manual */
+    BCT_MANUAL=0,  /**< bem-manual */
     BCT_NONE=1 /**< not defined */
 };
 
