@@ -70,8 +70,8 @@
 #include "generic/vstring.h"
 #include "generic/pbeparm.h"
 #include "generic/mgparm.h"
-#include "generic/femparm.h"
 #include "generic/apolparm.h"
+#include "generic/femparm.h"
 #include "generic/valist.h"
 #include "generic/bemparm.h"
 
@@ -114,7 +114,7 @@ typedef enum eNOsh_MolFormat NOsh_MolFormat;
 enum eNOsh_CalcType {
     NCT_MG=0,  /**< Multigrid */
     NCT_FEM=1, /**< Finite element */
-    NCT_APOL=2 /**< non-polar */
+    NCT_APOL=2, /**< non-polar */
     NCT_BEM=3 /**< Boundary element (TABI)*/
 };
 
@@ -166,7 +166,7 @@ typedef enum eNOsh_PrintType NOsh_PrintType;
 struct sNOsh_calc {
     MGparm *mgparm;         /**< Multigrid parameters */
     FEMparm *femparm;       /**< Finite element parameters */
-    BEMparm *femparm;       /**< boundary element (tabi) parameters */
+    BEMparm *bemparm;       /**< boundary element (tabi) parameters */
     PBEparm *pbeparm;       /**< Generic PBE parameters */
     APOLparm *apolparm;		/**< Non-polar parameters */
     NOsh_CalcType calctype; /**< Calculation type */
