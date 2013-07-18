@@ -89,6 +89,12 @@ VEXTERNC int NOsh_parseMG(
                           NOsh_calc *elec
                           );
 
+VEXTERNC int NOsh_parseBEM(
+                          NOsh *thee,
+                          Vio *sock,
+                          NOsh_calc *elec
+                          );
+
 VEXTERNC int NOsh_parseAPOL(
                            NOsh *thee,
                            Vio *sock,
@@ -99,6 +105,7 @@ VPRIVATE int NOsh_setupCalcMG(
                               NOsh *thee,
                               NOsh_calc *elec
                               );
+
 
 VPRIVATE int NOsh_setupCalcMGAUTO(
                                   NOsh *thee,
@@ -124,6 +131,11 @@ VPRIVATE int NOsh_setupCalcFEMANUAL(
                                NOsh *thee,
                                NOsh_calc *elec
                                );
+
+VPRIVATE int NOsh_setupCalcBEM(
+                              NOsh *thee,
+                              NOsh_calc *elec
+                              );
 
 VPRIVATE int NOsh_setupCalcAPOL(
                                 NOsh *thee,
@@ -317,25 +329,25 @@ VPUBLIC NOsh_calc* NOsh_calc_ctor(
             thee->mgparm = MGparm_ctor(MCT_NONE);
             thee->femparm = VNULL;
             thee->apolparm = VNULL;
-            //thee->bemparm = VNULL;
+            thee->bemparm = VNULL;
             break;
         case NCT_FEM:
             thee->mgparm = VNULL;
             thee->femparm = FEMparm_ctor(FCT_NONE);
             thee->apolparm = VNULL;
-            //thee->bemparm = VNULL;
+            thee->bemparm = VNULL;
             break;
         case NCT_APOL:
             thee->mgparm = VNULL;
             thee->femparm = VNULL;
             thee->apolparm = APOLparm_ctor();
-            //thee->bemparm = VNULL;
+            thee->bemparm = VNULL;
             break;
         case NCT_BEM:
             thee->mgparm = VNULL;
             thee->femparm = VNULL;
             thee->apolparm = VNULL;
-            //thee->bemparm = BEMparm_ctor()
+            thee->bemparm = BEMparm_ctor()
             break
         default:
             Vnm_print(2, "NOsh_calc_ctor:  unknown calculation type (%d)!\n",
@@ -365,9 +377,9 @@ VPUBLIC void NOsh_calc_dtor(
         case NCT_APOL:
             APOLparm_dtor(&(calc->apolparm));
             break;
-//        case NCT_BEM:
-//            BEMparm_dtor(&(calc->bemparm));
-//            break;
+        case NCT_BEM:
+            BEMparm_dtor(&(calc->bemparm));
+            break;
         default:
             Vnm_print(2, "NOsh_calc_ctor:  unknown calculation type (%d)!\n",
                       calc->calctype);
@@ -392,6 +404,8 @@ VPUBLIC int NOsh_calc_copy(
         MGparm_copy(thee->mgparm, source->mgparm);
     if (source->femparm != VNULL)
         FEMparm_copy(thee->femparm, source->femparm);
+    if (source->bemparm != VNULL)
+        FEMparm_copy(thee->bemparm, source->bemparm);
     if (source->pbeparm != VNULL)
         PBEparm_copy(thee->pbeparm, source->pbeparm);
     if (source->apolparm != VNULL)

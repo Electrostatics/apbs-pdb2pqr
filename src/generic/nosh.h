@@ -73,6 +73,7 @@
 #include "generic/femparm.h"
 #include "generic/apolparm.h"
 #include "generic/valist.h"
+#include "generic/bemparm.h"
 
 /** @brief Maximum number of molecules in a run
 *  @ingroup NOsh */
@@ -165,6 +166,7 @@ typedef enum eNOsh_PrintType NOsh_PrintType;
 struct sNOsh_calc {
     MGparm *mgparm;         /**< Multigrid parameters */
     FEMparm *femparm;       /**< Finite element parameters */
+    BEMparm *femparm;       /**< boundary element (tabi) parameters */
     PBEparm *pbeparm;       /**< Generic PBE parameters */
     APOLparm *apolparm;		/**< Non-polar parameters */
     NOsh_CalcType calctype; /**< Calculation type */
