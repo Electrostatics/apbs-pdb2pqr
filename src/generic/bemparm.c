@@ -96,8 +96,8 @@ VPUBLIC Vrc_Codes BEMparm_ctor2(BEMparm *thee, BEMparm_CalcType type) {
     /* *** TYPE 1 & 2 PARAMETERS *** */
 
     /* *** TYPE 2 PARAMETERS *** */
-    thee->nonlintype =0;
-    thee->setnonlintyple=0;
+    thee->nonlintype = 0;
+    thee->setnonlintype = 0;
 
     /* *** Default parameters for TINKER *** */
     thee->chgs = VCM_CHARGE;
@@ -134,21 +134,21 @@ VPUBLIC Vrc_Codes BEMparm_check(BEMparm *thee) {
 
     /* Check type settings */
     if ((thee->type != BCT_MANUAL) && (thee->type != BCT_NONE)) {
-         Vnm_print(2,"BEMparm_check: type not set")
+         Vnm_print(2,"BEMparm_check: type not set");
          rc = VRC_FAILURE;
     }
 
     /* Check treecode setting*/
     if (thee->tree_order<1) {
-        Vnm_print(2,"BEMparm_check: treecode order is less than 1")
+        Vnm_print(2,"BEMparm_check: treecode order is less than 1");
         rc = VRC_FAILURE;
     }
     if (thee->tree_n0<1) {
-        Vnm_print(2,"BEMparm_check: treecode leaf size is less than 1")
+        Vnm_print(2,"BEMparm_check: treecode leaf size is less than 1");
         rc = VRC_FAILURE;
     }
     if (thee->mac>1 || thee->mac <=0 ) {
-        Vnm_print(2,"BEMparm_check: MAC criterion fails")
+        Vnm_print(2,"BEMparm_check: MAC criterion fails");
         rc = VRC_FAILURE;
     }
 
@@ -218,7 +218,7 @@ VPRIVATE Vrc_Codes BEMparm_parseTREE_N0(BEMparm *thee, Vio *sock) {
         Vnm_print(2, "NOsh:  Read non-float (%s) while parsing TREE_N0 \
 keyword!\n", tok);
         return VRC_WARNING;
-    } else if (tf <= 0) {
+    } else if (ti <= 0) {
         Vnm_print(2, "parseBEM:  tree_n0 must be greater than 0!\n");
         return VRC_WARNING;
     } else thee->tree_n0 = ti;

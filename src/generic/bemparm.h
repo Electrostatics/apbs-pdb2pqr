@@ -61,8 +61,8 @@
  */
 
 
-#ifndef _MGPARM_H_
-#define _MGPARM_H_
+#ifndef _BEMPARM_H_
+#define _BEMPARM_H_
 
 /* Generic header files */
 #include "maloc/maloc.h"
@@ -93,9 +93,9 @@ typedef enum eBEMparm_CalcType BEMparm_CalcType;
  *           functions -- especially BEMparm_copy -- must be modified
  *           accordingly
  */
-struct sBEMparm {
+typedef struct sBEMparm {
 
-    BEMparm_CalcType type;  /**< What type of MG calculation? */
+    BEMparm_CalcType type;  /**< What type of BEM calculation? */
     int parsed;  /**< Has this structure been filled? (0 = no, 1 = yes) */
 
     /* *** GENERIC PARAMETERS *** */
@@ -110,7 +110,7 @@ struct sBEMparm {
     int nonlintype; /**< Linearity Type Method to be used */
     int setnonlintype; /**< Flag, @see nonlintype */
 
-};
+} BEMparm;
 
 /** @brief   Construct BEMparm object
  *  @ingroup BEMparm

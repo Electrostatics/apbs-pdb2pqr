@@ -324,31 +324,25 @@ VPUBLIC NOsh_calc* NOsh_calc_ctor(
     NOsh_calc *thee;
     thee = (NOsh_calc *)Vmem_malloc(VNULL, 1, sizeof(NOsh_calc));
     thee->calctype = calctype;
+
+    thee->mgparm = VNULL;
+    thee->femparm = VNULL;
+    thee->apolparm = VNULL;
+    thee->bemparm = VNULL;
+
     switch (calctype) {
         case NCT_MG:
             thee->mgparm = MGparm_ctor(MCT_NONE);
-            thee->femparm = VNULL;
-            thee->apolparm = VNULL;
-            thee->bemparm = VNULL;
             break;
         case NCT_FEM:
-            thee->mgparm = VNULL;
             thee->femparm = FEMparm_ctor(FCT_NONE);
-            thee->apolparm = VNULL;
-            thee->bemparm = VNULL;
             break;
         case NCT_APOL:
-            thee->mgparm = VNULL;
-            thee->femparm = VNULL;
             thee->apolparm = APOLparm_ctor();
-            thee->bemparm = VNULL;
             break;
         case NCT_BEM:
-            thee->mgparm = VNULL;
-            thee->femparm = VNULL;
-            thee->apolparm = VNULL;
-            thee->bemparm = BEMparm_ctor()
-            break
+            thee->bemparm = BEMparm_ctor(BCT_MANUAL);
+            break;
         default:
             Vnm_print(2, "NOsh_calc_ctor:  unknown calculation type (%d)!\n",
                       calctype);
@@ -405,7 +399,7 @@ VPUBLIC int NOsh_calc_copy(
     if (source->femparm != VNULL)
         FEMparm_copy(thee->femparm, source->femparm);
     if (source->bemparm != VNULL)
-        FEMparm_copy(thee->bemparm, source->bemparm);
+        BEMparm_copy(thee->bemparm, source->bemparm);
     if (source->pbeparm != VNULL)
         PBEparm_copy(thee->pbeparm, source->pbeparm);
     if (source->apolparm != VNULL)
