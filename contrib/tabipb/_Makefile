@@ -27,4 +27,4 @@ $(LIBNAME).a: $(OBJS)
 	$(CC) -c $< $(CFLAGS)
 
 clean: 
-	-rm *.o *.mod $(EXECUTABLE) $(LIBNAME).* 
+	-rm *.o *.mod $(LIBNAME).* 

@@ -203,9 +203,15 @@ else()
     message(WARNING "Did not find fetk")
 endif()
 
+ExternalProject_add(
+    "tabipb"
+    SOURCE_DIR ${CONTRIB_PATH}/tabipb
+    CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${APBS_ROOT}
+        -DBUILD_SHARED_LIBS=${BUILD_SHARED_LIBS}
+)
 
 
-################################################################################
+##############################################################################n
 # Handle the MALOC library dependency                                          #
 ################################################################################
 
