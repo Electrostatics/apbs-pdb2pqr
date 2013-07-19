@@ -8,7 +8,8 @@
 ! 7. Extension from spherical cavity to real molecules
 ! 8. Preconditioning: Diagnal Scalling 
 
-subroutine apbs2tabipb(apbs_pqr_filename, nion, ionc, ionq, ionr, pdie, sdie, sdens, temp)
+!subroutine apbs2tabipb(apbs_pqr_filename, nion, ionc, ionq, ionr, pdie, sdie, sdens, temp)
+subroutine apbs2tabipb(nion)
 use comdata
 use molecule
 implicit double precision (a-h,o-z)

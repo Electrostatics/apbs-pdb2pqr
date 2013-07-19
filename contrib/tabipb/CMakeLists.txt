@@ -10,9 +10,9 @@ if (NOT CMAKE_BUILD_TYPE)
 endif (NOT CMAKE_BUILD_TYPE)
 
 # default installation
-get_filename_component (default_prefix ".." ABSOLUTE)
+get_filename_component (default_prefix "." ABSOLUTE)
 set (CMAKE_INSTALL_PREFIX ${default_prefix} CACHE STRING
-      "Choose the installation directory; by default it installs in the NORMA directory."
+      "Choose the installation directory; by default it installs in the tabipb directory."
       FORCE)
 
 # FFLAGS depend on the compiler
