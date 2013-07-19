@@ -662,7 +662,7 @@ int main(
                 /* Set up problem */
                 Vnm_tprint( 1, "  Setting up problem...\n");
 
-                if (!initBEM(nosh, mgparm, pbeparm, pbe) {
+                if (!initBEM(i,nosh, bemparm, pbeparm, pbe) {
                     Vnm_tprint( 2, "Error setting up BEM calculation!\n");
                     VJMPERR1(0);
                 }
@@ -672,7 +672,7 @@ int main(
                 printPBEPARM(pbeparm);
 
                 /* Solve PDE */
-                if (solveBEM(nosh, mgparm->type) != 1) {
+                if (solveBEM(nosh, bemparm->type) != 1) {
                     Vnm_tprint(2, "Error solving PDE!\n");
                     VJMPERR1(0);
                 }

@@ -690,3 +690,113 @@ VEXTERNC void killMeshes(
 #endif
 
 #endif
+
+
+
+VEXTERNC void printMGPARM(MGparm *mgparm, double realCenter[3]);
+
+/**
+ * @brief  Initialize an MG calculation
+ * @ingroup  Frontend
+ * @author  Nathan Baker
+ * @return  1 if succesful, 0 otherwise */
+VEXTERNC int initBEM(
+                    int icalc,  /**< Index of calculation in pmg/pmpg arrays */
+                    NOsh *nosh,  /**< Object with parsed input file parameters */
+                    MGparm *mgparm,  /**< Object with MG-specific parameters */
+                    PBEparm *pbeparm,  /**< Object with generic PBE parameters  */
+                    Vpbe *pbe[NOSH_MAXCALC]  /**< Array of Vpbe objects (one for each calc) */
+                    );
+
+/**
+ * @brief  Kill structures initialized during an MG calculation
+ * @ingroup  Frontend
+ * @author  Nathan Baker
+ */
+VEXTERNC void killBEM(
+                     NOsh *nosh,  /** Object with parsed input file parameters */
+                     Vpbe *pbe[NOSH_MAXCALC]  /** Array of Vpbe objects for each calc */
+);
+
+/**
+ * @brief  Solve the PBE with MG
+ * @ingroup  Frontend
+ * @author  Nathan Baker
+ * @param nosh  Object with parsed input file parameters
+ * @param pmg  MG objects for this calculation
+ * @param type  Type of MG calculation
+ * @return  1 if successful, 0 otherwise */
+VEXTERNC int solveBEM(NOsh *nosh, MGparm_CalcType type);
+
+/**
+ * @brief  Set MG partitions for calculating observables and performing I/O
+ * @ingroup  Frontend
+ * @author  Nathan Baker
+ * @param nosh  Object with parsed input file parameters
+ * @param mgparm  MG parameters from input file
+ * @param pmg  MG object
+ * @return  1 if successful, 0 otherwise */
+VEXTERNC int setPartBEM(NOsh *nosh, MGparm *mgparm);
+
+/**
+ * @brief  Calculate electrostatic energies from MG solution
+ * @ingroup  Frontend
+ * @author  Nathan Baker
+ * @param nosh  Object with parsed input file parameters
+ * @param icalc  Index of calculation
+ * @param pmg  MG object
+ * @param nenergy  Set to number of entries in energy arrays
+ * @param totEnergy  Set to total energy (in kT)
+ * @param qfEnergy  Set to charge-potential energy (in kT)
+ * @param qmEnergy  Set to mobile ion energy (in kT)
+ * @param dielEnergy  Set to polarization energy (in kT)
+ * @return  1 if successful, 0 otherwise */
+VEXTERNC int energyBEM(NOsh* nosh, int icalc, 
+  int *nenergy, double *totEnergy, double *qfEnergy, double *qmEnergy,
+  double *dielEnergy);
+
+/**
+ * @brief  Calculate forces from MG solution
+ * @ingroup  Frontend
+ * @author  Nathan Baker
+ * @param  mem  Memory management object
+ * @param  nosh  Parameters from input file
+ * @param  pbeparm  Generic PBE parameters
+ * @param  mgparm  MG-specific parmaeters
+ * @param pmg  MG object
+ * @param nforce  Set to number of forces in arrays
+ * @param  atomForce  List of atom forces
+ * @param  alist  List of atom lists
+ * @return  1 if successful, 0 otherwise */
+VEXTERNC int forceBEM(NOsh *nosh, PBEparm *pbeparm,  BEMparm *bemparm,
+  int *nforce, AtomForce **atomForce, Valist *alist[NOSH_MAXMOL]);
+
+/**
+ * @brief  Print out BEM-specific params loaded from input
+ * @ingroup  Frontend
+ * @author  Nathan Baker
+ * @param  realCenter  Center of mesh for actual calculation
+ * @param  bemparm  BEMparm object */
+VEXTERNC void printBEMPARM(BEMparm *bemparm);
+
+/**
+ * @brief  Write out observables from MG calculation to file
+ * @ingroup  Frontend
+ * @author  Nathan Baker
+ * @param  rank  Processor rank (if parallel calculation)
+ * @param  nosh  Parameters from input file
+ * @param  pbeparm  Generic PBE parameters
+ * @param pmg  MG object
+ * @return  1 if successful, 0 otherwise */
+VEXTERNC int writedataBEM(int rank, NOsh *nosh, PBEparm *pbeparm);
+
+/**
+ * @brief  Write out operator matrix from MG calculation to file
+ * @ingroup  Frontend
+ * @author  Nathan Baker
+ * @param  rank  Processor rank (if parallel calculation)
+ * @param  nosh  Parameters from input file
+ * @param  pbeparm  Generic PBE parameters
+ * @param pmg  MG object
+ * @return  1 if successful, 0 otherwise */
+VEXTERNC int writematBEM(int rank, NOsh *nosh, PBEparm *pbeparm);
