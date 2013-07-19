@@ -183,6 +183,28 @@ if(NOT HAVE_SRAND_FUNC)
     message(FATAL_ERROR "Required srand function not found")
 endif()
 
+ExternalProject_add(
+    "tabipb"
+    SOURCE_DIR ${CONTRIB_PATH}/tabipb
+    CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${APBS_ROOT}
+        -DBUILD_SHARED_LIBS=${BUILD_SHARED_LIBS}
+)
+if(BUILD_SHARED_LIBS)
+    set(TABI_LIBRARY_BASENAME ${CMAKE_SHARED_LIBRARY_PREFIX}tabi${CMAKE_SHARED_LIBRARY_SUFFIX})
+else()
+    set(TABI_LIBRARY_BASENAME ${CMAKE_STATIC_LIBRARY_PREFIX}tabi${CMAKE_STATIC_LIBRARY_SUFFIX})
+endif()
+    message(STATUS "tabi: ${LIBRARY_OUTPUT_PATH}/${TABI_LIBRARY_BASENAME}")
+    message(STATUS "tabi: ${LIBRARY_INSTALL_PATH}")
+
+install(
+    FILES contrib/tabi/lib/${TABI_LIBRARY_BASENAME}
+contrib/tabi/lib/*.mod
+    DESTINATION ${LIBRARY_INSTALL_PATH}
+)
+
+set(TABI_LIBRARY ${LIBRARY_OUTPUT_PATH}/${TABI_LIBRARY_BASENAME})
+list(APPEND APBS_LIBS "-L../../../lib -L../../lib -ltabipb -lgfortran")
 
 
 ################################################################################
@@ -203,12 +225,6 @@ else()
     message(WARNING "Did not find fetk")
 endif()
 
-ExternalProject_add(
-    "tabipb"
-    SOURCE_DIR ${CONTRIB_PATH}/tabipb
-    CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${APBS_ROOT}
-        -DBUILD_SHARED_LIBS=${BUILD_SHARED_LIBS}
-)
 
 
 ##############################################################################n
@@ -245,7 +261,7 @@ if(NOT (HAVE_MALOC_H AND MALOC_LIBRARY))
         URL file://${CONTRIB_PATH}/maloc.tar.gz
         SOURCE_DIR ${CONTRIB_PATH}/maloc
         CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${APBS_ROOT}
--DBUILD_SHARED_LIBS=${BUILD_SHARED_LIBS}
+            -DBUILD_SHARED_LIBS=${BUILD_SHARED_LIBS}
     )
     include_directories(${APBS_ROOT}/include)
     if(BUILD_SHARED_LIBS)

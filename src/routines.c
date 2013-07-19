@@ -4814,6 +4814,10 @@ VPUBLIC int solveBEM(NOsh *nosh,
     }
 
     Vnm_tstart(APBS_TIMER_SOLVER, "Solver timer");
+
+
+    apbs2tabipb_();
+
     Vnm_tstop(APBS_TIMER_SOLVER, "Solver timer");
 
     return 1;
