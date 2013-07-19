@@ -703,7 +703,7 @@ VEXTERNC void printMGPARM(MGparm *mgparm, double realCenter[3]);
 VEXTERNC int initBEM(
                     int icalc,  /**< Index of calculation in pmg/pmpg arrays */
                     NOsh *nosh,  /**< Object with parsed input file parameters */
-                    MGparm *mgparm,  /**< Object with MG-specific parameters */
+                    BEMparm *bemparm,  /**< Object with MG-specific parameters */
                     PBEparm *pbeparm,  /**< Object with generic PBE parameters  */
                     Vpbe *pbe[NOSH_MAXCALC]  /**< Array of Vpbe objects (one for each calc) */
                     );
@@ -726,7 +726,7 @@ VEXTERNC void killBEM(
  * @param pmg  MG objects for this calculation
  * @param type  Type of MG calculation
  * @return  1 if successful, 0 otherwise */
-VEXTERNC int solveBEM(NOsh *nosh, MGparm_CalcType type);
+VEXTERNC int solveBEM(NOsh *nosh, BEMparm_CalcType type);
 
 /**
  * @brief  Set MG partitions for calculating observables and performing I/O
@@ -736,7 +736,7 @@ VEXTERNC int solveBEM(NOsh *nosh, MGparm_CalcType type);
  * @param mgparm  MG parameters from input file
  * @param pmg  MG object
  * @return  1 if successful, 0 otherwise */
-VEXTERNC int setPartBEM(NOsh *nosh, MGparm *mgparm);
+VEXTERNC int setPartBEM(NOsh *nosh, BEMparm *bemparm);
 
 /**
  * @brief  Calculate electrostatic energies from MG solution
@@ -800,3 +800,4 @@ VEXTERNC int writedataBEM(int rank, NOsh *nosh, PBEparm *pbeparm);
  * @param pmg  MG object
  * @return  1 if successful, 0 otherwise */
 VEXTERNC int writematBEM(int rank, NOsh *nosh, PBEparm *pbeparm);
+

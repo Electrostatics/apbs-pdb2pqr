@@ -4776,7 +4776,7 @@ VPUBLIC int initBEM(int icalc,
                    NOsh *nosh, 
                    BEMparm *bemparm,
                    PBEparm *pbeparm,
-                   Vpbe *pbe[NOSH_MAXCALC],
+                   Vpbe *pbe[NOSH_MAXCALC]
                   ) {
 
     Vnm_tstart(APBS_TIMER_SETUP, "Setup timer");
@@ -4848,7 +4848,7 @@ VPUBLIC int energyBEM(NOsh *nosh,
     int i,
         extEnergy;
     double tenergy;
-    MGparm *mgparm;
+    BEMparm *bemparm;
     PBEparm *pbeparm;
 
     bemparm = nosh->calc[icalc]->bemparm;
@@ -4860,10 +4860,10 @@ VPUBLIC int energyBEM(NOsh *nosh,
     return 1;
 }
 
-VPUBLIC int forceBEM(Vmem *mem,
+VPUBLIC int forceBEM(
                     NOsh *nosh,
                     PBEparm *pbeparm,
-                    MGparm *mgparm,
+                    BEMparm *bemparm,
                     int *nforce,
                     AtomForce **atomForce,
                     Valist *alist[NOSH_MAXMOL]
@@ -4886,21 +4886,21 @@ VPUBLIC int forceBEM(Vmem *mem,
     return 1;
 }
 
-VPUBLIC void printMGPARM(MGparm *mgparm) {
+VPUBLIC void printBEMPARM(BEMparm *bemparm) {
 
 }
 
 
 VPUBLIC int writedataBEM(int rank,
                         NOsh *nosh,
-                        PBEparm *pbeparm,
+                        PBEparm *pbeparm
                        ) {
 
     return 1;
 }
 
 
-VPUBLIC int writematMG(int rank, NOsh *nosh, PBEparm *pbeparm, Vpmg *pmg) {
+VPUBLIC int writematBEM(int rank, NOsh *nosh, PBEparm *pbeparm) {
 
 
     if (nosh->bogus) return 1;
