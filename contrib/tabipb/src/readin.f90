@@ -11,7 +11,7 @@ integer i,iflag,nremark,MEOF
 real*4 xyzqr(5)
 
 !Obtain path
-    pathname='test_proteins/'
+    pathname=''
     lenpath = len(pathname)
     do while (pathname(lenpath:lenpath) .eq. ' ')
         lenpath = lenpath - 1
@@ -25,15 +25,17 @@ real*4 xyzqr(5)
     !write(*,*) 'Please input MSMS triangulation density in # per astrong^2:'
     !read(*,*) den
     !den='10'	
-    lenfname = len(fname)
-    do while (fname(lenfname:lenfname) .eq. ' ')
-        lenfname = lenfname - 1
+    lenfname = 0 
+    do while (fname(lenfname:lenfname) .ne. ' ')
+        lenfname = lenfname + 1
     enddo 
+!write(*,*) lenfname, fname, fname(1:lenfname)
+    lenfname = 4;
 
     nremark=0
-    open(2,file=pathname(1:lenpath)//fname(1:lenfname)//".pqr")
+    open(102,file=pathname(1:lenpath)//fname(1:lenfname)//".pqr")
     do  
-        READ(2,*) fhead
+        READ(102,*) fhead
         if (fhead(1:6)=='REMARK') then
             nremark=nremark+1
         else
@@ -41,28 +43,28 @@ real*4 xyzqr(5)
         endif
     enddo 
     print *,'lines of remarks = ', nremark
-    close(2)
+    close(102)
     
-    open(2,file=pathname(1:lenpath)//fname(1:lenfname)//".pqr")
-    open(3,file=pathname(1:lenpath)//fname(1:lenfname)//".xyzr")
+    open(102,file=pathname(1:lenpath)//fname(1:lenfname)//".pqr")
+    open(103,file=pathname(1:lenpath)//fname(1:lenfname)//".xyzr")
     
     do i=1,nremark
-        read(2,*) fhead
+        read(102,*) fhead
     enddo
     
     natm=0
     do 
-        read(2,*,IOSTAT = MEOF) c1,c2,c3,c4,c5,xyzqr
+        read(102,*,IOSTAT = MEOF) c1,c2,c3,c4,c5,xyzqr
         
         if (c1(1:3) .ne. 'END') then 
-            write(3,*) xyzqr(1:3),xyzqr(5)
+            write(103,*) xyzqr(1:3),xyzqr(5)
             natm=natm+1
         endif 
         IF(MEOF .LT. 0) EXIT
     enddo      
     
-    close(2)
-    close(3)
+    close(102)
+    close(103)
 
 
     !Read atom coordinates and partial charges
@@ -73,31 +75,31 @@ real*4 xyzqr(5)
         STOP
     END IF
 
-    open(2,file=pathname(1:lenpath)//fname(1:lenfname)//".pqr")
+    open(102,file=pathname(1:lenpath)//fname(1:lenfname)//".pqr")
     
     do i=1,nremark
-        read(2,*) fhead
+        read(102,*) fhead
     enddo
     
     do i=1,natm
-        read(2,*,IOSTAT = MEOF) c1,c2,c3,c4,c5,xyzqr
+        read(102,*,IOSTAT = MEOF) c1,c2,c3,c4,c5,xyzqr
         atmpos(1:3,i)=xyzqr(1:3)
         atmrad(i)=xyzqr(5)
         chrpos(1:3,i)=xyzqr(1:3)
         atmchr(i)=xyzqr(4)
     enddo      
     
-    close(2)
+    close(102)
 
     rslt=system('./msms -if '//pathname(1:lenpath)//fname(1:lenfname)//".xyzr"//' -prob 1.4 -de ' &
     //den(1:5)//' -of '//pathname(1:lenpath)//fname(1:lenfname))    
     
     ! read the surface points
-    OPEN(2,FILE=pathname(1:lenpath)//FNAME(1:lenfname)//".vert")
+    OPEN(102,FILE=pathname(1:lenpath)//FNAME(1:lenfname)//".vert")
 
-    READ(2,*) FHEAD
-    READ(2,*) FHEAD
-    READ(2,*) NSPT, ppp, qqq, rrr
+    READ(102,*) FHEAD
+    READ(102,*) FHEAD
+    READ(102,*) NSPT, ppp, qqq, rrr
 
     ALLOCATE(SPTPOS(3,NSPT), SPTNRM(3,NSPT), NATMAFF(NSPT), NSFTYPE(NSPT), STAT= ierr)
     IF (ierr .NE. 0) THEN
@@ -108,21 +110,21 @@ real*4 xyzqr(5)
     SPTPOS=0.D0; SPTNRM=0.D0; NATMAFF=0; NSFTYPE=0;
       
     DO I=1,NSPT
-        READ(2,*) POS(1:3), VECTOR(1:3), KK, NAFF, NAFFT 
+        READ(102,*) POS(1:3), VECTOR(1:3), KK, NAFF, NAFFT 
          
         SPTPOS(:,I) = POS;   SPTNRM(:,I) = VECTOR
         NATMAFF(I)  = NAFF;  NSFTYPE(I)  = NAFFT
     END DO
       
-    CLOSE(2)
+    CLOSE(102)
 
 ! read the surface triangulization
 
-    OPEN(3,FILE=pathname(1:lenpath)//FNAME(1:lenfname)//".face")
+    OPEN(103,FILE=pathname(1:lenpath)//FNAME(1:lenfname)//".face")
 
-    READ(3,*) FHEAD
-    READ(3,*) FHEAD
-    READ(3,*) NFACE, PPP, QQQ, RRR
+    READ(103,*) FHEAD
+    READ(103,*) FHEAD
+    READ(103,*) NFACE, PPP, QQQ, RRR
 
     ALLOCATE(NVERT(3,NFACE), MFACE(NFACE), STAT=ierr)
     IF (ierr .NE. 0) THEN
@@ -133,10 +135,10 @@ real*4 xyzqr(5)
     NVERT=0; MFACE=0
       
     DO I=1,NFACE 
-       READ(3,*) NIND(1:5) 
+       READ(103,*) NIND(1:5) 
        NVERT(1:3,I) = NIND(1:3);  MFACE(I) = NIND(4)
     END DO
-    CLOSE(3)
+    CLOSE(103)
     call surface_area(s_area) ! the post-MSMS code
     print *,'surface area=', real(s_area)
 

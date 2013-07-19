@@ -4800,7 +4800,7 @@ VPUBLIC void killBEM(NOsh *nosh, Vpbe *pbe[NOSH_MAXCALC]
 
 }
 
-VPUBLIC int solveBEM(NOsh *nosh,
+VPUBLIC int solveBEM(NOsh *nosh, PBEparm *pbeparm,
                     BEMparm_CalcType type
                    ) {
 
@@ -4815,8 +4815,17 @@ VPUBLIC int solveBEM(NOsh *nosh,
 
     Vnm_tstart(APBS_TIMER_SOLVER, "Solver timer");
 
-
-    apbs2tabipb_();
+//apbs2tabipb(apbs_pqr_filename, nion, ionc, ionq, ionr, pdie, sdie, sdens, temp)
+    apbs2tabipb_(&(nosh->molpath),
+                 &(pbeparm->nion),
+                 &(pbeparm->ionc),
+                 &(pbeparm->ionq),
+                 &(pbeparm->ionr),
+                 &(pbeparm->pdie),
+                 &(pbeparm->sdie),
+                 &(pbeparm->sdens),
+                 &(pbeparm->temp)
+                 );
 
     Vnm_tstop(APBS_TIMER_SOLVER, "Solver timer");
 

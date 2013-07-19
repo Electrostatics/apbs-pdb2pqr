@@ -8,8 +8,7 @@
 ! 7. Extension from spherical cavity to real molecules
 ! 8. Preconditioning: Diagnal Scalling 
 
-!subroutine apbs2tabipb(apbs_pqr_filename, nion, ionc, ionq, ionr, pdie, sdie, sdens, temp)
-subroutine apbs2tabipb(nion)
+subroutine apbs2tabipb(apbs_pqr_filename, nion, ionc, ionq, ionr, pdie, sdie, sdens, temp)
 use comdata
 use molecule
 implicit double precision (a-h,o-z)
@@ -20,6 +19,9 @@ real*8 pdie, sdie, sdens, temp, ionc(nion), ionq(nion), ionr(nion)
 
 !local variables
 real*8 bulk_strength, kappa2
+
+write(*,*) apbs_pqr_filename, nion, ionc, ionq, ionr, pdie, sdie, sdens, temp
+
 
 ! passing parameters and some calculation when necessary 
 fname=apbs_pqr_filename
@@ -32,6 +34,8 @@ do i=1,nion
 enddo
 kappa2=8.430325455*bulk_strength/eps1     !kappa2 in 300K
 kappa=sqrt(kappa2)
+
+call TABIPB
 
 end subroutine apbs2tabipb
 
@@ -58,7 +62,7 @@ common // pi,one_over_4pi
 eps0=1.d0;            !the dielectric constant in molecule 
 eps1=80.d0;           !the dielectric constant in solvent
 bulk_strength=0.d0  !ion_strength with units (M)$I=\sum\limits_{i=1}^nc_iz_i^2$
-fname='1a63'
+!fname='1a63'
 den='10'
 
 !Treecode

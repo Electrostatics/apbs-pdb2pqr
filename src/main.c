@@ -672,7 +672,7 @@ int main(
                 printPBEPARM(pbeparm);
 
                 /* Solve PDE */
-                if (solveBEM(nosh, bemparm->type) != 1) {
+                if (solveBEM(nosh, pbeparm, bemparm->type) != 1) {
                     Vnm_tprint(2, "Error solving PDE!\n");
                     VJMPERR1(0);
                 }
