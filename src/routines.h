@@ -726,7 +726,7 @@ VEXTERNC void killBEM(
  * @param pmg  MG objects for this calculation
  * @param type  Type of MG calculation
  * @return  1 if successful, 0 otherwise */
-VEXTERNC int solveBEM(NOsh *nosh, BEMparm_CalcType type);
+VEXTERNC int solveBEM(NOsh *nosh, PBEparm *pbeparm, BEMparm_CalcType type);
 
 /**
  * @brief  Set MG partitions for calculating observables and performing I/O

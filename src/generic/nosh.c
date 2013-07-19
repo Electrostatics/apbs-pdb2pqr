@@ -2443,18 +2443,15 @@ set up?\n");
 
     /* Set up missing BEM parameters */
     if (bemparm->settree_order == 0) {
-        VASSERT(bemparm->settree_order);
         bemparm->tree_order=1;
     }
 
     if (bemparm->settree_n0 == 0) {
-        VASSERT(bemparm->settree_n0);
-        bemparm->tree_n0=1;
+        bemparm->tree_n0=500;
     }
 
     if (bemparm->setmac == 0) {
-        VASSERT(bemparm->setmac);
-        bemparm->mac=1;
+        bemparm->mac=0.8;
     }
 
     /* Check to see if he have any room left for this type of calculation, if
@@ -2468,7 +2465,7 @@ set up?\n");
     }
 
     /* Get the next calculation object and increment the number of calculations */
-    thee->calc[thee->ncalc] = NOsh_calc_ctor(NCT_MG);
+    thee->calc[thee->ncalc] = NOsh_calc_ctor(NCT_BEM);
     calc = thee->calc[thee->ncalc];
     (thee->ncalc)++;
 
