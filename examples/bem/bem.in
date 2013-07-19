@@ -1,0 +1,55 @@
+read
+    mol pqr 1a63_apbs.pqr       # PDB ID
+end
+elec name comp_solv        # Solvated complex
+    mg-manual
+    dime 33 33 33          # Grid dimensions
+    nlev 4                 # Multigrid levels
+    glen 76 51 52          # Grid lengths
+    gcent 3 0.5 1        # Grid center on (0.0, 0.0, 0.0)
+    mol 1
+    lpbe                   # Linearized PB
+    bcfl mdh               # Full multipole boundary condition
+    pdie 1.0               # Solute dielectric
+    sdie 80.00             # Solvent dielectric
+    chgm spl2              # Cubic spline charge discretization
+    srfm mol               # Molecular surface
+    srad 1.4               # Solvent probe radius
+    swin 0.0               # Surface spline window
+    sdens 10
+    temp 300.00            # Temperature
+    gamma 0.00000          # Apolar coefficient
+    calcenergy total       # Total energy
+    calcforce no           # No forces
+  #  write pot dx potential-RADIUS
+  #                        # Write out the potential
+
+end
+
+elec name comp_vac
+    mg-manual
+    dime 33 33 33          # Grid dimensions
+    nlev 4                 # Multigrid levels
+    glen 76 51 52          # Grid lengths
+    gcent 3 0.5 1        # Grid center on (0.0, 0.0, 0.0)
+    mol 1
+    lpbe
+    bcfl mdh
+    pdie 1.0
+    sdie 1.0
+    chgm spl2
+    srfm mol
+    srad 1.4
+    swin 0.0
+    sdens 10
+    temp 300
+    gamma 0.00000
+    calcenergy total
+    calcforce no
+end
+
+print energy comp_solv - comp_vac end
+
+quit
+
+
