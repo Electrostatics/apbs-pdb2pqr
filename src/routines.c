@@ -4768,3 +4768,142 @@ VPUBLIC int forceAPOL(Vacc *acc,
 }
 
 
+
+/**
+ * Initialize a boundary element calculation.
+ */
+VPUBLIC int initBEM(int icalc,
+                   NOsh *nosh, 
+                   BEMparm *bemparm,
+                   PBEparm *pbeparm,
+                   Vpbe *pbe[NOSH_MAXCALC],
+                  ) {
+
+    Vnm_tstart(APBS_TIMER_SETUP, "Setup timer");
+
+    /* Setup time statistics */
+    Vnm_tstop(APBS_TIMER_SETUP, "Setup timer");
+
+    return 1;
+
+}
+
+VPUBLIC void killBEM(NOsh *nosh, Vpbe *pbe[NOSH_MAXCALC]
+                    ) {
+
+        int i;
+
+#ifndef VAPBSQUIET
+    Vnm_tprint(1, "Destroying boundary element structures.\n");
+#endif
+
+
+}
+
+VPUBLIC int solveBEM(NOsh *nosh,
+                    BEMparm_CalcType type
+                   ) {
+
+    int nx,
+        ny,
+        nz,
+        i;
+
+    if (nosh != VNULL) {
+        if (nosh->bogus) return 1;
+    }
+
+    Vnm_tstart(APBS_TIMER_SOLVER, "Solver timer");
+    Vnm_tstop(APBS_TIMER_SOLVER, "Solver timer");
+
+    return 1;
+
+}
+
+VPUBLIC int setPartBEM(NOsh *nosh,
+                      BEMparm *BEMparm
+                     ) {
+
+    int j;
+    double partMin[3],
+           partMax[3];
+
+    if (nosh->bogus) return 1;
+
+    return 1;
+
+}
+
+VPUBLIC int energyBEM(NOsh *nosh,
+                     int icalc,
+                     int *nenergy,
+                     double *totEnergy,
+                     double *qfEnergy,
+                     double *qmEnergy,
+                     double *dielEnergy
+                    ) {
+
+    Valist *alist;
+    Vatom *atom;
+    int i,
+        extEnergy;
+    double tenergy;
+    MGparm *mgparm;
+    PBEparm *pbeparm;
+
+    bemparm = nosh->calc[icalc]->bemparm;
+    pbeparm = nosh->calc[icalc]->pbeparm;
+
+    Vnm_tstart(APBS_TIMER_ENERGY, "Energy timer");
+    Vnm_tstop(APBS_TIMER_ENERGY, "Energy timer");
+
+    return 1;
+}
+
+VPUBLIC int forceBEM(Vmem *mem,
+                    NOsh *nosh,
+                    PBEparm *pbeparm,
+                    MGparm *mgparm,
+                    int *nforce,
+                    AtomForce **atomForce,
+                    Valist *alist[NOSH_MAXMOL]
+                   ) {
+
+    int j,
+        k;
+    double qfForce[3],
+           dbForce[3],
+           ibForce[3];
+
+    Vnm_tstart(APBS_TIMER_FORCE, "Force timer");
+
+#ifndef VAPBSQUIET
+    Vnm_tprint( 1,"  Calculating forces...\n");
+#endif
+
+    Vnm_tstop(APBS_TIMER_FORCE, "Force timer");
+
+    return 1;
+}
+
+VPUBLIC void printMGPARM(MGparm *mgparm) {
+
+}
+
+
+VPUBLIC int writedataBEM(int rank,
+                        NOsh *nosh,
+                        PBEparm *pbeparm,
+                       ) {
+
+    return 1;
+}
+
+
+VPUBLIC int writematMG(int rank, NOsh *nosh, PBEparm *pbeparm, Vpmg *pmg) {
+
+
+    if (nosh->bogus) return 1;
+    return 1;
+}
+
