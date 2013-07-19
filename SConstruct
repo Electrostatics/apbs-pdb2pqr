@@ -110,16 +110,17 @@ env = Environment(tools=tool_chain + ['swig'],
                   SHLIBSUFFIX=gcv('SO'))
 
 env.Append(CPPPATH=[distutils.sysconfig.get_python_inc(), numpy.get_include()])
+python_lib = 'python' + distutils.sysconfig.get_config_var('VERSION')
+env.Append(LIBS=[python_lib])
+env.Append(ENV={'PATH' : os.environ['PATH']})
 
 if os.name == 'nt':
-    python_root = sys.prefix
-    python_version = '%u%u' % sys.version_info[:2]
+    python_root = sys.prefix    
     python_include = os.path.join(python_root, 'include')
-    python_libs = os.path.join(python_root, 'libs')
-    python_lib = 'python' + python_version
+    python_libs = os.path.join(python_root, 'libs')    
     env.Append(LIBPATH=[python_libs])
-    env.Append(LIBS=[python_lib])
-    env.Append(ENV={'PATH' : os.environ['PATH']})
+else:
+    env.Append(LIBPATH=[distutils.sysconfig.get_config_var('LIBDIR')])
     
 Export('env')
 
