@@ -90,7 +90,7 @@ int main(
 
     MGparm *mgparm = VNULL;
     FEMparm *feparm = VNULL;
-    BEMparm *beparm = VNULL;
+    BEMparm *bemparm = VNULL;
     PBEparm *pbeparm = VNULL;
     APOLparm *apolparm = VNULL;
     Vparam *param = VNULL;
@@ -656,13 +656,13 @@ int main(
                                 i+1, nosh->elecname[k]);
                 }
                 /* Useful local variables */
-                mgparm = nosh->calc[i]->bemparm;
+                bemparm = nosh->calc[i]->bemparm;
                 pbeparm = nosh->calc[i]->pbeparm;
 
                 /* Set up problem */
                 Vnm_tprint( 1, "  Setting up problem...\n");
 
-                if (!initBEM(i,nosh, bemparm, pbeparm, pbe) {
+                if (!initBEM(i,nosh, bemparm, pbeparm, pbe)) {
                     Vnm_tprint( 2, "Error setting up BEM calculation!\n");
                     VJMPERR1(0);
                 }
@@ -683,7 +683,7 @@ int main(
                         &(qmEnergy[i]), &(dielEnergy[i]));
 
                 /* Write out forces */
-                forceBEM(mem, nosh, pbeparm, bemparm, &(nforce[i]),
+                forceBEM(nosh, pbeparm, bemparm, &(nforce[i]),
                         &(atomForce[i]), alist);
 
                 /* Write out data folks might want */
