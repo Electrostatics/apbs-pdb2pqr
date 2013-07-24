@@ -90,7 +90,16 @@ def getOldHeader(pdblist):
         
     return oldHeader.getvalue()
 
-def printPQRHeader(pdblist, atomlist, reslist, charge, ff, warnings, pH, ffout, cl_args):
+def printPQRHeader(pdblist, 
+                   atomlist, 
+                   reslist, 
+                   charge, 
+                   ff, 
+                   warnings, 
+                   pH, 
+                   ffout, 
+                   cl_args, 
+                   include_old_header = False):
     """
         Print the header for the PQR file
 
@@ -153,10 +162,12 @@ def printPQRHeader(pdblist, atomlist, reslist, charge, ff, warnings, pH, ffout, 
         header += "REMARK   5\n"
     header += "REMARK   6 Total charge on this protein: %.4f e\n" % charge
     header += "REMARK   6\n"
-#    header += "REMARK   6 Original PDB header follows\n"
-#    header += "REMARK   6\n"
-#
-#    header += getOldHeader(pdblist)
+    
+    if include_old_header:
+        header += "REMARK   7 Original PDB header follows\n"
+        header += "REMARK   7\n"
+    
+        header += getOldHeader(pdblist)
     
     return header
 
@@ -179,7 +190,8 @@ def runPDB2PQR(pdblist, ff,
                userff = None,
                usernames = None,
                ffout = None,
-               commandLine=None):
+               commandLine=None,
+               include_old_header=False):
     """
         Run the PDB2PQR Suite
 
@@ -209,6 +221,8 @@ def runPDB2PQR(pdblist, ff,
             usernames:     The user created names file to use. Required if using userff.
             ffout:         Instead of using the standard canonical naming scheme for residue and atom names,  +
                            use the names from the given forcefield
+            commandLine:   command line used (if any) to launch the program. Included in output header.
+            include_old_header: Include most of the PDB header in output.
             
         Returns
             header:  The PQR file header (string)
@@ -405,7 +419,8 @@ def runPDB2PQR(pdblist, ff,
         myRoutines.applyNameScheme(myNameScheme)
 
     header = printPQRHeader(pdblist, misslist, reslist, charge, ff, 
-                            myRoutines.getWarnings(), ph, ffout, commandLine)
+                            myRoutines.getWarnings(), ph, ffout, commandLine, 
+                            include_old_header=include_old_header)
     lines = myProtein.printAtoms(hitlist, chain)
 
     # Determine if any of the atoms in misslist were ligands
@@ -510,6 +525,10 @@ def mainCommand(argv):
 
     group.add_option('-v', '--verbose', dest='verbose', action='store_true', default=False,
                       help='Print information to stdout.')
+    
+    group.add_option('--include_header', dest='include_header', action='store_true', default=False,
+                      help='Include pdb header in pqr file. '
+                           'WARNING: The resulting PQR file will not with APBS versions prior to 1.5')
     parser.add_option_group(group)
     
     
@@ -650,7 +669,8 @@ Please cite your use of PDB2PQR as:
                                                   userff = userfffile,
                                                   usernames = usernamesfile,
                                                   ffout = options.ffout,
-                                                  commandLine = commandLine)
+                                                  commandLine = commandLine,
+                                                  include_old_header = options.include_header)
     except PDB2PQRError as er:
         print er
         sys.exit(1)
