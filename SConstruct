@@ -107,10 +107,11 @@ else:
 env = Environment(tools=tool_chain + ['swig'], 
                   SWIGFLAGS=['-python', '-c++'], 
                   SHLIBPREFIX="", 
-                  SHLIBSUFFIX=gcv('SO'))
+                  SHLIBSUFFIX=gcv('SO'),
+                  LDMODULESUFFIX=gcv('SO'))
 
 env.Append(CPPPATH=[distutils.sysconfig.get_python_inc(), numpy.get_include()])
-python_lib = 'python' + distutils.sysconfig.get_config_var('VERSION')
+python_lib = 'python' + gcv('VERSION')
 env.Append(LIBS=[python_lib])
 env.Append(ENV={'PATH' : os.environ['PATH']})
 
@@ -120,7 +121,7 @@ if os.name == 'nt':
     python_libs = os.path.join(python_root, 'libs')    
     env.Append(LIBPATH=[python_libs])
 else:
-    env.Append(LIBPATH=[distutils.sysconfig.get_config_var('LIBDIR')])
+    env.Append(LIBPATH=[gcv('LIBDIR')])
     
 Export('env')
 
