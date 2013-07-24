@@ -45,6 +45,8 @@ set(CMAKE_BUILD_TYPE "RELWITHDEBINFO")
 
 project(apbs)
 
+OPTION (BUILD_SHARED_LIBS "Build shared libraries." OFF)
+
 ################################################################################
 # Set project paths                                                            #
 ################################################################################
@@ -89,8 +91,7 @@ set(CMAKE_INCLUDE_PATH "${CMAKE_INCLUDE_PATH}")
 list(APPEND CMAKE_INCLUDE_PATH /usr/include)
 list(APPEND CMAKE_INCLUDE_PATH /usr/local/include)
 
-set(APBS_LIBS "")
-
+set(APBS_LIBS "-L${APBS_ROOT}/lib")
 
 ################################################################################
 # Enable ansi pedantic compiling                                               #
@@ -152,7 +153,7 @@ endif()
 
 if(NOT WIN32)
     find_library(MATH_LIBRARY "m")
-    list(APPEND APBS_LIBS ${MATH_LIBRARY})
+    list(APPEND APBS_LIBS -lm)
 endif()
 
 
@@ -183,40 +184,39 @@ if(NOT HAVE_SRAND_FUNC)
     message(FATAL_ERROR "Required srand function not found")
 endif()
 
+set(TABI tabipb)
+set(TABI_PATH ${CONTRIB_PATH}/tabipb)
 ExternalProject_add(
-    "tabipb"
-    SOURCE_DIR ${CONTRIB_PATH}/tabipb
-    CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${APBS_ROOT}
+    ${TABI}
+    URL file://${TABI_PATH}
+    CMAKE_ARGS -DCMAKE_INSTALL_PREFIX:PATH=${APBS_ROOT}
         -DBUILD_SHARED_LIBS=${BUILD_SHARED_LIBS}
 )
+
 if(BUILD_SHARED_LIBS)
-    set(TABI_LIBRARY_BASENAME ${CMAKE_SHARED_LIBRARY_PREFIX}tabi${CMAKE_SHARED_LIBRARY_SUFFIX})
+    set(TABI_LIBRARY_BASENAME ${CMAKE_SHARED_LIBRARY_PREFIX}${TABI}${CMAKE_SHARED_LIBRARY_SUFFIX})
 else()
-    set(TABI_LIBRARY_BASENAME ${CMAKE_STATIC_LIBRARY_PREFIX}tabi${CMAKE_STATIC_LIBRARY_SUFFIX})
+    set(TABI_LIBRARY_BASENAME ${CMAKE_STATIC_LIBRARY_PREFIX}${TABI}${CMAKE_STATIC_LIBRARY_SUFFIX})
 endif()
-    message(STATUS "tabi: ${LIBRARY_OUTPUT_PATH}/${TABI_LIBRARY_BASENAME}")
-    message(STATUS "tabi: ${LIBRARY_INSTALL_PATH}")
 
 install(
-    FILES contrib/tabi/lib/${TABI_LIBRARY_BASENAME}
-contrib/tabi/lib/*.mod
+    FILES ${LIBRARY_OUTPUT_PATH}/${TABI_LIBRARY_BASENAME} ${LIBRARY_OUTPUT_PATH}/*.mod
     DESTINATION ${LIBRARY_INSTALL_PATH}
 )
 
-set(TABI_LIBRARY ${LIBRARY_OUTPUT_PATH}/${TABI_LIBRARY_BASENAME})
-list(APPEND APBS_LIBS "-L../../../lib -L../../lib -ltabipb -lgfortran")
+    message(STATUS "tabi: ${LIBRARY_OUTPUT_PATH}/${TABI_LIBRARY_BASENAME}")
+    message(STATUS "tabi: ${LIBRARY_INSTALL_PATH}")
 
+set(TABI_LIBRARY ${APBS_ROOT}/${LIBRARY_INSTALL_PATH}/${TABI_LIBRARY_BASENAME})
+    message(STATUS "tabi: ${TABI_LIBRARY}")
+list(APPEND APBS_LIBS "-L${APBS_ROOT}/${LIBRARY_INSTALL_PATH} -lgfortran -ltabipb" )
 
-################################################################################
-# Look for the FEtk library                                                    #
-################################################################################
 
 find_file(
     FETK_PATH
     NAMES fetk
     PATHS ${SYS_LIBPATHS} /data/work/source . ..
-    DOC "Use an external fetk library"
-    )
+    DOC "Use an external fetk library")
 
 if(FETK_PATH)
     include_directories(${FETK_PATH}/include)
@@ -225,11 +225,6 @@ else()
     message(WARNING "Did not find fetk")
 endif()
 
-
-
-##############################################################################n
-# Handle the MALOC library dependency                                          #
-################################################################################
 
 find_library(MALOC_LIBRARY  "maloc"
     PATHS ${FETK_PATH}/lib ${CONTRIB_PATH}
@@ -275,7 +270,7 @@ if(NOT (HAVE_MALOC_H AND MALOC_LIBRARY))
     )
     set(MALOC_LIBRARY ${LIBRARY_OUTPUT_PATH}/${MALOC_LIBRARY_BASENAME})
 endif()
-list(APPEND APBS_LIBS ${MALOC_LIBRARY})
+list(APPEND APBS_LIBS -lmaloc)
 
 
 
@@ -550,6 +545,7 @@ if(NOT CYGWIN AND NOT MINGW AND WIN32)
     ADD_DEFINITIONS("/D _CRT_SECURE_NO_WARNINGS")
 endif()
 
+message("libs: " ${APBS_LIBS})
 
 
 ################################################################################
@@ -634,7 +630,6 @@ if(ENABLE_iAPBS)
     add_subdirectory(contrib/iapbs/src)
     list(APPEND APBS_LIBS ${iAPBS_LIBRARY})
 endif()
-
 
 
 ################################################################################
