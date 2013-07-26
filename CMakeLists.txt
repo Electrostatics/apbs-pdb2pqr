@@ -184,35 +184,43 @@ if(NOT HAVE_SRAND_FUNC)
     message(FATAL_ERROR "Required srand function not found")
 endif()
 
-set(TABI tabipb)
-set(TABI_PATH ${CONTRIB_PATH}/tabipb)
-ExternalProject_add(
-    ${TABI}
-    URL file://${TABI_PATH}
-    CMAKE_ARGS -DCMAKE_INSTALL_PREFIX:PATH=${APBS_ROOT}
-        -DBUILD_SHARED_LIBS=${BUILD_SHARED_LIBS}
-)
-
-if(BUILD_SHARED_LIBS)
-    set(TABI_LIBRARY_BASENAME ${CMAKE_SHARED_LIBRARY_PREFIX}${TABI}${CMAKE_SHARED_LIBRARY_SUFFIX})
-else()
-    set(TABI_LIBRARY_BASENAME ${CMAKE_STATIC_LIBRARY_PREFIX}${TABI}${CMAKE_STATIC_LIBRARY_SUFFIX})
+option(ENABLE_BEM "Boundary element method using TABIPB" ON)
+if(ENABLE_BEM)
+    set(TABI tabipb)
+    set(TABI_PATH ${CONTRIB_PATH}/tabipb)
+    ExternalProject_add(
+        ${TABI}
+        URL file://${TABI_PATH}
+        CMAKE_ARGS -DCMAKE_INSTALL_PREFIX:PATH=${APBS_ROOT}
+            -DBUILD_SHARED_LIBS=${BUILD_SHARED_LIBS}
+    )
+    
+    if(BUILD_SHARED_LIBS)
+        set(TABI_LIBRARY_BASENAME ${CMAKE_SHARED_LIBRARY_PREFIX}${TABI}${CMAKE_SHARED_LIBRARY_SUFFIX})
+    else()
+        set(TABI_LIBRARY_BASENAME ${CMAKE_STATIC_LIBRARY_PREFIX}${TABI}${CMAKE_STATIC_LIBRARY_SUFFIX})
+    endif()
+    
+    install(
+        FILES ${LIBRARY_OUTPUT_PATH}/${TABI_LIBRARY_BASENAME} ${LIBRARY_OUTPUT_PATH}/*.mod
+        DESTINATION ${LIBRARY_INSTALL_PATH}
+    )
+    set(TABI_LIBRARY ${APBS_ROOT}/${LIBRARY_INSTALL_PATH}/${TABI_LIBRARY_BASENAME})
+    
+    set(LIBGFORTRAN_NAME ${CMAKE_SHARED_LIBRARY_PREFIX}gfortran${CMAKE_SHARED_LIBRARY_SUFFIX})
+    execute_process(COMMAND gfortran --print-file-name ${LIBGFORTRAN_NAME} 
+                    OUTPUT_VARIABLE LIBGFORTRANPATH
+                    RESULT_VARIABLE HAVE_GFORTRAN
+    )
+    if(HAVE_GFORTRAN GREATER 0)
+        message(FATAL_ERROR gfortran is currently required for using BEM/TABIPB in APBS)
+    endif()
+    get_filename_component(LIBGFORTRANPATH ${LIBGFORTRANPATH} PATH)
+    find_path(LIBGFORTRAN_PATH ${LIBGFORTRAN_NAME} PATH ${LIBGFORTRANPATH})
+    list(APPEND APBS_LIBS "-L${APBS_ROOT}/${LIBRARY_INSTALL_PATH} -L${LIBGFORTRAN_PATH} -lgfortran -ltabipb" )
 endif()
 
-install(
-    FILES ${LIBRARY_OUTPUT_PATH}/${TABI_LIBRARY_BASENAME} ${LIBRARY_OUTPUT_PATH}/*.mod
-    DESTINATION ${LIBRARY_INSTALL_PATH}
-)
-
-    message(STATUS "tabi: ${LIBRARY_OUTPUT_PATH}/${TABI_LIBRARY_BASENAME}")
-    message(STATUS "tabi: ${LIBRARY_INSTALL_PATH}")
-
-set(TABI_LIBRARY ${APBS_ROOT}/${LIBRARY_INSTALL_PATH}/${TABI_LIBRARY_BASENAME})
-    message(STATUS "tabi: ${TABI_LIBRARY}")
-list(APPEND APBS_LIBS "-L${APBS_ROOT}/${LIBRARY_INSTALL_PATH} -lgfortran -ltabipb" )
-
-
-find_file(
+find_file( # this should be find path...
     FETK_PATH
     NAMES fetk
     PATHS ${SYS_LIBPATHS} /data/work/source . ..
