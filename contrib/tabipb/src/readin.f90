@@ -91,7 +91,7 @@ real*4 xyzqr(5)
     
     close(102)
 
-    rslt=system('./msms -if '//pathname(1:lenpath)//fname(1:lenfname)//".xyzr"//' -prob 1.4 -de ' &
+    rslt=system('msms -if '//pathname(1:lenpath)//fname(1:lenfname)//".xyzr"//' -prob 1.4 -de ' &
     //den(1:5)//' -of '//pathname(1:lenpath)//fname(1:lenfname))    
     
     ! read the surface points
