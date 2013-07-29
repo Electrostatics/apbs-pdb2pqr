@@ -987,7 +987,7 @@ class pKaRoutines:
                                 # Insert the average value in the symetric matrix
                                 #
                                 average = (value1+value2)/2.0
-                                print '%25s %25s %10s %10s %6.3f %6.3 %6.3f' %(pKa1.uniqueid,pKa2.uniqueid,state1,state2,value1,value2,average)
+                                print '%25s %25s %10s %10s %6.3f %6.3f %6.3f' %(pKa1.uniqueid,pKa2.uniqueid,state1,state2,value1,value2,average)
                                 
                                 symmetric_matrix[pKa1][titration1][state1][pKa2][titration2][state2]=average
         return symmetric_matrix
@@ -1160,7 +1160,7 @@ class pKaRoutines:
         #
         """
         # Setting up
-        myRoutines = Routines(self.protein, 0)
+        myRoutines = Routines(self.protein, True)
         myRoutines.updateResidueTypes()
         myRoutines.updateSSbridges()
         myRoutines.updateBonds()
