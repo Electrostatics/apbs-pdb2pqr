@@ -993,9 +993,8 @@ class Routines:
         # Initialize some variables
         nearatoms = {}
         residue = atom.residue
-        cutoff = BUMP_DIST
-        if atom.isHydrogen(): cutoff = 1.0
         #print 'Cutoff distance',cutoff
+        atom_size = BUMP_HYDROGEN_SIZE if atom.isHydrogen() else BUMP_HEAVY_SIZE
 
         # Get atoms from nearby cells
 
@@ -1006,8 +1005,7 @@ class Routines:
         bumpscore = 0.0
         for closeatom in closeatoms:
             closeresidue = closeatom.residue
-            #print 'Closeatomname',atom.name,closeatom.name
-            if closeresidue == residue and closeatom.name not in ['N', 'CA', 'C', 'O']:
+            if closeresidue == residue and (closeatom in atom.bonds or atom in closeatom.bonds):
                 continue
 
             if not isinstance(closeresidue, Amino):
@@ -1016,16 +1014,23 @@ class Routines:
                 if residue.SSbondedpartner == closeatom: continue
 
             # Also ignore if this is a donor/acceptor pair
-
-            #if atom.isHydrogen() and len(atom.bonds) != 0 and atom.bonds[0].hdonor \
-            #   and closeatom.hacceptor: continue
-            #if closeatom.isHydrogen() and len(closeatom.bonds) != 0 and closeatom.bonds[0].hdonor \
-            #       and atom.hacceptor:
-            #    continue
+            pair_ignored = False
+            if atom.isHydrogen() and len(atom.bonds) != 0 and atom.bonds[0].hdonor \
+               and closeatom.hacceptor: 
+                pair_ignored = True
+            if closeatom.isHydrogen() and len(closeatom.bonds) != 0 and closeatom.bonds[0].hdonor \
+                   and atom.hacceptor:
+                pair_ignored = True
 
             dist = distance(atom.getCoords(), closeatom.getCoords())
+            other_size = BUMP_HYDROGEN_SIZE if closeatom.isHydrogen() else BUMP_HEAVY_SIZE
+            cutoff = atom_size + other_size
             if dist < cutoff:
                 bumpscore = bumpscore + 1000.0
+                if pair_ignored:
+                    print 'This bump is a donor/acceptor pair.'
+#                if heavy_not_ignored:
+#                    print 'Bumped {0} against {1} within residue'.format(atom.name, closeatom.name)
                 #nearatoms[closeatom] = (dist-cutoff)**2
         print 'BUMPSCORE', bumpscore
         return bumpscore
@@ -1066,9 +1071,9 @@ class Routines:
 
             self.write("Starting to debump %s...\n" % residue, 1)
             self.write("Debumping cutoffs: %2.1f for heavy-heavy, %2.1f for hydrogen-heavy, and %2.1f for hydrogen-hydrogen.\n" % 
-                       (BUMP_HYDROGEN_SIZE*2, 
+                       (BUMP_HEAVY_SIZE*2, 
                         BUMP_HYDROGEN_SIZE+BUMP_HEAVY_SIZE, 
-                        BUMP_HEAVY_SIZE*2), 1)
+                        BUMP_HYDROGEN_SIZE*2), 1)
             if self.debumpResidue(residue, conflictnames):
                 self.write("Debumping Successful!\n\n", 1)
             else:
@@ -1159,10 +1164,9 @@ class Routines:
                 # Check for conflicts
 
                 score = self.scoreDihedralAngle(residue, anglenum)
-                currentConflictNames = self.findResidueConflicts(residue)
 
                 if score == 0:                    
-                    if not currentConflictNames:
+                    if not self.findResidueConflicts(residue):
                         self.write("No conflicts found at angle %.2f.\n" % newangle, 1)
                         return True
                     else:
@@ -1302,8 +1306,9 @@ class Routines:
 
         for closeatom in closeatoms:
             closeresidue = closeatom.residue
-            if closeresidue == residue: 
+            if closeresidue == residue and (closeatom in atom.bonds or atom in closeatom.bonds):
                 continue
+                
             if not isinstance(closeresidue, (Amino, WAT)): 
                 continue
             if isinstance(residue, CYS) and residue.SSbondedpartner == closeatom: 
