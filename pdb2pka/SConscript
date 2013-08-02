@@ -1,8 +1,13 @@
 Import('env')
+Import('prefix')
 
 if GetOption('swig'):
-    Default(env.LoadableModule('_pMC_mult', ['pMC_mult.cpp', 'pMC_mult.i']))
+    pyc = env.LoadableModule('_pMC_mult', ['pMC_mult.cpp', 'pMC_mult.i'])
 else:
-    Default(env.LoadableModule('_pMC_mult', ['pMC_mult.cpp', 'pMC_mult_wrap.cpp']))
+    pyc = env.LoadableModule('_pMC_mult', ['pMC_mult.cpp', 'pMC_mult_wrap.cpp'])
+    
+Default(pyc)
+    
+algorithms_module = SConscript('substruct/SConscript')
 
-SConscript('substruct/SConscript')
+Return('pyc algorithms_module')

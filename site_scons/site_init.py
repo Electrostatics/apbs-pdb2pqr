@@ -7,6 +7,7 @@
 ###############################################################################
 
 from SCons.Script import *
+import SCons.Errors
 import re
 from test_tools import ComparePQRAction, ComparePROPKAAction, CompareStringFunc
 
@@ -128,10 +129,30 @@ def CopySubAction(targetfile, sourcefile, dict, useRegex=False):
 def CopySubActionStringFunc(targetfile, sourcefile, dict, useRegex):
     return 'CopySubAction("%s", "%s")' % (targetfile, sourcefile)
 
+def CompilePythonAction(targetfile, sourcefile):
+    """Compile python into byte code.
+    """
+    try:
+        import py_compile
+    except ImportError:
+        raise SCons.Errors.InternalError, "Couldn't import py_compile module"
+    
+    try:
+        py_compile.compile(sourcefile, targetfile, doraise=True)
+    except py_compile.PyCompileError:
+        raise SCons.Errors.InternalError, "Couldn't compile {0}".format(sourcefile)
+    
+    
+
+def CompilePythonActionStringFunc(targetfile, sourcefile):
+    return 'Compiling python to bytecode ("%s", "%s")' % (targetfile, sourcefile)
+
 CopySub = SCons.Action.ActionFactory( CopySubAction, CopySubActionStringFunc )
 
 ComparePQR = SCons.Action.ActionFactory( ComparePQRAction, CompareStringFunc )
 ComparePROPKA = SCons.Action.ActionFactory( ComparePROPKAAction, CompareStringFunc )
+
+CompilePython = SCons.Action.ActionFactory( CompilePythonAction, CompilePythonActionStringFunc )
 
 
 

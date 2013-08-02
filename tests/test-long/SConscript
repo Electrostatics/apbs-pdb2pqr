@@ -3,6 +3,12 @@ Import('pdb2pqr')
 import sys
 import os
 
+AddOption('--long-test-count',
+        dest='longTestCount',
+        action='store',
+        type=int,
+        help='When building the long-test target specify how many tests to run.')
+
 commandLineStart = sys.executable + ' ' + str(pdb2pqr[0])
 nullTarget = '/dev/null'    
 if os.name == 'nt':
