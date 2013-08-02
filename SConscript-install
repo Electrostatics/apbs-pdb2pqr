@@ -76,6 +76,8 @@ for target in compile_targets:
 for file_name in getAllFiles('pdb2pka/'):
 	installFile(file_name)
 	
+Alias('install', env.Install(prefix+'pdb2pka/', 'pdb2pka/pka.py'))
+	
 #Main Program
 for dir_name in ('src/',
                  'extensions/'):
