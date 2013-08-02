@@ -1,7 +1,8 @@
-import distutils.sysconfig
-gcv = distutils.sysconfig.get_config_var
-
 Import('env')
 
-Default(env.LoadableModule('Algorithms', ['Algorithms.cpp']))
+algorithms_pyc = env.LoadableModule('Algorithms', ['Algorithms.cpp'])
+
+Default(algorithms_pyc)
+
+Return('algorithms_pyc')
 

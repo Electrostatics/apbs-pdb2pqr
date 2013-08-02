@@ -33,3 +33,4 @@ Please see http://www.poissonboltzmann.org/pdb2pqr/release-history
  
 - CHANGES
  * Removed numpy from contrib. The user is expected to have numpy installed and available to python at configuration.
+ * Support for neumeric dropped. 
