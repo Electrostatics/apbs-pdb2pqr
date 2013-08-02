@@ -8,14 +8,15 @@
 ! 7. Extension from spherical cavity to real molecules
 ! 8. Preconditioning: Diagnal Scalling 
 
-subroutine apbs2tabipb(apbs_pqr_filename, nion, ionc, ionq, ionr, pdie, sdie, sdens, temp)
+subroutine apbs2tabipb(apbs_pqr_filename, nion, ionc, ionq, ionr, pdie, sdie, sdens, temp,tree_order, tree_n0, mac)
 use comdata
 use molecule
+use treecode
 implicit double precision (a-h,o-z)
 
 character(100)  apbs_pqr_filename
-integer nion
-real*8 pdie, sdie, sdens, temp, ionc(nion), ionq(nion), ionr(nion)
+integer nion, tree_n0, tree_order
+real*8 pdie, sdie, sdens, temp, ionc(nion), ionq(nion), ionr(nion), mac
 
 !local variables
 real*8 bulk_strength, kappa2
@@ -34,6 +35,9 @@ do i=1,nion
 enddo
 kappa2=8.430325455*bulk_strength/eps1     !kappa2 in 300K
 kappa=sqrt(kappa2)
+theta=mac
+order=tree_order
+maxparnode=tree_n0
 
 call TABIPB
 
@@ -65,9 +69,11 @@ common // pi,one_over_4pi
 !den='10'
 
 !Treecode
-order=1               !The order of taylor expansion
-maxparnode=500        !maximum particles per leaf
-theta=0.8d0           !MAC, rc/R<MAC, the bigger MAC, the more treecode 
+!order=1               !The order of taylor expansion
+!maxparnode=500        !maximum particles per leaf
+!theta=0.8d0           !MAC, rc/R<MAC, the bigger MAC, the more treecode 
+write(*,*) 'treecode parameters'
+write(*,*) 'tree_order=', order, 'tree_n0=',maxparnode, 'mac=', theta 
 
 
 !GMRES

@@ -2519,7 +2519,7 @@ VPUBLIC int NOsh_parseBEM(
     rc = 1;
     while (Vio_scanf(sock, "%s", tok) == 1) {
 
-        Vnm_print(0, "NOsh_parseMG:  Parsing %s...\n", tok);
+        Vnm_print(0, "NOsh_parseBEM:  Parsing %s...\n", tok);
 
         /* See if it's an END token */
         if (Vstring_strcasecmp(tok, "end") == 0) {

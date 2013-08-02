@@ -211,11 +211,11 @@ keyword!\n", tok);
 VPRIVATE Vrc_Codes BEMparm_parseTREE_N0(BEMparm *thee, Vio *sock) {
 
     char tok[VMAX_BUFSIZE];
-    double ti;
+    int ti;
 
     VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
     if (sscanf(tok, "%d", &ti) == 0) {
-        Vnm_print(2, "NOsh:  Read non-float (%s) while parsing TREE_N0 \
+        Vnm_print(2, "NOsh:  Read non-integer (%s) while parsing TREE_N0 \
 keyword!\n", tok);
         return VRC_WARNING;
     } else if (ti <= 0) {

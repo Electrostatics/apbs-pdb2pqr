@@ -696,20 +696,20 @@ VEXTERNC void killMeshes(
 VEXTERNC void printMGPARM(MGparm *mgparm, double realCenter[3]);
 
 /**
- * @brief  Initialize an MG calculation
+ * @brief  Initialize an BEM calculation
  * @ingroup  Frontend
  * @author  Nathan Baker
  * @return  1 if succesful, 0 otherwise */
 VEXTERNC int initBEM(
-                    int icalc,  /**< Index of calculation in pmg/pmpg arrays */
+                    int icalc,  /**< Index of calculation in pbem/pmbem arrays */
                     NOsh *nosh,  /**< Object with parsed input file parameters */
-                    BEMparm *bemparm,  /**< Object with MG-specific parameters */
+                    BEMparm *bemparm,  /**< Object with BEM-specific parameters */
                     PBEparm *pbeparm,  /**< Object with generic PBE parameters  */
                     Vpbe *pbe[NOSH_MAXCALC]  /**< Array of Vpbe objects (one for each calc) */
                     );
 
 /**
- * @brief  Kill structures initialized during an MG calculation
+ * @brief  Kill structures initialized during an BEM calculation
  * @ingroup  Frontend
  * @author  Nathan Baker
  */
@@ -719,32 +719,32 @@ VEXTERNC void killBEM(
 );
 
 /**
- * @brief  Solve the PBE with MG
+ * @brief  Solve the PBE with BEM 
  * @ingroup  Frontend
- * @author  Nathan Baker
+ * @author  Nathan Baker, Weihua Geng, Andrew Stevens 
  * @param nosh  Object with parsed input file parameters
- * @param pmg  MG objects for this calculation
- * @param type  Type of MG calculation
+ * @param pbem  BEM objects for this calculation
+ * @param type  Type of BEM calculation
  * @return  1 if successful, 0 otherwise */
-VEXTERNC int solveBEM(NOsh *nosh, PBEparm *pbeparm, BEMparm_CalcType type);
+VEXTERNC int solveBEM(NOsh *nosh, PBEparm *pbeparm, BEMparm *bemparm, BEMparm_CalcType type);
 
 /**
  * @brief  Set MG partitions for calculating observables and performing I/O
  * @ingroup  Frontend
  * @author  Nathan Baker
  * @param nosh  Object with parsed input file parameters
- * @param mgparm  MG parameters from input file
- * @param pmg  MG object
+ * @param bemparm  BEM parameters from input file
+ * @param pbem  BEM object
  * @return  1 if successful, 0 otherwise */
 VEXTERNC int setPartBEM(NOsh *nosh, BEMparm *bemparm);
 
 /**
- * @brief  Calculate electrostatic energies from MG solution
+ * @brief  Calculate electrostatic energies from BEM  solution
  * @ingroup  Frontend
  * @author  Nathan Baker
  * @param nosh  Object with parsed input file parameters
  * @param icalc  Index of calculation
- * @param pmg  MG object
+ * @param pbem  BEM object
  * @param nenergy  Set to number of entries in energy arrays
  * @param totEnergy  Set to total energy (in kT)
  * @param qfEnergy  Set to charge-potential energy (in kT)
@@ -756,14 +756,14 @@ VEXTERNC int energyBEM(NOsh* nosh, int icalc,
   double *dielEnergy);
 
 /**
- * @brief  Calculate forces from MG solution
+ * @brief  Calculate forces from BEM solution
  * @ingroup  Frontend
  * @author  Nathan Baker
  * @param  mem  Memory management object
  * @param  nosh  Parameters from input file
  * @param  pbeparm  Generic PBE parameters
- * @param  mgparm  MG-specific parmaeters
- * @param pmg  MG object
+ * @param  bemparm  BEM-specific parmaeters
+ * @param pbem  BEM object
  * @param nforce  Set to number of forces in arrays
  * @param  atomForce  List of atom forces
  * @param  alist  List of atom lists
@@ -780,24 +780,24 @@ VEXTERNC int forceBEM(NOsh *nosh, PBEparm *pbeparm,  BEMparm *bemparm,
 VEXTERNC void printBEMPARM(BEMparm *bemparm);
 
 /**
- * @brief  Write out observables from MG calculation to file
+ * @brief  Write out observables from BEM calculation to file
  * @ingroup  Frontend
  * @author  Nathan Baker
  * @param  rank  Processor rank (if parallel calculation)
  * @param  nosh  Parameters from input file
  * @param  pbeparm  Generic PBE parameters
- * @param pmg  MG object
+ * @param pbem  BEM object
  * @return  1 if successful, 0 otherwise */
 VEXTERNC int writedataBEM(int rank, NOsh *nosh, PBEparm *pbeparm);
 
 /**
- * @brief  Write out operator matrix from MG calculation to file
+ * @brief  Write out operator matrix from BEM calculation to file
  * @ingroup  Frontend
  * @author  Nathan Baker
  * @param  rank  Processor rank (if parallel calculation)
  * @param  nosh  Parameters from input file
  * @param  pbeparm  Generic PBE parameters
- * @param pmg  MG object
+ * @param pbem  BEM object
  * @return  1 if successful, 0 otherwise */
 VEXTERNC int writematBEM(int rank, NOsh *nosh, PBEparm *pbeparm);
 
