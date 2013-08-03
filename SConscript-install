@@ -85,6 +85,7 @@ for dir_name in ('src/',
 		installFile(file_name)
 		
 Alias('install', env.Install(prefix, 'pdb2pqr.py'))
+Alias('install', env.Install(prefix, 'pdb2pqr.cgi'))
 Alias('install', env.InstallAs(prefix+'/index.html', 'html/server.html'))
 
 for file_name in ('AppService_client.py',
