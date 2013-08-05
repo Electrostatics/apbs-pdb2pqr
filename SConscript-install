@@ -101,6 +101,10 @@ for file_name in ('AppService_client.py',
 				  'pdb2pqr.css',
 				  'README'):
 	installFile(file_name)
+	
+Alias('install', env.Command(prefix+'tmp', None,
+							[Mkdir('$TARGET'),
+			 				Chmod('$TARGET', 0777)]))
 
 #Testing stuff to test installed pdb2pqr	
 for dir_name in ('tests/',
