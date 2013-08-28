@@ -954,9 +954,12 @@ class pKaRoutines:
         #
         # Make matrix symmetric
         #
-        print
-        print 'Interaction energy matrix'
-        print '%25s %25s %10s %10s %16s' %('Group1','Group 2','State G1','State G2','Interaction energy (kT)')
+        
+        outfile = open('%s.INTERACTION_MATRIX.DAT' %self.pdbfile_name, 'w')
+        
+        
+        outfile.write('Interaction energy matrix\n')
+        outfile.write('%25s %25s %10s %10s %16s\n' %('Group1','Group 2','State G1','State G2','Interaction energy (kT)'))
         symmetric_matrix={}
         for pKa1 in self.pKas:
             symmetric_matrix[pKa1]={}
@@ -987,7 +990,7 @@ class pKaRoutines:
                                 # Insert the average value in the symetric matrix
                                 #
                                 average = (value1+value2)/2.0
-                                print '%25s %25s %10s %10s %6.3f %6.3f %6.3f' %(pKa1.uniqueid,pKa2.uniqueid,state1,state2,value1,value2,average)
+                                outfile.write('%25s %25s %10s %10s %6.3f %6.3f %6.3f\n' %(pKa1.uniqueid,pKa2.uniqueid,state1,state2,value1,value2,average))
                                 
                                 symmetric_matrix[pKa1][titration1][state1][pKa2][titration2][state2]=average
         return symmetric_matrix
