@@ -1017,10 +1017,12 @@ class Routines:
             pair_ignored = False
             if atom.isHydrogen() and len(atom.bonds) != 0 and atom.bonds[0].hdonor \
                and closeatom.hacceptor: 
-                pair_ignored = True
+                #pair_ignored = True
+                continue
             if closeatom.isHydrogen() and len(closeatom.bonds) != 0 and closeatom.bonds[0].hdonor \
                    and atom.hacceptor:
-                pair_ignored = True
+                #pair_ignored = True
+                continue
 
             dist = distance(atom.getCoords(), closeatom.getCoords())
             other_size = BUMP_HYDROGEN_SIZE if closeatom.isHydrogen() else BUMP_HEAVY_SIZE
