@@ -1376,6 +1376,16 @@ class pKaRoutines:
                     import pickle
                     pickle.dump(savedict,fd)
                     fd.close()
+        
+        name=self.pdbfile_name+'.nice_background'            
+        with open(name, 'w') as f:
+            keys = savedict.keys()
+            keys.sort()
+            for key in keys:
+                value = savedict[key]
+                residue, tit_state = key.rsplit('_', 1)
+                
+                f.write(' '.join((residue, tit_state, str(value)))+'\n')
         return
 
     #
@@ -1521,6 +1531,16 @@ class pKaRoutines:
                     import pickle
                     pickle.dump(savedict,fd)
                     fd.close()
+                    
+        name=self.pdbfile_name+'.nice_desolv'            
+        with open(name, 'w') as f:
+            keys = savedict.keys()
+            keys.sort()
+            for key in keys:
+                value = savedict[key]
+                residue, tit_state = key.rsplit('_', 1)
+                
+                f.write(' '.join((residue, tit_state, str(value)))+'\n')
         return
 
     #
