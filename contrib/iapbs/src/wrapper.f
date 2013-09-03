@@ -76,6 +76,12 @@ c     initialization of input data
        fcenter(i) = 0.
       end do
 
+      do i = 1, 13
+         apbsgrid_meta(i) = 0.0
+      end do
+      apbsgrid = 0.0
+
+
 c     defaults
       grid(1) = 0.5
       grid(2) = 0.5
@@ -281,21 +287,21 @@ c     print molecule data
 
 c more intialization
       do i = 1, natom
-         apbsdx = 0.0
-         apbsdy = 0.0
-         apbsdz = 0.0
-         apbsqfx = 0.0
-         apbsqfy = 0.0
-         apbsqfz = 0.0
-         apbsibx = 0.0
-         apbsiby = 0.0
-         apbsibz = 0.0
-         apbsdbx = 0.0
-         apbsdby = 0.0
-         apbsdbz = 0.0
-         apbsnpx = 0.0
-         apbsnpy = 0.0
-         apbsnpz = 0.0
+         apbsdx(i) = 0.0
+         apbsdy(i) = 0.0
+         apbsdz(i) = 0.0
+         apbsqfx(i) = 0.0
+         apbsqfy(i) = 0.0
+         apbsqfz(i) = 0.0
+         apbsibx(i) = 0.0
+         apbsiby(i) = 0.0
+         apbsibz(i) = 0.0
+         apbsdbx(i) = 0.0
+         apbsdby(i) = 0.0
+         apbsdbz(i) = 0.0
+         apbsnpx(i) = 0.0
+         apbsnpy(i) = 0.0
+         apbsnpz(i) = 0.0
       end do
       esenergy = 0.0
       npenergy = 0.0
