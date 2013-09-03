@@ -18,8 +18,8 @@ CONTAINS
 ! read in APBS user input parameters and set defaults
 !++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-    USE apbs_vars
-    USE file_io_dat, only : mdin_apbs, sp_apbs
+    use apbs_vars
+    use file_io_dat, only : mdin_apbs, sp_apbs
     IMPLICIT NONE
 
     INTEGER :: i
@@ -178,7 +178,7 @@ CONTAINS
 ! these values are then constant during simulation
 !++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-    USE apbs_vars
+    use apbs_vars
 
     IMPLICIT NONE
     ! passed in variables
@@ -191,7 +191,7 @@ CONTAINS
     CHARACTER (len = 128) string
     _REAL_ :: dummyr,  maxx, minx, maxy, miny, maxz, minz
     _REAL_ :: cx(natom), cy(natom), cz(natom)
-    _REAL_ :: tmpcg, tmprad
+    _REAL_ :: tmpcg, tmprad, tot_charge
 
     WRITE(6, '(a)') 'iAPBS: Initializing APBS interface'
 
@@ -294,6 +294,7 @@ CONTAINS
     miny = cy(1)
     maxz = cz(1)
     minz = cz(1)
+    tot_charge = 0.0
     DO i = 1, natom
        IF(maxx < cx(i)+pbradii(i)) maxx = cx(i)+pbradii(i)
        IF(minx > cx(i)-pbradii(i)) minx = cx(i)-pbradii(i)
@@ -301,11 +302,13 @@ CONTAINS
        IF(miny > cy(i)-pbradii(i)) miny = cy(i)-pbradii(i)
        IF(maxz < cz(i)+pbradii(i)) maxz = cz(i)+pbradii(i)
        IF(minz > cz(i)-pbradii(i)) minz = cz(i)-pbradii(i)
+       tot_charge = tot_charge + pbcg(i)
     END DO
 
     IF (apbs_print > 1) THEN
        WRITE(6,'(a, 3f8.3)') 'iAPBS: Molecular dimensions: ', &
             maxx-minx, maxy-miny, maxz-minz
+       WRITE(6,'(a, f8.3)') 'iAPBS: Total charge: ', tot_charge
     END IF
 
 ! for mg-auto calculate missing grid parameters if dime = 0
@@ -354,7 +357,7 @@ CONTAINS
 !
 !++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-    USE apbs_vars
+    use apbs_vars
     IMPLICIT NONE
 
     WRITE(6,'()')
@@ -547,7 +550,7 @@ CONTAINS
 !
 !++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-    USE apbs_vars
+    use apbs_vars
 
     IMPLICIT NONE
 
@@ -572,6 +575,14 @@ CONTAINS
     _REAL_ :: apbsgrid_meta(13), apbsgrid(3*natom)
 
     !    eelt = 0.d0; enpol = 0.d0 rokFIXME ?
+
+    ! initialization
+    DO i = 1, 13
+       apbsgrid_meta(i) = 0.0
+    END DO
+    DO i = 1, 3*natom
+       apbsgrid(i) = 0.0
+    END DO
 
     ! unpack coordinates
     DO i = 1, natom
@@ -703,7 +714,7 @@ CONTAINS
 !
 !++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-    USE apbs_vars
+    use apbs_vars
 
     IMPLICIT NONE
 
@@ -748,6 +759,14 @@ CONTAINS
 
 
     !    eelt = 0.d0; enpol = 0.d0 rokFIXME??
+
+    ! initialization
+    DO i = 1, 13
+       apbsgrid_meta(i) = 0.0
+    END DO
+    DO i = 1, 3*natom
+       apbsgrid(i) = 0.0
+    END DO
 
     ! initialize solv forces
     DO i = 1, natom
@@ -1175,7 +1194,7 @@ CONTAINS
 ! check if change in geometry warrants new PB energy and forces update
 !++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-    USE apbs_vars
+    use apbs_vars
 
     IMPLICIT NONE
 

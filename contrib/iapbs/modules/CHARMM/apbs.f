@@ -187,6 +187,13 @@ c-----------------------------------------------------------------
          fcenter(i) = 0.0D0
       end do
 
+      do i = 1, 13
+         apbsgrid_meta(i) = 0.0
+      end do
+      do i = 1, 3*NATOM
+         apbsgrid(i) = 0.0
+      end do
+
     ! is this a single point energy calculation?
     ! default is no
       sp_apbs = .FALSE.
@@ -734,6 +741,15 @@ c did we parse options first?
       if (.not. qaparsed) then
          call wrndie(-5, '<APBSFRC>', 'Must have APBS options first!')
       endif
+
+c initialization
+
+      do i = 1, 13
+         apbsgrid_meta(i) = 0.0
+      end do
+      do i = 1, 3*NATOM
+         apbsgrid(i) = 0.0
+      end do
 
 c we're doing this calculation only every icall/napbs step
       if (mod(icall, napbs) .eq. 0) then
