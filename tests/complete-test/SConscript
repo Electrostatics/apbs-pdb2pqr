@@ -40,7 +40,6 @@ def buildTest(input_file_names,
         validatePROPKAResult = env.Command(test_result_file_name, [out_propka_file_name, correct_propka_file_name],
                                    			ComparePROPKA('$TARGET', '${SOURCES[0]}', '${SOURCES[1]}'))
         output_tests.append(validatePROPKAResult)
-        #env.Clean(runTest, out_propka_file_name)
 							
     aliasObj = setupTest(test_name, runTest, output_tests)
     testList.append(aliasObj)

@@ -1,5 +1,4 @@
 Import('env')
-Import('prefix')
 Import('compile_targets')
 
 from os.path import dirname, basename, join, isfile
@@ -41,9 +40,9 @@ def installFile(file_name, build_target='install'):
 		result = env.Command(compiled_name, file_name, CompilePython('$TARGET', '$SOURCE'))
 		if GetOption("clean"):
 			env.Default(result)
-		Alias(build_target, env.Install(prefix+dirname(file_name), result))
+		Alias(build_target, env.Install(env['PREFIX']+dirname(file_name), result))
 	else:
-		Alias(build_target, env.Install(prefix+dirname(file_name), target))
+		Alias(build_target, env.Install(env['PREFIX']+dirname(file_name), target))
 
 #Contrib
 for file_name in getAllFiles('contrib/ZSI-2.1-a1/ZSI'):
@@ -58,7 +57,7 @@ for file_name in getAllFiles('propka30/'):
 #Whole directories
 for dir_name in ('dat/', 'doc/', 'examples/', 'jmol/'):
 	dat = Dir(dir_name)
-	Alias('install', env.Install(prefix, dat))
+	Alias('install', env.Install(env['PREFIX'], dat))
 
 #Compiled Targets
 for target in compile_targets:
@@ -68,15 +67,15 @@ for target in compile_targets:
 		result = env.Command(compiled_name, file_name, CompilePython('$TARGET', '$SOURCE'))
 		if GetOption("clean"):
 			env.Default(result)
-		Alias('install', env.Install(prefix+dirname(file_name), result))
+		Alias('install', env.Install(env['PREFIX']+dirname(file_name), result))
 	else:
-		Alias('install', env.Install(prefix+dirname(file_name), target))
+		Alias('install', env.Install(env['PREFIX']+dirname(file_name), target))
 
 #PDB2PKA	
 for file_name in getAllFiles('pdb2pka/'):
 	installFile(file_name)
 	
-Alias('install', env.Install(prefix+'pdb2pka/', 'pdb2pka/pka.py'))
+Alias('install', env.Install(env['PREFIX']+'pdb2pka/', 'pdb2pka/pka.py'))
 	
 #Main Program
 for dir_name in ('src/',
@@ -84,9 +83,9 @@ for dir_name in ('src/',
 	for file_name in getAllFiles(dir_name, python_only=True):
 		installFile(file_name)
 		
-Alias('install', env.Install(prefix, 'pdb2pqr.py'))
-Alias('install', env.Install(prefix, 'pdb2pqr.cgi'))
-Alias('install', env.InstallAs(prefix+'/index.html', 'html/server.html'))
+Alias('install', env.Install(env['PREFIX'], 'pdb2pqr.py'))
+Alias('install', env.Install(env['PREFIX'], 'pdb2pqr.cgi'))
+Alias('install', env.InstallAs(env['PREFIX']+'/index.html', 'html/server.html'))
 
 for file_name in ('AppService_client.py',
 				  'AppService_services.py',
@@ -102,7 +101,7 @@ for file_name in ('AppService_client.py',
 				  'README'):
 	installFile(file_name)
 	
-Alias('install', env.Command(prefix+'tmp', None,
+Alias('install', env.Command(env['PREFIX']+'tmp', None,
 							[Mkdir('$TARGET'),
 			 				Chmod('$TARGET', 0777)]))
 
@@ -113,8 +112,8 @@ for dir_name in ('tests/',
 	for file_name in getAllFiles(dir_name):
 		installFile(file_name, build_target='install-tests')
 		
-Alias('install-tests', env.Install(prefix+'scons/', 'scons/scons.py'))
-Alias('install-tests', env.Install(prefix+'site_scons/', 'site_scons/site_init.py'))
+Alias('install-tests', env.Install(env['PREFIX']+'scons/', 'scons/scons.py'))
+Alias('install-tests', env.Install(env['PREFIX']+'site_scons/', 'site_scons/site_init.py'))
 
 installFile('SConstruct', build_target='install-tests')
 

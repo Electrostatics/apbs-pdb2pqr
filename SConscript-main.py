@@ -1,91 +1,45 @@
 import distutils.sysconfig
 
-import numpy
 import os
 from defaults import *
 import atexit
 
 Export('codePath')
 
+config_file = 'build_config.py'
+
 gcv = distutils.sysconfig.get_config_var
 
-AddOption('--prefix',
-        dest='prefix',
-        type='string',
-        nargs=1,
-        action='store',
-        metavar='DIR',
-        default=defaultPrefix,
-        help='installation prefix - defaults to ' + defaultPrefix)
+vars = Variables(['.variables.cache', config_file], ARGUMENTS)
 
-AddOption('--with-url',
-        dest='url',
-        type='string',
-        nargs=1,
-        action='store',
-        default=defaultURL,
-        help='Set url for the website.  Default ' + defaultURL)
+vars.Add(PathVariable('PREFIX',
+                      'Install directory',
+                      defaultPrefix,
+                      PathVariable.PathAccept))
+                      
+vars.Add('URL', "Sets the url of pdb2pqr's web interface.", defaultURL)
 
-AddOption('--with-apbs',
-        dest='apbs',
-        type='string',
-        nargs=1,
-        action='store',
-        default="",
-        help='Location of APBS install.')
+vars.Add('OPAL', 'Sets the url of a pdb2pqr opal service.', '')
+vars.Add('APBS_OPAL', 'Sets the url of a apbs opal service.', '')
 
-AddOption('--with-default-opal',
-        dest='opal',
-        action='store_const',
-        const=defaultOpalURL,
-        help='Use default URL for Opal service -> '+defaultOpalURL)
-
-AddOption('--with-opal',
-        dest='opal',
-        type='string',
-        nargs=1,
-        action='store',
-        default='',
-        help='Set URL for Opal service')
-
-AddOption('--with-default-apbs-opal',
-        dest='apbs_opal',
-        action='store_const',
-        const=defaultAPBSOpalURL,
-        help='Set URL for APBS Opal service -> '+defaultAPBSOpalURL)
-
-AddOption('--with-apbs-opal',
-        dest='apbs_opal',
-        type='string',
-        nargs=1,
-        action='store',
-        default='',
-        help='Set URL for APBS Opal service.')
-
-AddOption('--with-max-atoms',
-        dest='max_atoms',
-        type='int',
-        nargs=1,
-        action='store',
-        default=defaultMaxAtoms,
-        help='Sets the maximum number of atoms in '+\
-             'a protein for non-Opal job submission. '+\
-             'Only affects web tools. Default is '+\
-             str(defaultMaxAtoms))
-
-AddOption('--disable-pdb2pka',
-        dest='pdb2pka',
-        action='store_false',
-        default=True,
-        help='Disable pkb2pka compilation. pdb2pka is required for ligand support.')
-
-AddOption('--rebuild-swig-bindings',
-        dest='swig',
-        action='store_true',
-        default=False,
-        help='Rebuild swig bindings for pdb2pka. Requires swig be installed. In Windows swig must be in your PATH.')
+vars.Add(PathVariable('APBS',
+                      'Location of the APBS binary if installed',
+                      '',
+                      PathVariable.PathAccept))
+                      
+vars.Add('MAX_ATOMS', 'Sets the maximum number of atoms in a protein for non-Opal job submission. '
+					  'Only affects web tools', 10000, None, int)
+					  
+vars.Add(BoolVariable('BUILD_PDB2PKA', 
+					  'Set to False to skip building ligand and pdb2pka support. Requires numpy.',
+					  True))
+					  
+vars.Add(BoolVariable('REBUILD_SWIG', 
+					  'Set to True to rebuild the swig bindings. Requires swig on the the user path.',
+					  False))
 
 #TODO: setup rebuilding of docs.
+# THIS SHOULD BE A TARGET!
 #AddOption('--rebuild-docs',
 #        dest='docs',
 #        action='store_true',
@@ -97,13 +51,15 @@ if os.name == 'nt':
 else:
     tool_chain = ['default']
     
-env = Environment(tools=tool_chain + ['swig'], 
+env = Environment(variables=vars,
+                  tools=tool_chain + ['swig'], 
                   SWIGFLAGS=['-python', '-c++'], 
                   SHLIBPREFIX="", 
                   SHLIBSUFFIX=gcv('SO'),
                   LDMODULESUFFIX=gcv('SO'))
 
-env.Append(CPPPATH=[distutils.sysconfig.get_python_inc(), numpy.get_include()])
+
+
 python_lib = 'python' + gcv('VERSION')
 env.Append(LIBS=[python_lib])
 env.Append(ENV={'PATH' : os.environ['PATH']})
@@ -118,14 +74,22 @@ else:
     
 Export('env')
 
-prefix = GetOption('prefix')
+prefix = env['PREFIX']
 prefix = prefix.replace('\\', '/')
 if prefix[-1] != '/':
     prefix+='/'
     
-Export('prefix')
-    
-url = GetOption('url')
+env['PREFIX'] = prefix
+
+Help(vars.GenerateHelpText(env))
+
+vars.Save('.variables.cache', env)
+
+#Not the optimal way to do this...
+#Should figure out how to do it with a delete command
+Clean('pdb2pqr.py', '.variables.cache')
+  
+url = env['URL']
 #Not sure if this is needed.
 if url is not None:
     submitAction = url+'/pdb2pqr.cgi'
@@ -134,7 +98,7 @@ else:
     #Can it always just be this?  
     submitAction = 'pdb2pqr.cgi'
 
-maxatomsStr = str(GetOption('max_atoms'))
+maxatomsStr = str(env['MAX_ATOMS'])
                
 replacementDict = {'@WHICHPYTHON@':pythonBin,
                    '@INSTALLDIR@':prefix,
@@ -143,9 +107,9 @@ replacementDict = {'@WHICHPYTHON@':pythonBin,
                    '@srcpath@':codePath,
                    '@PDB2PQR_VERSION@':productVersion,
                    '@action@':submitAction,
-                   '@APBS_LOCATION@':GetOption('apbs'),
-                   '@APBS_OPAL_URL@':GetOption('apbs_opal'),
-                   '@PDB2PQR_OPAL_URL@':GetOption('opal')}
+                   '@APBS_LOCATION@':env['APBS'],
+                   '@APBS_OPAL_URL@':env['APBS_OPAL'],
+                   '@PDB2PQR_OPAL_URL@':env['OPAL']}
 
 #If any replacement strings change recompile those files.
 #As the product version can be based on the time this may
@@ -155,7 +119,7 @@ settingsValues = env.Value(replacementDict)
 #We have a separate dict for server.html.in as we need to use regex
 #Regex does not play nice with some  possible user strings
 #Set up regex to alternately clear tags or wipe sections
-if GetOption('opal') == '':
+if env['OPAL'] == '':
     #Not using opal for pdb2pqr.
     withOpalRegex = '@WITHOPAL@'
     withoutOpalRegex = r'@WITHOUTOPAL@.*?@WITHOUTOPAL@'
@@ -200,12 +164,14 @@ for target, source, chmod in subFiles:
 Default(env.Command('pdb2pqr.cgi', 'pdb2pqr.py', Copy('$TARGET', '$SOURCE')))
 
 
-if GetOption('pdb2pka'):
+if env['BUILD_PDB2PKA']:
     compile_targets.extend(SConscript('pdb2pka/SConscript'))
     
 SConscript('tests/SConscript')
 
-SConscript('SConscript-install', exports='env prefix compile_targets')
+SConscript('SConscript-install.py', exports='env compile_targets')
+
+SConscript('SConscript-error.py')
 
 def print_default_message(target_list):
     target_list = map(str, target_list)
@@ -213,26 +179,45 @@ def print_default_message(target_list):
         return
     if GetOption("clean"):
         return
-    if GetOption("help"):
-        return
-    print
-    print 'TARGETS:', target_list
-    print
-    print '========================'
-    print 'Configuration Parameters'
-    print '========================'
-    print
-    print 'Version:', productVersion
-    print 'Install directory:', prefix
-    print 'pdb2pka and ligand support:', GetOption('pdb2pka')
-    print 'Path to the website directory:', url
-    if GetOption('opal') == '':
-        print 'PDB2PQR jobs run via the web interface will be forked on the server'
+    if not GetOption("help"):
+        
+        print
+        print 'TARGETS:', target_list
+        print
+        print '========================'
+        print 'Configuration Parameters'
+        print '========================'
+        print
+        print 'Version:', productVersion
+        print 'Install directory:', env['PREFIX']
+        print 'pdb2pka and ligand support:', env['BUILD_PDB2PKA']
+        print 'Path to the website directory:', url
+        if env['OPAL'] == '':
+            print 'PDB2PQR jobs run via the web interface will be forked on the server.'
+        else:
+            print 'PDB2PQR jobs run via the web interface will be run via opal at', env['OPAL']
     else:
-        print 'PDB2PQR jobs run via the web interface will be run via opal at', GetOption('opal') 
+        print
+        print 'Run "python scons/scons.py" to build pdb2pqr.'
+        
     print
-    print 'Run "scons/scons.py install" to install pdb2pqr in', prefix
-    print 'Run "scons/scons.py test", "scons/scons.py advtest", or "scons/scons.py completetest" to run various pdb2pqr tests.'
-    print 'To setup a web service create a symbolic link to', prefix, 'that enables you to view', url,'after running "scons/scons.py install"'
+    print 'The preferred way to configure the build is by editing the file', config_file        
+    print
+    print 'Run scons with the python that you intend to use with pdb2pqr.'
+    print 'For example: "/opt/bin/python scons/scons.py" will setup pdb2pqr to be run with /opt/bin/python'
+    
+    if 'install' not in target_list:
+        print
+        print 'Run "python scons/scons.py install" to install pdb2pqr in', env['PREFIX']
+    
+    print    
+    print 'Run "python scons/scons.py test", "scons/scons.py advtest", or "scons/scons.py complete-test" to run various pdb2pqr tests.'
+    print 'To setup a web service create a symbolic link to', env['PREFIX'], 'that enables you to view', env['URL'],'after running "scons/scons.py install"'
+
+    
+    if 'install' in target_list:
+        print
+        print 'pdb2pqr installed in', env['PREFIX']
+    
     
 atexit.register(print_default_message, BUILD_TARGETS)

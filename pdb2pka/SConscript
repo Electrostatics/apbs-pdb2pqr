@@ -1,7 +1,6 @@
 Import('env')
-Import('prefix')
 
-if GetOption('swig'):
+if env['REBUILD_SWIG']:
     pyc = env.LoadableModule('_pMC_mult', ['pMC_mult.cpp', 'pMC_mult.i'])
 else:
     pyc = env.LoadableModule('_pMC_mult', ['pMC_mult.cpp', 'pMC_mult_wrap.cpp'])
