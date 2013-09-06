@@ -3,7 +3,7 @@ import os
 
 #Are we running from the installed version?
 if isfile('pdb2pqr.py.in'):
-    SConscript('SConscript-main')
+    SConscript('SConscript-main.py')
 else:
     #Allow test targets to run in installed version.
     env = Environment()
