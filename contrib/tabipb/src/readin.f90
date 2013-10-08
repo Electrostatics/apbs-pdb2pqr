@@ -18,18 +18,10 @@ real*4 xyzqr(5)
     enddo  
 
 
-    !Obtain protein name
-    !write(*,*) 'Please input the protein name:'
-    !read(*,*) fname:wq
-    !fname='1a63'
-    !write(*,*) 'Please input MSMS triangulation density in # per astrong^2:'
-    !read(*,*) den
-    !den='10'	
     lenfname = 0 
     do while (fname(lenfname:lenfname) .ne. ' ')
         lenfname = lenfname + 1
     enddo 
-!write(*,*) lenfname, fname, fname(1:lenfname)
     lenfname = 4;
 
     nremark=0
@@ -56,7 +48,7 @@ real*4 xyzqr(5)
     do 
         read(102,*,IOSTAT = MEOF) c1,c2,c3,c4,c5,xyzqr
         
-        if (c1(1:3) .ne. 'END') then 
+        if ((c1(1:3) .ne. 'END') .and. (MEOF .eq. 0)) then 
             write(103,*) xyzqr(1:3),xyzqr(5)
             natm=natm+1
         endif 
@@ -141,6 +133,10 @@ real*4 xyzqr(5)
     CLOSE(103)
     call surface_area(s_area) ! the post-MSMS code
     print *,'surface area=', real(s_area)
+
+    rslt=system('rm '//pathname(1:lenpath)//fname(1:lenfname)//".xyzr")
+    rslt=system('rm '//pathname(1:lenpath)//fname(1:lenfname)//".vert")
+    rslt=system('rm '//pathname(1:lenpath)//fname(1:lenfname)//".face")
 
 End
 !------------------------------------------------------------------------

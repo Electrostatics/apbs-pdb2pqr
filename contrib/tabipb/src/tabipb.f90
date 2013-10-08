@@ -23,7 +23,6 @@ real*8 bulk_strength, kappa2
 
 write(*,*) apbs_pqr_filename, nion, ionc, ionq, ionr, pdie, sdie, sdens, temp
 
-
 ! passing parameters and some calculation when necessary 
 fname=apbs_pqr_filename
 eps0=pdie
