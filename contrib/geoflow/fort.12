@@ -1,0 +1,28 @@
+17		NMOL
+0.008 		PRES_I
+0.0005		GAMA_I
+1		npiter
+1		ngiter
+1.40		TAUVAL: probe radius for creating the solvent accessible surface		
+0.00		PROB
+1		FFMODEL: 1 for ZAP-9/AM1-BCCv1; 2 for OPLS/AA
+1.5828		SIGMAS: Angstrom (radius of water molecule based on LJ parameter sigma)
+0.1554		EPSILONW:  epsilon parameter of O (kcal/mol) of water molecule.
+0 		VDWDISPERSION:  1(on) or 0 (off)- previously called REPULSIVE
+1.90		EXTVALUE:  (distance atom surface and box boundary)
+0		IPREC: flag to indicate the usage of preconditioner iprec =1 (yes); 0 (no)
+10		ISTEP
+0		IADI: 0 for explicit scheme; 1 for ADI scheme
+0.50		ALPHA: weight of previous solution to change the next solution in geometry flow
+1		IPBIN: start guess for PB 1; inherit '0'
+0.0001		TOL: 
+3.5		TOTTF: total time
+0.25		DCEL
+20		MAXSTEP
+80		EPSILONS
+1.5		EPSILONP
+1		RADEXP
+0.01		CREVALUE
+0		idacsl: 0 for solvation force calculation; 1 or accuracy test
+0.03346         density (use 0.03346) 
+0		IFLAG_REGULARIZED: 1 for regularized formulation, otherwise 0

@@ -1,0 +1,83 @@
+ Using original formulation of the generalized Poisson equation
+ IFLAG_REGULARIZED =            0
+ EPSILONP =    1.5000000000000000     
+ DCEL =   0.25000000000000000     
+ GAMA_STEP=   1.00000000000000005E-004
+ GAMA =   5.00000000000000010E-004
+ density =   3.34599999999999967E-002
+ RORO=    66.919999999999987     
+ POTCOE=    2000.0000000000000     
+ PRES=   8.00000000000000017E-003
+ CONMS=    16.000000000000000     
+ molecule coordinate filegly                                                                                                 
+ ILOOP =            1  TOTT =    3.5000000000000000     
+ ILOOP =            2  TOTT =    2.5000000000000000     
+ molecule coordinate filebenzylb                                                                                             
+ ILOOP =            1  TOTT =    3.5000000000000000     
+ ILOOP =            2  TOTT =    2.5000000000000000     
+ molecule coordinate filebenzylc                                                                                             
+ ILOOP =            1  TOTT =    3.5000000000000000     
+ ILOOP =            2  TOTT =    2.5000000000000000     
+ molecule coordinate filembis                                                                                                
+ ILOOP =            1  TOTT =    3.5000000000000000     
+ ILOOP =            2  TOTT =    2.5000000000000000     
+ molecule coordinate filennd                                                                                                 
+ ILOOP =            1  TOTT =    3.5000000000000000     
+ ILOOP =            2  TOTT =    2.5000000000000000     
+ molecule coordinate filenn4t                                                                                                
+ ILOOP =            1  TOTT =    3.5000000000000000     
+ ILOOP =            2  TOTT =    2.5000000000000000     
+ molecule coordinate filebis                                                                                                 
+ ILOOP =            1  TOTT =    3.5000000000000000     
+ ILOOP =            2  TOTT =    2.5000000000000000     
+ molecule coordinate filediac                                                                                                
+ ILOOP =            1  TOTT =    3.5000000000000000     
+ ILOOP =            2  TOTT =    2.5000000000000000     
+ molecule coordinate filediet                                                                                                
+ ILOOP =            1  TOTT =    3.5000000000000000     
+ ILOOP =            2  TOTT =    2.5000000000000000     
+ molecule coordinate filedio                                                                                                 
+ ILOOP =            1  TOTT =    3.5000000000000000     
+ ILOOP =            2  TOTT =    2.5000000000000000     
+ molecule coordinate filediethylp                                                                                            
+ ILOOP =            1  TOTT =    3.5000000000000000     
+ ILOOP =            2  TOTT =    2.5000000000000000     
+ molecule coordinate filedime                                                                                                
+ ILOOP =            1  TOTT =    3.5000000000000000     
+ ILOOP =            2  TOTT =    2.5000000000000000     
+ molecule coordinate fileethy                                                                                                
+ ILOOP =            1  TOTT =    3.5000000000000000     
+ ILOOP =            2  TOTT =    2.5000000000000000     
+ molecule coordinate fileditho                                                                                               
+ ILOOP =            1  TOTT =    3.5000000000000000     
+ ILOOP =            2  TOTT =    2.5000000000000000     
+ molecule coordinate filediethyls                                                                                            
+ ILOOP =            1  TOTT =    3.5000000000000000     
+ ILOOP =            2  TOTT =    2.5000000000000000     
+ molecule coordinate filephenyl                                                                                              
+ ILOOP =            1  TOTT =    3.5000000000000000     
+ ILOOP =            2  TOTT =    2.5000000000000000     
+ molecule coordinate fileimidazole                                                                                           
+ ILOOP =            1  TOTT =    3.5000000000000000     
+ ILOOP =            2  TOTT =    2.5000000000000000     
+ PRESSURE =   8.00000000000000017E-003
+ GAMA =   5.00000000000000010E-004
+    nonpolar    electro      totl_energy  area    volume    uattint    expt    error
+          NaN    0.0000000          NaN          NaN          NaN          NaN   -8.8400000          NaN
+          NaN    0.0000000          NaN          NaN          NaN          NaN   -2.3800000          NaN
+          NaN    0.0000000          NaN          NaN          NaN          NaN   -1.9300000          NaN
+          NaN    0.0000000          NaN          NaN          NaN          NaN    1.0700000          NaN
+          NaN    0.0000000          NaN          NaN          NaN          NaN  -11.0100000          NaN
+          NaN    0.0000000          NaN          NaN          NaN          NaN   -9.7600000          NaN
+          NaN    0.0000000          NaN          NaN          NaN          NaN   -4.2300000          NaN
+          NaN    0.0000000          NaN          NaN          NaN          NaN   -4.9700000          NaN
+          NaN    0.0000000          NaN          NaN          NaN          NaN   -3.2800000          NaN
+          NaN    0.0000000          NaN          NaN          NaN          NaN   -5.0500000          NaN
+          NaN    0.0000000          NaN          NaN          NaN          NaN   -6.0000000          NaN
+          NaN    0.0000000          NaN          NaN          NaN          NaN   -2.9300000          NaN
+          NaN    0.0000000          NaN          NaN          NaN          NaN   -6.3400000          NaN
+          NaN    0.0000000          NaN          NaN          NaN          NaN   -3.5400000          NaN
+          NaN    0.0000000          NaN          NaN          NaN          NaN   -1.4300000          NaN
+          NaN    0.0000000          NaN          NaN          NaN          NaN   -4.0800000          NaN
+          NaN    0.0000000          NaN          NaN          NaN          NaN   -9.8100000          NaN
+the root mean square=         NaN

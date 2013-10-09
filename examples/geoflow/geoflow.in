@@ -1,0 +1,23 @@
+read
+    mol pqr 1a63.pqr        
+end
+elec name comp_solv        # Solvated complex
+    bem-manual
+
+    lpbe                   #xxx
+    bcfl mdh               #xxx
+    srfm spl2              #xxx
+    swin 0.3               #xxx
+
+    mol 1
+    ion  1 0.15 0.95       # sodium ions
+    ion -1 0.15 1.81       # chloride ions
+    pdie 1.0               # Solute dielectric
+    sdie 80.00             # Solvent dielectric
+    srad 1.4               # Solvent probe radius
+    sdens 10
+    temp 300.00            # Temperature
+end
+
+quit
+

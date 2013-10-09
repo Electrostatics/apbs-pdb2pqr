@@ -4923,3 +4923,160 @@ VPUBLIC int writematBEM(int rank, NOsh *nosh, PBEparm *pbeparm) {
     return 1;
 }
 
+
+
+/**
+ * Initialize a geometric flow calculation.
+ */
+VPUBLIC int initGEOFLOW(int icalc,
+                   NOsh *nosh, 
+                   GEOFLOWparm *bemparm,
+                   PBEparm *pbeparm,
+                   Vpbe *pbe[NOSH_MAXCALC]
+                  ) {
+
+    Vnm_tstart(APBS_TIMER_SETUP, "Setup timer");
+
+    /* Setup time statistics */
+    Vnm_tstop(APBS_TIMER_SETUP, "Setup timer");
+
+    return 1;
+
+}
+
+VPUBLIC void killGEOFLOW(NOsh *nosh, Vpbe *pbe[NOSH_MAXCALC]
+                    ) {
+
+        int i;
+
+#ifndef VAPBSQUIET
+    Vnm_tprint(1, "Destroying geometric flow structures.\n");
+#endif
+
+
+}
+
+VPUBLIC int solveGEOFLOW(NOsh *nosh, PBEparm *pbeparm, GEOFLOWparm *parm,
+                    GEOFLOWparm_CalcType type
+                   ) {
+
+    int nx,
+        ny,
+        nz,
+        i;
+
+    if (nosh != VNULL) {
+        if (nosh->bogus) return 1;
+    }
+
+    Vnm_tstart(APBS_TIMER_SOLVER, "Solver timer");
+
+//apbs2tabipb(apbs_pqr_filename, nion, ionc, ionq, ionr, pdie, sdie, sdens, temp)
+//    apbs2tabipb_(&(nosh->molpath),
+//                 &(pbeparm->nion),
+//                 &(pbeparm->ionc),
+//                 &(pbeparm->ionq),
+//                 &(pbeparm->ionr),
+//                 &(pbeparm->pdie),
+//                 &(pbeparm->sdie),
+//                 &(pbeparm->sdens),
+//                 &(pbeparm->temp),
+//                 &(parm->tree_order),
+//                 &(parm->tree_n0),
+//                 &(parm->mac)
+//                 );
+    Vnm_tprint(1, "****************hello from geoflow**********\n");
+
+    Vnm_tstop(APBS_TIMER_SOLVER, "Solver timer");
+
+    return 1;
+
+}
+
+VPUBLIC int setPartGEOFLOW(NOsh *nosh,
+                      GEOFLOWparm *GEOFLOWparm
+                     ) {
+
+    int j;
+    double partMin[3],
+           partMax[3];
+
+    if (nosh->bogus) return 1;
+
+    return 1;
+
+}
+
+VPUBLIC int energyGEOFLOW(NOsh *nosh,
+                     int icalc,
+                     int *nenergy,
+                     double *totEnergy,
+                     double *qfEnergy,
+                     double *qmEnergy,
+                     double *dielEnergy
+                    ) {
+
+    Valist *alist;
+    Vatom *atom;
+    int i,
+        extEnergy;
+    double tenergy;
+    GEOFLOWparm *parm;
+    PBEparm *pbeparm;
+
+    parm = nosh->calc[icalc]->geoflowparm;
+    pbeparm = nosh->calc[icalc]->pbeparm;
+
+    Vnm_tstart(APBS_TIMER_ENERGY, "Energy timer");
+    Vnm_tstop(APBS_TIMER_ENERGY, "Energy timer");
+
+    return 1;
+}
+
+VPUBLIC int forceGEOFLOW(
+                    NOsh *nosh,
+                    PBEparm *pbeparm,
+                    GEOFLOWparm *parm,
+                    int *nforce,
+                    AtomForce **atomForce,
+                    Valist *alist[NOSH_MAXMOL]
+                   ) {
+
+    int j,
+        k;
+    double qfForce[3],
+           dbForce[3],
+           ibForce[3];
+
+    Vnm_tstart(APBS_TIMER_FORCE, "Force timer");
+
+#ifndef VAPBSQUIET
+    Vnm_tprint( 1,"  Calculating forces...\n");
+#endif
+
+    Vnm_tstop(APBS_TIMER_FORCE, "Force timer");
+
+    return 1;
+}
+
+VPUBLIC void printGEOFLOWPARM(GEOFLOWparm *parm) {
+
+}
+
+
+VPUBLIC int writedataGEOFLOW(int rank,
+                        NOsh *nosh,
+                        PBEparm *pbeparm
+                       ) {
+
+    return 1;
+}
+
+
+VPUBLIC int writematGEOFLOW(int rank, NOsh *nosh, PBEparm *pbeparm) {
+
+
+    if (nosh->bogus) return 1;
+    return 1;
+}
+
