@@ -350,6 +350,7 @@ VPUBLIC NOsh_calc* NOsh_calc_ctor(
     thee->femparm = VNULL;
     thee->apolparm = VNULL;
     thee->bemparm = VNULL;
+    thee->geoflowparm = VNULL;
 
     switch (calctype) {
         case NCT_MG:
@@ -363,6 +364,9 @@ VPUBLIC NOsh_calc* NOsh_calc_ctor(
             break;
         case NCT_BEM:
             thee->bemparm = BEMparm_ctor(BCT_MANUAL);
+            break;
+        case NCT_GEOFLOW:
+            thee->geoflowparm = GEOFLOWparm_ctor(GFCT_MANUAL);
             break;
         default:
             Vnm_print(2, "NOsh_calc_ctor:  unknown calculation type (%d)!\n",
@@ -394,6 +398,9 @@ VPUBLIC void NOsh_calc_dtor(
             break;
         case NCT_BEM:
             BEMparm_dtor(&(calc->bemparm));
+            break;
+        case NCT_GEOFLOW:
+            GEOFLOWparm_dtor(&(calc->geoflowparm));
             break;
         default:
             Vnm_print(2, "NOsh_calc_ctor:  unknown calculation type (%d)!\n",
@@ -2678,7 +2685,7 @@ VPUBLIC int NOsh_parseGEOFLOW(
                          ) {
 
     char tok[VMAX_BUFSIZE];
-    BEMparm *parm = VNULL;
+    GEOFLOWparm *parm = VNULL;
     PBEparm *pbeparm = VNULL;
     int rc;
 
@@ -2695,7 +2702,7 @@ VPUBLIC int NOsh_parseGEOFLOW(
         Vnm_print(2, "NOsh:  Got pointer to NULL elec object!\n");
         return 0;
     }
-    parm = elec->bemparm;
+    parm = elec->geoflowparm;
     if (parm == VNULL) {
         Vnm_print(2, "NOsh:  Got pointer to NULL geoflowparm object!\n");
         return 0;

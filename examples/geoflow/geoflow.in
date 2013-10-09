@@ -2,7 +2,7 @@ read
     mol pqr 1a63.pqr        
 end
 elec name comp_solv        # Solvated complex
-    bem-manual
+    geoflow-manual
 
     lpbe                   #xxx
     bcfl mdh               #xxx
