@@ -74,6 +74,7 @@
 #include "generic/femparm.h"
 #include "generic/valist.h"
 #include "generic/bemparm.h"
+#include "generic/geoflowparm.h"
 
 /** @brief Maximum number of molecules in a run
 *  @ingroup NOsh */
@@ -115,7 +116,8 @@ enum eNOsh_CalcType {
     NCT_MG=0,  /**< Multigrid */
     NCT_FEM=1, /**< Finite element */
     NCT_APOL=2, /**< non-polar */
-    NCT_BEM=3 /**< Boundary element (TABI)*/
+    NCT_BEM=3, /**< Boundary element (TABI)*/
+    NCT_GEOFLOW=4 /**< Geometric flow*/
 };
 
 /**
@@ -167,6 +169,7 @@ struct sNOsh_calc {
     MGparm *mgparm;         /**< Multigrid parameters */
     FEMparm *femparm;       /**< Finite element parameters */
     BEMparm *bemparm;       /**< boundary element (tabi) parameters */
+    GEOFLOWparm *geoflowparm;
     PBEparm *pbeparm;       /**< Generic PBE parameters */
     APOLparm *apolparm;		/**< Non-polar parameters */
     NOsh_CalcType calctype; /**< Calculation type */

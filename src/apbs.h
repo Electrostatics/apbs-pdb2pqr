@@ -71,6 +71,8 @@
 #include "generic/mgparm.h"
 #include "generic/pbeparm.h"
 #include "generic/femparm.h"
+#include "generic/bemparm.h"
+#include "generic/geoflowparm.h"
 #include "generic/vacc.h"
 #include "generic/valist.h"
 #include "generic/vatom.h"

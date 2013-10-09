@@ -5,6 +5,7 @@ add_items(
     femparm.c
     pbeparm.c
     bemparm.c
+    geoflowparm.c
     apolparm.c
     vacc.c
     valist.c
@@ -24,6 +25,7 @@ add_items(
     femparm.h
     pbeparm.h
     bemparm.h
+    geoflowparm.h
     apolparm.h
     vacc.h
     valist.h
