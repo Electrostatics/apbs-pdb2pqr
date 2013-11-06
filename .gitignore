@@ -3,3 +3,4 @@ build/**
 include/
 lib/
 **.out
+*.o

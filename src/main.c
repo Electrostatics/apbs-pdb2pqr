@@ -90,6 +90,8 @@ int main(
 
     MGparm *mgparm = VNULL;
     FEMparm *feparm = VNULL;
+    BEMparm *bemparm = VNULL;
+    GEOFLOWparm *geoflowparm = VNULL;
     PBEparm *pbeparm = VNULL;
     APOLparm *apolparm = VNULL;
     Vparam *param = VNULL;
@@ -638,11 +640,138 @@ int main(
                     VJMPERR1(0);
                 }
                 break;
+
+ 		/* Boundary Element (tabi) */
+            case NCT_BEM:
+                /* What is this?  This seems like a very awkward way to find
+                the right ELEC statement... */
+                for (k=0; k<nosh->nelec; k++) {
+                    if (nosh->elec2calc[k] >= i) {
+                        break;
+                    }
+                }
+                if (Vstring_strcasecmp(nosh->elecname[k], "") == 0) {
+                    Vnm_tprint( 1, "CALCULATION #%d: BOUNDARY ELEMENT\n", i+1);
+                } else {
+                    Vnm_tprint( 1, "CALCULATION #%d (%s): BOUNDARY ELEMENT\n",
+                                i+1, nosh->elecname[k]);
+                }
+                /* Useful local variables */
+                bemparm = nosh->calc[i]->bemparm;
+                pbeparm = nosh->calc[i]->pbeparm;
+
+                /* Set up problem */
+                Vnm_tprint( 1, "  Setting up problem...\n");
+
+                if (!initBEM(i,nosh, bemparm, pbeparm, pbe)) {
+                    Vnm_tprint( 2, "Error setting up BEM calculation!\n");
+                    VJMPERR1(0);
+                }
+
+                /* Print problem parameters */
+                printBEMPARM(bemparm);
+                printPBEPARM(pbeparm);
+
+                /* Solve PDE */
+                if (solveBEM(nosh, pbeparm, bemparm, bemparm->type) != 1) {
+                    Vnm_tprint(2, "Error solving PDE!\n");
+                    VJMPERR1(0);
+                }
+
+                /* Write out energies */
+                energyBEM(nosh, i,
+                        &(nenergy[i]), &(totEnergy[i]), &(qfEnergy[i]),
+                        &(qmEnergy[i]), &(dielEnergy[i]));
+
+                /* Write out forces */
+                forceBEM(nosh, pbeparm, bemparm, &(nforce[i]),
+                        &(atomForce[i]), alist);
+
+                /* Write out data folks might want */
+                writedataBEM(rank, nosh, pbeparm);
+
+                /* Write matrix */
+                writematBEM(rank, nosh, pbeparm);
+
+                /* If needed, cache atom energies */
+                nenergy[i] = 0;
+                if ((pbeparm->calcenergy == PCE_COMPS) && (outputformat != OUTPUT_NULL)){
+                    storeAtomEnergy(pmg[i], i, &(atomEnergy[i]), &(nenergy[i]));
+                }
+
+                fflush(stdout);
+                fflush(stderr);
+
+                break;
+
+ 		/* geometric flow */
+            case NCT_GEOFLOW:
+                /* What is this?  This seems like a very awkward way to find
+                the right ELEC statement... */
+                for (k=0; k<nosh->nelec; k++) {
+                    if (nosh->elec2calc[k] >= i) {
+                        break;
+                    }
+                }
+                if (Vstring_strcasecmp(nosh->elecname[k], "") == 0) {
+                    Vnm_tprint( 1, "CALCULATION #%d: GEOMETRIC FLOW\n", i+1);
+                } else {
+                    Vnm_tprint( 1, "CALCULATION #%d (%s): GEOMETRIC FLOW\n",
+                                i+1, nosh->elecname[k]);
+                }
+                /* Useful local variables */
+                geoflowparm = nosh->calc[i]->geoflowparm;
+                pbeparm = nosh->calc[i]->pbeparm;
+
+                /* Set up problem */
+                Vnm_tprint( 1, "  Setting up problem...\n");
+
+                if (!initGEOFLOW(i,nosh, geoflowparm, pbeparm, pbe)) {
+                    Vnm_tprint( 2, "Error setting up GEOFLOW calculation!\n");
+                    VJMPERR1(0);
+                }
+
+                /* Print problem parameters */
+                printGEOFLOWPARM(geoflowparm);
+                printPBEPARM(pbeparm);
+
+                /* Solve PDE */
+                if (solveGEOFLOW(alist, nosh, pbeparm, geoflowparm, geoflowparm->type) != 1) {
+                    Vnm_tprint(2, "Error solving PDE!\n");
+                    VJMPERR1(0);
+                }
+
+                /* Write out energies */
+                energyGEOFLOW(nosh, i,
+                        &(nenergy[i]), &(totEnergy[i]), &(qfEnergy[i]),
+                        &(qmEnergy[i]), &(dielEnergy[i]));
+
+                /* Write out forces */
+                forceGEOFLOW(nosh, pbeparm, geoflowparm, &(nforce[i]),
+                        &(atomForce[i]), alist);
+
+                /* Write out data folks might want */
+                writedataGEOFLOW(rank, nosh, pbeparm);
+
+                /* Write matrix */
+                writematGEOFLOW(rank, nosh, pbeparm);
+
+                /* If needed, cache atom energies */
+                nenergy[i] = 0;
+                if ((pbeparm->calcenergy == PCE_COMPS) && (outputformat != OUTPUT_NULL)){
+                    storeAtomEnergy(pmg[i], i, &(atomEnergy[i]), &(nenergy[i]));
+                }
+
+                fflush(stdout);
+                fflush(stderr);
+                break;
+                
             default:
-                Vnm_tprint(2, "  Unknown calculation type (%d)!\n",
-                           nosh->calc[i]->calctype);
+                Vnm_tprint(2, "  Unknown calculation type (%d)!\n", nosh->calc[i]->calctype);
                 exit(2);
-        }
+                break;
+            }
+              
     }
 
     //Clear out the parameter file memory

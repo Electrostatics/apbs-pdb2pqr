@@ -89,6 +89,18 @@ VEXTERNC int NOsh_parseMG(
                           NOsh_calc *elec
                           );
 
+VEXTERNC int NOsh_parseBEM(
+                          NOsh *thee,
+                          Vio *sock,
+                          NOsh_calc *elec
+                          );
+
+VEXTERNC int NOsh_parseGEOFLOW(
+                          NOsh *thee,
+                          Vio *sock,
+                          NOsh_calc *elec
+                          );
+
 VEXTERNC int NOsh_parseAPOL(
                            NOsh *thee,
                            Vio *sock,
@@ -99,6 +111,7 @@ VPRIVATE int NOsh_setupCalcMG(
                               NOsh *thee,
                               NOsh_calc *elec
                               );
+
 
 VPRIVATE int NOsh_setupCalcMGAUTO(
                                   NOsh *thee,
@@ -124,6 +137,26 @@ VPRIVATE int NOsh_setupCalcFEMANUAL(
                                NOsh *thee,
                                NOsh_calc *elec
                                );
+
+VPRIVATE int NOsh_setupCalcBEM(
+                              NOsh *thee,
+                              NOsh_calc *elec
+                              );
+
+VPRIVATE int NOsh_setupCalcGEOFLOW(
+                              NOsh *thee,
+                              NOsh_calc *elec
+                              );
+
+VPRIVATE int NOsh_setupCalcBEMMANUAL(
+                              NOsh *thee,
+                              NOsh_calc *elec
+                              );
+
+VPRIVATE int NOsh_setupCalcGEOFLOWMANUAL(
+                              NOsh *thee,
+                              NOsh_calc *elec
+                              );
 
 VPRIVATE int NOsh_setupCalcAPOL(
                                 NOsh *thee,
@@ -312,21 +345,28 @@ VPUBLIC NOsh_calc* NOsh_calc_ctor(
     NOsh_calc *thee;
     thee = (NOsh_calc *)Vmem_malloc(VNULL, 1, sizeof(NOsh_calc));
     thee->calctype = calctype;
+
+    thee->mgparm = VNULL;
+    thee->femparm = VNULL;
+    thee->apolparm = VNULL;
+    thee->bemparm = VNULL;
+    thee->geoflowparm = VNULL;
+
     switch (calctype) {
         case NCT_MG:
             thee->mgparm = MGparm_ctor(MCT_NONE);
-            thee->femparm = VNULL;
-            thee->apolparm = VNULL;
             break;
         case NCT_FEM:
-            thee->mgparm = VNULL;
             thee->femparm = FEMparm_ctor(FCT_NONE);
-            thee->apolparm = VNULL;
             break;
         case NCT_APOL:
-            thee->mgparm = VNULL;
-            thee->femparm = VNULL;
             thee->apolparm = APOLparm_ctor();
+            break;
+        case NCT_BEM:
+            thee->bemparm = BEMparm_ctor(BCT_MANUAL);
+            break;
+        case NCT_GEOFLOW:
+            thee->geoflowparm = GEOFLOWparm_ctor(GFCT_MANUAL);
             break;
         default:
             Vnm_print(2, "NOsh_calc_ctor:  unknown calculation type (%d)!\n",
@@ -356,6 +396,12 @@ VPUBLIC void NOsh_calc_dtor(
         case NCT_APOL:
             APOLparm_dtor(&(calc->apolparm));
             break;
+        case NCT_BEM:
+            BEMparm_dtor(&(calc->bemparm));
+            break;
+        case NCT_GEOFLOW:
+            GEOFLOWparm_dtor(&(calc->geoflowparm));
+            break;
         default:
             Vnm_print(2, "NOsh_calc_ctor:  unknown calculation type (%d)!\n",
                       calc->calctype);
@@ -380,6 +426,8 @@ VPUBLIC int NOsh_calc_copy(
         MGparm_copy(thee->mgparm, source->mgparm);
     if (source->femparm != VNULL)
         FEMparm_copy(thee->femparm, source->femparm);
+    if (source->bemparm != VNULL)
+        BEMparm_copy(thee->bemparm, source->bemparm);
     if (source->pbeparm != VNULL)
         PBEparm_copy(thee->pbeparm, source->pbeparm);
     if (source->apolparm != VNULL)
@@ -1138,8 +1186,20 @@ ELEC section!\n");
             (thee->nelec)++;
             calc->femparm->type = FCT_MANUAL;
             return NOsh_parseFEM(thee, sock, calc);
+        } else if (Vstring_strcasecmp(tok, "bem-manual") == 0) {
+            thee->elec[thee->nelec] = NOsh_calc_ctor(NCT_BEM);
+            calc = thee->elec[thee->nelec];
+            (thee->nelec)++;
+            calc->bemparm->type = BCT_MANUAL;
+            return NOsh_parseBEM(thee, sock, calc);
+        } else if (Vstring_strcasecmp(tok, "geoflow-manual") == 0) {
+            thee->elec[thee->nelec] = NOsh_calc_ctor(NCT_GEOFLOW);
+            calc = thee->elec[thee->nelec];
+            (thee->nelec)++;
+            calc->geoflowparm->type = GFCT_MANUAL;
+            return NOsh_parseGEOFLOW(thee, sock, calc);
         } else {
-            Vnm_print(2, "NOsh_parseELEC: The method (\"mg\" or \"fem\") or \
+            Vnm_print(2, "NOsh_parseELEC: The method (\"mg\",\"fem\", \"bem\", \"geoflow\") or \
 \"name\" must be the first keyword in the ELEC section\n");
             return 0;
         }
@@ -1269,6 +1329,12 @@ map is used!\n");
                 break;
             case NCT_FEM:
                 NOsh_setupCalcFEM(thee, elec);
+                break;
+            case NCT_BEM:
+                NOsh_setupCalcBEM(thee, elec);
+                break;
+            case NCT_GEOFLOW:
+                NOsh_setupCalcGEOFLOW(thee, elec);
                 break;
             default:
                 Vnm_print(2, "NOsh_setupCalc:  Invalid calculation type (%d)!\n",
@@ -1455,6 +1521,57 @@ VPRIVATE int NOsh_setupCalcMG(
     /* Shouldn't get here */
     return 0;
 }
+
+
+
+VPRIVATE int NOsh_setupCalcBEM(
+                              NOsh *thee,
+                              NOsh_calc *calc
+                              ) {
+
+    BEMparm *bemparm = VNULL;
+
+    VASSERT(thee != VNULL);
+    VASSERT(calc != VNULL);
+    bemparm = calc->bemparm;
+    VASSERT(bemparm != VNULL);
+
+
+    /* Now we're ready to whatever sorts of post-processing operations that are
+        necessary for the various types of calculations */
+    switch (bemparm->type) {
+        case BCT_MANUAL:
+            return NOsh_setupCalcBEMMANUAL(thee, calc);
+        default:
+            Vnm_print(2, "NOsh_setupCalcBEM:  undefined BEM calculation type (%d)!\n",
+                      bemparm->type);
+            return 0;
+    }
+
+    /* Shouldn't get here */
+    return 0;
+}
+
+VPRIVATE int NOsh_setupCalcGEOFLOW(NOsh *thee, NOsh_calc *calc) {
+
+    GEOFLOWparm *parm = VNULL;
+
+    VASSERT(thee != VNULL);
+    VASSERT(calc != VNULL);
+    parm = calc->geoflowparm;
+    VASSERT(parm != VNULL);
+
+
+    /* Now we're ready to whatever sorts of post-processing operations that are
+        necessary for the various types of calculations */
+    if(parm->type == GFCT_MANUAL){
+        return NOsh_setupCalcGEOFLOWMANUAL(thee, calc);
+    }else{
+        Vnm_print(2, "NOsh_setupCalcGEOFLOW:  undefined GEOFLOW calculation type (%d)!\n", parm->type);
+        return 0;
+    }
+}
+
 
 VPRIVATE int NOsh_setupCalcFEM(
                                NOsh *thee,
@@ -2314,6 +2431,7 @@ VPUBLIC int NOsh_parseAPOL(
 
 }
 
+
 VPRIVATE int NOsh_setupCalcAPOL(
                                 NOsh *thee,
                                 NOsh_calc *apol
@@ -2343,3 +2461,292 @@ VPRIVATE int NOsh_setupCalcAPOL(
 
     return 1;
 }
+
+
+VPRIVATE int NOsh_setupCalcBEMMANUAL(
+                                   NOsh *thee,
+                                   NOsh_calc *elec
+                                   ) {
+
+    BEMparm *bemparm = VNULL;
+    PBEparm *pbeparm = VNULL;
+    NOsh_calc *calc = VNULL;
+
+    if (thee == VNULL) {
+        Vnm_print(2, "NOsh_setupCalcBEMMANUAL:  Got NULL thee!\n");
+        return 0;
+    }
+    if (elec == VNULL) {
+        Vnm_print(2, "NOsh_setupCalcBEMMANUAL:  Got NULL calc!\n");
+        return 0;
+    }
+    bemparm = elec->bemparm;
+    if (bemparm == VNULL) {
+        Vnm_print(2, "NOsh_setupCalcBEMMANUAL:  Got NULL mgparm -- was this calculation \
+set up?\n");
+        return 0;
+    }
+    pbeparm = elec->pbeparm;
+    if (pbeparm == VNULL) {
+        Vnm_print(2, "NOsh_setupCalcBEMMANUAL:  Got NULL pbeparm -- was this calculation \
+set up?\n");
+        return 0;
+    }
+
+    /* Set up missing BEM parameters */
+    if (bemparm->settree_order == 0) {
+        bemparm->tree_order=1;
+    }
+
+    if (bemparm->settree_n0 == 0) {
+        bemparm->tree_n0=500;
+    }
+
+    if (bemparm->setmac == 0) {
+        bemparm->mac=0.8;
+    }
+
+    /* Check to see if he have any room left for this type of calculation, if
+        so: set the calculation type, update the number of calculations of this type,
+        and parse the rest of the section */
+    if (thee->ncalc >= NOSH_MAXCALC) {
+        Vnm_print(2, "NOsh:  Too many calculations in this run!\n");
+        Vnm_print(2, "NOsh:  Current max is %d; ignoring this calculation\n",
+                  NOSH_MAXCALC);
+        return 0;
+    }
+
+    /* Get the next calculation object and increment the number of calculations */
+    thee->calc[thee->ncalc] = NOsh_calc_ctor(NCT_BEM);
+    calc = thee->calc[thee->ncalc];
+    (thee->ncalc)++;
+
+    /* Copy over contents of ELEC */
+    NOsh_calc_copy(calc, elec);
+
+
+    return 1;
+}
+
+VPRIVATE int NOsh_setupCalcGEOFLOWMANUAL(
+                                   NOsh *thee,
+                                   NOsh_calc *elec
+                                   ) {
+
+    GEOFLOWparm *parm = VNULL;
+    PBEparm *pbeparm = VNULL;
+    NOsh_calc *calc = VNULL;
+
+    if (thee == VNULL) {
+        Vnm_print(2, "NOsh_setupCalcGEOFLOWMANUAL:  Got NULL thee!\n");
+        return 0;
+    }
+    if (elec == VNULL) {
+        Vnm_print(2, "NOsh_setupCalcGEOFLOWMANUAL:  Got NULL calc!\n");
+        return 0;
+    }
+    parm = elec->geoflowparm;
+    if (parm == VNULL) {
+        Vnm_print(2, "NOsh_setupCalcGEOFLOWMANUAL:  Got NULL mgparm -- was this calculation \
+set up?\n");
+        return 0;
+    }
+    pbeparm = elec->pbeparm;
+    if (pbeparm == VNULL) {
+        Vnm_print(2, "NOsh_setupCalcGEOFLOWMANUAL:  Got NULL pbeparm -- was this calculation \
+set up?\n");
+        return 0;
+    }
+
+    /* Check to see if he have any room left for this type of calculation, if
+        so: set the calculation type, update the number of calculations of this type,
+        and parse the rest of the section */
+    if (thee->ncalc >= NOSH_MAXCALC) {
+        Vnm_print(2, "NOsh:  Too many calculations in this run!\n");
+        Vnm_print(2, "NOsh:  Current max is %d; ignoring this calculation\n",
+                  NOSH_MAXCALC);
+        return 0;
+    }
+
+    /* Get the next calculation object and increment the number of calculations */
+    thee->calc[thee->ncalc] = NOsh_calc_ctor(NCT_GEOFLOW);
+    calc = thee->calc[thee->ncalc];
+    (thee->ncalc)++;
+
+    /* Copy over contents of ELEC */
+    NOsh_calc_copy(calc, elec);
+
+    return 1;
+}
+
+
+VPUBLIC int NOsh_parseBEM(
+                         NOsh *thee,
+                         Vio *sock,
+                         NOsh_calc *elec
+                         ) {
+
+    char tok[VMAX_BUFSIZE];
+    BEMparm *bemparm = VNULL;
+    PBEparm *pbeparm = VNULL;
+    int rc;
+
+    /* Check the arguments */
+    if (thee == VNULL) {
+        Vnm_print(2, "NOsh:  Got NULL thee!\n");
+        return 0;
+    }
+    if (sock == VNULL) {
+        Vnm_print(2, "NOsh:  Got pointer to NULL socket!\n");
+        return 0;
+    }
+    if (elec == VNULL) {
+        Vnm_print(2, "NOsh:  Got pointer to NULL elec object!\n");
+        return 0;
+    }
+    bemparm = elec->bemparm;
+    if (bemparm == VNULL) {
+        Vnm_print(2, "NOsh:  Got pointer to NULL bemparm object!\n");
+        return 0;
+    }
+    pbeparm = elec->pbeparm;
+    if (pbeparm == VNULL) {
+        Vnm_print(2, "NOsh:  Got pointer to NULL pbeparm object!\n");
+        return 0;
+    }
+
+    Vnm_print(0, "NOsh_parseBEM: Parsing parameters for BEM calculation\n");
+
+
+    /* Start snarfing tokens from the input stream */
+    rc = 1;
+    while (Vio_scanf(sock, "%s", tok) == 1) {
+
+        Vnm_print(0, "NOsh_parseBEM:  Parsing %s...\n", tok);
+
+        /* See if it's an END token */
+        if (Vstring_strcasecmp(tok, "end") == 0) {
+            bemparm->parsed = 1;
+            pbeparm->parsed = 1;
+            rc = 1;
+            break;
+        }
+
+        /* Pass the token through a series of parsers */
+        rc = PBEparm_parseToken(pbeparm, tok, sock);
+        if (rc == -1) {
+            Vnm_print(0, "NOsh_parseBEM:  parsePBE error!\n");
+            break;
+        } else if (rc == 0) {
+            /* Pass the token to the generic BEM parser */
+            rc = BEMparm_parseToken(bemparm, tok, sock);
+            if (rc == -1) {
+                Vnm_print(0, "NOsh_parseBEM:  parseBEM error!\n");
+                break;
+            } else if (rc == 0) {
+                /* We ran out of parsers! */
+                Vnm_print(2, "NOsh:  Unrecognized keyword: %s\n", tok);
+                break;
+            }
+        }
+    }
+
+    /* Handle various errors arising in the token-snarfing loop -- these all
+        just result in simple returns right now */
+    if (rc == -1) return 0;
+    if (rc == 0) return 0;
+
+    /* Check the status of the parameter objects */
+    if ((BEMparm_check(bemparm) == VRC_FAILURE) || (!PBEparm_check(pbeparm))) {
+        Vnm_print(2, "NOsh:  BEM parameters not set correctly!\n");
+        return 0;
+    }
+
+    return 1;
+}
+
+VPUBLIC int NOsh_parseGEOFLOW(
+                         NOsh *thee,
+                         Vio *sock,
+                         NOsh_calc *elec
+                         ) {
+
+    char tok[VMAX_BUFSIZE];
+    GEOFLOWparm *parm = VNULL;
+    PBEparm *pbeparm = VNULL;
+    int rc;
+
+    /* Check the arguments */
+    if (thee == VNULL) {
+        Vnm_print(2, "NOsh:  Got NULL thee!\n");
+        return 0;
+    }
+    if (sock == VNULL) {
+        Vnm_print(2, "NOsh:  Got pointer to NULL socket!\n");
+        return 0;
+    }
+    if (elec == VNULL) {
+        Vnm_print(2, "NOsh:  Got pointer to NULL elec object!\n");
+        return 0;
+    }
+    parm = elec->geoflowparm;
+    if (parm == VNULL) {
+        Vnm_print(2, "NOsh:  Got pointer to NULL geoflowparm object!\n");
+        return 0;
+    }
+    pbeparm = elec->pbeparm;
+    if (pbeparm == VNULL) {
+        Vnm_print(2, "NOsh:  Got pointer to NULL pbeparm object!\n");
+        return 0;
+    }
+
+    Vnm_print(0, "NOsh_parseGEOFLOW: Parsing parameters for GEOFLOW calculation\n");
+
+
+    /* Start snarfing tokens from the input stream */
+    rc = 1;
+    while (Vio_scanf(sock, "%s", tok) == 1) {
+
+        Vnm_print(0, "NOsh_parseGEOFLOW:  Parsing %s...\n", tok);
+
+        /* See if it's an END token */
+        if (Vstring_strcasecmp(tok, "end") == 0) {
+            parm->parsed = 1;
+            pbeparm->parsed = 1;
+            rc = 1;
+            break;
+        }
+
+        /* Pass the token through a series of parsers */
+        rc = PBEparm_parseToken(pbeparm, tok, sock);
+        if (rc == -1) {
+            Vnm_print(0, "NOsh_parseGEOFLOW:  parsePBE error!\n");
+            break;
+        } else if (rc == 0) {
+            /* Pass the token to the generic GEOFLOW parser */
+            rc = GEOFLOWparm_parseToken(parm, tok, sock);
+            if (rc == -1) {
+                Vnm_print(0, "NOsh_parseGEOFLOW:  parseGEOFLOW error!\n");
+                break;
+            } else if (rc == 0) {
+                /* We ran out of parsers! */
+                Vnm_print(2, "NOsh:  Unrecognized keyword: %s\n", tok);
+                break;
+            }
+        }
+    }
+
+    /* Handle various errors arising in the token-snarfing loop -- these all
+        just result in simple returns right now */
+    if (rc == -1) return 0;
+    if (rc == 0) return 0;
+
+    /* Check the status of the parameter objects */
+    if ((GEOFLOWparm_check(parm) == VRC_FAILURE) || (!PBEparm_check(pbeparm))) {
+        Vnm_print(2, "NOsh:  GEOFLOW parameters not set correctly!\n");
+        return 0;
+    }
+
+    return 1;
+}
+
