@@ -1,0 +1,25 @@
+read
+    mol pqr imidazole_oplsaa.pqr
+end
+elec name comp_solv        # Solvated complex
+    geoflow-manual
+
+    lpbe                   #xxx
+    bcfl mdh               #xxx
+    srfm spl2              #xxx
+    swin 0.3               #xxx
+
+    mol 1
+    pdie 1.5               # Solute dielectric
+    sdie 80.00             # Solvent dielectric
+    srad 0.0               # Solvent probe radius
+    dcel 0.25              # grid spacing
+    pres 0.008             # pressure kcal/(mol*A^3)
+    gama 0.0001            # surface tension kcal/(mol*A^2)
+    vdw 0
+
+    temp 300               #xxx
+end
+
+quit
+
