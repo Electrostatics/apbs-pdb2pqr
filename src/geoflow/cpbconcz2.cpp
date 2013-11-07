@@ -1,3 +1,58 @@
+///  @file    cpbconcz2.cpp 
+///  @author  Peter Hui, Andrew Stevens, Kyle Monson, Zhan Chen, Guowei Wei
+///  @brief this is the top level of geoflow
+///  @ingroup Geoflow
+///  @version $Id$
+///  @attention
+///  @verbatim
+///
+/// APBS -- Adaptive Poisson-Boltzmann Solver
+///
+///  Nathan A. Baker (nathan.baker@pnnl.gov)
+///  Pacific Northwest National Laboratory
+///
+///  Additional contributing authors listed in the code documentation.
+///
+/// Copyright (c) 2010-2012 Battelle Memorial Institute. Developed at the
+/// Pacific Northwest National Laboratory, operated by Battelle Memorial
+/// Institute, Pacific Northwest Division for the U.S. Department of Energy.
+///
+/// Portions Copyright (c) 2002-2010, Washington University in St. Louis.
+/// Portions Copyright (c) 2002-2010, Nathan A. Baker.
+/// Portions Copyright (c) 1999-2002, The Regents of the University of
+/// California.
+/// Portions Copyright (c) 1995, Michael Holst.
+/// All rights reserved.
+///
+/// Redistribution and use in source and binary forms, with or without
+/// modification, are permitted provided that the following conditions are met:
+///
+/// Redistributions of source code must retain the above copyright notice, this
+/// list of conditions and the following disclaimer.
+///
+/// Redistributions in binary form must reproduce the above copyright notice,
+/// this list of conditions and the following disclaimer in the documentation
+/// and/or other materials provided with the distribution.
+///
+/// Neither the name of the developer nor the names of its contributors may be
+/// used to endorse or promote products derived from this software without
+/// specific prior written permission.
+///
+/// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+/// AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+/// IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+/// ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+/// LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+/// CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+/// SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+/// INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+/// CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+/// ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF
+/// THE POSSIBILITY OF SUCH DAMAGE.
+///
+/// @endverbatim
+
+
 #include <iostream>
 #include <fstream>
 #include <sstream>
@@ -293,8 +348,7 @@ int loadData(std::ifstream& f,    //<i
 }
 
 GeoflowOutput geoflowSolvation(double xyzr[MAXATOMS][XYZRWIDTH], int natm, double dcel, int ffmodel, double extvalue, double* pqr, int maxstep, double crevalue, int iadi, double tottf, double* ljepsilon, double alpha, int igfin, double epsilons, double epsilonp, int idacsl, double tol, int iterf, double tpb, int itert, double pres, double gama, double tauval, double prob, int vdwdispersion, double sigmas, double density, double epsilonw){
-    double elec;
-    double area = 0.0, volume = 0.0, attint = 0.0;
+    double elec = 0.0, area = 0.0, volume = 0.0, attint = 0.0;
     double *phi, *phix, *phivoc, *surfu;
 
     comdata.dcel = dcel;
@@ -444,24 +498,24 @@ GeoflowOutput geoflowSolvation(double xyzr[MAXATOMS][XYZRWIDTH], int natm, doubl
         itert += iter;
 
 
-        if(idacsl == 1)
-        {
-            //maxerr = 0.0;    
-            for(int i = 1; i <= comdata.nx; i++){
-            for(int j = 1; j <= comdata.ny ; j++){
-            for(int k = 1; k <= comdata.nz;k++){
-                double     x = xvalue(i),
-                     y = yvalue(j),
-                    z = zvalue(k);    
-                int idx[] = { k - 1, j - 1, i - 1 };
-                std::vector<int> idxv( idx, idx + sizeof(idx) / sizeof(int) );
-                double phival = getMDArrayElement( phi, dims, idxv );
-                double err = abs(phival) - cos(x)*cos(y)*cos(z);
-              //  maxerr = max(maxerr, err);
-
-            }}}
-            exit(0);
-        }
+//         if(idacsl == 1)
+//         {
+//             maxerr = 0.0;    
+//             for(int i = 1; i <= comdata.nx; i++){
+//             for(int j = 1; j <= comdata.ny ; j++){
+//             for(int k = 1; k <= comdata.nz;k++){
+//                 double     x = xvalue(i),
+//                      y = yvalue(j),
+//                     z = zvalue(k);    
+//                 int idx[] = { k - 1, j - 1, i - 1 };
+//                 std::vector<int> idxv( idx, idx + sizeof(idx) / sizeof(int) );
+//                 double phival = getMDArrayElement( phi, dims, idxv );
+//                 double err = abs(phival) - cos(x)*cos(y)*cos(z);
+//                 maxerr = max(maxerr, err);
+// 
+//             }}}
+//             exit(0);
+//         }
 
         if(iloop==1)
         {
@@ -675,8 +729,6 @@ pbconcz2(
         std::cout << "PRES = " << pres << std::endl;
 //        std::cout << "CONMS = " << lj.conms << std::endl;
         
-        nmol = 0;
-
         int igfin = 1;
         double tpb = 0.0;
         int iterf = 0, itert = 0;
@@ -684,37 +736,4 @@ pbconcz2(
         processAtomsFile( "17set.txt",  ffmodel, radexp, extvalue, maxstep, crevalue, iadi, tottf, alpha, igfin, epsilons, epsilonp, idacsl, tol, tpb, iterf, itert, pres, gama, dcel, tauval, prob, vdwdispersion, sigmas, density, epsilonw);
     }
 }
-
-//int
-//main()
-//{
-//    pbconcz2(17,    // nmol
-//         0.03,    // pres_i
-//         0.08,    // gama_i
-//         1,    // npiter
-//         1,    // ngiter
-//         1.40,    // tauval
-//         0.0,    // prob
-//         2,    // ffmodel
-//         1.5828,// sigmas
-//         0.1554,// epsilonw
-//         1,    // vdwdispersion
-//         1.90,    // extvalue
-////         0,    // iprec
-////         10,    // istep
-//         0,    // iadi
-//        0.50,     // ALPHA
-////        1,    // IPBIN
-//        1e-5,    // TOL
-//        3.5,    // TOTTF
-//        0.25,    // DCEL
-//        20,    // MAXSTEP
-//        80.00,     // EPSILONS
-//        3.00,     // EPSILONP
-//        1,     // RADEXP
-//        0.01,     // CREVALUE
-//        0,     // idacsl
-//        0.03346 //density (use 0.03346) 
-//        );
-//}
 

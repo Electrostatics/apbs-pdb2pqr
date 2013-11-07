@@ -1,6 +1,6 @@
-///  @file    modules.h
+///  @file    cpbconcz2.h
 ///  @author  Andrew Stevens, Kyle Monson
-///  @brief FORTRAN globals and function headers
+///  @brief some definitons for APBS
 ///  @ingroup Geoflow
 ///  @version $Id$
 ///  @attention
@@ -52,60 +52,33 @@
 ///
 /// @endverbatim
 
-#ifndef MODULES_H
-#define MODULES_H
+#ifndef _CPBCONCZ_H_
+#define _CPBCONCZ_H_
+
+#ifdef __cplusplus
+extern "C"{
+#endif
 
 #define MAXATOMS 15000  /* From the original f90 code; need to keep this
-             * constant since the f90 routines that we call from here 
-             * depend on it. */
+             * constant since the f90 routines that we call from here   
+             *              * depend on it. */                                         
 #define XYZRWIDTH 4     // 4: 0-2 => pos, 3 => radius
 
-#define MAX(x,y)  ((x > y) ? x : y)
+typedef struct _GeoflowOutput{
+    double area,
+        volume,
+        attint,
+        sumpot,
+        totalSolvation,
+        nonpolarSolvation,
+        elecSolvation;
+} GeoflowOutput;
 
-struct Comdata{
-    char fname[100];
-    int nx, ny, nz;
-    double xleft, xright,
-           yleft, yright,
-           zleft, zright,
-    
-           deltax, deltay, deltaz,
-    
-           dcel,
-           pi;
-    double* xc, *yc, *zc;
-};
-extern Comdata comdata;
+GeoflowOutput geoflowSolvation(double xyzr[MAXATOMS][XYZRWIDTH], int natm, double dcel, int ffmodel, double extvalue, double* pqr, int maxstep, double crevalue, int iadi, double tottf, double* ljepsilon, double alpha, int igfin, double epsilons, double epsilonp, int idacsl, double tol, int iterf, double tpb, int itert, double potcoe, double gama, double tauval, double prob, int vdwdispersion, double sigmas, double density, double epsilonw);
 
-struct LJ{
-    double tauval, prob, vdwdispersion,
-           sigmas, roro, conms,
-           density, epsilonw;
-    int ffmodel;
-    static const int iosetar = 1, iosetaa = 1, iwca = 1;
-};
-extern LJ lj;
-
-double dot(double x, double y, double z);
-
-extern "C"{
-void domainini(double xyzr[MAXATOMS][XYZRWIDTH], const int natm, const double extvalue);
-void chargedist(double* atmpos, double* chratm, int& natm, double* charget, double* corlocqt, int* loc_qt, int& iatm);
-void yhsurface(double xyzr[MAXATOMS][XYZRWIDTH], double* ljepsilon, int natm, double tott,
-    double deltat, double* phix, double* surfu, int i, double& area, double& vol, double& attint,
-    double alpha, int iadi, int igfin);
-void seteqb(double* bg, double xyzr[MAXATOMS][XYZRWIDTH], double* pqr, int& natm, double* charget, double* corlocqt, double *epsilonsp);
-//  void writerms_gama( double* sumpot, double* expv, double* elec, int* natm, double* gama, int *ngiter, double *pres );
-void pbsolver( double* eps, double* phi, double* bg, int nx, int ny, int nz, double dcel,  double tol, int iter);
-
-double xvalue(int& i);
-double yvalue(int& i);
-double zvalue(int& i);
-
-int inverx(double& x);
-int invery(double& y);
-int inverz(double& z);
+#ifdef __cplusplus
 }
+#endif
 
 #endif
 

@@ -1,0 +1,17 @@
+gly_oplsaa          -8.84
+benzylb_oplsaa      -2.38
+benzylc_oplsaa      -1.93 
+mbis_oplsaa          1.07
+nnd_oplsaa          -11.01 
+nn4t_oplsaa         -9.76
+bis_oplsaa          -4.23
+diac_oplsaa         -4.97
+diet_oplsaa         -3.28
+dio_oplsaa          -5.05
+diethylp_oplsaa     -6.00
+dime_oplsaa         -2.93
+ethy_oplsaa         -6.34
+ditho_oplsaa        -3.54
+diethyls_oplsaa     -1.43
+phenyl_oplsaa       -4.08
+imidazole_oplsaa    -9.81 
