@@ -65,8 +65,10 @@ def process_serial( binary, input_file ):
     # Look for the results in the output file
     output_file = open( output_name, 'r' )
     output_text = output_file.read()
+    
     output_pattern = r'Global net (?:ELEC|APOL) energy \= ' + float_pattern
     output_results = [ float( r ) for r in re.findall( output_pattern, output_text ) ]
+    
     
     # Return all the matched results as a list of floating point numbers
     return output_results
@@ -171,6 +173,7 @@ def run_test( binary, test_files, test_name, test_directory, logger, ocd ):
                     continue
                     
                 # Compare the expected to computed results
+                
                 computed_result = computed_results[i]
                 expected_result = float( expected_results[i] )
                 logger.message( "Testing computed result %.12E against expected result %12E" % ( computed_result, expected_result ) )
