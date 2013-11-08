@@ -389,7 +389,7 @@ def main():
             size.setConstant("ofrac", float(a))
         if o == "--redfac":
             size.setConstant("redfac", float(a))
-		if o == "--fadd":
+        if o == "--fadd":
             size.setConstant("fadd", int(a))
         if o == "--istrng":
             istrng = float(a)

@@ -2638,7 +2638,7 @@ VPUBLIC int printEnergy(Vcom *com,
            scalar;
 
     Vnm_tprint( 2, "Warning: The 'energy' print keyword is deprecated.\n" \
-                   "         Use elecEnergy for electrostatics energy calcs.\n\n");
+                   "         Use eilecEnergy for electrostatics energy calcs.\n\n");
 
     if (Vstring_strcasecmp(nosh->elecname[nosh->printcalc[iprint][0]], "") == 0){
         Vnm_tprint( 1, "print energy %d ", nosh->printcalc[iprint][0]+1);
@@ -5022,10 +5022,10 @@ VPUBLIC int solveGEOFLOW(Valist* molecules[NOSH_MAXMOL], NOsh *nosh, PBEparm *pb
                             0.1554    // epsilonw
     );
 
-    Vnm_tprint( 1,"  GEOFLOW Total Solvation: %f\n", gf.totalSolvation);
-    Vnm_tprint( 1,"  GEOFLOW Elec Solvation: %f\n", gf.elecSolvation);
-    Vnm_tprint( 1,"  GEOFLOW NonPolar Solvation: %f\n", gf.nonpolarSolvation);
-
+    Vnm_tprint( 1,"  Global net energy = %1.12e\n", gf.totalSolvation);
+    Vnm_tprint( 1,"  Global net ELEC energy = %1.12E\n", gf.elecSolvation);
+    Vnm_tprint( 1,"  Global net APOL energy = %1.12E\n", gf.nonpolarSolvation);
+//                "  Global net ELEC energy = %1.12E "
     Vnm_tstop(APBS_TIMER_SOLVER, "Solver timer");
 
     return 1;
