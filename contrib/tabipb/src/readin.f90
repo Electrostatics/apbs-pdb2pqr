@@ -34,7 +34,7 @@ real*4 xyzqr(5)
             exit 
         endif
     enddo 
-    print *,'lines of remarks = ', nremark
+    !print *,'lines of remarks = ', nremark
     close(102)
     
     open(102,file=pathname(1:lenpath)//fname(1:lenfname)//".pqr")
@@ -176,11 +176,11 @@ real*8,allocatable:: nvert_copy(:,:)
                     dist_local=dot_product(xx-yy,xx-yy)
                     if (dist_local<1.d-5) then
                        ialert=1
-                       print *,i,ii,'particles are too close',dist_local
+!                       print *,i,ii,'particles are too close',dist_local
                     endif
                 enddo
                 if (area_local < 1.d-5 .or. ialert==1) then
-                    print *,i,j,'small area=', area_local
+!                    print *,i,j,'small area=', area_local
                     ichanged=nface-nfacenew
                     nvert_copy(:,(i-ichanged):(nface-1))=nvert_copy(:,(i-ichanged+1):nface)
                     nfacenew=nfacenew-1

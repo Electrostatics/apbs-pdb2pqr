@@ -768,12 +768,12 @@ C   ------------------------------------------------------------------
       ELSE
          BNRM = DNRM2(N,RGWK(LR),1)
       ENDIF
-      print *,'call matvec'
+C      print *,'call matvec'
 C   ------------------------------------------------------------------
 C         Calculate initial residual.
 C   ------------------------------------------------------------------
       CALL MATVEC(N, X, RGWK(LR))
-      print *,'leave matvec'
+C      print *,'leave matvec'
       DO 50 I = 1,N
          RGWK(LR-1+I) = B(I) - RGWK(LR-1+I)
  50   CONTINUE

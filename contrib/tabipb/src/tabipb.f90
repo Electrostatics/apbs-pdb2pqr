@@ -21,7 +21,7 @@ real*8 pdie, sdie, sdens, temp, ionc(nion), ionq(nion), ionr(nion), mac
 !local variables
 real*8 bulk_strength, kappa2
 
-write(*,*) apbs_pqr_filename, nion, ionc, ionq, ionr, pdie, sdie, sdens, temp
+!write(*,*) apbs_pqr_filename, nion, ionc, ionq, ionr, pdie, sdie, sdens, temp
 
 ! passing parameters and some calculation when necessary 
 fname=apbs_pqr_filename
@@ -57,23 +57,8 @@ external MATVEC, MSOLVE
 
 common // pi,one_over_4pi
 
-!??????????????????????????????????????????????????????????????
-!??????????????????????????????????????????????????????????????
-!PARAMETERS
-
-!PB equation 
-!eps0=1.d0;            !the dielectric constant in molecule 
-!eps1=80.d0;           !the dielectric constant in solvent
-!bulk_strength=0.d0  !ion_strength with units (M)$I=\sum\limits_{i=1}^nc_iz_i^2$
-!den='10'
-
-!Treecode
-!order=1               !The order of taylor expansion
-!maxparnode=500        !maximum particles per leaf
-!theta=0.8d0           !MAC, rc/R<MAC, the bigger MAC, the more treecode 
 write(*,*) 'treecode parameters'
 write(*,*) 'tree_order=', order, 'tree_n0=',maxparnode, 'mac=', theta 
-
 
 !GMRES
 thresh=1.d-20
@@ -81,12 +66,9 @@ itol=2
 itmax=1000000
 tol=1.d-4
 !???????????????????????????????????????????????????????????????
-!???????????????????????????????????????????????????????????????
 
 pi=acos(-1.d0)
 one_over_4pi=0.25d0/pi
-!kappa2=8.430325455*bulk_strength/eps1     !kappa2 in 300K
-!kappa=sqrt(kappa2)                        !kappa
 para=332.0716d0
 eps=eps1/eps0;
 call cpu_time(cpu1)
@@ -156,15 +138,15 @@ do iatm=1,nchr
 enddo
 
 
-print *,'Solvation energy=:' ,soleng
+print *,'Solvation energy=:' ,soleng, 'kcal/mol.'
 
 call output_potential
 
 ! Calculate the interface error
 
 call cpu_time(cpu4)
-print *,'setup cpu=', real(cpu2-cpu1), '  solving cpu=', real(cpu3-cpu2), &
-'cpu for computing solvation energy=',real(cpu4-cpu3), 'Total cpu= ', real(cpu4-cpu1)
+print *,'setup cpu=', real(cpu2-cpu1), '  solving cpu=', real(cpu3-cpu2)
+print *,'cpu for computing solvation energy=',real(cpu4-cpu3), 'Total cpu= ', real(cpu4-cpu1)
 
 !-------------------------------------------------------------------------------
 ! deallocate memory
@@ -272,8 +254,6 @@ do i=1,nspt
         aa=tr_xyz(:,ind_vert(j,i))-sptpos(:,i) 
         loc_length=sqrt(dot_product(aa,aa)) !distance between vertices and centroid
 
-        !vert_ptl(1,i)=vert_ptl(1,i)+xvct(ind_vert(j,i))
-        !vert_ptl(2,i)=vert_ptl(2,i)+xvct(ind_vert(j,i)+numpars)
         vert_ptl(1,i)=vert_ptl(1,i)+1.d0/loc_length*xvct(ind_vert(j,i))
         vert_ptl(2,i)=vert_ptl(2,i)+1.d0/loc_length*xvct(ind_vert(j,i)+numpars)
         tot_length=tot_length+1.d0/loc_length
@@ -468,15 +448,11 @@ use comdata
 use treecode3d_procedures
 implicit double precision(a-h,o-z)
 integer N
-real*8 xx(N),bb(N),timebeg,timeend
+real*8 xx(N),bb(N)
 
-call cpu_time(timebeg)
 if (sum(abs(xx))<1.d-10) goto 1022
 CALL TREE_COMPP_PB(troot,kappa,eps,xx)
-!stop
 1022 bb=xx
-call cpu_time(timeend)
-print *,'time to compute AX=: ',timeend-timebeg 
 CALL REMOVE_MMT(troot)
 
 return

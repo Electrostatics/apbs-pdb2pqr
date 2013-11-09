@@ -244,9 +244,8 @@ C
 
 C########################################################
 C Shrink the box
-C      if (1==2) then
          do i=1,8
-             if (ind(i,1) .le. ind(i,2)) then
+             if (ind(i,1) < ind(i,2)) then
                  xyzmms(1,i)=minval(x(ind(i,1):ind(i,2)))
                  xyzmms(2,i)=maxval(x(ind(i,1):ind(i,2)))
                  xyzmms(3,i)=minval(y(ind(i,1):ind(i,2)))
@@ -1147,7 +1146,7 @@ C local variables
       REAL*8 :: pre1,pre2
       
 
-      print *,'entering TREE_COMPP_PB'
+      !print *,'entering TREE_COMPP_PB'
       pre1=0.5d0*(1.d0+eps)
       pre2=0.5d0*(1.d0+1.d0/eps)
       tpoten_old=tpoten
