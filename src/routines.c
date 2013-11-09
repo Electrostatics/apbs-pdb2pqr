@@ -5022,10 +5022,10 @@ VPUBLIC int solveGEOFLOW(Valist* molecules[NOSH_MAXMOL], NOsh *nosh, PBEparm *pb
                             0.1554    // epsilonw
     );
 
-    Vnm_tprint( 1,"  Global net energy = %1.12e\n", gf.totalSolvation);
+    Vnm_tprint( 1,"  Global net energy = %1.12E\n", gf.totalSolvation);
     Vnm_tprint( 1,"  Global net ELEC energy = %1.12E\n", gf.elecSolvation);
     Vnm_tprint( 1,"  Global net APOL energy = %1.12E\n", gf.nonpolarSolvation);
-//                "  Global net ELEC energy = %1.12E "
+
     Vnm_tstop(APBS_TIMER_SOLVER, "Solver timer");
 
     return 1;
