@@ -101,7 +101,7 @@ double qb(int& natm,int& i,int& j,int& k, double xyzr[MAXATOMS][XYZRWIDTH], doub
     }
 }
 
-void seteqb(double* bg, double xyzr[MAXATOMS][XYZRWIDTH], double* pqr, int& natm, double* charget, double* corlocqt, double* epsilonsp){
+void seteqb(Mat<>& bg, double xyzr[MAXATOMS][XYZRWIDTH], double* pqr, int& natm, double* charget, double* corlocqt, double* epsilonsp){
     for(int i=1; i<=comdata.nx; ++i){
     for(int j=1; j<=comdata.ny; ++j){
     for(int k=1; k<=comdata.nz; ++k){

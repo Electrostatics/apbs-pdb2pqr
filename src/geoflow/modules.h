@@ -55,6 +55,9 @@
 #ifndef MODULES_H
 #define MODULES_H
 
+#include <vector>
+#include "Mat.h"
+
 #define MAXATOMS 15000  /* From the original f90 code; need to keep this
              * constant since the f90 routines that we call from here 
              * depend on it. */
@@ -73,7 +76,7 @@ struct Comdata{
     
            dcel,
            pi;
-    double* xc, *yc, *zc;
+    std::vector<double> xc, yc, zc;
 };
 extern Comdata comdata;
 
@@ -92,11 +95,11 @@ extern "C"{
 void domainini(double xyzr[MAXATOMS][XYZRWIDTH], const int natm, const double extvalue);
 void chargedist(double* atmpos, double* chratm, int& natm, double* charget, double* corlocqt, int* loc_qt, int& iatm);
 void yhsurface(double xyzr[MAXATOMS][XYZRWIDTH], double* ljepsilon, int natm, double tott,
-    double deltat, double* phix, double* surfu, int i, double& area, double& vol, double& attint,
+    double deltat, Mat<>& phix, Mat<>& surfu, int i, double& area, double& vol, double& attint,
     double alpha, int iadi, int igfin);
-void seteqb(double* bg, double xyzr[MAXATOMS][XYZRWIDTH], double* pqr, int& natm, double* charget, double* corlocqt, double *epsilonsp);
+void seteqb(Mat<>& bg, double xyzr[MAXATOMS][XYZRWIDTH], double* pqr, int& natm, double* charget, double* corlocqt, double *epsilonsp);
 //  void writerms_gama( double* sumpot, double* expv, double* elec, int* natm, double* gama, int *ngiter, double *pres );
-void pbsolver( double* eps, double* phi, double* bg, int nx, int ny, int nz, double dcel,  double tol, int iter);
+void pbsolver( Mat<>& eps, Mat<>& phi, Mat<>& bg, double dcel,  double tol, int iter);
 
 double xvalue(int& i);
 double yvalue(int& i);

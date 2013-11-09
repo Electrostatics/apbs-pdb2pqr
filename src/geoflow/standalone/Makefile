@@ -1,7 +1,7 @@
 CFLAGS=-W -Wall -Wextra -I ../../../include/
 
 ifdef DEBUG
-	CFLAGS+=-ggdb3 -O0
+	CFLAGS+=-ggdb3 -O2
 else
 	CFLAGS+=-O3
 endif

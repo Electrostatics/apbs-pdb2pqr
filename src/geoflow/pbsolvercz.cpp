@@ -64,10 +64,11 @@
 
 extern "C"{
 
-void pbsolver(double* _eps, double* _phi, double* bgf, int nx,int ny,int nz, double dcel, double tol, int iter){
+void pbsolver(Mat<>& eps, Mat<>& phi, Mat<>& bgf, double dcel, double tol, int iter){
+    int nx = eps._nx, ny = eps._ny, nz = eps._nz;
     int n = nx*ny*nz;
     std::vector<double> _eps1(n), _eps2(n), _eps3(n);
-    Mat<> eps(_eps,nx,ny,nz), eps1(_eps1,nx,ny,nz), eps2(_eps2,nx,ny,nz), eps3(_eps3,nx,ny,nz);
+    Mat<> eps1(_eps1,nx,ny,nz), eps2(_eps2,nx,ny,nz), eps3(_eps3,nx,ny,nz);
     for(int i=1; i<nx; ++i){
     for(int j=1; j<ny; ++j){
     for(int k=1; k<nz; ++k){
@@ -79,7 +80,6 @@ void pbsolver(double* _eps, double* _phi, double* bgf, int nx,int ny,int nz, dou
     std::vector< Eigen::Triplet<double> > tripletList;
     tripletList.reserve(nx*ny*nz);
     Eigen::VectorXd b(nx*ny*nz);
-    Mat<> phi(_phi, nx,ny,nz);
     Eigen::VectorXd phi_flat(nx*ny*nz);
 
     for(int i=0; i<nx; ++i){

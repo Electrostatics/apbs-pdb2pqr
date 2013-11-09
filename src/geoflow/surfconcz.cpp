@@ -236,7 +236,7 @@ void potIntegral(double rcfactor, double ddx, int natm, valarray<double>& atom_x
 
 //void adicor(double* su, double* g, double& ddx, double& dt, int& nz,int& ny,int& nx, double* phitotx);
 
-void yhsurface(double xyzr[MAXATOMS][XYZRWIDTH], double* ljepsilon, int natm, double tott, double dt, double* _phitotx, double* _surfu, int iloop, double& area, double& volume, double& attint, double alpha, int iadi, int igfin
+void yhsurface(double xyzr[MAXATOMS][XYZRWIDTH], double* ljepsilon, int natm, double tott, double dt, Mat<>& phitotx, Mat<>& surfu, int iloop, double& area, double& volume, double& attint, double alpha, int iadi, int igfin
 ){
     int nx = comdata.nx, ny = comdata.ny, nz = comdata.nz;
     double xl = comdata.xleft, yl = comdata.yleft, zl = comdata.zleft;
@@ -255,10 +255,7 @@ void yhsurface(double xyzr[MAXATOMS][XYZRWIDTH], double* ljepsilon, int natm, do
     Mat<> g(_g, nx,ny,nz);
 
     initial(xl,yl,zl, ddx, natm, atom_x,atom_y,atom_z,atom_r, g, su);
-
-    Mat<> surfu(_surfu, nx,ny,nz);
     if(iloop > 1 && igfin == 1){ su = surfu; }
-
 
     valarray<double> sigma(natm), seta12(natm), seta6(natm), expan(natm), epsilon(natm);
     double rcfactor = (lj.ffmodel == 1) ? 1.0 : pow(2.0, 1.0/6.0);
@@ -299,7 +296,6 @@ void yhsurface(double xyzr[MAXATOMS][XYZRWIDTH], double* ljepsilon, int natm, do
 
     if(lj.iwca == 1) potr = 0;
 
-    Mat<> phitotx(_phitotx, nx,ny,nz);
     for(int i=0; i<phitotx.size(); ++i){ 
         phitotx[i] = -lj.conms - phitotx[i] + lj.roro*(potr[i] + pota[i]);
     }
