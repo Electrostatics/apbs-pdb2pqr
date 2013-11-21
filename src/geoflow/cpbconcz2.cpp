@@ -254,7 +254,7 @@ double maxrms(double* sumpot, double* expv, double* elec, double gama, int nmol)
     return sqrt(rms / nmol);
 }
 
-int loadData(std::ifstream& f, //<i
+size_t loadData(std::ifstream& f, //<i
         int imord, //<i
         int ffmodel, //<i
         double radexp, //<i
@@ -273,11 +273,11 @@ int loadData(std::ifstream& f, //<i
     std::ifstream atomFile;
     atomFile.open(atomFileName.c_str());
 
-    int natm = 0;
+    size_t natm = 0;
     initXYZR(xyzr);
     switch (ffmodel) {
         case 1:
-            while (!atomFile.eof()) {
+            while (atomFile.good()) {
                 atomFile >> xyzr[natm][0] >> xyzr[natm][1] >>
                         xyzr[natm][2] >> xyzr[natm][3] >> pqr[natm];
                 atomFile.ignore(); // skip remainder of line
@@ -307,7 +307,7 @@ int loadData(std::ifstream& f, //<i
     return natm;
 }
 
-GeoflowOutput geoflowSolvation(double xyzr[MAXATOMS][XYZRWIDTH], int natm, double dcel, int ffmodel, double extvalue, double* pqr, int maxstep, double crevalue, int iadi, double tottf, double* ljepsilon, double alpha, int igfin, double epsilons, double epsilonp, int idacsl, double tol, int iterf, double tpb, int itert, double pres, double gama, double tauval, double prob, int vdwdispersion, double sigmas, double density, double epsilonw) {
+GeoflowOutput geoflowSolvation(double xyzr[MAXATOMS][XYZRWIDTH], size_t natm, double dcel, int ffmodel, double extvalue, double* pqr, int maxstep, double crevalue, int iadi, double tottf, double* ljepsilon, double alpha, int igfin, double epsilons, double epsilonp, int idacsl, double tol, int iterf, double tpb, int itert, double pres, double gama, double tauval, double prob, int vdwdispersion, double sigmas, double density, double epsilonw) {
     double elec = 0.0, area = 0.0, volume = 0.0, attint = 0.0;
 
     comdata.dcel = dcel;
@@ -327,8 +327,8 @@ GeoflowOutput geoflowSolvation(double xyzr[MAXATOMS][XYZRWIDTH], int natm, doubl
 
     domainini(xyzr, natm, extvalue);
 
-    int nchr = natm;
-    int width = 3 * 8 * nchr;
+    size_t nchr = natm;
+    size_t width = 3 * 8 * nchr;
     double corlocqt[width],//TODO make these Mat objects
             charget[8 * nchr];
     int loc_qt[width];
@@ -458,7 +458,7 @@ processAtomsFile(std::string fileName, int ffmodel, int radexp, double extvalue,
         double pqr[MAXATOMS];
         double expv[100]; // hardcoded 100 constant, as per interface to F90 code :(
 
-        int natm = loadData(f, imord, ffmodel, radexp, expv, xyzr, pqr, ljepsilon);
+        size_t natm = loadData(f, imord, ffmodel, radexp, expv, xyzr, pqr, ljepsilon);
 
         GeoflowOutput gf = geoflowSolvation(xyzr, natm, dcel, ffmodel, extvalue, pqr, maxstep, crevalue, iadi, tottf, ljepsilon, alpha, igfin, epsilons, epsilonp, idacsl, tol, iterf, tpb, itert, pres, gama, tauval, prob, vdwdispersion, sigmas, density, epsilonw);
 
@@ -529,6 +529,7 @@ pbconcz2(
         int idacsl, //  0 for solvation force calculation; 1 or accuracy test
         double density //  (use 0.03346) 
         ) {
+    std::cout << "ffmodel (1:zap, 2:opls) = " << ffmodel << std::endl;
     double pres = pres_i;
     //    writeSupportingFiles(nmol);
 

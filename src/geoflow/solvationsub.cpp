@@ -65,7 +65,7 @@ int inverx(double& x){ return int( (x - comdata.xleft)/comdata.deltax ) + 1; }
 int invery(double& y){ return int( (y - comdata.yleft)/comdata.deltay ) + 1; }
 int inverz(double& z){ return int( (z - comdata.zleft)/comdata.deltaz ) + 1; }
 
-void chargedist(double* _atmpos, double* chratm, int& natm, double* _charget, double* _corlocqt, int* _loc_qt, int& iatm){
+void chargedist(double* _atmpos, double* chratm, size_t& natm, double* _charget, double* _corlocqt, int* _loc_qt, int& iatm){
     Mat<> atmpos(_atmpos, 4,natm);
     double x_q = atmpos(1, iatm);
     double y_q = atmpos(2, iatm);

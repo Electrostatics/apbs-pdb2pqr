@@ -72,9 +72,9 @@ double right(const valarray<double>& pr, double ev){
     return ceil( (pr + ev).max()/comdata.dcel )*comdata.dcel + ev;
 }
 
-void domainini(double xyzr[MAXATOMS][XYZRWIDTH], const int natm, const double extvalue){
+void domainini(double xyzr[MAXATOMS][XYZRWIDTH], const size_t natm, const double extvalue){
     valarray<double> atom_x(natm), atom_y(natm), atom_z(natm), atom_r(natm);
-    for(int i=0; i<natm; ++i){
+    for(size_t i=0; i<natm; ++i){
         atom_x[i] = xyzr[i][0];
         atom_y[i] = xyzr[i][1];
         atom_z[i] = xyzr[i][2];
@@ -121,47 +121,25 @@ double volumeIntegration(Mat<> f, double dcel){
 }
 
 void upwinding(int nx, int ny, int nz, double dx, double dt, int nt, Mat<>& g, Mat<>& surfu, Mat<>& phitotx){
-    double w1i[] = {-0.5, 0, 0.5};
-    valarray<double> w1(w1i, 3);
-    w1/=dx;
-    
-    double w2i[] = {1.0, -2.0, 1.0};
-    valarray<double> w2(w2i, 3);
-    w2/=dx*dx;
-    
-    double wxy = 0.25/dx/dx; //sign is sgn(prod(coord shifts))
-    
     vector<double> surfnewi(surfu.data(), surfu.end()); //hide me in ctor
     Mat<> surfnew(surfnewi.data(), nx,ny,nz);
-    
     for(int t=0; t<nt; ++t){ 
-        for(int x=2; x<nx-1; ++x){ 
-        for(int y=2; y<ny-1; ++y){ 
-        for(int z=2; z<nz-1; ++z){
-            if(g(x,y,z) > 2e-2){
-                double phix = w1[0]*surfu(x-1,y,z) + w1[2]*surfu(x+1,y,z);
-                double phiy = w1[0]*surfu(x,y-1,z) + w1[2]*surfu(x,y+1,z);
-                double phiz = w1[0]*surfu(x,y,z-1) + w1[2]*surfu(x,y,z+1);
+        Stencil<double> phi(surfu, dx);
+        for(size_t i = phi.i; i < g.size() - nx*ny; ++i){ 
+            if(g[phi.i] > 2e-2){
+                double dphi =  (1.0 + phi.dx()*phi.dx() + phi.dy()*phi.dy())*phi.dzz()
+                             + (1.0 + phi.dx()*phi.dx() + phi.dz()*phi.dz())*phi.dyy()
+                             + (1.0 + phi.dy()*phi.dy() + phi.dz()*phi.dz())*phi.dxx();
                 
-                double phixx = w2[0]*surfu(x-1,y,z) + w2[1]*surfu(x,y,z) + w2[2]*surfu(x+1,y,z);
-                double phiyy = w2[0]*surfu(x,y-1,z) + w2[1]*surfu(x,y,z) + w2[2]*surfu(x,y+1,z);
-                double phizz = w2[0]*surfu(x,y,z-1) + w2[1]*surfu(x,y,z) + w2[2]*surfu(x,y,z+1);
+                dphi -= 2*( phi.dx()*phi.dy()*phi.dxy() + phi.dx()*phi.dz()*phi.dxz() + phi.dy()*phi.dz()*phi.dyz() );            
+                double gram = 1.0 + phi.dx()*phi.dx() + phi.dy()*phi.dy() + phi.dz()*phi.dz();
+                dphi = dphi/gram + sqrt(gram)*phitotx[phi.i];//(x,y,z);
                 
-                double phixz = wxy*(surfu(x-1,y,z-1) + surfu(x+1,y,z+1)) - wxy*(surfu(x-1,y,z+1) + surfu(x+1,y,z-1));
-                double phixy = wxy*(surfu(x-1,y-1,z) + surfu(x+1,y+1,z)) - wxy*(surfu(x-1,y+1,z) + surfu(x+1,y-1,z));
-                double phiyz = wxy*(surfu(x,y-1,z-1) + surfu(x,y+1,z+1)) - wxy*(surfu(x,y-1,z+1) + surfu(x,y+1,z-1));
-                
-                double dphi =  (1.0 + phix*phix + phiy*phiy)*phizz
-                             + (1.0 + phix*phix + phiz*phiz)*phiyy
-                             + (1.0 + phiy*phiy + phiz*phiz)*phixx;
-                
-                dphi -= 2*( phix*phiy*phixy + phix*phiz*phixz + phiy*phiz*phiyz );            
-                double gram = 1.0 + phix*phix + phiy*phiy + phiz*phiz;
-                dphi = dphi/gram + sqrt(gram)*phitotx(x,y,z);
-                
-                surfnew(x,y,z) = min(1000.0, max(0.0, surfu(x,y,z) + dt*dphi));
+                //surfnew(x,y,z) = min(1000.0, max(0.0, surfu(x,y,z) + dt*dphi));
+                surfnew[phi.i] = min(1000.0, max(0.0, *(phi.c) + dt*dphi));
             }
-        }}}
+            phi.next();
+        }
         
         surfu = surfnew;
     }
@@ -204,13 +182,13 @@ void initial(double xl, double yl, double zl, double dx, int n_atom, const valar
     }
 }
 
-void potIntegral(double rcfactor, double ddx, int natm, valarray<double>& atom_x,valarray<double>& atom_y,valarray<double>& atom_z,valarray<double>& seta12, valarray<double>& seta6, valarray<double>& epsilon, valarray<double>& sigma, Mat<>& g, Mat<>& potr, Mat<>& pota){
-    for(int x=2; x<potr._nx; ++x){ 
-    for(int y=2; y<potr._ny; ++y){ 
-    for(int z=2; z<potr._nz; ++z){
+void potIntegral(double rcfactor, double ddx, size_t natm, valarray<double>& atom_x,valarray<double>& atom_y,valarray<double>& atom_z,valarray<double>& seta12, valarray<double>& seta6, valarray<double>& epsilon, valarray<double>& sigma, Mat<>& g, Mat<>& potr, Mat<>& pota){
+    for(size_t x=2; x<potr._nx; ++x){ 
+    for(size_t y=2; y<potr._ny; ++y){ 
+    for(size_t z=2; z<potr._nz; ++z){
         if(g(x,y,z) == 0){ continue; }
         double pr=0, pa=0;
-        for(int a=0; a<natm; ++a){
+        for(size_t a=0; a<natm; ++a){
             double xi = comdata.xleft + (x-1)*ddx;
             double yi = comdata.yleft + (y-1)*ddx;
             double zi = comdata.zleft + (z-1)*ddx;
@@ -236,13 +214,13 @@ void potIntegral(double rcfactor, double ddx, int natm, valarray<double>& atom_x
 
 //void adicor(double* su, double* g, double& ddx, double& dt, int& nz,int& ny,int& nx, double* phitotx);
 
-void yhsurface(double xyzr[MAXATOMS][XYZRWIDTH], double* ljepsilon, int natm, double tott, double dt, Mat<>& phitotx, Mat<>& surfu, int iloop, double& area, double& volume, double& attint, double alpha, int iadi, int igfin
+void yhsurface(double xyzr[MAXATOMS][XYZRWIDTH], double* ljepsilon, size_t natm, double tott, double dt, Mat<>& phitotx, Mat<>& surfu, int iloop, double& area, double& volume, double& attint, double alpha, int iadi, int igfin
 ){
     int nx = comdata.nx, ny = comdata.ny, nz = comdata.nz;
     double xl = comdata.xleft, yl = comdata.yleft, zl = comdata.zleft;
     double ddx = comdata.dcel;
     valarray<double> atom_x(natm), atom_y(natm), atom_z(natm), atom_r(natm);
-    for(int i=0; i<natm; ++i){
+    for(size_t i=0; i<natm; ++i){
         atom_x[i] = xyzr[i][0];
         atom_y[i] = xyzr[i][1];
         atom_z[i] = xyzr[i][2];
@@ -260,7 +238,7 @@ void yhsurface(double xyzr[MAXATOMS][XYZRWIDTH], double* ljepsilon, int natm, do
     valarray<double> sigma(natm), seta12(natm), seta6(natm), expan(natm), epsilon(natm);
     double rcfactor = (lj.ffmodel == 1) ? 1.0 : pow(2.0, 1.0/6.0);
     if(lj.ffmodel == 1){
-        for(int i=0; i<natm; ++i){
+        for(size_t i=0; i<natm; ++i){
             sigma[i] = atom_r[i] + lj.sigmas;
             expan[i] = atom_r[i] + lj.prob; //doesnt need to be a vector
             if(lj.vdwdispersion == 0){
@@ -275,7 +253,7 @@ void yhsurface(double xyzr[MAXATOMS][XYZRWIDTH], double* ljepsilon, int natm, do
             }
         }
     }else{
-        for(int i=0; i<natm; ++i){
+        for(size_t i=0; i<natm; ++i){
             sigma[i] = sqrt(4.0*atom_r[i]*lj.sigmas);
             if(lj.vdwdispersion == 0){
                 epsilon[i] = 0;
@@ -296,7 +274,7 @@ void yhsurface(double xyzr[MAXATOMS][XYZRWIDTH], double* ljepsilon, int natm, do
 
     if(lj.iwca == 1) potr = 0;
 
-    for(int i=0; i<phitotx.size(); ++i){ 
+    for(size_t i=0; i<phitotx.size(); ++i){ 
         phitotx[i] = -lj.conms - phitotx[i] + lj.roro*(potr[i] + pota[i]);
     }
 
@@ -315,7 +293,7 @@ void yhsurface(double xyzr[MAXATOMS][XYZRWIDTH], double* ljepsilon, int natm, do
     if(iloop < 2){
         surfu = su;
     }else{
-        for(int i=0; i<surfu.size(); ++i){ 
+        for(size_t i=0; i<surfu.size(); ++i){ 
            surfu[i] = surfu[i]*alpha + su[i]*(1.0 - alpha);
         }
         su = surfu;
@@ -339,11 +317,11 @@ void yhsurface(double xyzr[MAXATOMS][XYZRWIDTH], double* ljepsilon, int natm, do
     potIntegral(rcfactor, ddx, natm, atom_x, atom_y, atom_z, seta12, seta6, epsilon, sigma, g, potr, pota);
 
     if(lj.iwca==1){
-        for(int i=0; i<fintegr.size(); ++i){
+        for(size_t i=0; i<fintegr.size(); ++i){
             fintegr[i] = pota[i]*(1e3 - su[i]);
         }
     }else{
-        for(int i=0; i<fintegr.size(); ++i){ 
+        for(size_t i=0; i<fintegr.size(); ++i){ 
             fintegr[i] = (pota[i] + potr[i])*(1e3 - su[i]);
         }
 

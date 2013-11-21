@@ -74,7 +74,7 @@ typedef struct _GeoflowOutput{
         elecSolvation;
 } GeoflowOutput;
 
-GeoflowOutput geoflowSolvation(double xyzr[MAXATOMS][XYZRWIDTH], int natm, double dcel, int ffmodel, double extvalue, double* pqr, int maxstep, double crevalue, int iadi, double tottf, double* ljepsilon, double alpha, int igfin, double epsilons, double epsilonp, int idacsl, double tol, int iterf, double tpb, int itert, double potcoe, double gama, double tauval, double prob, int vdwdispersion, double sigmas, double density, double epsilonw);
+GeoflowOutput geoflowSolvation(double xyzr[MAXATOMS][XYZRWIDTH], size_t natm, double dcel, int ffmodel, double extvalue, double* pqr, int maxstep, double crevalue, int iadi, double tottf, double* ljepsilon, double alpha, int igfin, double epsilons, double epsilonp, int idacsl, double tol, int iterf, double tpb, int itert, double potcoe, double gama, double tauval, double prob, int vdwdispersion, double sigmas, double density, double epsilonw);
 
 #ifdef __cplusplus
 }

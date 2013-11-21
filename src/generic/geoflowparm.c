@@ -75,6 +75,9 @@ VPUBLIC GEOFLOWparm* GEOFLOWparm_ctor(GEOFLOWparm_CalcType type) {
 }
 
 VPUBLIC Vrc_Codes GEOFLOWparm_ctor2(GEOFLOWparm *thee, GEOFLOWparm_CalcType type) {
+
+    int i;
+
     if (thee == VNULL) return VRC_FAILURE;
 
     thee->parsed = 0;
@@ -100,7 +103,6 @@ VPUBLIC void GEOFLOWparm_dtor2(GEOFLOWparm *thee) { ; }
 VPUBLIC Vrc_Codes GEOFLOWparm_check(GEOFLOWparm *thee) {
 
     Vrc_Codes rc;
-    int tdime[3], ti, tnlev[3], nlev;
 
     rc = VRC_SUCCESS;
 
@@ -119,20 +121,6 @@ VPUBLIC Vrc_Codes GEOFLOWparm_check(GEOFLOWparm *thee) {
          Vnm_print(2,"GEOFLOWparm_check: type not set");
          rc = VRC_FAILURE;
     }
-
-    /* Check treecode setting*/
-//     if (thee->tree_order<1) {
-//         Vnm_print(2,"GEOFLOWparm_check: treecode order is less than 1");
-//         rc = VRC_FAILURE;
-//     }
-//     if (thee->tree_n0<1) {
-//         Vnm_print(2,"GEOFLOWparm_check: treecode leaf size is less than 1");
-//         rc = VRC_FAILURE;
-//     }
-//     if (thee->mac>1 || thee->mac <=0 ) {
-//         Vnm_print(2,"GEOFLOWparm_check: MAC criterion fails");
-//         rc = VRC_FAILURE;
-//     }
 
     return rc;
 }

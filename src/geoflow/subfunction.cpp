@@ -61,9 +61,9 @@ using namespace std;
 
 extern "C"{
 
-double qbboundary(int& natm, double& x,double& y,double& z, double xyzr[MAXATOMS][XYZRWIDTH], double* pqr, double& epsilonsp){
+double qbboundary(size_t& natm, double& x,double& y,double& z, double xyzr[MAXATOMS][XYZRWIDTH], double* pqr, double& epsilonsp){
     double vbdn = 0;
-    for(int a=0; a<natm; ++a){
+    for(size_t a=0; a<natm; ++a){
         double x_q = x - xyzr[a][1];
         double y_q = y - xyzr[a][2];
         double z_q = z - xyzr[a][3];
@@ -75,10 +75,10 @@ double qbboundary(int& natm, double& x,double& y,double& z, double xyzr[MAXATOMS
 }
 
 
-double qbinterior(int& natm, double& x,double& y,double& z, double* _charget, double* _corlocqt){
+double qbinterior(size_t& natm, double& x,double& y,double& z, double* _charget, double* _corlocqt){
     Mat<> charget(_charget, natm,8), corlocqt(_corlocqt, natm,8,3);
     double fp = 0;
-    for(int a=1; a<=natm; ++a){
+    for(size_t a=1; a<=natm; ++a){
     for(int ii=1; ii<=8; ++ii){
         double xc = x - corlocqt(a,ii,1);
         double yc = y - corlocqt(a,ii,2);
@@ -90,7 +90,7 @@ double qbinterior(int& natm, double& x,double& y,double& z, double* _charget, do
     return fp;
 }
 
-double qb(int& natm,int& i,int& j,int& k, double xyzr[MAXATOMS][XYZRWIDTH], double*pqr, double* charget, double* corlocqt, double& epsilonsp){
+double qb(size_t& natm,int& i,int& j,int& k, double xyzr[MAXATOMS][XYZRWIDTH], double*pqr, double* charget, double* corlocqt, double& epsilonsp){
     double x = xvalue(i);
     double y = yvalue(j);
     double z = zvalue(k);
@@ -101,7 +101,7 @@ double qb(int& natm,int& i,int& j,int& k, double xyzr[MAXATOMS][XYZRWIDTH], doub
     }
 }
 
-void seteqb(Mat<>& bg, double xyzr[MAXATOMS][XYZRWIDTH], double* pqr, int& natm, double* charget, double* corlocqt, double* epsilonsp){
+void seteqb(Mat<>& bg, double xyzr[MAXATOMS][XYZRWIDTH], double* pqr, size_t& natm, double* charget, double* corlocqt, double* epsilonsp){
     for(int i=1; i<=comdata.nx; ++i){
     for(int j=1; j<=comdata.ny; ++j){
     for(int k=1; k<=comdata.nz; ++k){

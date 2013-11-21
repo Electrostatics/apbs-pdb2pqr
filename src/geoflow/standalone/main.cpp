@@ -106,7 +106,7 @@ int main()
          0,    // iadi
         0.50,     // ALPHA
 //        1,    // IPBIN
-        1e-5,    // TOL
+        1e-4,    // TOL
         3.5,    // TOTTF
         0.25,    // DCEL
         20,    // MAXSTEP
