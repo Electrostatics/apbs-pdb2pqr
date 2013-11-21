@@ -4956,16 +4956,29 @@ VPUBLIC void killGEOFLOW(NOsh *nosh, Vpbe *pbe[NOSH_MAXCALC]
 
 }
 
+<<<<<<< HEAD
 
 VPUBLIC int solveGEOFLOW(Valist* molecules[NOSH_MAXMOL], NOsh *nosh, PBEparm *pbeparm, GEOFLOWparm *parm,
                     GEOFLOWparm_CalcType type
                    ) {
 
+=======
+VPUBLIC int solveGEOFLOW(NOsh *nosh, PBEparm *pbeparm, GEOFLOWparm *parm,
+                    GEOFLOWparm_CalcType type
+                   ) {
+
+    int nx,
+        ny,
+        nz,
+        i;
+
+>>>>>>> eeffc50d1ae067d3f14820011b6421b442d7be71
     if (nosh != VNULL) {
         if (nosh->bogus) return 1;
     }
 
     Vnm_tstart(APBS_TIMER_SOLVER, "Solver timer");
+<<<<<<< HEAD
     
     int natm = 0;
     for(int m=0; m < nosh->nmol; ++m){
@@ -5025,6 +5038,24 @@ VPUBLIC int solveGEOFLOW(Valist* molecules[NOSH_MAXMOL], NOsh *nosh, PBEparm *pb
     Vnm_tprint( 1,"  Global net energy = %1.12E\n", gf.totalSolvation);
     Vnm_tprint( 1,"  Global net ELEC energy = %1.12E\n", gf.elecSolvation);
     Vnm_tprint( 1,"  Global net APOL energy = %1.12E\n", gf.nonpolarSolvation);
+=======
+
+//apbs2tabipb(apbs_pqr_filename, nion, ionc, ionq, ionr, pdie, sdie, sdens, temp)
+//    apbs2tabipb_(&(nosh->molpath),
+//                 &(pbeparm->nion),
+//                 &(pbeparm->ionc),
+//                 &(pbeparm->ionq),
+//                 &(pbeparm->ionr),
+//                 &(pbeparm->pdie),
+//                 &(pbeparm->sdie),
+//                 &(pbeparm->sdens),
+//                 &(pbeparm->temp),
+//                 &(parm->tree_order),
+//                 &(parm->tree_n0),
+//                 &(parm->mac)
+//                 );
+    Vnm_tprint(1, "****************hello from geoflow**********\n");
+>>>>>>> eeffc50d1ae067d3f14820011b6421b442d7be71
 
     Vnm_tstop(APBS_TIMER_SOLVER, "Solver timer");
 
@@ -5090,7 +5121,11 @@ VPUBLIC int forceGEOFLOW(
     Vnm_tstart(APBS_TIMER_FORCE, "Force timer");
 
 #ifndef VAPBSQUIET
+<<<<<<< HEAD
 //    Vnm_tprint( 1,"  Calculating forces...\n");
+=======
+    Vnm_tprint( 1,"  Calculating forces...\n");
+>>>>>>> eeffc50d1ae067d3f14820011b6421b442d7be71
 #endif
 
     Vnm_tstop(APBS_TIMER_FORCE, "Force timer");

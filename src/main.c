@@ -736,7 +736,11 @@ int main(
                 printPBEPARM(pbeparm);
 
                 /* Solve PDE */
+<<<<<<< HEAD
                 if (solveGEOFLOW(alist, nosh, pbeparm, geoflowparm, geoflowparm->type) != 1) {
+=======
+                if (solveGEOFLOW(nosh, pbeparm, geoflowparm, geoflowparm->type) != 1) {
+>>>>>>> eeffc50d1ae067d3f14820011b6421b442d7be71
                     Vnm_tprint(2, "Error solving PDE!\n");
                     VJMPERR1(0);
                 }
