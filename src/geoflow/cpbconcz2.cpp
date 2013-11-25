@@ -180,7 +180,7 @@ numberOfLines(std::string fileName) {
 
 void
 normalizeSurfuAndEps(Mat<>& surfu, Mat<>& eps, double epsilons, double epsilonp) {
-    for (int i = 0; i < surfu.size(); i++) {
+    for (size_t i = 0; i < surfu.size(); i++) {
         if (surfu[i] > 1000.0) { surfu[i] = 1000.0; }
         if (surfu[i] < 0.0) { surfu[i] = 0.0; }
         eps[i] = epsilonp + (epsilons - epsilonp) * ( (1000.0 - surfu[i])/1000.0 );
@@ -200,32 +200,16 @@ normalizeSurfuAndEps(Mat<>& surfu, Mat<>& eps, double epsilons, double epsilonp)
  *    charget:    charget array.  This is an [8][natm] int array.
  */
 void
-computeSoleng(double& soleng, Mat<>& phi, std::vector<int> phiDims, Mat<>& charget, int natm, int *loc_qt) {
-    int locqtDims[] = {3, 8, natm};
-    std::vector<int> locqtDimv = arrayToVector(locqtDims, 3);
-    int chargetDims[] = {8, natm};
-    std::vector<int> chargetDimv = arrayToVector(chargetDims, 2);
+computeSoleng(double& soleng, Mat<>& phi, std::vector<int> phiDims, Mat<>& charget, Mat<int>& loc_qt) {
     soleng = 0.0;
+    for (size_t iind = 1; iind <= charget.nx(); iind++) {
+    for (size_t jind = 1; jind <= charget.ny(); jind++) {
+        int i = loc_qt(iind,jind,1);
+        int j = loc_qt(iind,jind,2);
+        int k = loc_qt(iind,jind,3);
 
-    for (int iind = 0; iind < natm; iind++) {
-        for (int jind = 0; jind < 8; jind++) {
-            int idx[] = {0, jind, iind};
-            std::vector<int> idxv = arrayToVector(idx, 3);
-
-            int i1 = getMDArrayElement(loc_qt, locqtDimv, idxv);
-            idxv[0] = 1;
-            int j1 = getMDArrayElement(loc_qt, locqtDimv, idxv);
-            idxv[0] = 2;
-            int k1 = getMDArrayElement(loc_qt, locqtDimv, idxv);
-
-            double c = charget(iind+1,jind+1);
-            if (c != 0) {
-                soleng += 0.5*c*phi(i1,j1,k1);
-            }
-
-
-        }
-    }
+        soleng += 0.5*charget(iind,jind)*phi(i,j,k);
+    }}
 }
 
 double maxrms(double* sumpot, double* expv, double* elec, double gama, int nmol) {
@@ -313,14 +297,12 @@ GeoflowOutput geoflowSolvation(double xyzr[MAXATOMS][XYZRWIDTH], size_t natm, do
 
     domainini(xyzr, natm, extvalue);
 
-    size_t width = 3 * 8 * natm;
     vector<double> _charget(8 * natm); Mat<> charget(_charget, natm, 8);
     vector<double> _corlocqt(3*8 * natm); Mat<> corlocqt(_corlocqt, natm, 8, 3);
-            
-    int loc_qt[width];
-    initValues((int*) loc_qt, width, 0);
+    vector<int> _loc_qt(3*8*natm); Mat<int> loc_qt(_loc_qt, natm,8,3); 
+
     for (size_t iatm = 1; iatm <= natm; iatm++) {
-        chargedist(xyzr, pqr, charget, corlocqt, (int*) loc_qt, iatm);
+        chargedist(xyzr, pqr, charget, corlocqt, loc_qt, iatm);
     }
 
     int nx = comdata.nx, ny = comdata.ny, nz = comdata.nz;
@@ -402,8 +384,8 @@ GeoflowOutput geoflowSolvation(double xyzr[MAXATOMS][XYZRWIDTH], size_t natm, do
         // solvation
         double soleng1, soleng2;
         soleng1 = soleng2 = 0.0;
-        computeSoleng(soleng1, phi, dims, charget, natm, (int*) loc_qt);
-        computeSoleng(soleng2, phivoc, dims, charget, natm, (int*) loc_qt);
+        computeSoleng(soleng1, phi, dims, charget, loc_qt);
+        computeSoleng(soleng2, phivoc, dims, charget, loc_qt);
         elec = (soleng1 - soleng2) * 332.0716;
         solv[iloop - 1] = elec + gama * (area + volume * lj.conms + attint * lj.roro);
         if (iloop > 1) {

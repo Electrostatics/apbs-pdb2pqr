@@ -94,7 +94,7 @@ double dot(double x, double y, double z);
 extern "C"{
 void domainini(double xyzr[MAXATOMS][XYZRWIDTH], const size_t natm, const double extvalue);
 
-void chargedist(double xyzr[MAXATOMS][XYZRWIDTH], double* chratm, Mat<>& charget, Mat<>& corlocqt, int* loc_qt, size_t iatm);
+void chargedist(double xyzr[MAXATOMS][XYZRWIDTH], double* chratm, Mat<>& charget, Mat<>& corlocqt, Mat<int>& loc_qt, size_t iatm);
 
 void yhsurface(double xyzr[MAXATOMS][XYZRWIDTH], double* ljepsilon, size_t natm, double tott,
     double deltat, Mat<>& phix, Mat<>& surfu, int i, double& area, double& vol, double& attint,

@@ -72,7 +72,7 @@ template<typename T> struct Mat{
 
     T* _data;
     std::vector<T>* vec;
-    Mat(T* data, size_t nx, size_t ny, size_t nz=1):  _nx(nx), _ny(ny), _nz(nz), _data(data), vec(0) {} //this needs to die
+    //Mat(T* data, size_t nx, size_t ny, size_t nz=1):  _nx(nx), _ny(ny), _nz(nz), _data(data), vec(0) {} //this needs to die
     Mat(std::vector<T>& val, size_t nx, size_t ny, size_t nz=1): _nx(nx), _ny(ny), _nz(nz), _data(val.data()), vec(&val) {}
 
     ~Mat(){};
