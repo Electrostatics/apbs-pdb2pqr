@@ -200,7 +200,7 @@ normalizeSurfuAndEps(Mat<>& surfu, Mat<>& eps, double epsilons, double epsilonp)
  *    charget:    charget array.  This is an [8][nchr] int array.
  */
 void
-computeSoleng(double& soleng, Mat<>& phi, std::vector<int> phiDims, double* charget, int nchr, int *loc_qt) {
+computeSoleng(double& soleng, Mat<>& phi, std::vector<int> phiDims, Mat<>& charget, int nchr, int *loc_qt) {
     int locqtDims[] = {3, 8, nchr};
     std::vector<int> locqtDimv = arrayToVector(locqtDims, 3);
     int chargetDims[] = {8, nchr};
@@ -218,15 +218,8 @@ computeSoleng(double& soleng, Mat<>& phi, std::vector<int> phiDims, double* char
             idxv[0] = 2;
             int k1 = getMDArrayElement(loc_qt, locqtDimv, idxv);
 
-
-            int chargetIdx[] = {jind, iind};
-            std::vector<int> chargetIdxv = arrayToVector(chargetIdx, 2);
-
-            double c = getMDArrayElement(charget, chargetDimv, chargetIdxv);
+            double c = charget(iind+1,jind+1);
             if (c != 0) {
-                int idx[] = {k1 - 1, j1 - 1, i1 - 1};
-                std::vector<int> idxv = arrayToVector(idx, 3);
-
                 soleng += 0.5*c*phi(i1,j1,k1);
             }
 
@@ -322,37 +315,32 @@ GeoflowOutput geoflowSolvation(double xyzr[MAXATOMS][XYZRWIDTH], size_t natm, do
 
     size_t nchr = natm;
     size_t width = 3 * 8 * nchr;
-    double corlocqt[width],//TODO make these Mat objects
-            charget[8 * nchr];
+    vector<double> _charget(8 * nchr); Mat<> charget(_charget, nchr, 8);
+    double corlocqt[width];//TODO make these Mat objects
+            
     int loc_qt[width];
     initValues((int*) loc_qt, width, 0);
     initValues((double*) corlocqt, width, 0.0);
-    initValues((double*) charget, width, 0.0);
-    for (int iatm = 1; iatm <= nchr; iatm++) {
-        chargedist(xyzr, pqr, nchr, (double*) charget, (double*) corlocqt, (int*) loc_qt, iatm);
-    }
-
-    comdata.xc.resize(comdata.nx);
-    comdata.yc.resize(comdata.ny);
-    comdata.zc.resize(comdata.nz);
-
-    for (int i = 0; i < comdata.nx; i++) {
-        comdata.xc[i] = comdata.xleft + (i - 1) * comdata.dcel;
-    }
-
-    for (int i = 0; i < comdata.ny; i++) {
-        comdata.yc[i] = comdata.yleft + (i - 1) * comdata.dcel;
-    }
-
-    for (int i = 0; i < comdata.nz; i++) {
-        comdata.zc[i] = comdata.zleft + (i - 1) * comdata.dcel;
+//    initValues((double*) charget, width, 0.0);
+    for (size_t iatm = 1; iatm <= nchr; iatm++) {
+        chargedist(xyzr, pqr, nchr, charget, (double*) corlocqt, (int*) loc_qt, iatm);
     }
 
     int nx = comdata.nx, ny = comdata.ny, nz = comdata.nz;
+    comdata.xc.resize(nx);
+    for (int i=0; i<nx; i++) { comdata.xc[i] = comdata.xleft + (i-1)*comdata.dcel; }
+
+    comdata.yc.resize(ny);
+    for (int i=0; i<ny; i++) { comdata.yc[i] = comdata.yleft + (i-1)*comdata.dcel; }
+
+    comdata.zc.resize(nz);
+    for (int i=0; i<nz; i++) { comdata.zc[i] = comdata.zleft + (i-1)*comdata.dcel; }
+
     int arrayLengths = nz*ny*nx;
     int aDim[] = {nz,ny,nx};
     std::vector<int> dims(aDim, aDim + sizeof (aDim) / sizeof (int));
 
+//is this needed????
     int solvWidth = maxstep + 1;
     double solv[solvWidth];
     initValues((double*) solv, solvWidth, 0.0);
@@ -388,7 +376,7 @@ GeoflowOutput geoflowSolvation(double xyzr[MAXATOMS][XYZRWIDTH], size_t natm, do
         yhsurface(xyzr, ljepsilon, natm, tott, deltat, phix, surfu, iloop, area, volume, attint, alpha, iadi, igfin);
         normalizeSurfuAndEps(surfu, eps, epsilons, epsilonp);
         if (iloop == 1) {
-            seteqb(bg, xyzr, (double*) pqr, natm, (double*) charget, (double*) corlocqt, &epsilons);
+            seteqb(bg, xyzr, (double*) pqr, natm, charget, (double*) corlocqt, &epsilons);
         }
 
         int iter = 1000;
@@ -418,8 +406,8 @@ GeoflowOutput geoflowSolvation(double xyzr[MAXATOMS][XYZRWIDTH], size_t natm, do
         // solvation
         double soleng1, soleng2;
         soleng1 = soleng2 = 0.0;
-        computeSoleng(soleng1, phi, dims, (double*) charget, nchr, (int*) loc_qt);
-        computeSoleng(soleng2, phivoc, dims, (double*) charget, nchr, (int*) loc_qt);
+        computeSoleng(soleng1, phi, dims, charget, nchr, (int*) loc_qt);
+        computeSoleng(soleng2, phivoc, dims, charget, nchr, (int*) loc_qt);
         elec = (soleng1 - soleng2) * 332.0716;
         solv[iloop - 1] = elec + gama * (area + volume * lj.conms + attint * lj.roro);
         if (iloop > 1) {

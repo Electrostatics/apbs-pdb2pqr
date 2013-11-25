@@ -75,11 +75,11 @@ double qbboundary(size_t& natm, double& x,double& y,double& z, double xyzr[MAXAT
 }
 
 
-double qbinterior(size_t& natm, double& x,double& y,double& z, double* _charget, double* _corlocqt){
-    Mat<> charget(_charget, natm,8), corlocqt(_corlocqt, natm,8,3);
+double qbinterior(size_t& natm, double& x,double& y,double& z, Mat<>& charget, double* _corlocqt){
+    Mat<> corlocqt(_corlocqt, natm,8,3);
     double fp = 0;
-    for(size_t a=1; a<=natm; ++a){
-    for(int ii=1; ii<=8; ++ii){
+    for(size_t a=1; a<=charget.nx(); ++a){
+    for(int ii=1; ii<=charget.ny(); ++ii){
         double xc = x - corlocqt(a,ii,1);
         double yc = y - corlocqt(a,ii,2);
         double zc = z - corlocqt(a,ii,3);
@@ -90,7 +90,7 @@ double qbinterior(size_t& natm, double& x,double& y,double& z, double* _charget,
     return fp;
 }
 
-double qb(size_t& natm,int& i,int& j,int& k, double xyzr[MAXATOMS][XYZRWIDTH], double*pqr, double* charget, double* corlocqt, double& epsilonsp){
+double qb(size_t& natm,int& i,int& j,int& k, double xyzr[MAXATOMS][XYZRWIDTH], double*pqr, Mat<>& charget, double* corlocqt, double& epsilonsp){
     double x = xvalue(i);
     double y = yvalue(j);
     double z = zvalue(k);
@@ -101,7 +101,7 @@ double qb(size_t& natm,int& i,int& j,int& k, double xyzr[MAXATOMS][XYZRWIDTH], d
     }
 }
 
-void seteqb(Mat<>& bg, double xyzr[MAXATOMS][XYZRWIDTH], double* pqr, size_t& natm, double* charget, double* corlocqt, double* epsilonsp){
+void seteqb(Mat<>& bg, double xyzr[MAXATOMS][XYZRWIDTH], double* pqr, size_t& natm, Mat<>& charget, double* corlocqt, double* epsilonsp){
     for(int i=1; i<=comdata.nx; ++i){
     for(int j=1; j<=comdata.ny; ++j){
     for(int k=1; k<=comdata.nz; ++k){

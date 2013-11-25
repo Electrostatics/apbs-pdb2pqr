@@ -66,7 +66,7 @@ int invery(double& y){ return int( (y - comdata.yleft)/comdata.deltay ) + 1; }
 int inverz(double& z){ return int( (z - comdata.zleft)/comdata.deltaz ) + 1; }
 
 void chargedist(double xyzr[MAXATOMS][XYZRWIDTH],
-double* chratm, size_t& natm, double* _charget, double* _corlocqt, int* _loc_qt, int& iatm){
+double* chratm, size_t& natm, Mat<>& charget, double* _corlocqt, int* _loc_qt, size_t iatm){
     double x_q = xyzr[iatm-1][0];
     double y_q = xyzr[iatm-1][1];
     double z_q = xyzr[iatm-1][2];
@@ -172,7 +172,8 @@ double* chratm, size_t& natm, double* _charget, double* _corlocqt, int* _loc_qt,
 
     charge=q_q*charge/charge.sum();
 
-    Mat<> charget(_charget, natm,8), corlocqt(_corlocqt, natm,8,3);
+//    Mat<> charget(_charget, natm,8);
+    Mat<> corlocqt(_corlocqt, natm,8,3);
     Mat<int> loc_qt(_loc_qt, natm,8,3);
     for(size_t j=1; j<=charget.ny(); ++j){
         charget(iatm,j) = charge[j-1];

@@ -94,13 +94,13 @@ double dot(double x, double y, double z);
 extern "C"{
 void domainini(double xyzr[MAXATOMS][XYZRWIDTH], const size_t natm, const double extvalue);
 
-void chargedist(double xyzr[MAXATOMS][XYZRWIDTH], double* chratm, size_t& natm, double* charget, double* corlocqt, int* loc_qt, int& iatm);
+void chargedist(double xyzr[MAXATOMS][XYZRWIDTH], double* chratm, size_t& natm, Mat<>& charget, double* corlocqt, int* loc_qt, size_t iatm);
 
 void yhsurface(double xyzr[MAXATOMS][XYZRWIDTH], double* ljepsilon, size_t natm, double tott,
     double deltat, Mat<>& phix, Mat<>& surfu, int i, double& area, double& vol, double& attint,
     double alpha, int iadi, int igfin);
 
-void seteqb(Mat<>& bg, double xyzr[MAXATOMS][XYZRWIDTH], double* pqr, size_t& natm, double* charget, double* corlocqt, double *epsilonsp);
+void seteqb(Mat<>& bg, double xyzr[MAXATOMS][XYZRWIDTH], double* pqr, size_t& natm, Mat<>& charget, double* corlocqt, double *epsilonsp);
 //  void writerms_gama( double* sumpot, double* expv, double* elec, size_t* natm, double* gama, int *ngiter, double *pres );
 
 void pbsolver( Mat<>& eps, Mat<>& phi, Mat<>& bg, double dcel,  double tol, int iter);
