@@ -179,19 +179,12 @@ numberOfLines(std::string fileName) {
 }
 
 void
-normalizeSurfuAndEps(double* _surfu, double* _eps, int nx, int ny, int nz, double epsilons, double epsilonp) {
-    Mat<> surfu(_surfu, nx,ny,nz),eps(_eps, nx,ny,nz);
-    for (int i = 0; i < nx; i++) {
-    for (int j = 0; j < ny; j++) {
-    for (int k = 0; k < nz; k++) {
-        if (surfu(i+1,j+1,k+1) > 1000.0) {
-            surfu(i+1,j+1,k+1) = 1000.0;
-        }
-        if (surfu(i+1,j+1,k+1) < 0.0) {
-            surfu(i+1,j+1,k+1) = 0.0;
-        }
-        eps(i+1,j+1,k+1) = epsilonp + (epsilons - epsilonp) * ( (1000.0 - surfu(i+1,j+1,k+1))/1000.0 );
-    }}}
+normalizeSurfuAndEps(Mat<>& surfu, Mat<>& eps, double epsilons, double epsilonp) {
+    for (int i = 0; i < surfu.size(); i++) {
+        if (surfu[i] > 1000.0) { surfu[i] = 1000.0; }
+        if (surfu[i] < 0.0) { surfu[i] = 0.0; }
+        eps[i] = epsilonp + (epsilons - epsilonp) * ( (1000.0 - surfu[i])/1000.0 );
+    }
 }
 
 /*
@@ -322,7 +315,7 @@ GeoflowOutput geoflowSolvation(double xyzr[MAXATOMS][XYZRWIDTH], size_t natm, do
     lj.density = density;
     lj.epsilonw = epsilonw;
     lj.roro = density / gama;
-    double potcoe = 1 / gama;
+    double potcoe = 1.0 / gama;
     lj.conms = pres / gama;
 
     domainini(xyzr, natm, extvalue);
@@ -336,7 +329,7 @@ GeoflowOutput geoflowSolvation(double xyzr[MAXATOMS][XYZRWIDTH], size_t natm, do
     initValues((double*) corlocqt, width, 0.0);
     initValues((double*) charget, width, 0.0);
     for (int iatm = 1; iatm <= nchr; iatm++) {
-        chargedist((double*) xyzr, pqr, nchr, (double*) charget, (double*) corlocqt, (int*) loc_qt, iatm);
+        chargedist(xyzr, pqr, nchr, (double*) charget, (double*) corlocqt, (int*) loc_qt, iatm);
     }
 
     comdata.xc.resize(comdata.nx);
@@ -393,7 +386,7 @@ GeoflowOutput geoflowSolvation(double xyzr[MAXATOMS][XYZRWIDTH], size_t natm, do
         }
         area = volume = attint = 0.0;
         yhsurface(xyzr, ljepsilon, natm, tott, deltat, phix, surfu, iloop, area, volume, attint, alpha, iadi, igfin);
-        normalizeSurfuAndEps(surfu.data(), eps.data(), comdata.nz, comdata.ny, comdata.nx, epsilons, epsilonp);
+        normalizeSurfuAndEps(surfu, eps, epsilons, epsilonp);
         if (iloop == 1) {
             seteqb(bg, xyzr, (double*) pqr, natm, (double*) charget, (double*) corlocqt, &epsilons);
         }
@@ -427,12 +420,12 @@ GeoflowOutput geoflowSolvation(double xyzr[MAXATOMS][XYZRWIDTH], size_t natm, do
         soleng1 = soleng2 = 0.0;
         computeSoleng(soleng1, phi, dims, (double*) charget, nchr, (int*) loc_qt);
         computeSoleng(soleng2, phivoc, dims, (double*) charget, nchr, (int*) loc_qt);
-        solv[iloop - 1] = (soleng1 - soleng2) * 332.0716;
-        elec = solv[iloop - 1];
+        elec = (soleng1 - soleng2) * 332.0716;
         solv[iloop - 1] = elec + gama * (area + volume * lj.conms + attint * lj.roro);
         if (iloop > 1) {
             diffEnergy = abs((solv[iloop - 1] - solv[iloop - 2]));
         }
+        std::cout << solv[iloop-1] << std::endl;
     }
 
 

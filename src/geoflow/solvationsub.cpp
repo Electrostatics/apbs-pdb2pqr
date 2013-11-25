@@ -65,11 +65,11 @@ int inverx(double& x){ return int( (x - comdata.xleft)/comdata.deltax ) + 1; }
 int invery(double& y){ return int( (y - comdata.yleft)/comdata.deltay ) + 1; }
 int inverz(double& z){ return int( (z - comdata.zleft)/comdata.deltaz ) + 1; }
 
-void chargedist(double* _atmpos, double* chratm, size_t& natm, double* _charget, double* _corlocqt, int* _loc_qt, int& iatm){
-    Mat<> atmpos(_atmpos, 4,natm);
-    double x_q = atmpos(1, iatm);
-    double y_q = atmpos(2, iatm);
-    double z_q = atmpos(3, iatm);
+void chargedist(double xyzr[MAXATOMS][XYZRWIDTH],
+double* chratm, size_t& natm, double* _charget, double* _corlocqt, int* _loc_qt, int& iatm){
+    double x_q = xyzr[iatm-1][0];
+    double y_q = xyzr[iatm-1][1];
+    double z_q = xyzr[iatm-1][2];
     double q_q = chratm[iatm-1];
 
     int i_q = inverx(x_q);
@@ -174,9 +174,9 @@ void chargedist(double* _atmpos, double* chratm, size_t& natm, double* _charget,
 
     Mat<> charget(_charget, natm,8), corlocqt(_corlocqt, natm,8,3);
     Mat<int> loc_qt(_loc_qt, natm,8,3);
-    for(int j=1; j<=charget._ny; ++j){
+    for(size_t j=1; j<=charget.ny(); ++j){
         charget(iatm,j) = charge[j-1];
-        for (int k=1; k<=corlocqt._nz; ++k){
+        for (size_t k=1; k<=corlocqt.nz(); ++k){
             corlocqt(iatm,j,k) = corlocq(j,k);
             loc_qt(iatm,j,k) = loc_q(j,k);
 

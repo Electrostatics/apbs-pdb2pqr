@@ -3,7 +3,7 @@ CFLAGS=-W -Wall -Wextra -I ../../../include/
 ifdef DEBUG
 	CFLAGS+=-ggdb3 -O0
 else PROFILE
-	CFLAGS+=-O1 -g -pg
+	CFLAGS+=-O3 -g -pg  -march=core2 -fstrict-aliasing
 else
 	CFLAGS+=-O3
 endif

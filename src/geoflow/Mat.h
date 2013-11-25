@@ -59,13 +59,25 @@
 #include <vector>
 #include <cmath>
 
+template<typename T> class Stencil;
 
 template<typename T=double> struct Mat;
 template<typename T> struct Mat{
+    friend class Stencil<T>;
+
     size_t _nx,_ny,_nz;
+    size_t nx()const{return _nx;}
+    size_t ny()const{return _ny;}
+    size_t nz()const{return _nz;}
+
     T* _data;
-    Mat(T* data, size_t nx, size_t ny, size_t nz=1):  _nx(nx), _ny(ny), _nz(nz), _data(data) {}
-    Mat(std::vector<T>& val, size_t nx, size_t ny, size_t nz=0): _nx(nx), _ny(ny), _nz(nz), _data(val.data()) {}
+    std::vector<T>* vec;
+    Mat(T* data, size_t nx, size_t ny, size_t nz=1):  _nx(nx), _ny(ny), _nz(nz), _data(data), vec(0) {} //this needs to die
+    Mat(std::vector<T>& val, size_t nx, size_t ny, size_t nz=1): _nx(nx), _ny(ny), _nz(nz), _data(val.data()), vec(&val) {}
+
+    ~Mat(){};
+
+    bool operator==(const Mat<T>& rhs) const { return (this->_data == rhs._data) && (this->_nx == rhs._nx) && (this->_ny == rhs._ny) && (this->_nz == rhs._nz); }
 
     size_t index(size_t x, size_t y, size_t z) const { return x-1 + _nx*((y-1) + _ny*(z-1)); }
     T& operator()(size_t x, size_t y, size_t z=1){ return _data[index(x,y,z)]; }
@@ -78,79 +90,124 @@ template<typename T> struct Mat{
     size_t size(){return _nx*_ny*_nz;}
     T* end(){return _data + size();}
 
-    void operator=(T a){ std::fill(data(), end(), a); }
-    void operator=(Mat& a){ std::copy(a.data(), a.end(), data()); }
+    Mat<T>& operator=(T a){ std::fill(data(), end(), a); return *this; }
+    Mat<T>& operator=(Mat a){
+//        if(vec==0){
+            std::copy(a.data(), a.end(), data()); return *this;
+//        }else{
+//            vec->swap(*(a.vec)); _data = vec->data(); return *this;
+//        }
+
+    }
+
+    Stencil<T> stencilBegin(T h) { return Stencil<T>(*this, h, 2,2,2); }
+    Stencil<T> stencilEnd(T h) { return Stencil<T>(*this, h, _nx-1,_ny-1,_nz-1); }
 };
 
-template<typename T> struct StencilBase{
-    T *c, *xm,*ym,*zm, *xp,*yp,*zp,
-      *xym,*xzm,*yzm, *xyp,*xzp,*yzp,
-      *xm_yp,*xm_zp,*ym_zp, *xp_ym,*xp_zm,*yp_zm;
-    
-}
-
-template<typename T> struct Stencil:  public std::iterator<std::forward_iterator_tag, Mat<T>>
-{
+template<typename T> struct Stencil: public std::iterator<std::forward_iterator_tag, T>
+{//this should be a const iterator :)
     Mat<T>& _mat;
-    T h,halfh,h2,qrth2;
+    const T h,halfh,h2,qrth2;
     size_t i;
+    const  size_t yStep, zStep;
+ 
+    T *c;// *xm,*ym,*zm, *xp,*yp,*zp,
+    //  *xym,*xzm,*yzm, *xyp,*xzp,*yzp,
+    //  *xm_yp,*xm_zp,*ym_zp, *xp_ym,*xp_zm,*yp_zm;
 
-    T *c, *xm,*ym,*zm, *xp,*yp,*zp,
-      *xym,*xzm,*yzm, *xyp,*xzp,*yzp,
-      *xm_yp,*xm_zp,*ym_zp, *xp_ym,*xp_zm,*yp_zm;
+    //Stencil(Stencil<T>&) default
+    //Stencil() default
+    //Stencil& operator=() default
 
-    Stencil(Mat<T>& mat, T _h): _mat(mat), h(1.0/_h), halfh(1.0/(2*_h)), h2(1./(_h*_h)),
-        qrth2(1.0/(4*_h*_h)), i(_mat.index(2,2,2)),
-        c(_mat.data() + _mat.index(2,2,2)),
-        xm(_mat.data() + _mat.index(1,2,2)), ym(_mat.data() + _mat.index(2,1,2)), zm(_mat.data() + _mat.index(2,2,1)),
-        xp(_mat.data() + _mat.index(3,2,2)), yp(_mat.data() + _mat.index(2,3,2)), zp(_mat.data() + _mat.index(2,2,3)),
-        xym(_mat.data() + _mat.index(1,1,2)), xzm(_mat.data() + _mat.index(1,2,1)), yzm(_mat.data() + _mat.index(2,1,1)),
-        xyp(_mat.data() + _mat.index(3,3,2)), xzp(_mat.data() + _mat.index(3,2,3)), yzp(_mat.data() + _mat.index(2,3,3)),
-        xm_yp(_mat.data() + _mat.index(1,3,2)), xm_zp(_mat.data() + _mat.index(1,2,3)), ym_zp(_mat.data() + _mat.index(2,1,3)),
-        xp_ym(_mat.data() + _mat.index(3,1,2)), xp_zm(_mat.data() + _mat.index(3,2,1)), yp_zm(_mat.data() + _mat.index(2,3,1))
+    Stencil(Mat<T>& mat, T _h, size_t x,size_t y,size_t z): _mat(mat), h(1.0/_h), halfh(1.0/(2*_h)), h2(1./(_h*_h)),
+        qrth2(1.0/(4*_h*_h)), i(_mat.index(x,y,z)), yStep(_mat.nx()), zStep(_mat.nx()*_mat.ny()),
+        c(_mat.data() + i)
+    //    xm(_mat.data() + _mat.index(x-1,y,z)), ym(_mat.data() + _mat.index(x,y-1,z)), zm(_mat.data() + _mat.index(x,y,z-1)),
+    //    xp(_mat.data() + _mat.index(x+1,y,z)), yp(_mat.data() + _mat.index(x,y+1,z)), zp(_mat.data() + _mat.index(x,y,z+1)),
+    //    xym(_mat.data() + _mat.index(x-1,y-1,z)), xzm(_mat.data() + _mat.index(x-1,y,z-1)), yzm(_mat.data() + _mat.index(x,y-1,z-1)),
+    //    xyp(_mat.data() + _mat.index(x+1,y+1,z)), xzp(_mat.data() + _mat.index(x+1,y,z+1)), yzp(_mat.data() + _mat.index(x,y+1,z+1)),
+    //    xm_yp(_mat.data() + _mat.index(x-1,y+1,z)), xm_zp(_mat.data() + _mat.index(x-1,y,z+1)), ym_zp(_mat.data() + _mat.index(x,y-1,z+1)),
+    //    xp_ym(_mat.data() + _mat.index(x+1,y-1,z)), xp_zm(_mat.data() + _mat.index(x+1,y,z-1)), yp_zm(_mat.data() + _mat.index(x,y+1,z-1))
     {}
+
+    bool operator==(const Stencil<T>& rhs) const { return (this->_mat == rhs._mat) && (this->c == rhs.c); }
+    bool operator!=(const Stencil<T>& rhs) const { return !(*this == rhs); }
+
+    T& operator*() { return *c; }
+    const T* operator->() { return c; } //???
+    Stencil& operator++() { next(); return *this; }
+    Stencil operator++ ( int ){
+          Stencil<T> clone( *this );
+          operator++();
+          return clone;
+    }
 
     void next(){
         ptrStep(1);
-        if((i+1)%_mat._nx == 0){
-            if( (i+1+_mat._nx)%(_mat._nx*_mat._ny) == 0 ){
-                ptrStep(_mat._nx + 2);
+        if((i+1) % yStep == 0){
+            if( (i+1+yStep) % (zStep) == 0 ){
+                ptrStep(yStep + 2);
             }else{
                 ptrStep(2);
             }
         }
-        
-//         c = _mat(x,y,z),
-//         xm = _mat(x-1,y,z); ym = _mat(x,y-1,z); zm = _mat(x,y,z-1);
-//         xp = _mat(x+1,y,z); yp = _mat(x,y+1,z); zp = _mat(x,y,z+1);
-//         xym = _mat(x-1,y-1,z); xzm = _mat(x-1,y,z-1); yzm = _mat(x,y-1,z-1);
-//         xyp = _mat(x+1,y+1,z); xzp = _mat(x+1,y,z+1); yzp = _mat(x,y+1,z+1);
-//         xm_yp = _mat(x-1,y+1,z); xm_zp = _mat(x-1,y,z+1); ym_zp = _mat(x,y-1,z+1);
-//         xp_ym = _mat(x+1,y-1,z); xp_zm = _mat(x+1,y,z-1); yp_zm = _mat(x,y+1,z-1);
     }
 
     void ptrStep(size_t numSteps){
         i += numSteps;
         c += numSteps;
-        xm += numSteps; ym += numSteps; zm += numSteps;
-        xp += numSteps; yp += numSteps; zp += numSteps;
-        xym += numSteps; xzm += numSteps; yzm += numSteps;
-        xyp += numSteps; xzp += numSteps; yzp += numSteps;
-        xm_yp += numSteps; xm_zp += numSteps; ym_zp += numSteps;
-        xp_ym += numSteps; xp_zm += numSteps; yp_zm += numSteps;
+  //      xm += numSteps; ym += numSteps; zm += numSteps;
+  //      xp += numSteps; yp += numSteps; zp += numSteps;
+  //      xym += numSteps; xzm += numSteps; yzm += numSteps;
+  //      xyp += numSteps; xzp += numSteps; yzp += numSteps;
+  //      xm_yp += numSteps; xm_zp += numSteps; ym_zp += numSteps;
+  //      xp_ym += numSteps; xp_zm += numSteps; yp_zm += numSteps;
     }
 
-    T dx() { return halfh*(*xp - *xm); }
-    T dy() { return halfh*(*yp - *ym); }
-    T dz() { return halfh*(*zp - *zm); }
+    const T* xm() const { return c-1; } 
+    const T* xp() const { return c+1; } 
+    const T* ym() const { return c-yStep; } 
+    const T* yp() const { return c+yStep; } 
+    const T* zm() const { return c-zStep; } 
+    const T* zp() const { return c+zStep; } 
 
-    T dxx() { return h2*(*xp - 2.0*(*c) + *xm); }
-    T dyy() { return h2*(*yp - 2.0*(*c) + *ym); }
-    T dzz() { return h2*(*zp - 2.0*(*c) + *zm); }
+    const T* xym() const { return xm() - yStep; } 
+    const T* xyp() const { return xp() + yStep; } 
+    const T* xzm() const { return xm() - zStep; } 
+    const T* xzp() const { return xp() + zStep; } 
+    const T* yzm() const { return zm() - yStep; } 
+    const T* yzp() const { return zp() + yStep; } 
 
-    T dxy() { return qrth2*(*xyp + *xym - *xm_yp - *xp_ym); }
-    T dxz() { return qrth2*(*xzp + *xzm - *xm_zp - *xp_zm); }
-    T dyz() { return qrth2*(*yzp + *yzm - *ym_zp - *yp_zm); }
+    const T* xm_yp() const { return xm() + yStep; } 
+    const T* xp_ym() const { return xp() - yStep; } 
+    const T* xm_zp() const { return xm() + zStep; } 
+    const T* xp_zm() const { return xp() - zStep; } 
+    const T* ym_zp() const { return zp() - yStep; } 
+    const T* yp_zm() const { return zm() + yStep; } 
+
+    T dx() const { return halfh*(*xp() - *xm()); }
+    T dy() const { return halfh*(*yp() - *ym()); }
+    T dz() const { return halfh*(*zp() - *zm()); }
+
+    T dxx() const { return h2*(*xp() - 2.0*(*c) + *xm()); }
+    T dyy() const { return h2*(*yp() - 2.0*(*c) + *ym()); }
+    T dzz() const { return h2*(*zp() - 2.0*(*c) + *zm()); }
+
+    T dxy() const { return qrth2*(*xyp() + *xym() - *xm_yp() - *xp_ym()); }
+    T dxz() const { return qrth2*(*xzp() + *xzm() - *xm_zp() - *xp_zm()); }
+    T dyz() const { return qrth2*(*yzp() + *yzm() - *ym_zp() - *yp_zm()); }
+
+    T deriv(T tx) const {
+        const double dphi =
+            (1.0 + dx()*dx() + dy()*dy())*dzz()
+          + (1.0 + dx()*dx() + dz()*dz())*dyy()
+          + (1.0 + dy()*dy() + dz()*dz())*dxx()
+          - 2.0*( dx()*dy()*dxy() + dx()*dz()*dxz() + dy()*dz()*dyz() );
+
+        const double gram = 1.0 + dx()*dx() + dy()*dy() + dz()*dz();
+        
+        return dphi/gram + sqrt(gram)*tx;//(x,y,z);
+    }
 
 };
 

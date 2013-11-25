@@ -122,23 +122,23 @@ double volumeIntegration(Mat<> f, double dcel){
 
 void upwinding(int nx, int ny, int nz, double dx, double dt, int nt, Mat<>& g, Mat<>& surfu, Mat<>& phitotx){
     vector<double> surfnewi(surfu.data(), surfu.end()); //hide me in ctor
-    Mat<> surfnew(surfnewi.data(), nx,ny,nz);
+    Mat<> surfnew(surfnewi, nx,ny,nz);
     for(int t=0; t<nt; ++t){ 
-        Stencil<double> phi(surfu, dx);
-        for(size_t i = phi.i; i < g.size() - nx*ny; ++i){ 
+        for(Stencil<double> phi = surfu.stencilBegin(dx);
+          phi != surfu.stencilEnd(dx);
+          ++phi
+        ) {
             if(g[phi.i] > 2e-2){
-                double dphi =  (1.0 + phi.dx()*phi.dx() + phi.dy()*phi.dy())*phi.dzz()
-                             + (1.0 + phi.dx()*phi.dx() + phi.dz()*phi.dz())*phi.dyy()
-                             + (1.0 + phi.dy()*phi.dy() + phi.dz()*phi.dz())*phi.dxx();
+//                double dphi =  (1.0 + phi.dx()*phi.dx() + phi.dy()*phi.dy())*phi.dzz()
+//                             + (1.0 + phi.dx()*phi.dx() + phi.dz()*phi.dz())*phi.dyy()
+//                             + (1.0 + phi.dy()*phi.dy() + phi.dz()*phi.dz())*phi.dxx();
+//                
+//                dphi -= 2*( phi.dx()*phi.dy()*phi.dxy() + phi.dx()*phi.dz()*phi.dxz() + phi.dy()*phi.dz()*phi.dyz() );            
+//                double gram = 1.0 + phi.dx()*phi.dx() + phi.dy()*phi.dy() + phi.dz()*phi.dz();
+//                dphi = dphi/gram + sqrt(gram)*phitotx[phi.i];//(x,y,z);
                 
-                dphi -= 2*( phi.dx()*phi.dy()*phi.dxy() + phi.dx()*phi.dz()*phi.dxz() + phi.dy()*phi.dz()*phi.dyz() );            
-                double gram = 1.0 + phi.dx()*phi.dx() + phi.dy()*phi.dy() + phi.dz()*phi.dz();
-                dphi = dphi/gram + sqrt(gram)*phitotx[phi.i];//(x,y,z);
-                
-                //surfnew(x,y,z) = min(1000.0, max(0.0, surfu(x,y,z) + dt*dphi));
-                surfnew[phi.i] = min(1000.0, max(0.0, *(phi.c) + dt*dphi));
+               surfnew[phi.i] = min(1000.0, max(0.0, *(phi.c) + dt*phi.deriv(phitotx[phi.i])));
             }
-            phi.next();
         }
         
         surfu = surfnew;
