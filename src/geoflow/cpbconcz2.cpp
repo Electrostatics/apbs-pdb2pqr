@@ -194,20 +194,20 @@ normalizeSurfuAndEps(Mat<>& surfu, Mat<>& eps, double epsilons, double epsilonp)
  *             soleng2, the phiarray should be phivoc. 
  *     phi:        Either phi or phivoc array, depending on which soleng variable we are computing
  *     phiDims:    Vector holding the dimensions of the phi array
- *     nchr:        The number of atoms
- *     loc_qt:        The loc_qt array.  This is a [3][8][nchr] int array, but must be passed as a pointer,
- *             since nchr is a variable.
- *    charget:    charget array.  This is an [8][nchr] int array.
+ *     natm:        The number of atoms
+ *     loc_qt:        The loc_qt array.  This is a [3][8][natm] int array, but must be passed as a pointer,
+ *             since natm is a variable.
+ *    charget:    charget array.  This is an [8][natm] int array.
  */
 void
-computeSoleng(double& soleng, Mat<>& phi, std::vector<int> phiDims, Mat<>& charget, int nchr, int *loc_qt) {
-    int locqtDims[] = {3, 8, nchr};
+computeSoleng(double& soleng, Mat<>& phi, std::vector<int> phiDims, Mat<>& charget, int natm, int *loc_qt) {
+    int locqtDims[] = {3, 8, natm};
     std::vector<int> locqtDimv = arrayToVector(locqtDims, 3);
-    int chargetDims[] = {8, nchr};
+    int chargetDims[] = {8, natm};
     std::vector<int> chargetDimv = arrayToVector(chargetDims, 2);
     soleng = 0.0;
 
-    for (int iind = 0; iind < nchr; iind++) {
+    for (int iind = 0; iind < natm; iind++) {
         for (int jind = 0; jind < 8; jind++) {
             int idx[] = {0, jind, iind};
             std::vector<int> idxv = arrayToVector(idx, 3);
@@ -313,17 +313,14 @@ GeoflowOutput geoflowSolvation(double xyzr[MAXATOMS][XYZRWIDTH], size_t natm, do
 
     domainini(xyzr, natm, extvalue);
 
-    size_t nchr = natm;
-    size_t width = 3 * 8 * nchr;
-    vector<double> _charget(8 * nchr); Mat<> charget(_charget, nchr, 8);
-    double corlocqt[width];//TODO make these Mat objects
+    size_t width = 3 * 8 * natm;
+    vector<double> _charget(8 * natm); Mat<> charget(_charget, natm, 8);
+    vector<double> _corlocqt(3*8 * natm); Mat<> corlocqt(_corlocqt, natm, 8, 3);
             
     int loc_qt[width];
     initValues((int*) loc_qt, width, 0);
-    initValues((double*) corlocqt, width, 0.0);
-//    initValues((double*) charget, width, 0.0);
-    for (size_t iatm = 1; iatm <= nchr; iatm++) {
-        chargedist(xyzr, pqr, nchr, charget, (double*) corlocqt, (int*) loc_qt, iatm);
+    for (size_t iatm = 1; iatm <= natm; iatm++) {
+        chargedist(xyzr, pqr, charget, corlocqt, (int*) loc_qt, iatm);
     }
 
     int nx = comdata.nx, ny = comdata.ny, nz = comdata.nz;
@@ -340,7 +337,6 @@ GeoflowOutput geoflowSolvation(double xyzr[MAXATOMS][XYZRWIDTH], size_t natm, do
     int aDim[] = {nz,ny,nx};
     std::vector<int> dims(aDim, aDim + sizeof (aDim) / sizeof (int));
 
-//is this needed????
     int solvWidth = maxstep + 1;
     double solv[solvWidth];
     initValues((double*) solv, solvWidth, 0.0);
@@ -376,7 +372,7 @@ GeoflowOutput geoflowSolvation(double xyzr[MAXATOMS][XYZRWIDTH], size_t natm, do
         yhsurface(xyzr, ljepsilon, natm, tott, deltat, phix, surfu, iloop, area, volume, attint, alpha, iadi, igfin);
         normalizeSurfuAndEps(surfu, eps, epsilons, epsilonp);
         if (iloop == 1) {
-            seteqb(bg, xyzr, (double*) pqr, natm, charget, (double*) corlocqt, &epsilons);
+            seteqb(bg, xyzr, pqr, charget, corlocqt, &epsilons);
         }
 
         int iter = 1000;
@@ -406,8 +402,8 @@ GeoflowOutput geoflowSolvation(double xyzr[MAXATOMS][XYZRWIDTH], size_t natm, do
         // solvation
         double soleng1, soleng2;
         soleng1 = soleng2 = 0.0;
-        computeSoleng(soleng1, phi, dims, charget, nchr, (int*) loc_qt);
-        computeSoleng(soleng2, phivoc, dims, charget, nchr, (int*) loc_qt);
+        computeSoleng(soleng1, phi, dims, charget, natm, (int*) loc_qt);
+        computeSoleng(soleng2, phivoc, dims, charget, natm, (int*) loc_qt);
         elec = (soleng1 - soleng2) * 332.0716;
         solv[iloop - 1] = elec + gama * (area + volume * lj.conms + attint * lj.roro);
         if (iloop > 1) {
