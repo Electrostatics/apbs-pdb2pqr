@@ -514,7 +514,7 @@ pbconcz2(
         double tpb = 0.0;
         int iterf = 0, itert = 0;
 
-        processAtomsFile("17set.txt", ffmodel, radexp, extvalue, maxstep, crevalue, iadi, tottf, alpha, igfin, epsilons, epsilonp, idacsl, tol, tpb, iterf, itert, pres, gama, dcel, tauval, prob, vdwdispersion, sigmas, density, epsilonw);
+        processAtomsFile("molecules.txt", ffmodel, radexp, extvalue, maxstep, crevalue, iadi, tottf, alpha, igfin, epsilons, epsilonp, idacsl, tol, tpb, iterf, itert, pres, gama, dcel, tauval, prob, vdwdispersion, sigmas, density, epsilonw);
     }
 }
 
