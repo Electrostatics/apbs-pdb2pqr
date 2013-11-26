@@ -77,10 +77,8 @@ double* chratm, Mat<>& charget, Mat<>& corlocqt, Mat<int>& loc_qt, size_t iatm){
     int k_q = inverz(z_q);
 
 
-    vector<int> _loc_q(8*3);
-    Mat<int> loc_q(_loc_q, 8,3);
-    vector<double> _corlocq(8*3);
-    Mat<> corlocq(_corlocq, 8,3);
+    Mat<int> loc_q(8,3);
+    Mat<> corlocq(8,3);
     for(int i=0; i<=1; ++i){
     for(int j=0; j<=1; ++j){
     for(int k=0; k<=1; ++k){

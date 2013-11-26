@@ -120,30 +120,18 @@ double volumeIntegration(Mat<> f, double dcel){
     return ff.sum();
 }
 
-void upwinding(int nx, int ny, int nz, double dx, double dt, int nt, Mat<>& g, Mat<>& surfu, Mat<>& phitotx){
-    vector<double> surfnewi(surfu.data(), surfu.end()); //hide me in ctor
-    Mat<> surfnew(surfnewi, nx,ny,nz);
+void upwinding(double dx, double dt, int nt, Mat<>& g, Mat<>& surfu, Mat<>& phitotx){
+    Mat<> surfnew(surfu);
     for(int t=0; t<nt; ++t){ 
-        for(Stencil<double> phi = surfu.stencilBegin(dx);
-          phi != surfu.stencilEnd(dx);
-          ++phi
-        ) {
+        for(Stencil<double> phi = surfu.stencilBegin(dx); phi != surfu.stencilEnd(dx); ++phi){
             if(g[phi.i] > 2e-2){
-//                double dphi =  (1.0 + phi.dx()*phi.dx() + phi.dy()*phi.dy())*phi.dzz()
-//                             + (1.0 + phi.dx()*phi.dx() + phi.dz()*phi.dz())*phi.dyy()
-//                             + (1.0 + phi.dy()*phi.dy() + phi.dz()*phi.dz())*phi.dxx();
-//                
-//                dphi -= 2*( phi.dx()*phi.dy()*phi.dxy() + phi.dx()*phi.dz()*phi.dxz() + phi.dy()*phi.dz()*phi.dyz() );            
-//                double gram = 1.0 + phi.dx()*phi.dx() + phi.dy()*phi.dy() + phi.dz()*phi.dz();
-//                dphi = dphi/gram + sqrt(gram)*phitotx[phi.i];//(x,y,z);
-                
-               surfnew[phi.i] = min(1000.0, max(0.0, *(phi.c) + dt*phi.deriv(phitotx[phi.i])));
+                surfnew[phi.i] = min(1000.0, max(0.0,
+                  *(phi.c) + dt*phi.deriv(phitotx[phi.i])
+                ));
             }
         }
-        
         surfu = surfnew;
     }
-
 }
 
 void initial(double xl, double yl, double zl, double dx, int n_atom, const valarray<double>& atom_x, const valarray<double>& atom_y, const valarray<double>& atom_z, const valarray<double>& atom_r, Mat<>& g, Mat<>& phi){
@@ -227,10 +215,7 @@ void yhsurface(double xyzr[MAXATOMS][XYZRWIDTH], double* ljepsilon, size_t natm,
         atom_r[i] = xyzr[i][3];
     }
 
-    vector<double> _su(nx*ny*nz);
-    Mat<> su(_su, nx,ny,nz);
-    vector<double> _g(nx*ny*nz);
-    Mat<> g(_g, nx,ny,nz);
+    Mat<> su(nx,ny,nz), g(nx,ny,nz);
 
     initial(xl,yl,zl, ddx, natm, atom_x,atom_y,atom_z,atom_r, g, su);
     if(iloop > 1 && igfin == 1){ su = surfu; }
@@ -267,8 +252,7 @@ void yhsurface(double xyzr[MAXATOMS][XYZRWIDTH], double* ljepsilon, size_t natm,
         }
     }
 
-    vector<double> _potr(nx*ny*nz), _pota(nx*ny*nz);
-    Mat<> potr(_potr, nx,ny,nz), pota(_pota, nx,ny,nz);
+    Mat<> potr(nx,ny,nz), pota(nx,ny,nz);
     potr=0.0, pota=0.0;
     potIntegral(rcfactor, ddx, natm, atom_x, atom_y, atom_z, seta12, seta6, epsilon, sigma, g, potr, pota);
 
@@ -281,7 +265,7 @@ void yhsurface(double xyzr[MAXATOMS][XYZRWIDTH], double* ljepsilon, size_t natm,
     if(iadi==0 || iloop>1){
         int nt = ceil(tott/dt);
         dt = ddx*ddx/4.5;
-        upwinding(nx,ny,nz, ddx,dt, nt, g,su,phitotx);
+        upwinding(ddx,dt, nt, g,su,phitotx);
     }else{
         cerr << "ADI not implemented..." << endl;
         exit(1);
@@ -301,8 +285,7 @@ void yhsurface(double xyzr[MAXATOMS][XYZRWIDTH], double* ljepsilon, size_t natm,
 
     volume = volumeIntegration(su, ddx);
 
-    vector<double> _fintegr(nx*ny*nz);
-    Mat<> fintegr(_fintegr, nx,ny,nz);
+    Mat<> fintegr(nx,ny,nz);
     double weight = pow(2.0*ddx, -1.0);
     for(int x=2; x<nx; ++x){
     for(int y=2; y<ny; ++y){

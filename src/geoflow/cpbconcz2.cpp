@@ -297,9 +297,9 @@ GeoflowOutput geoflowSolvation(double xyzr[MAXATOMS][XYZRWIDTH], size_t natm, do
 
     domainini(xyzr, natm, extvalue);
 
-    vector<double> _charget(8 * natm); Mat<> charget(_charget, natm, 8);
-    vector<double> _corlocqt(3*8 * natm); Mat<> corlocqt(_corlocqt, natm, 8, 3);
-    vector<int> _loc_qt(3*8*natm); Mat<int> loc_qt(_loc_qt, natm,8,3); 
+    Mat<> charget(natm, 8);
+    Mat<> corlocqt(natm, 8, 3);
+    Mat<int> loc_qt(natm,8,3); 
 
     for (size_t iatm = 1; iatm <= natm; iatm++) {
         chargedist(xyzr, pqr, charget, corlocqt, loc_qt, iatm);
@@ -326,12 +326,7 @@ GeoflowOutput geoflowSolvation(double xyzr[MAXATOMS][XYZRWIDTH], size_t natm, do
 
     int iloop = 0, ipath = 0;
     double tott = 0.0;
-    vector<double> _phi(arrayLengths); Mat<> phi(_phi, nx,ny,nz); 
-    vector<double> _phix(arrayLengths); Mat<> phix(_phix, nx,ny,nz);
-    vector<double> _phivoc(arrayLengths); Mat<> phivoc(_phivoc, nx,ny,nz);
-    vector<double> ___surfu(arrayLengths); Mat<> surfu(___surfu, nx,ny,nz);
-    vector<double> _eps(arrayLengths); Mat<> eps(_eps, nx,ny,nz);
-    vector<double> _bg(arrayLengths); Mat<> bg(_bg, nx,ny,nz);
+    Mat<> phi(nx,ny,nz), phix(nx,ny,nz), phivoc(nx,ny,nz), surfu(nx,ny,nz), eps(nx,ny,nz), bg(nx,ny,nz);
     while ((iloop < maxstep) && (diffEnergy > crevalue)) {
         iloop++;
 
