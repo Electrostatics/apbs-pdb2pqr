@@ -171,32 +171,34 @@ void initial(double xl, double yl, double zl, double dx, int n_atom, const valar
 }
 
 void potIntegral(double rcfactor, double ddx, size_t natm, valarray<double>& atom_x,valarray<double>& atom_y,valarray<double>& atom_z,valarray<double>& seta12, valarray<double>& seta6, valarray<double>& epsilon, valarray<double>& sigma, Mat<>& g, Mat<>& potr, Mat<>& pota){
-    for(size_t x=2; x<potr._nx; ++x){ 
-    for(size_t y=2; y<potr._ny; ++y){ 
-    for(size_t z=2; z<potr._nz; ++z){
+    for(size_t x=2; x<potr.nx(); ++x){ 
+    for(size_t y=2; y<potr.ny(); ++y){ 
+    for(size_t z=2; z<potr.nz(); ++z){
         if(g(x,y,z) == 0){ continue; }
         double pr=0, pa=0;
         for(size_t a=0; a<natm; ++a){
-            double xi = comdata.xleft + (x-1)*ddx;
-            double yi = comdata.yleft + (y-1)*ddx;
-            double zi = comdata.zleft + (z-1)*ddx;
-            double dist = sqrt( dot(xi-atom_x[a], yi-atom_y[a], zi-atom_z[a]) ) + lj.prob;
-            double ratio = (dist==0.0) ? 1.0 : sigma[a]/dist;
-    
+            const double xi = comdata.xleft + (x-1)*ddx;
+            const double yi = comdata.yleft + (y-1)*ddx;
+            const double zi = comdata.zleft + (z-1)*ddx;
+            const double dist = sqrt( dot(xi-atom_x[a], yi-atom_y[a], zi-atom_z[a]) ) + lj.prob;
+            const double ratio = (dist==0.0) ? 1.0 : sigma[a]/dist;
+            const double ratio6 = ratio*ratio*ratio*ratio*ratio*ratio;
+            const double ratio12 = ratio6*ratio6;
+            
             if(lj.iwca == 1){
                 if(ratio*rcfactor > 1){
-                    pr += seta12[a]*pow(ratio,12.0) - seta6[a]*pow(ratio,6.0) + epsilon[a];
+                    pr += seta12[a]*ratio12 - seta6[a]*ratio6 + epsilon[a];
                     pa -= epsilon[a];
                 }else{
-                    pa = pa - seta6[a]*pow(ratio,6.0) + seta12[a]*pow(ratio,12.0);
+                    pa = pa - seta6[a]*ratio6 + seta12[a]*ratio12;
                 }
             }else{
-                pr += pow(ratio,12.0)*seta12[a];
-                pa -= pow(ratio, 6.0)*seta6[a];
+                pr += ratio12*seta12[a];
+                pa -= ratio6*seta6[a];
             }
-            potr(x,y,z) = pr; 
-            pota(x,y,z) = pa;
         }
+        potr(x,y,z) = pr; 
+        pota(x,y,z) = pa;
     }}}
 }
 
@@ -220,31 +222,24 @@ void yhsurface(double xyzr[MAXATOMS][XYZRWIDTH], double* ljepsilon, size_t natm,
     initial(xl,yl,zl, ddx, natm, atom_x,atom_y,atom_z,atom_r, g, su);
     if(iloop > 1 && igfin == 1){ su = surfu; }
 
-    valarray<double> sigma(natm), seta12(natm), seta6(natm), expan(natm), epsilon(natm);
     double rcfactor = (lj.ffmodel == 1) ? 1.0 : pow(2.0, 1.0/6.0);
+    valarray<double> sigma(atom_r);
+    valarray<double> seta12(natm), seta6(natm), epsilon(natm);
+    
     if(lj.ffmodel == 1){
         for(size_t i=0; i<natm; ++i){
             sigma[i] = atom_r[i] + lj.sigmas;
-            expan[i] = atom_r[i] + lj.prob; //doesnt need to be a vector
-            if(lj.vdwdispersion == 0){
-                epsilon[i] = 0;
-                seta12[i] = 0;
-                seta6[i] = 0;
-            }else{
-                double se = sigma[i]/expan[i];
+            if(lj.vdwdispersion != 0){
+                double se = sigma[i]/(atom_r[i] + lj.prob);
                 epsilon[i] = pow( pow(se, 12.0) - 2.0*pow(se, 6.0) , -1.0);
-                seta12[i] = lj.iosetar*lj.vdwdispersion*epsilon[i];
-                seta6[i] = 2.0*lj.iosetaa*lj.vdwdispersion*epsilon[i];
             }
+            seta12[i] = lj.iosetar*lj.vdwdispersion*epsilon[i];
+            seta6[i] = 2.0*lj.iosetaa*lj.vdwdispersion*epsilon[i];
         }
     }else{
         for(size_t i=0; i<natm; ++i){
             sigma[i] = sqrt(4.0*atom_r[i]*lj.sigmas);
-            if(lj.vdwdispersion == 0){
-                epsilon[i] = 0;
-                seta12[i] = 0;
-                seta6[i] = 0;
-            }else{
+            if(lj.vdwdispersion != 0){
                 epsilon[i] = sqrt(ljepsilon[i]*lj.epsilonw);
                 seta12[i] = 4.0*epsilon[i];
                 seta6[i] = 4.0*epsilon[i];
@@ -253,11 +248,9 @@ void yhsurface(double xyzr[MAXATOMS][XYZRWIDTH], double* ljepsilon, size_t natm,
     }
 
     Mat<> potr(nx,ny,nz), pota(nx,ny,nz);
-    potr=0.0, pota=0.0;
     potIntegral(rcfactor, ddx, natm, atom_x, atom_y, atom_z, seta12, seta6, epsilon, sigma, g, potr, pota);
 
     if(lj.iwca == 1) potr = 0;
-
     for(size_t i=0; i<phitotx.size(); ++i){ 
         phitotx[i] = -lj.conms - phitotx[i] + lj.roro*(potr[i] + pota[i]);
     }

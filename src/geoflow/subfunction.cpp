@@ -61,7 +61,7 @@ using namespace std;
 
 extern "C"{
 
-double qbboundary(size_t natm, double& x,double& y,double& z, double xyzr[MAXATOMS][XYZRWIDTH], double* pqr, double& epsilonsp){
+double qbboundary(size_t natm, double x,double y,double z, double xyzr[MAXATOMS][XYZRWIDTH], double* pqr, double epsilonsp){
     double vbdn = 0;
     for(size_t a=0; a<natm; ++a){
         double x_q = x - xyzr[a][1];
@@ -75,7 +75,7 @@ double qbboundary(size_t natm, double& x,double& y,double& z, double xyzr[MAXATO
 }
 
 
-double qbinterior(double& x,double& y,double& z, Mat<>& charget, Mat<>& corlocqt){
+double qbinterior(double x,double y,double z, Mat<>& charget, Mat<>& corlocqt){
     double fp = 0;
     for(size_t a=1; a<=charget.nx(); ++a){
     for(size_t ii=1; ii<=charget.ny(); ++ii){
@@ -89,7 +89,7 @@ double qbinterior(double& x,double& y,double& z, Mat<>& charget, Mat<>& corlocqt
     return fp;
 }
 
-double qb(int& i,int& j,int& k, double xyzr[MAXATOMS][XYZRWIDTH], double*pqr, Mat<>& charget, Mat<>& corlocqt, double& epsilonsp){
+double qb(size_t i,size_t j,size_t k, double xyzr[MAXATOMS][XYZRWIDTH], double* pqr, Mat<>& charget, Mat<>& corlocqt, double epsilonsp){
     double x = xvalue(i);
     double y = yvalue(j);
     double z = zvalue(k);
@@ -100,14 +100,13 @@ double qb(int& i,int& j,int& k, double xyzr[MAXATOMS][XYZRWIDTH], double*pqr, Ma
     }
 }
 
-void seteqb(Mat<>& bg, double xyzr[MAXATOMS][XYZRWIDTH], double* pqr, Mat<>& charget, Mat<>& corlocqt, double* epsilonsp){
-    for(int i=1; i<=comdata.nx; ++i){
-    for(int j=1; j<=comdata.ny; ++j){
-    for(int k=1; k<=comdata.nz; ++k){
-        double fp = qb(i,j,k,xyzr,pqr,charget,corlocqt,*epsilonsp);
+void seteqb(Mat<>& bg, double xyzr[MAXATOMS][XYZRWIDTH], double* pqr, Mat<>& charget, Mat<>& corlocqt, double epsilonsp){
+    for(size_t i=1; i<=comdata.nx; ++i){
+    for(size_t j=1; j<=comdata.ny; ++j){
+    for(size_t k=1; k<=comdata.nz; ++k){
+        double fp = qb(i,j,k,xyzr,pqr,charget,corlocqt,epsilonsp);
         int ijk = (i-1)*comdata.ny*comdata.nz + (j-1)*comdata.nz + k - 1;
         bg[ijk] = fp;
-        
     }}}
 }
 

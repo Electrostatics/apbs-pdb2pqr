@@ -52,13 +52,13 @@
 /// 
 /// @endverbatim
 
-
+#include <iostream>
 
 void
 pbconcz2(
     // These parameters correspond directly to those read in via the datafiles (fort.12 and 17set.txt)
     // in the original Fortran code    
-    int     nmol,
+//    int     nmol,
     double  pres_i,
     double  gama_i,
     int    npiter,
@@ -83,20 +83,22 @@ pbconcz2(
     double        epsilonp,
     int        radexp,
     double        crevalue,
-    int        idacsl, //  0 for solvation force calculation; 1 or accuracy test
+//    int        idacsl, //  0 for solvation force calculation; 1 or accuracy test
     double         density     //  (use 0.03346) 
 );
 
-int main()
+int main(int narg)
 {
-    pbconcz2(17,    // nmol
+    int ffmodel = 3 - narg;
+    pbconcz2(
+//         17,    // nmol
          0.03,    // pres_i
          0.08,    // gama_i
          1,    // npiter
          1,    // ngiter
          1.40,    // tauval
          0.0,    // prob
-         2,    // ffmodel
+         ffmodel,    // ffmodel
          1.5828,// sigmas
          0.1554,// epsilonw
          1,    // vdwdispersion
@@ -114,7 +116,7 @@ int main()
         3.00,     // EPSILONP
         1,     // RADEXP
         0.01,     // CREVALUE
-        0,     // idacsl
+//        0,     // idacsl
         0.03346 //density (use 0.03346) 
         );
 }

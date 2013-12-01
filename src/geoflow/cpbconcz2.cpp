@@ -65,13 +65,6 @@
 
 using namespace std;
 
-void print_array_values(const double *values);
-
-/*
- * Helper functions.  Most of these are artifacts of refactoring.
- */
-
-
 void
 initXYZR(double xyzr[MAXATOMS][XYZRWIDTH]) {
     for (int i = 0; i < XYZRWIDTH; i++) {
@@ -80,27 +73,6 @@ initXYZR(double xyzr[MAXATOMS][XYZRWIDTH]) {
         }
     }
 }
-
-template<typename T>
-void
-initValues(T* array, int numelems, T initvalue) {
-    for (int i = 0; i < numelems; i++) {
-        array[i] = initvalue;
-    }
-}
-
-/*
- * Initialize all elements of the given array to hold the initvalue.
- * Can easily be used to initialize multidimensional arrays as well.
-void
-initReals( double *array, int numelems, double initvalue )
-{
-    for(int i = 0; i < numelems; i++)
-    {
-        array[i] = initvalue;
-    }
-}
- */
 
 void
 writePressGamaRms() {
@@ -134,44 +106,6 @@ writeSupportingFiles(int nmol) {
 }
 
 int
-calculateMDArrayOffset(std::vector<int> dims, std::vector<int> elementIdx) {
-    int offset = 0, dimlen = dims.size();
-    for (int i = 0; i < dimlen; i++) {
-        int tmp = 1;
-        for (int j = i + 1; j < dimlen; j++) {
-            tmp *= dims[j];
-        }
-        offset += tmp * elementIdx[i];
-    }
-    return offset;
-}
-
-/*
- * Given an n-dimensional array arrayBase, with dimensions specified by dims,
- * sets the element at the indices given by elementIdx to the value val
- */
-template <typename T>
-void
-setMDArrayElement(T* arrayBase, std::vector<int> dims, std::vector<int> elementIdx, T val) {
-    int offset = calculateMDArrayOffset(dims, elementIdx);
-    arrayBase[offset] = val;
-}
-
-template <typename T>
-T
-getMDArrayElement(T* arrayBase, std::vector<int> dims, std::vector<int> elementIdx) {
-    int offset = calculateMDArrayOffset(dims, elementIdx);
-    return arrayBase[offset];
-
-}
-
-template<typename T>
-std::vector<T>
-arrayToVector(T array[], int numelems) {
-    return std::vector<T>((T*) array, array + numelems);
-}
-
-int
 numberOfLines(std::string fileName) {
     std::ifstream file(fileName.c_str());
     return std::count(std::istreambuf_iterator<char>(file),
@@ -200,7 +134,7 @@ normalizeSurfuAndEps(Mat<>& surfu, Mat<>& eps, double epsilons, double epsilonp)
  *    charget:    charget array.  This is an [8][natm] int array.
  */
 void
-computeSoleng(double& soleng, Mat<>& phi, std::vector<int> phiDims, Mat<>& charget, Mat<int>& loc_qt) {
+computeSoleng(double& soleng, Mat<>& phi, Mat<>& charget, Mat<int>& loc_qt) {
     soleng = 0.0;
     for (size_t iind = 1; iind <= charget.nx(); iind++) {
     for (size_t jind = 1; jind <= charget.ny(); jind++) {
@@ -245,39 +179,20 @@ size_t loadData(std::ifstream& f, //<i
 
     size_t natm = 0;
     initXYZR(xyzr);
-    switch (ffmodel) {
-        case 1:
-            while (atomFile.good()) {
-                atomFile >> xyzr[natm][0] >> xyzr[natm][1] >>
-                        xyzr[natm][2] >> xyzr[natm][3] >> pqr[natm];
-                atomFile.ignore(); // skip remainder of line
-                xyzr[natm][3] *= radexp;
-                natm++;
-            }
-            break;
-        case 2:
-        default:
-            initValues(ljepsilon, MAXATOMS, 0.0);
-            while (!atomFile.eof()) {
-                atomFile >> xyzr[natm][0] >> xyzr[natm][1] >>
-                        xyzr[natm][2] >> xyzr[natm][3] >> pqr[natm] >> ljepsilon[natm];
-                atomFile.ignore(10000000, '\n'); // skip remainder of line
-                xyzr[natm][3] *= radexp;
-                natm++;
-                /*
-                    atomFile >> a->pos[0] >> a->pos[1] >> a->pos[2] >> a->radius >> pqr[natm] >> epsilon[natm];
-                    a->radius *= radexp;
-                    natm++;
-                 */
-            }
-
-            break;
+    std::fill(ljepsilon, ljepsilon+MAXATOMS, 0.0);
+    while (atomFile >> xyzr[natm][0]){
+        atomFile >> xyzr[natm][1] >> xyzr[natm][2] >> xyzr[natm][3] >> pqr[natm];
+        if (ffmodel!=1){ atomFile >> ljepsilon[natm]; }
+        atomFile.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // skip remainder of line
+        xyzr[natm][3] *= radexp;
+        natm++;
     }
-    natm--;
+    
+    std::cout << natm << std::endl;
     return natm;
 }
 
-GeoflowOutput geoflowSolvation(double xyzr[MAXATOMS][XYZRWIDTH], size_t natm, double dcel, int ffmodel, double extvalue, double* pqr, int maxstep, double crevalue, int iadi, double tottf, double* ljepsilon, double alpha, int igfin, double epsilons, double epsilonp, int idacsl, double tol, int iterf, double tpb, int itert, double pres, double gama, double tauval, double prob, int vdwdispersion, double sigmas, double density, double epsilonw) {
+GeoflowOutput geoflowSolvation(double xyzr[MAXATOMS][XYZRWIDTH], size_t natm, double dcel, int ffmodel, double extvalue, double* pqr, int maxstep, double crevalue, int iadi, double tottf, double* ljepsilon, double alpha, int igfin, double epsilons, double epsilonp, double tol, int iterf, double tpb, int itert, double pres, double gama, double tauval, double prob, int vdwdispersion, double sigmas, double density, double epsilonw) {
     double elec = 0.0, area = 0.0, volume = 0.0, attint = 0.0;
 
     comdata.dcel = dcel;
@@ -294,6 +209,13 @@ GeoflowOutput geoflowSolvation(double xyzr[MAXATOMS][XYZRWIDTH], size_t natm, do
     lj.roro = density / gama;
     double potcoe = 1.0 / gama;
     lj.conms = pres / gama;
+
+    if(ffmodel == 1){
+//        std::replace_if(xyzr, numbers+6, bind1st(equal_to<int>(),0) );
+        for(size_t i = 0; i<natm; ++i){
+            xyzr[i][3] = (xyzr[i][3] < 1e-6) ? 1.21 : xyzr[i][3];
+        }
+    }
 
     domainini(xyzr, natm, extvalue);
 
@@ -315,21 +237,15 @@ GeoflowOutput geoflowSolvation(double xyzr[MAXATOMS][XYZRWIDTH], size_t natm, do
     comdata.zc.resize(nz);
     for (int i=0; i<nz; i++) { comdata.zc[i] = comdata.zleft + (i-1)*comdata.dcel; }
 
-    int arrayLengths = nz*ny*nx;
-    int aDim[] = {nz,ny,nx};
-    std::vector<int> dims(aDim, aDim + sizeof (aDim) / sizeof (int));
-
-    int solvWidth = maxstep + 1;
-    double solv[solvWidth];
-    initValues((double*) solv, solvWidth, 0.0);
+    vector<double> solv(maxstep+1);
     double diffEnergy = 100;
 
     int iloop = 0, ipath = 0;
     double tott = 0.0;
+std::cout << nx <<" "<<ny<<" "<<nz<<std::endl;
     Mat<> phi(nx,ny,nz), phix(nx,ny,nz), phivoc(nx,ny,nz), surfu(nx,ny,nz), eps(nx,ny,nz), bg(nx,ny,nz);
     while ((iloop < maxstep) && (diffEnergy > crevalue)) {
         iloop++;
-
         double deltat = 0; //this is wrong for adi...
         if (!iadi) {
             deltat = comdata.dcel * comdata.dcel / 4.5;
@@ -349,7 +265,7 @@ GeoflowOutput geoflowSolvation(double xyzr[MAXATOMS][XYZRWIDTH], size_t natm, do
         yhsurface(xyzr, ljepsilon, natm, tott, deltat, phix, surfu, iloop, area, volume, attint, alpha, iadi, igfin);
         normalizeSurfuAndEps(surfu, eps, epsilons, epsilonp);
         if (iloop == 1) {
-            seteqb(bg, xyzr, pqr, charget, corlocqt, &epsilons);
+            seteqb(bg, xyzr, pqr, charget, corlocqt, epsilons);
         }
 
         int iter = 1000;
@@ -366,9 +282,9 @@ GeoflowOutput geoflowSolvation(double xyzr[MAXATOMS][XYZRWIDTH], size_t natm, do
         pbsolver(eps, phivoc, bg, comdata.dcel, tol, iter);
 
         double weit = 1.0 / (2.0 * comdata.dcel);
-        for (int ix = 2; ix <= comdata.nx - 1; ix++) {
-        for (int iy = 2; iy <= comdata.ny - 1; iy++) {
-        for (int iz = 2; iz <= comdata.nz - 1; iz++) {
+        for (size_t ix = 2; ix <= comdata.nx - 1; ix++) {
+        for (size_t iy = 2; iy <= comdata.ny - 1; iy++) {
+        for (size_t iz = 2; iz <= comdata.nz - 1; iz++) {
             double phixx = phi(ix+1,iy,iz) - weit*phi(ix-1,iy,iz);
             double phixy = phi(ix,iy+1,iz) - weit*phi(ix,iy-1,iz);
             double phixz = phi(ix,iy,iz+1) - weit*phi(ix,iy,iz-1);
@@ -379,8 +295,8 @@ GeoflowOutput geoflowSolvation(double xyzr[MAXATOMS][XYZRWIDTH], size_t natm, do
         // solvation
         double soleng1, soleng2;
         soleng1 = soleng2 = 0.0;
-        computeSoleng(soleng1, phi, dims, charget, loc_qt);
-        computeSoleng(soleng2, phivoc, dims, charget, loc_qt);
+        computeSoleng(soleng1, phi, charget, loc_qt);
+        computeSoleng(soleng2, phivoc, charget, loc_qt);
         elec = (soleng1 - soleng2) * 332.0716;
         solv[iloop - 1] = elec + gama * (area + volume * lj.conms + attint * lj.roro);
         if (iloop > 1) {
@@ -401,7 +317,7 @@ GeoflowOutput geoflowSolvation(double xyzr[MAXATOMS][XYZRWIDTH], size_t natm, do
 }
 
 void
-processAtomsFile(std::string fileName, int ffmodel, int radexp, double extvalue, int maxstep, double crevalue, int iadi, double tottf, double alpha, int igfin, double epsilons, double epsilonp, int idacsl, double tol, double &tpb, int &iterf, int &itert, double pres, double gama, double dcel, double tauval, double prob, int vdwdispersion, double sigmas, double density, double epsilonw) {
+processAtomsFile(std::string fileName, int ffmodel, int radexp, double extvalue, int maxstep, double crevalue, int iadi, double tottf, double alpha, int igfin, double epsilons, double epsilonp, double tol, double &tpb, int &iterf, int &itert, double pres, double gama, double dcel, double tauval, double prob, int vdwdispersion, double sigmas, double density, double epsilonw) {
     std::ifstream f;
     f.open(fileName.c_str());
 
@@ -414,7 +330,7 @@ processAtomsFile(std::string fileName, int ffmodel, int radexp, double extvalue,
 
         size_t natm = loadData(f, imord, ffmodel, radexp, expv, xyzr, pqr, ljepsilon);
 
-        GeoflowOutput gf = geoflowSolvation(xyzr, natm, dcel, ffmodel, extvalue, pqr, maxstep, crevalue, iadi, tottf, ljepsilon, alpha, igfin, epsilons, epsilonp, idacsl, tol, iterf, tpb, itert, pres, gama, tauval, prob, vdwdispersion, sigmas, density, epsilonw);
+        GeoflowOutput gf = geoflowSolvation(xyzr, natm, dcel, ffmodel, extvalue, pqr, maxstep, crevalue, iadi, tottf, ljepsilon, alpha, igfin, epsilons, epsilonp, tol, iterf, tpb, itert, pres, gama, tauval, prob, vdwdispersion, sigmas, density, epsilonw);
 
         std::cout << "totalSolv:\t" << gf.totalSolvation << "\t";
         std::cout << "nonpolar: " << gf.nonpolarSolvation << "\t";
@@ -455,7 +371,7 @@ void
 pbconcz2(
         // These parameters correspond directly to those read in via the datafiles (fort.12 and 17set.txt)
         // in the original Fortran code    
-        int nmol,
+ //       int nmol,
         double pres_i,
         double gama_i,
         int npiter,
@@ -480,10 +396,10 @@ pbconcz2(
         double epsilonp,
         int radexp,
         double crevalue,
-        int idacsl, //  0 for solvation force calculation; 1 or accuracy test
+  //      int idacsl, //  0 for solvation force calculation; 1 or accuracy test
         double density //  (use 0.03346) 
         ) {
-    std::cout << "ffmodel (1:zap, 2:opls) = " << ffmodel << std::endl;
+    std::cout << ((ffmodel==1)?"ZAP":"OPLS") << std::endl;
     double pres = pres_i;
     //    writeSupportingFiles(nmol);
 
@@ -514,7 +430,7 @@ pbconcz2(
         double tpb = 0.0;
         int iterf = 0, itert = 0;
 
-        processAtomsFile("molecules.txt", ffmodel, radexp, extvalue, maxstep, crevalue, iadi, tottf, alpha, igfin, epsilons, epsilonp, idacsl, tol, tpb, iterf, itert, pres, gama, dcel, tauval, prob, vdwdispersion, sigmas, density, epsilonw);
+        processAtomsFile("molecules.txt", ffmodel, radexp, extvalue, maxstep, crevalue, iadi, tottf, alpha, igfin, epsilons, epsilonp, tol, tpb, iterf, itert, pres, gama, dcel, tauval, prob, vdwdispersion, sigmas, density, epsilonw);
     }
 }
 

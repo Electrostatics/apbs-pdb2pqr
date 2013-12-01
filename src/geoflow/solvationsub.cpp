@@ -61,9 +61,9 @@ using namespace std;
 
 extern "C"{
 
-int inverx(double& x){ return int( (x - comdata.xleft)/comdata.deltax ) + 1; }
-int invery(double& y){ return int( (y - comdata.yleft)/comdata.deltay ) + 1; }
-int inverz(double& z){ return int( (z - comdata.zleft)/comdata.deltaz ) + 1; }
+size_t inverx(double x){ return size_t( (x - comdata.xleft)/comdata.deltax ) + 1; }
+size_t invery(double y){ return size_t( (y - comdata.yleft)/comdata.deltay ) + 1; }
+size_t inverz(double z){ return size_t( (z - comdata.zleft)/comdata.deltaz ) + 1; }
 
 void chargedist(double xyzr[MAXATOMS][XYZRWIDTH],
 double* chratm, Mat<>& charget, Mat<>& corlocqt, Mat<int>& loc_qt, size_t iatm){
@@ -106,68 +106,57 @@ double* chratm, Mat<>& charget, Mat<>& corlocqt, Mat<int>& loc_qt, size_t iatm){
     double yd1 = y_q - y;
     double zd1 = z_q - z;
 
-    valarray<int> iloc(1.0, 3);//ones
-    if(xd1==0){ iloc[1]=0; }
-    if(yd1==0){ iloc[2]=0; }
-    if(zd1==0){ iloc[3]=0; }
-
     valarray<double> charge(0.0, 8);
-    switch(iloc.sum()){
-        case 3:
-            for(int i=0; i<=1; ++i){
+    if(xd1 !=0 && yd1 !=0 && zd1 !=0){
+        for(int i=0; i<=1; ++i){
+        for(int j=0; j<=1; ++j){
+        for(int k=0; k<=1; ++k){
+            int ind = 4*k + 2*j + i;
+        
+            double xd = i*comdata.deltax - xd1;
+            double yd = j*comdata.deltay - yd1;
+            double zd = k*comdata.deltaz - zd1;
+
+            charge[ind] = 1.0/abs(xd*yd*zd);
+        }}}
+    }else if( (xd1 !=0 && yd1 !=0) || (xd1 !=0 && zd1 !=0) || (yd1 !=0 && zd1 !=0) ){
+        if(xd1 == 0){
             for(int j=0; j<=1; ++j){
             for(int k=0; k<=1; ++k){
-                int ind = 4*k + 2*j + i;
-            
-                double xd = i*comdata.deltax - xd1;
                 double yd = j*comdata.deltay - yd1;
                 double zd = k*comdata.deltaz - zd1;
-
-                charge[ind] = 1.0/abs(xd*yd*zd);
-            }}}
-            break;
-
-        case 2:
-            if(iloc[0] == 0){
-                for(int j=0; j<=1; ++j){
-                for(int k=0; k<=1; ++k){
-                    double yd = j*comdata.deltay - yd1;
-                    double zd = k*comdata.deltaz - zd1;
-                    charge[4*j + 2*k] = 1.0/abs(yd*zd);
-                }}
-            }else if(iloc[1] == 0){
-                for(int i=0; i<=1; ++i){
-                for(int k=0; k<=1; ++k){
-                    double xd = i*comdata.deltax - xd1;
-                    double zd = k*comdata.deltaz - zd1;
-                    charge[i + 4*k] = 1.0/abs(xd*zd);
-                }}
-            }else if(iloc[2] == 0){
-                for(int i=0; i<=1; ++i){
-                for(int j=0; j<=1; ++j){
-                    double xd = i*comdata.deltax - xd1;
-                    double yd = j*comdata.deltay - yd1;
-                    charge[i + 2*j] = 1.0/abs(xd*yd);
-                }}
-            }
-            break;
-
-        case 1:
-            if(iloc[0]){
-                charge[0] = 1.0/xd1;
-                charge[1] = 1.0/(comdata.deltax-xd1);
-            }else if(iloc[1]){
-                charge[0] = 1.0/yd1;
-                charge[2] = 1.0/(comdata.deltay-yd1);
-            }else if(iloc[2]){
-                charge[0] = 1.0/zd1;
-                charge[4] = 1.0/(comdata.deltaz-zd1);
-            }
-            break;
-       default:
-           charge[0] = 1.0;
+                charge[4*j + 2*k] = 1.0/abs(yd*zd);
+            }}
+        }else if(yd1 == 0){
+            for(int i=0; i<=1; ++i){
+            for(int k=0; k<=1; ++k){
+                double xd = i*comdata.deltax - xd1;
+                double zd = k*comdata.deltaz - zd1;
+                charge[i + 4*k] = 1.0/abs(xd*zd);
+            }}
+        }else if(zd1 == 0){
+            for(int i=0; i<=1; ++i){
+            for(int j=0; j<=1; ++j){
+                double xd = i*comdata.deltax - xd1;
+                double yd = j*comdata.deltay - yd1;
+                charge[i + 2*j] = 1.0/abs(xd*yd);
+            }}
+        }
+    }else if(xd1 !=0  || yd1 !=0 || zd1 !=0 ){
+        if(xd1!=0){
+            charge[0] = 1.0/xd1;
+            charge[1] = 1.0/(comdata.deltax-xd1);
+        }else if(yd1!=0){
+            charge[0] = 1.0/yd1;
+            charge[2] = 1.0/(comdata.deltay-yd1);
+        }else if(zd1!=0){
+            charge[0] = 1.0/zd1;
+            charge[4] = 1.0/(comdata.deltaz-zd1);
+        }
+    }else{
+        charge[0] = 1.0;
     }
-
+    
     charge=q_q*charge/charge.sum();
 
     for(size_t j=1; j<=charget.ny(); ++j){
@@ -178,7 +167,6 @@ double* chratm, Mat<>& charget, Mat<>& corlocqt, Mat<int>& loc_qt, size_t iatm){
 
         }
     }
-
 }
 
 }//extern

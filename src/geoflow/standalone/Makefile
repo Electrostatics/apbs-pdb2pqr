@@ -1,21 +1,20 @@
 CFLAGS=-W -Wall -Wextra -I ../../../include/
 
 ifdef DEBUG
-	CFLAGS+=-ggdb3 -O0
-else PROFILE
-	CFLAGS+=-O3 -g -pg  -march=core2 -fstrict-aliasing -DNDEBUG -DEIGEN_NO_MALLOC
+	CFLAGS+=-g -O0
+#else PROFILE
+#	CFLAGS+=-O3 -g -pg  -march=core2 -fstrict-aliasing -DNDEBUG -DEIGEN_NO_MALLOC
 else
-	CFLAGS+=-O3
+	CFLAGS+=-O2 -g -DNDEBUG -DEIGEN_NO_MALLOC 
 endif
 
 OBJS=cpbconcz2.o modules.o pbsolvercz.o surfconcz.o solvationsub.o subfunction.o
-
 
 .PHONY: all
 all: osm.exe 
 
 osm.exe: main.cpp $(OBJS)
-	$(CXX) $(FCFLAGS) $(CFLAGS) -o $@ $^ $(LDFLAGS)
+	$(CXX) $(CFLAGS) -o $@ $^ $(LDFLAGS)
 
 %.o: ../%.cpp
 	$(CXX) $(CFLAGS) -c $<

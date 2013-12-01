@@ -67,7 +67,7 @@
 
 struct Comdata{
     char fname[100];
-    int nx, ny, nz;
+    size_t nx, ny, nz;
     double xleft, xright,
            yleft, yright,
            zleft, zright,
@@ -100,18 +100,18 @@ void yhsurface(double xyzr[MAXATOMS][XYZRWIDTH], double* ljepsilon, size_t natm,
     double deltat, Mat<>& phix, Mat<>& surfu, int i, double& area, double& vol, double& attint,
     double alpha, int iadi, int igfin);
 
-void seteqb(Mat<>& bg, double xyzr[MAXATOMS][XYZRWIDTH], double* pqr, Mat<>& charget, Mat<>& corlocqt, double *epsilonsp);
+void seteqb(Mat<>& bg, double xyzr[MAXATOMS][XYZRWIDTH], double* pqr, Mat<>& charget, Mat<>& corlocqt, double epsilonsp);
 //  void writerms_gama( double* sumpot, double* expv, double* elec, size_t* natm, double* gama, int *ngiter, double *pres );
 
-void pbsolver( Mat<>& eps, Mat<>& phi, Mat<>& bg, double dcel,  double tol, int iter);
+void pbsolver(Mat<>& eps, Mat<>& phi, Mat<>& bg, double dcel, double tol, int iter);
 
-double xvalue(int& i);
-double yvalue(int& i);
-double zvalue(int& i);
+double xvalue(size_t i);
+double yvalue(size_t i);
+double zvalue(size_t i);
 
-int inverx(double& x);
-int invery(double& y);
-int inverz(double& z);
+size_t inverx(double x);
+size_t invery(double y);
+size_t inverz(double z);
 }
 
 #endif

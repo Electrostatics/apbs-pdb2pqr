@@ -66,13 +66,14 @@ template<typename T=double> struct Mat;
 template<typename T> struct Mat{
     friend class Stencil<T>;
 
-    size_t _nx,_ny,_nz;
+    const size_t _nx,_ny,_nz;
     size_t nx()const{return _nx;}
     size_t ny()const{return _ny;}
     size_t nz()const{return _nz;}
 
     Eigen::Matrix<T,Eigen::Dynamic,1> vec;
-    Mat(size_t nx, size_t ny, size_t nz=1): _nx(nx), _ny(ny), _nz(nz), vec(nx*ny*nz) {}
+    Mat(size_t nx, size_t ny, size_t nz=1, T a=0): _nx(nx), _ny(ny), _nz(nz),
+        vec(nx*ny*nz) { vec.fill(a); }
 
     ~Mat(){};
 
@@ -96,7 +97,7 @@ template<typename T> struct Mat{
     //should be iterator...
     T* end(){return vec.data() + size();}
 
-    Mat<T>& operator=(T a){ std::fill(data(), end(), a); return *this; }
+    Mat<T>& operator=(T a){ vec.fill(a); return *this; }
     Mat<T>& operator=(Mat a){ vec.swap(a.vec); return *this; }
 
     Stencil<T> stencilBegin(T h) { return Stencil<T>(*this, h, 2,2,2); }
@@ -108,7 +109,7 @@ template<typename T> struct Stencil: public std::iterator<std::forward_iterator_
     Mat<T>& _mat;
     const T h,halfh,h2,qrth2;
     size_t i;
-    const  size_t yStep, zStep;
+    const size_t yStep, zStep;
  
     T *c;
 
