@@ -66,27 +66,27 @@ size_t invery(double y){ return size_t( (y - comdata.yleft)/comdata.deltay ) + 1
 size_t inverz(double z){ return size_t( (z - comdata.zleft)/comdata.deltaz ) + 1; }
 
 void chargedist(double xyzr[MAXATOMS][XYZRWIDTH],
-double* chratm, Mat<>& charget, Mat<>& corlocqt, Mat<int>& loc_qt, size_t iatm){
+double* chratm, Mat<>& charget, Mat<>& corlocqt, Mat<size_t>& loc_qt, size_t iatm){
     double x_q = xyzr[iatm-1][0];
     double y_q = xyzr[iatm-1][1];
     double z_q = xyzr[iatm-1][2];
     double q_q = chratm[iatm-1];
 
-    int i_q = inverx(x_q);
+    size_t i_q = inverx(x_q);
     int j_q = invery(y_q);
     int k_q = inverz(z_q);
 
 
-    Mat<int> loc_q(8,3);
+    Mat<size_t> loc_q(8,3);
     Mat<> corlocq(8,3);
-    for(int i=0; i<=1; ++i){
-    for(int j=0; j<=1; ++j){
-    for(int k=0; k<=1; ++k){
-        int ind = 4*k + 2*j + i + 1;
+    for(size_t i=0; i<=1; ++i){
+    for(size_t j=0; j<=1; ++j){
+    for(size_t k=0; k<=1; ++k){
+        size_t ind = 4*k + 2*j + i + 1;
     
-        int ind_i = i_q + i;
-        int ind_j = j_q + j;
-        int ind_k = k_q + k;
+        size_t ind_i = i_q + i;
+        size_t ind_j = j_q + j;
+        size_t ind_k = k_q + k;
         
         corlocq(ind,1) = xvalue(ind_i);
         corlocq(ind,2) = yvalue(ind_j);

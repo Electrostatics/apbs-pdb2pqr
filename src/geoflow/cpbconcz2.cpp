@@ -134,13 +134,13 @@ normalizeSurfuAndEps(Mat<>& surfu, Mat<>& eps, double epsilons, double epsilonp)
  *    charget:    charget array.  This is an [8][natm] int array.
  */
 void
-computeSoleng(double& soleng, Mat<>& phi, Mat<>& charget, Mat<int>& loc_qt) {
+computeSoleng(double& soleng, Mat<>& phi, Mat<>& charget, Mat<size_t>& loc_qt) {
     soleng = 0.0;
     for (size_t iind = 1; iind <= charget.nx(); iind++) {
     for (size_t jind = 1; jind <= charget.ny(); jind++) {
-        int i = loc_qt(iind,jind,1);
-        int j = loc_qt(iind,jind,2);
-        int k = loc_qt(iind,jind,3);
+        size_t i = loc_qt(iind,jind,1);
+        size_t j = loc_qt(iind,jind,2);
+        size_t k = loc_qt(iind,jind,3);
 
         soleng += 0.5*charget(iind,jind)*phi(i,j,k);
     }}
@@ -221,7 +221,7 @@ GeoflowOutput geoflowSolvation(double xyzr[MAXATOMS][XYZRWIDTH], size_t natm, do
 
     Mat<> charget(natm, 8);
     Mat<> corlocqt(natm, 8, 3);
-    Mat<int> loc_qt(natm,8,3); 
+    Mat<size_t> loc_qt(natm,8,3); 
 
     for (size_t iatm = 1; iatm <= natm; iatm++) {
         chargedist(xyzr, pqr, charget, corlocqt, loc_qt, iatm);

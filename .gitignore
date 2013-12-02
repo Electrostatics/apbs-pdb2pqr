@@ -1,6 +1,6 @@
 bin/
 build/**
-include/
+include/maloc
 lib/
 **.out
 *.o
