@@ -10,8 +10,6 @@ add_items(
 
 add_items(
     EXTERNAL_HEADERS
-    modules.h
-    Mat.h
     cpbconcz2.h
 )
 

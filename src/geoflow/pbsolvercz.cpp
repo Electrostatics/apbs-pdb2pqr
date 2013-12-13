@@ -61,9 +61,6 @@
 #include <fstream>
 #include <Eigen/Sparse>
 
-
-extern "C"{
-
 void pbsolver(Mat<>& eps, Mat<>& phi, Mat<>& bgf, double dcel, double tol, int iter){
     int nx = eps._nx, ny = eps._ny, nz = eps._nz;
     Mat<> eps1(nx,ny,nz), eps2(nx,ny,nz), eps3(nx,ny,nz);
@@ -141,4 +138,3 @@ void pbsolver(Mat<>& eps, Mat<>& phi, Mat<>& bgf, double dcel, double tol, int i
     }}}
 }
 
-}//extern

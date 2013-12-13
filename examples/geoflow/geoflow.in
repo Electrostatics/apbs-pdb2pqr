@@ -1,9 +1,5 @@
 read
-<<<<<<< HEAD
-    mol pqr imidazole_oplsaa.pqr
-=======
     mol pqr 1a63.pqr        
->>>>>>> eeffc50d1ae067d3f14820011b6421b442d7be71
 end
 elec name comp_solv        # Solvated complex
     geoflow-manual
@@ -14,7 +10,6 @@ elec name comp_solv        # Solvated complex
     swin 0.3               #xxx
 
     mol 1
-<<<<<<< HEAD
     pdie 1.5               # Solute dielectric
     sdie 80.00             # Solvent dielectric
     srad 0.0               # Solvent probe radius
@@ -22,17 +17,7 @@ elec name comp_solv        # Solvated complex
     pres 0.008             # pressure kcal/(mol*A^3)
     gama 0.0001            # surface tension kcal/(mol*A^2)
     vdw 0
-
     temp 300               #xxx
-=======
-    ion  1 0.15 0.95       # sodium ions
-    ion -1 0.15 1.81       # chloride ions
-    pdie 1.0               # Solute dielectric
-    sdie 80.00             # Solvent dielectric
-    srad 1.4               # Solvent probe radius
-    sdens 10
-    temp 300.00            # Temperature
->>>>>>> eeffc50d1ae067d3f14820011b6421b442d7be71
 end
 
 quit

@@ -87,7 +87,7 @@ pbconcz2(
     double         density     //  (use 0.03346) 
 );
 
-int main(int narg)
+int main(int narg, char** unused)
 {
     int ffmodel = 3 - narg;
     pbconcz2(

@@ -59,12 +59,6 @@
 
 using namespace std;
 
-extern "C"{
-
-size_t inverx(double x){ return size_t( (x - comdata.xleft)/comdata.deltax ) + 1; }
-size_t invery(double y){ return size_t( (y - comdata.yleft)/comdata.deltay ) + 1; }
-size_t inverz(double z){ return size_t( (z - comdata.zleft)/comdata.deltaz ) + 1; }
-
 void chargedist(double xyzr[MAXATOMS][XYZRWIDTH],
 double* chratm, Mat<>& charget, Mat<>& corlocqt, Mat<size_t>& loc_qt, size_t iatm){
     double x_q = xyzr[iatm-1][0];
@@ -168,7 +162,4 @@ double* chratm, Mat<>& charget, Mat<>& corlocqt, Mat<size_t>& loc_qt, size_t iat
         }
     }
 }
-
-}//extern
-
-    
+ 

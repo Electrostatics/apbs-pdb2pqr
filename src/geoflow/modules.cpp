@@ -65,3 +65,7 @@ double xvalue(size_t i){ return (i - 1)*comdata.deltax + comdata.xleft; }
 double yvalue(size_t i){ return (i - 1)*comdata.deltay + comdata.yleft; }
 double zvalue(size_t i){ return (i - 1)*comdata.deltaz + comdata.zleft; }
 
+size_t inverx(double x){ return size_t( (x - comdata.xleft)/comdata.deltax ) + 1; }
+size_t invery(double y){ return size_t( (y - comdata.yleft)/comdata.deltay ) + 1; }
+size_t inverz(double z){ return size_t( (z - comdata.zleft)/comdata.deltaz ) + 1; }
+

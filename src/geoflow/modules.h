@@ -63,8 +63,6 @@
              * depend on it. */
 #define XYZRWIDTH 4     // 4: 0-2 => pos, 3 => radius
 
-#define MAX(x,y)  ((x > y) ? x : y)
-
 struct Comdata{
     char fname[100];
     size_t nx, ny, nz;
@@ -91,7 +89,6 @@ extern LJ lj;
 
 double dot(double x, double y, double z);
 
-extern "C"{
 void domainini(double xyzr[MAXATOMS][XYZRWIDTH], const size_t natm, const double extvalue);
 
 void chargedist(double xyzr[MAXATOMS][XYZRWIDTH], double* chratm, Mat<>& charget, Mat<>& corlocqt, Mat<size_t>& loc_qt, size_t iatm);
@@ -111,7 +108,6 @@ double zvalue(size_t i);
 size_t inverx(double x);
 size_t invery(double y);
 size_t inverz(double z);
-}
 
 #endif
 

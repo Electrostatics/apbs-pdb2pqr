@@ -59,8 +59,6 @@
 
 using namespace std;
 
-extern "C"{
-
 double qbboundary(size_t natm, double x,double y,double z, double xyzr[MAXATOMS][XYZRWIDTH], double* pqr, double epsilonsp){
     double vbdn = 0;
     for(size_t a=0; a<natm; ++a){
@@ -110,4 +108,3 @@ void seteqb(Mat<>& bg, double xyzr[MAXATOMS][XYZRWIDTH], double* pqr, Mat<>& cha
     }}}
 }
 
-}//extern
