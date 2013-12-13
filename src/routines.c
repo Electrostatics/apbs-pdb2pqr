@@ -52,7 +52,7 @@
  */
 
 #include "routines.h"
-
+#include "geoflow/cpbconcz2.h"
 VEMBED(rcsid="$Id$")
 
 VPUBLIC void startVio() { Vio_start(); }
@@ -4800,6 +4800,9 @@ VPUBLIC void killBEM(NOsh *nosh, Vpbe *pbe[NOSH_MAXCALC]
 
 }
 
+
+void apbs2tabipb_(char**, int*, double*,double* , double*, double*, double*, double*, double*, int*, int*, double*);
+
 VPUBLIC int solveBEM(NOsh *nosh, PBEparm *pbeparm, BEMparm *bemparm,
                     BEMparm_CalcType type
                    ) {
@@ -4816,18 +4819,18 @@ VPUBLIC int solveBEM(NOsh *nosh, PBEparm *pbeparm, BEMparm *bemparm,
     Vnm_tstart(APBS_TIMER_SOLVER, "Solver timer");
 
 //apbs2tabipb(apbs_pqr_filename, nion, ionc, ionq, ionr, pdie, sdie, sdens, temp)
-    apbs2tabipb_(&(nosh->molpath),
+    apbs2tabipb_( (char**)&(nosh->molpath),
                  &(pbeparm->nion),
-                 &(pbeparm->ionc),
-                 &(pbeparm->ionq),
-                 &(pbeparm->ionr),
-                 &(pbeparm->pdie),
-                 &(pbeparm->sdie),
-                 &(pbeparm->sdens),
-                 &(pbeparm->temp),
+                 (double*)&(pbeparm->ionc),
+                 (double*)&(pbeparm->ionq),
+                 (double*)&(pbeparm->ionr),
+                 (double*)&(pbeparm->pdie),
+                 (double*)&(pbeparm->sdie),
+                 (double*)&(pbeparm->sdens),
+                 (double*)&(pbeparm->temp),
                  &(bemparm->tree_order),
                  &(bemparm->tree_n0),
-                 &(bemparm->mac)
+                 (double*)&(bemparm->mac)
                  );
 
     Vnm_tstop(APBS_TIMER_SOLVER, "Solver timer");
@@ -4956,29 +4959,12 @@ VPUBLIC void killGEOFLOW(NOsh *nosh, Vpbe *pbe[NOSH_MAXCALC]
 
 }
 
-<<<<<<< HEAD
-
-VPUBLIC int solveGEOFLOW(Valist* molecules[NOSH_MAXMOL], NOsh *nosh, PBEparm *pbeparm, GEOFLOWparm *parm,
-                    GEOFLOWparm_CalcType type
-                   ) {
-
-=======
-VPUBLIC int solveGEOFLOW(NOsh *nosh, PBEparm *pbeparm, GEOFLOWparm *parm,
-                    GEOFLOWparm_CalcType type
-                   ) {
-
-    int nx,
-        ny,
-        nz,
-        i;
-
->>>>>>> eeffc50d1ae067d3f14820011b6421b442d7be71
+VPUBLIC int solveGEOFLOW(Valist* molecules[NOSH_MAXMOL], NOsh *nosh, PBEparm *pbeparm, GEOFLOWparm *parm, GEOFLOWparm_CalcType type) {
     if (nosh != VNULL) {
         if (nosh->bogus) return 1;
     }
 
     Vnm_tstart(APBS_TIMER_SOLVER, "Solver timer");
-<<<<<<< HEAD
     
     int natm = 0;
     for(int m=0; m < nosh->nmol; ++m){
@@ -5038,24 +5024,6 @@ VPUBLIC int solveGEOFLOW(NOsh *nosh, PBEparm *pbeparm, GEOFLOWparm *parm,
     Vnm_tprint( 1,"  Global net energy = %1.12E\n", gf.totalSolvation);
     Vnm_tprint( 1,"  Global net ELEC energy = %1.12E\n", gf.elecSolvation);
     Vnm_tprint( 1,"  Global net APOL energy = %1.12E\n", gf.nonpolarSolvation);
-=======
-
-//apbs2tabipb(apbs_pqr_filename, nion, ionc, ionq, ionr, pdie, sdie, sdens, temp)
-//    apbs2tabipb_(&(nosh->molpath),
-//                 &(pbeparm->nion),
-//                 &(pbeparm->ionc),
-//                 &(pbeparm->ionq),
-//                 &(pbeparm->ionr),
-//                 &(pbeparm->pdie),
-//                 &(pbeparm->sdie),
-//                 &(pbeparm->sdens),
-//                 &(pbeparm->temp),
-//                 &(parm->tree_order),
-//                 &(parm->tree_n0),
-//                 &(parm->mac)
-//                 );
-    Vnm_tprint(1, "****************hello from geoflow**********\n");
->>>>>>> eeffc50d1ae067d3f14820011b6421b442d7be71
 
     Vnm_tstop(APBS_TIMER_SOLVER, "Solver timer");
 
@@ -5121,11 +5089,7 @@ VPUBLIC int forceGEOFLOW(
     Vnm_tstart(APBS_TIMER_FORCE, "Force timer");
 
 #ifndef VAPBSQUIET
-<<<<<<< HEAD
-//    Vnm_tprint( 1,"  Calculating forces...\n");
-=======
     Vnm_tprint( 1,"  Calculating forces...\n");
->>>>>>> eeffc50d1ae067d3f14820011b6421b442d7be71
 #endif
 
     Vnm_tstop(APBS_TIMER_FORCE, "Force timer");
