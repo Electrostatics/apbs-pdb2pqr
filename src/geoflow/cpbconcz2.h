@@ -52,9 +52,8 @@
 ///
 /// @endverbatim
 
-#ifndef _CPBCONCZ_H_
-#define _CPBCONCZ_H_
-
+#ifndef __CPBCONCZ_H_
+#define __CPBCONCZ_H_
 
 #define MAXATOMS 15000  /* From the original f90 code; need to keep this
              * constant since the f90 routines that we call from here   
@@ -71,41 +70,39 @@ typedef struct _GeoflowOutput{
         elecSolvation;
 } GeoflowOutput;
 
+typedef struct _GeoflowInput{
+    double dcel;
+	int ffmodel;
+	double extvalue;
+	double* pqr;
+	int maxstep;
+	double crevalue;
+	int iadi;
+	double tottf;
+	double* ljepsilon;
+	double alpha;
+	int igfin;
+	double epsilons;
+	double epsilonp;
+	int idacsl;
+	double tol;
+	int iterf;
+	double tpb;
+	int itert;
+    double pres;
+	double gama;
+	double tauval;
+	double prob;
+	int vdwdispersion;
+	double sigmas;
+	double density;
+	double epsilonw;
+} GeoflowInput;
+
 #ifdef __cplusplus
 extern "C"
 #endif
-GeoflowOutput geoflowSolvation(double xyzr[MAXATOMS][XYZRWIDTH],
-                                size_t natm,
-                                double dcel,
-                                int ffmodel,
-                                double extvalue,
-                                double* pqr,
-                                int maxstep,
-                                double crevalue,
-                                int iadi,
-                                double tottf,
-                                double* ljepsilon,
-                                double alpha,
-                                int igfin,
-                                double epsilons,
-                                double epsilonp,
-                                int idacsl,
-                                double tol,
-                                int iterf,
-                                double tpb,
-                                int itert,
-                                double potcoe,
-                                double gama,
-                                double tauval,
-                                double prob,
-                                int vdwdispersion,
-                                double sigmas,
-                                double density,
-                                double epsilonw);
-
-#ifdef __cplusplus
-
-#endif
+GeoflowOutput geoflowSolvation(double xyzr[MAXATOMS][XYZRWIDTH], size_t natm, GeoflowInput gfin);
 
 #endif
 

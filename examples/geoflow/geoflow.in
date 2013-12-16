@@ -1,5 +1,5 @@
 read
-    mol pqr 1a63.pqr        
+    mol pqr imidazole_zap.pqr        
 end
 elec name comp_solv        # Solvated complex
     geoflow-manual

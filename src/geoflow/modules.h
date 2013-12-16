@@ -52,16 +52,12 @@
 ///
 /// @endverbatim
 
-#ifndef MODULES_H
-#define MODULES_H
+#ifndef __MODULES_H
+#define __MODULES_H
 
 #include <vector>
 #include "Mat.h"
-
-#define MAXATOMS 15000  /* From the original f90 code; need to keep this
-             * constant since the f90 routines that we call from here 
-             * depend on it. */
-#define XYZRWIDTH 4     // 4: 0-2 => pos, 3 => radius
+#include "cpbconcz2.h"
 
 struct Comdata{
     char fname[100];

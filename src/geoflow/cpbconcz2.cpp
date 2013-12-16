@@ -192,7 +192,33 @@ size_t loadData(std::ifstream& f, //<i
     return natm;
 }
 
-GeoflowOutput geoflowSolvation(double xyzr[MAXATOMS][XYZRWIDTH], size_t natm, double dcel, int ffmodel, double extvalue, double* pqr, int maxstep, double crevalue, int iadi, double tottf, double* ljepsilon, double alpha, int igfin, double epsilons, double epsilonp, double tol, int iterf, double tpb, int itert, double pres, double gama, double tauval, double prob, int vdwdispersion, double sigmas, double density, double epsilonw) {
+GeoflowOutput geoflowSolvation(double xyzr[MAXATOMS][XYZRWIDTH], size_t natm, GeoflowInput gfin) {
+    double dcel = gfin.dcel;
+	int ffmodel = gfin.ffmodel;
+	double extvalue = gfin.extvalue;
+	double* pqr = gfin.pqr;
+	int maxstep = gfin.maxstep;
+	double crevalue = gfin.crevalue;
+	int iadi = gfin.iadi;
+	double tottf = gfin.tottf;
+	double* ljepsilon = gfin.ljepsilon;
+	double alpha = gfin.alpha;
+	int igfin = gfin.igfin;
+	double epsilons = gfin.epsilons;
+	double epsilonp = gfin.epsilonp;
+	double tol = gfin.tol;
+	int iterf = gfin.iterf;
+	double tpb = gfin.tpb;
+	int itert = gfin.itert;
+	double pres = gfin.pres;
+	double gama = gfin.gama;
+	double tauval = gfin.tauval;
+	double prob = gfin.prob;
+	int vdwdispersion = gfin.vdwdispersion;
+	double sigmas = gfin.sigmas;
+	double density = gfin.density;
+	double epsilonw = gfin.epsilonw;
+
     double elec = 0.0, area = 0.0, volume = 0.0, attint = 0.0;
 
     comdata.dcel = dcel;
@@ -330,7 +356,34 @@ processAtomsFile(std::string fileName, int ffmodel, int radexp, double extvalue,
 
         size_t natm = loadData(f, imord, ffmodel, radexp, expv, xyzr, pqr, ljepsilon);
 
-        GeoflowOutput gf = geoflowSolvation(xyzr, natm, dcel, ffmodel, extvalue, pqr, maxstep, crevalue, iadi, tottf, ljepsilon, alpha, igfin, epsilons, epsilonp, tol, iterf, tpb, itert, pres, gama, tauval, prob, vdwdispersion, sigmas, density, epsilonw);
+        GeoflowInput gfin = (GeoflowInput){
+            dcel,
+            ffmodel,
+           	extvalue,
+           	pqr,
+           	maxstep,
+           	crevalue,
+           	iadi,
+           	tottf,
+           	ljepsilon,
+           	alpha,
+           	igfin,
+           	epsilons,
+           	epsilonp,
+            0,//idascl
+           	tol,
+           	iterf,
+           	tpb,
+           	itert,
+           	pres,
+           	gama,
+           	tauval,
+           	prob,
+           	vdwdispersion,
+           	sigmas,
+           	density,
+           	epsilonw};
+        GeoflowOutput gf = geoflowSolvation(xyzr, natm, gfin);
 
         std::cout << "totalSolv:\t" << gf.totalSolvation << "\t";
         std::cout << "nonpolar: " << gf.nonpolarSolvation << "\t";
