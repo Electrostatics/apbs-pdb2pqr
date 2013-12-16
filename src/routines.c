@@ -4990,36 +4990,35 @@ VPUBLIC int solveGEOFLOW(Valist* molecules[NOSH_MAXMOL], NOsh *nosh, PBEparm *pb
         pqr[i] = Vatom_getCharge(atom);
     }}
 
-    GeoflowOutput gf =  geoflowSolvation(
-                            xyzr,
-                            natm,
-                            parm->dcel,     // dcel
-                            1,        // ffmodel
-                            1.90,     // extvalue
-                            pqr,           
-                            20,       // MAXSTEP
-                            0.01,     // CREVALUE
-                            0,        // iadi
-                            3.5,      // TOTTF
-                            NULL,     // ljepsilon, unused for ffmodel == 1, which is all APBS can use
-                            0.50,     // ALPHA
-                            1,        // igfin,
-                            pbeparm->sdie,    // EPSILONS
-                            pbeparm->pdie,     // EPSILONP
-                            0,        // idacsl
-                            1e-5,     // TOL
-                            0,        // iterf
-                            0.0,      // tpb
-                            0,        // itert
-                            parm->pres,     // pres
-                            parm->gama,     // gama
-                            1.40,     // tauval
-                            pbeparm->srad,      // prob
-                            parm->vdw,        // vdwdispersion
-                            1.5828,   // sigmas
-                            0.03346,  // density
-                            0.1554    // epsilonw
-    );
+    GeoflowInput gfin = (GeoflowInput){
+         parm->dcel,     // dcel
+         1,        // ffmodel
+         1.90,     // extvalue
+         pqr,           
+         20,       // MAXSTEP
+         0.01,     // CREVALUE
+         0,        // iadi
+         3.5,      // TOTTF
+         NULL,     // ljepsilon, unused for ffmodel == 1, which is all APBS can use
+         0.50,     // ALPHA
+         1,        // igfin,
+         pbeparm->sdie,    // EPSILONS
+         pbeparm->pdie,     // EPSILONP
+         0,        // idacsl
+         1e-5,     // TOL
+         0,        // iterf
+         0.0,      // tpb
+         0,        // itert
+         parm->pres,     // pres
+         parm->gama,     // gama
+         1.40,     // tauval
+         pbeparm->srad,      // prob
+         parm->vdw,        // vdwdispersion
+         1.5828,   // sigmas
+         0.03346,  // density
+         0.1554    // epsilonw
+    };
+    GeoflowOutput gf =  geoflowSolvation(xyzr, natm, gfin);
 
     Vnm_tprint( 1,"  Global net energy = %1.12E\n", gf.totalSolvation);
     Vnm_tprint( 1,"  Global net ELEC energy = %1.12E\n", gf.elecSolvation);
