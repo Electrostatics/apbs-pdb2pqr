@@ -721,6 +721,7 @@ int main(
                 }
                 /* Useful local variables */
                 geoflowparm = nosh->calc[i]->geoflowparm;
+                apolparm = nosh->calc[i]->apolparm;
                 pbeparm = nosh->calc[i]->pbeparm;
 
                 /* Set up problem */
@@ -736,7 +737,7 @@ int main(
                 printPBEPARM(pbeparm);
 
                 /* Solve PDE */
-                if (solveGEOFLOW(alist, nosh, pbeparm, geoflowparm, geoflowparm->type) != 1) {
+                if (solveGEOFLOW(alist, nosh, pbeparm, apolparm, geoflowparm, geoflowparm->type) != 1) {
                     Vnm_tprint(2, "Error solving PDE!\n");
                     VJMPERR1(0);
                 }

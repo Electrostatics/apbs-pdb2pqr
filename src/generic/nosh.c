@@ -366,7 +366,8 @@ VPUBLIC NOsh_calc* NOsh_calc_ctor(
             thee->bemparm = BEMparm_ctor(BCT_MANUAL);
             break;
         case NCT_GEOFLOW:
-            thee->geoflowparm = GEOFLOWparm_ctor(GFCT_MANUAL);
+            thee->geoflowparm = GEOFLOWparm_ctor(GFCT_NONE);
+            thee->apolparm = APOLparm_ctor();
             break;
         default:
             Vnm_print(2, "NOsh_calc_ctor:  unknown calculation type (%d)!\n",
@@ -401,6 +402,7 @@ VPUBLIC void NOsh_calc_dtor(
             break;
         case NCT_GEOFLOW:
             GEOFLOWparm_dtor(&(calc->geoflowparm));
+            APOLparm_dtor(&(calc->apolparm));
             break;
         default:
             Vnm_print(2, "NOsh_calc_ctor:  unknown calculation type (%d)!\n",
@@ -1198,6 +1200,12 @@ ELEC section!\n");
             (thee->nelec)++;
             calc->geoflowparm->type = GFCT_MANUAL;
             return NOsh_parseGEOFLOW(thee, sock, calc);
+        } else if (Vstring_strcasecmp(tok, "geoflow-auto") == 0) {
+            thee->elec[thee->nelec] = NOsh_calc_ctor(NCT_GEOFLOW);
+            calc = thee->elec[thee->nelec];
+            (thee->nelec)++;
+            calc->geoflowparm->type = GFCT_AUTO;
+            return NOsh_parseGEOFLOW(thee, sock, calc);
         } else {
             Vnm_print(2, "NOsh_parseELEC: The method (\"mg\",\"fem\", \"bem\", \"geoflow\") or \
 \"name\" must be the first keyword in the ELEC section\n");
@@ -1252,12 +1260,18 @@ run!\n");
             calc = thee->apol[thee->napol];
             (thee->napol)++;
             return NOsh_parseAPOL(thee, sock, calc);
-
-            if (Vio_scanf(sock, "%s", tok) != 1) {
-                Vnm_print(2, "NOsh_parseAPOLAR:  Ran out of tokens while reading \
-APOLAR section!\n");
-                return 0;
-            }
+//        } else if (Vstring_strcasecmp(tok, "geoflow-manual") == 0) {
+//            thee->elec[thee->nelec] = NOsh_calc_ctor(NCT_GEOFLOW);
+//            calc = thee->elec[thee->nelec];
+//            (thee->nelec)++;
+//            calc->geoflowparm->type = GFCT_MANUAL;
+//            return NOsh_parseGEOFLOW(thee, sock, calc);
+//        } else if (Vstring_strcasecmp(tok, "geoflow-auto") == 0) {
+//            thee->elec[thee->nelec] = NOsh_calc_ctor(NCT_GEOFLOW);
+//            calc = thee->elec[thee->nelec];
+//            (thee->nelec)++;
+//            calc->geoflowparm->type = GFCT_AUTO;
+//            return NOsh_parseGEOFLOW(thee, sock, calc);
         }
     }
 
@@ -1564,7 +1578,7 @@ VPRIVATE int NOsh_setupCalcGEOFLOW(NOsh *thee, NOsh_calc *calc) {
 
     /* Now we're ready to whatever sorts of post-processing operations that are
         necessary for the various types of calculations */
-    if(parm->type == GFCT_MANUAL){
+    if(parm->type == GFCT_MANUAL || parm->type == GFCT_AUTO){
         return NOsh_setupCalcGEOFLOWMANUAL(thee, calc);
     }else{
         Vnm_print(2, "NOsh_setupCalcGEOFLOW:  undefined GEOFLOW calculation type (%d)!\n", parm->type);
@@ -2384,7 +2398,7 @@ VPUBLIC int NOsh_parseAPOL(
     }
     apolparm = elec->apolparm;
     if (apolparm == VNULL) {
-        Vnm_print(2, "NOsh_parseAPOL:  Got pointer to NULL feparm object!\n");
+        Vnm_print(2, "NOsh_parseAPOL:  Got pointer to NULL apolparm object!\n");
         return 0;
     }
 
@@ -2534,6 +2548,7 @@ VPRIVATE int NOsh_setupCalcGEOFLOWMANUAL(
                                    ) {
 
     GEOFLOWparm *parm = VNULL;
+    APOLparm *apolparm = VNULL;
     PBEparm *pbeparm = VNULL;
     NOsh_calc *calc = VNULL;
 
@@ -2547,7 +2562,13 @@ VPRIVATE int NOsh_setupCalcGEOFLOWMANUAL(
     }
     parm = elec->geoflowparm;
     if (parm == VNULL) {
-        Vnm_print(2, "NOsh_setupCalcGEOFLOWMANUAL:  Got NULL mgparm -- was this calculation \
+        Vnm_print(2, "NOsh_setupCalcGEOFLOWMANUAL:  Got NULL geoflowparm -- was this calculation \
+set up?\n");
+        return 0;
+    }
+    apolparm = elec->apolparm;
+    if (parm == VNULL) {
+        Vnm_print(2, "NOsh_setupCalcGEOFLOWMANUAL:  Got NULL apolparm -- was this calculation \
 set up?\n");
         return 0;
     }
@@ -2673,6 +2694,7 @@ VPUBLIC int NOsh_parseGEOFLOW(
 
     char tok[VMAX_BUFSIZE];
     GEOFLOWparm *parm = VNULL;
+    APOLparm *apolparm = VNULL;
     PBEparm *pbeparm = VNULL;
     int rc;
 
@@ -2694,6 +2716,11 @@ VPUBLIC int NOsh_parseGEOFLOW(
         Vnm_print(2, "NOsh:  Got pointer to NULL geoflowparm object!\n");
         return 0;
     }
+    apolparm = elec->apolparm;
+    if (parm == VNULL) {
+        Vnm_print(2, "NOsh:  Got pointer to NULL apolparm object!\n");
+        return 0;
+    }
     pbeparm = elec->pbeparm;
     if (pbeparm == VNULL) {
         Vnm_print(2, "NOsh:  Got pointer to NULL pbeparm object!\n");
@@ -2713,8 +2740,13 @@ VPUBLIC int NOsh_parseGEOFLOW(
         if (Vstring_strcasecmp(tok, "end") == 0) {
             parm->parsed = 1;
             pbeparm->parsed = 1;
+            apolparm->parsed = 1;
             rc = 1;
             break;
+        }
+        
+        if (Vstring_strcasecmp(tok, "ion") == 0) {
+            Vnm_print(2, "parseGEOFLOW: WARNING! ion not implemented for geometric flow!\n");
         }
 
         /* Pass the token through a series of parsers */
@@ -2724,17 +2756,28 @@ VPUBLIC int NOsh_parseGEOFLOW(
             break;
         } else if (rc == 0) {
             /* Pass the token to the generic GEOFLOW parser */
-            rc = GEOFLOWparm_parseToken(parm, tok, sock);
+            rc = APOLparm_parseToken(apolparm, tok, sock);
             if (rc == -1) {
-                Vnm_print(0, "NOsh_parseGEOFLOW:  parseGEOFLOW error!\n");
+                Vnm_print(0, "NOsh_parseAPOL:  parseAPOL error!\n");
                 break;
             } else if (rc == 0) {
-                /* We ran out of parsers! */
-                Vnm_print(2, "NOsh:  Unrecognized keyword: %s\n", tok);
-                break;
+                rc = GEOFLOWparm_parseToken(parm, tok, sock);
+                if (rc == -1) {
+                    Vnm_print(0, "NOsh_parseGEOFLOW:  parseGEOFLOW error!\n");
+                    break;
+                } else if (rc == 0) {
+                    /* We ran out of parsers! */
+                    Vnm_print(2, "NOsh:  Unrecognized keyword: %s\n", tok);
+                    break;
+                }
             }
         }
     }
+    
+    pbeparm->setsrfm=1;
+    pbeparm->srad=0.0;
+    pbeparm->setsrad=1;
+    pbeparm->settemp=1;
 
     /* Handle various errors arising in the token-snarfing loop -- these all
         just result in simple returns right now */

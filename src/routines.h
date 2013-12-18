@@ -833,7 +833,7 @@ VEXTERNC void killGEOFLOW (
  * @param pbem  GEOFLOW objects for this calculation
  * @param type  Type of GEOFLOW calculation
  * @return  1 if successful, 0 otherwise */
-VEXTERNC int solveGEOFLOW(Valist* molecules[NOSH_MAXMOL], NOsh *nosh, PBEparm *pbeparm, GEOFLOWparm *parm, GEOFLOWparm_CalcType type);
+VEXTERNC int solveGEOFLOW(Valist* molecules[NOSH_MAXMOL], NOsh *nosh, PBEparm *pbeparm, APOLparm *apolparm, GEOFLOWparm *parm, GEOFLOWparm_CalcType type);
 
 /**
  * @brief  Set GEOFLOW partitions for calculating observables and performing I/O

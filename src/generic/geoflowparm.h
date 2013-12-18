@@ -76,7 +76,8 @@
  */
 enum eGEOFLOWparm_CalcType {
     GFCT_MANUAL=0,  /**< GEOFLOW-manual */
-    GFCT_NONE=1 /**< not defined */
+    GFCT_AUTO=1,  /**< GEOFLOW-auto */
+    GFCT_NONE=2 /**< not defined */
 };
 
 /**
@@ -99,14 +100,14 @@ typedef struct sGEOFLOWparm {
     int parsed;  /**< Has this structure been filled? (0 = no, 1 = yes) */
 
     /* *** GENERIC PARAMETERS *** */
-    double dcel;
-    double pres;
-    double gama;
+//    double dcel;
+//    double pres;
+//    double gama;
     int vdw;
     
-    int setdcel;
-    int setpres;
-    int setgama;
+//    int setdcel;
+//    int setpres;
+//   int setgama;
     int setvdw;
 
 } GEOFLOWparm;
