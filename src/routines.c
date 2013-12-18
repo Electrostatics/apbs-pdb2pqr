@@ -4959,7 +4959,7 @@ VPUBLIC void killGEOFLOW(NOsh *nosh, Vpbe *pbe[NOSH_MAXCALC]
 
 }
 
-VPUBLIC int solveGEOFLOW(Valist* molecules[NOSH_MAXMOL], NOsh *nosh, PBEparm *pbeparm, GEOFLOWparm *parm, GEOFLOWparm_CalcType type) {
+VPUBLIC int solveGEOFLOW(Valist* molecules[NOSH_MAXMOL], NOsh *nosh, PBEparm *pbeparm, APOLparm *apolparm, GEOFLOWparm *parm, GEOFLOWparm_CalcType type) {
     if (nosh != VNULL) {
         if (nosh->bogus) return 1;
     }
@@ -4991,7 +4991,7 @@ VPUBLIC int solveGEOFLOW(Valist* molecules[NOSH_MAXMOL], NOsh *nosh, PBEparm *pb
     }}
 
     GeoflowInput gfin = (GeoflowInput){
-         parm->dcel,     // dcel
+         apolparm->grid[0],     // dcel
          1,        // ffmodel
          1.90,     // extvalue
          pqr,           
@@ -4999,7 +4999,7 @@ VPUBLIC int solveGEOFLOW(Valist* molecules[NOSH_MAXMOL], NOsh *nosh, PBEparm *pb
          0.01,     // CREVALUE
          0,        // iadi
          3.5,      // TOTTF
-         NULL,     // ljepsilon, unused for ffmodel == 1, which is all APBS can use
+         NULL,     // ljepsilon, unused for ffmodel == 1, which is all for now
          0.50,     // ALPHA
          1,        // igfin,
          pbeparm->sdie,    // EPSILONS
@@ -5009,14 +5009,14 @@ VPUBLIC int solveGEOFLOW(Valist* molecules[NOSH_MAXMOL], NOsh *nosh, PBEparm *pb
          0,        // iterf
          0.0,      // tpb
          0,        // itert
-         parm->pres,     // pres
-         parm->gama,     // gama
-         1.40,     // tauval
-         pbeparm->srad,      // prob
+         apolparm->press,     // pres
+         apolparm->gamma,     // gama
+         1.4,     // tauval unused???
+         0.0,                // prob
          parm->vdw,        // vdwdispersion
-         1.5828,   // sigmas
-         0.03346,  // density
-         0.1554    // epsilonw
+         1.5828,            // sigmas
+         apolparm->bconc,  // density
+         0.1554          // epsilonw
     };
     GeoflowOutput gf =  geoflowSolvation(xyzr, natm, gfin);
 

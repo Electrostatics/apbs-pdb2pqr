@@ -83,9 +83,9 @@ VPUBLIC Vrc_Codes GEOFLOWparm_ctor2(GEOFLOWparm *thee, GEOFLOWparm_CalcType type
     thee->parsed = 0;
     thee->type = type;
     thee->vdw = 0;
-    thee->dcel = 0.25;
-    thee->pres = 0.008;
-    thee->gama = 0.0001;
+//    thee->dcel = 0.25;
+//    thee->pres = 0.008;
+//    thee->gama = 0.0001;
 
     return VRC_SUCCESS;
 }
@@ -117,7 +117,7 @@ VPUBLIC Vrc_Codes GEOFLOWparm_check(GEOFLOWparm *thee) {
 
 
     /* Check type settings */
-    if ((thee->type != GFCT_MANUAL) && (thee->type != GFCT_NONE)) {
+    if ((thee->type != GFCT_MANUAL)&& (thee->type != GFCT_AUTO)&& (thee->type != GFCT_NONE)) {
          Vnm_print(2,"GEOFLOWparm_check: type not set");
          rc = VRC_FAILURE;
     }
@@ -133,9 +133,9 @@ VPUBLIC void GEOFLOWparm_copy(GEOFLOWparm *thee, GEOFLOWparm *parm) {
     thee->parsed = parm->parsed;
 
     thee->vdw = parm->vdw;
-    thee->dcel = parm->dcel;
-    thee->pres = parm->pres;
-    thee->gama = parm->gama;
+//    thee->dcel = parm->dcel;
+//    thee->pres = parm->pres;
+//    thee->gama = parm->gama;
 }
 
 Vrc_Codes FUBAR(const char* name){
@@ -200,13 +200,14 @@ VPUBLIC Vrc_Codes GEOFLOWparm_parseToken(GEOFLOWparm *thee, char tok[VMAX_BUFSIZ
     Vnm_print(0, "GEOFLOWparm_parseToken:  trying %s...\n", tok);
 
 
-    if (Vstring_strcasecmp(tok, "pres") == 0) {
-        return parseNonNeg(&(thee->pres), 0.008, &(thee->setpres), "pres", sock);
-    } else if (Vstring_strcasecmp(tok, "gama") == 0) {
-        return parseNonNeg(&(thee->gama), 0.0001, &(thee->setgama), "gama", sock);
-    } else if (Vstring_strcasecmp(tok, "dcel") == 0) {
-        return parseNonNeg(&(thee->dcel), 0.25, &(thee->setdcel), "dcel", sock);
-    } else if (Vstring_strcasecmp(tok, "vdw") == 0) {
+//    if (Vstring_strcasecmp(tok, "press") == 0) {
+//        return parseNonNeg(&(thee->pres), 0.008, &(thee->setpres), "pres", sock);
+//    } else if (Vstring_strcasecmp(tok, "gamma") == 0) {
+//        return parseNonNeg(&(thee->gama), 0.0001, &(thee->setgama), "gama", sock);
+//    } else if (Vstring_strcasecmp(tok, "grid") == 0) {
+//        return parseNonNeg(&(thee->dcel), 0.25, &(thee->setdcel), "dcel", sock);
+//    } else
+    if (Vstring_strcasecmp(tok, "vdwdisp") == 0) {
         return GEOFLOWparm_parseVDW(thee, sock);
     } else {
         Vnm_print(2, "parseGEOFLOW:  Unrecognized keyword (%s)!\n", tok);
