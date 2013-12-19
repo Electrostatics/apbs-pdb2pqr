@@ -193,7 +193,6 @@ size_t loadData(std::ifstream& f, //<i
 }
 
 GeoflowOutput geoflowSolvation(double xyzr[MAXATOMS][XYZRWIDTH], size_t natm, GeoflowInput gfin) {
-    double dcel = gfin.dcel;
 	int ffmodel = gfin.ffmodel;
 	double extvalue = gfin.extvalue;
 	double* pqr = gfin.pqr;
@@ -220,9 +219,11 @@ GeoflowOutput geoflowSolvation(double xyzr[MAXATOMS][XYZRWIDTH], size_t natm, Ge
 	double epsilonw = gfin.epsilonw;
 
     double elec = 0.0, area = 0.0, volume = 0.0, attint = 0.0;
-
-    comdata.dcel = dcel;
-    comdata.deltax = comdata.deltay = comdata.deltaz = dcel;
+    
+    double dx = gfin.dcel[0], dy = gfin.dcel[1], dz=gfin.dcel[2];
+    comdata.deltax = dx;
+    comdata.deltay = dy;
+    comdata.deltaz = dz;
     comdata.pi = acos(-1.0);
 
     lj.ffmodel = ffmodel;
@@ -268,13 +269,14 @@ GeoflowOutput geoflowSolvation(double xyzr[MAXATOMS][XYZRWIDTH], size_t natm, Ge
 
     int iloop = 0, ipath = 0;
     double tott = 0.0;
-std::cout << nx <<" "<<ny<<" "<<nz<<std::endl;
+std::cout <<"dimensions:\t" << nx <<" "<<ny<<" "<<nz<<std::endl;
+std::cout <<"grid spacing:\t" << dx <<" "<<dy<<" "<<dz<<std::endl;
     Mat<> phi(nx,ny,nz), phix(nx,ny,nz), phivoc(nx,ny,nz), surfu(nx,ny,nz), eps(nx,ny,nz), bg(nx,ny,nz);
     while ((iloop < maxstep) && (diffEnergy > crevalue)) {
         iloop++;
         double deltat = 0; //this is wrong for adi...
         if (!iadi) {
-            deltat = comdata.dcel * comdata.dcel / 4.5;
+            deltat =  pow(dx*dy*dz, 2.0/3.0)/4.5;
         }
         if (ipath == 0) /* will always be true, but this is how
                   * it was in the original F90 code.  
@@ -284,7 +286,7 @@ std::cout << nx <<" "<<ny<<" "<<nz<<std::endl;
             if (iloop == 1) {
                 tott = tottf;
             } else {
-                tott = iloop * comdata.dcel * comdata.dcel / 4.5;
+                tott = iloop*pow(dx*dy*dz, 2.0/3.0)/4.5;
             }
         }
         area = volume = attint = 0.0;
@@ -296,7 +298,7 @@ std::cout << nx <<" "<<ny<<" "<<nz<<std::endl;
 
         int iter = 1000;
         double fpb, titer = 0.0;
-        pbsolver(eps, phi, bg, comdata.dcel, tol, iter);
+        pbsolver(eps, phi, bg, 0, tol, iter);
         if (iloop == 1) {
             fpb = titer;
             iterf = iter;
@@ -305,15 +307,14 @@ std::cout << nx <<" "<<ny<<" "<<nz<<std::endl;
         itert += iter;
 
         eps = epsilonp;
-        pbsolver(eps, phivoc, bg, comdata.dcel, tol, iter);
+        pbsolver(eps, phivoc, bg, 0, tol, iter);
 
-        double weit = 1.0 / (2.0 * comdata.dcel);
         for (size_t ix = 2; ix <= comdata.nx - 1; ix++) {
         for (size_t iy = 2; iy <= comdata.ny - 1; iy++) {
         for (size_t iz = 2; iz <= comdata.nz - 1; iz++) {
-            double phixx = phi(ix+1,iy,iz) - weit*phi(ix-1,iy,iz);
-            double phixy = phi(ix,iy+1,iz) - weit*phi(ix,iy-1,iz);
-            double phixz = phi(ix,iy,iz+1) - weit*phi(ix,iy,iz-1);
+            double phixx = phi(ix+1,iy,iz) - phi(ix-1,iy,iz)/(2.0*dx);
+            double phixy = phi(ix,iy+1,iz) - phi(ix,iy-1,iz)/(2.0*dy);
+            double phixz = phi(ix,iy,iz+1) - phi(ix,iy,iz-1)/(2.0*dz);
 
             phix(ix,iy,iz) = 0.5 * (epsilons - epsilonp) * (phixx * phixx + phixy * phixy + phixz * phixz) * potcoe;
         }}}
@@ -356,8 +357,9 @@ processAtomsFile(std::string fileName, int ffmodel, int radexp, double extvalue,
 
         size_t natm = loadData(f, imord, ffmodel, radexp, expv, xyzr, pqr, ljepsilon);
 
+       double dcel3[3] = {0.25,0.25,0.25}; 
         GeoflowInput gfin = (GeoflowInput){
-            dcel,
+            dcel3,
             ffmodel,
            	extvalue,
            	pqr,

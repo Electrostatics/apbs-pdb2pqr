@@ -64,15 +64,16 @@
 using namespace std;
 
 
-double left(const valarray<double>& pr, double ev){
-    return floor( (pr - ev).min()/comdata.dcel )*comdata.dcel - ev;
+double left(const valarray<double>& pr, double h, double ev){
+    return floor( (pr - ev).min()/h )*h - ev;
 }
 
-double right(const valarray<double>& pr, double ev){
-    return ceil( (pr + ev).max()/comdata.dcel )*comdata.dcel + ev;
+double right(const valarray<double>& pr, double h, double ev){
+    return ceil( (pr + ev).max()/h )*h + ev;
 }
 
 void domainini(double xyzr[MAXATOMS][XYZRWIDTH], const size_t natm, const double extvalue){
+    double dx = comdata.deltax, dy = comdata.deltay, dz = comdata.deltaz;
     valarray<double> atom_x(natm), atom_y(natm), atom_z(natm), atom_r(natm);
     for(size_t i=0; i<natm; ++i){
         atom_x[i] = xyzr[i][0];
@@ -81,21 +82,21 @@ void domainini(double xyzr[MAXATOMS][XYZRWIDTH], const size_t natm, const double
         atom_r[i] = xyzr[i][3];
     }
     
-    double xleft = left(atom_x - atom_r, extvalue);
-    double yleft = left(atom_y - atom_r, extvalue);
-    double zleft = left(atom_z - atom_r, extvalue);
+    double xleft = left(atom_x - atom_r, dx, extvalue);
+    double yleft = left(atom_y - atom_r, dy, extvalue);
+    double zleft = left(atom_z - atom_r, dz, extvalue);
 
-    double xright = right(atom_x + atom_r, extvalue);
-    double yright = right(atom_y + atom_r, extvalue);
-    double zright = right(atom_z + atom_r, extvalue);
+    double xright = right(atom_x + atom_r, dx, extvalue);
+    double yright = right(atom_y + atom_r, dy, extvalue);
+    double zright = right(atom_z + atom_r, dz, extvalue);
     
-    int nx = (xright - xleft)/comdata.dcel + 1;
-    int ny = (yright - yleft)/comdata.dcel + 1;
-    int nz = (zright - zleft)/comdata.dcel + 1;
+    int nx = (xright - xleft)/dx + 1;
+    int ny = (yright - yleft)/dy + 1;
+    int nz = (zright - zleft)/dz + 1;
 
-    xright = xleft + comdata.dcel*(nx - 1);
-    yright = yleft + comdata.dcel*(ny - 1);
-    zright = zleft + comdata.dcel*(nz - 1);
+    xright = xleft + dx*(nx - 1);
+    yright = yleft + dy*(ny - 1);
+    zright = zleft + dz*(nz - 1);
 
     //set the stupid globals...
     comdata.xleft = xleft; comdata.xright = xright;
@@ -107,7 +108,7 @@ void domainini(double xyzr[MAXATOMS][XYZRWIDTH], const size_t natm, const double
 void volumintegration(const double* f, const int& nx, const int& ny, const int& nz, const double& dcel, double& volume){ //FIXME return volume
     valarray<double> ff(f, nx*ny*nz);//maybe divide before sum to avoid floating pt stuff
     ff /= 1000.0;
-    ff *= dcel*dcel*dcel;
+    ff *= comdata.deltax*comdata.deltay*comdata.deltaz;
     volume = ff.sum();
 }
 
@@ -116,14 +117,14 @@ void volumintegration(const double* f, const int& nx, const int& ny, const int& 
 double volumeIntegration(Mat<> f, double dcel){
     valarray<double> ff(f.data(), f.size());
     ff /= 1000.0;
-    ff *= dcel*dcel*dcel;
+    ff *= comdata.deltax*comdata.deltay*comdata.deltaz;
     return ff.sum();
 }
 
 void upwinding(double dx, double dt, int nt, Mat<>& g, Mat<>& surfu, Mat<>& phitotx){
     Mat<> surfnew(surfu);
     for(int t=0; t<nt; ++t){ 
-        for(Stencil<double> phi = surfu.stencilBegin(dx); phi != surfu.stencilEnd(dx); ++phi){
+        for(Stencil<double> phi = surfu.stencilBegin(comdata.deltax); phi != surfu.stencilEnd(dx); ++phi){
             if(g[phi.i] > 2e-2){
                 surfnew[phi.i] = min(1000.0, max(0.0,
                   *(phi.c) + dt*phi.deriv(phitotx[phi.i])
@@ -134,7 +135,8 @@ void upwinding(double dx, double dt, int nt, Mat<>& g, Mat<>& surfu, Mat<>& phit
     }
 }
 
-void initial(double xl, double yl, double zl, double dx, int n_atom, const valarray<double>& atom_x, const valarray<double>& atom_y, const valarray<double>& atom_z, const valarray<double>& atom_r, Mat<>& g, Mat<>& phi){
+void initial(double xl, double yl, double zl, double deleteme, int n_atom, const valarray<double>& atom_x, const valarray<double>& atom_y, const valarray<double>& atom_z, const valarray<double>& atom_r, Mat<>& g, Mat<>& phi){
+    double dx = comdata.deltax, dy = comdata.deltay, dz = comdata.deltaz;
     g = 1.0;
     phi = 0.0;
 
@@ -143,19 +145,19 @@ void initial(double xl, double yl, double zl, double dx, int n_atom, const valar
     for(int a=0; a<n_atom; ++a){
         double r = atom_r[a];
         double r2 = r*r;
-        double zmin = ((atom_z[a] - zl - r)/dx + 1.0);
-        double zmax = ((atom_z[a] - zl + r)/dx + 1.0);
+        double zmin = ((atom_z[a] - zl - r)/dz + 1.0);
+        double zmax = ((atom_z[a] - zl + r)/dz + 1.0);
 
         for(int z = ceil(zmin); z<=floor(zmax); ++z){
-            double distxy = (zl + (z-1)*dx - atom_z[a]);
+            double distxy = (zl + (z-1)*dz - atom_z[a]);
             double distxy2 = distxy*distxy;
             double rxy2 = abs(r2 - distxy2);
             double rxy = sqrt(rxy2);
-            double ymin = ((atom_y[a] - yl - rxy)/dx + 1.0);
-            double ymax = ((atom_y[a] - yl + rxy)/dx + 1.0);
+            double ymin = ((atom_y[a] - yl - rxy)/dy + 1.0);
+            double ymax = ((atom_y[a] - yl + rxy)/dy + 1.0);
 
             for(int y=ceil(ymin); y<=floor(ymax); ++y){
-                double distx = (yl + (y-1)*dx - atom_y[a]);
+                double distx = (yl + (y-1)*dy - atom_y[a]);
                 double distx2 = distx*distx;
                 double rx = sqrt(abs(rxy2 - distx2));
                 double xmin = ((atom_x[a] - xl - rx)/dx + 1.0);
@@ -171,15 +173,16 @@ void initial(double xl, double yl, double zl, double dx, int n_atom, const valar
 }
 
 void potIntegral(double rcfactor, double ddx, size_t natm, valarray<double>& atom_x,valarray<double>& atom_y,valarray<double>& atom_z,valarray<double>& seta12, valarray<double>& seta6, valarray<double>& epsilon, valarray<double>& sigma, Mat<>& g, Mat<>& potr, Mat<>& pota){
+    double dx = comdata.deltax, dy = comdata.deltay, dz = comdata.deltaz;
     for(size_t x=2; x<potr.nx(); ++x){ 
     for(size_t y=2; y<potr.ny(); ++y){ 
     for(size_t z=2; z<potr.nz(); ++z){
         if(g(x,y,z) == 0){ continue; }
         double pr=0, pa=0;
         for(size_t a=0; a<natm; ++a){
-            const double xi = comdata.xleft + (x-1)*ddx;
-            const double yi = comdata.yleft + (y-1)*ddx;
-            const double zi = comdata.zleft + (z-1)*ddx;
+            const double xi = comdata.xleft + (x-1)*dx;
+            const double yi = comdata.yleft + (y-1)*dy;
+            const double zi = comdata.zleft + (z-1)*dz;
             const double dist = sqrt( dot(xi-atom_x[a], yi-atom_y[a], zi-atom_z[a]) ) + lj.prob;
             const double ratio = (dist==0.0) ? 1.0 : sigma[a]/dist;
             const double ratio6 = ratio*ratio*ratio*ratio*ratio*ratio;
@@ -208,7 +211,7 @@ void yhsurface(double xyzr[MAXATOMS][XYZRWIDTH], double* ljepsilon, size_t natm,
 ){
     int nx = comdata.nx, ny = comdata.ny, nz = comdata.nz;
     double xl = comdata.xleft, yl = comdata.yleft, zl = comdata.zleft;
-    double ddx = comdata.dcel;
+    double ddx = 0;
     valarray<double> atom_x(natm), atom_y(natm), atom_z(natm), atom_r(natm);
     for(size_t i=0; i<natm; ++i){
         atom_x[i] = xyzr[i][0];
@@ -257,7 +260,7 @@ void yhsurface(double xyzr[MAXATOMS][XYZRWIDTH], double* ljepsilon, size_t natm,
 
     if(iadi==0 || iloop>1){
         int nt = ceil(tott/dt);
-        dt = ddx*ddx/4.5;
+        //dt = deltat;
         upwinding(ddx,dt, nt, g,su,phitotx);
     }else{
         cerr << "ADI not implemented..." << endl;
@@ -279,14 +282,14 @@ void yhsurface(double xyzr[MAXATOMS][XYZRWIDTH], double* ljepsilon, size_t natm,
     volume = volumeIntegration(su, ddx);
 
     Mat<> fintegr(nx,ny,nz);
-    double weight = pow(2.0*ddx, -1.0);
-    for(int x=2; x<nx; ++x){
-    for(int y=2; y<ny; ++y){
-    for(int z=2; z<nz; ++z){
+    double dx = comdata.deltax, dy = comdata.deltay, dz = comdata.deltaz;
+    for(size_t x=2; x<nx; ++x){
+    for(size_t y=2; y<ny; ++y){
+    for(size_t z=2; z<nz; ++z){
         double sux = su(x+1,y,z) - su(x-1,y,z);
         double suy = su(x,y+1,z) - su(x,y-1,z);
         double suz = su(x,y,z+1) - su(x,y,z-1);
-        fintegr(x,y,z) = sqrt(dot(sux,suy,suz))*weight;
+        fintegr(x,y,z) = sqrt(dot(sux/(2*dx*dx),suy/(2*dy*dy),suz/(2*dz*dz)));
     }}}
     area = volumeIntegration(fintegr, ddx);
    

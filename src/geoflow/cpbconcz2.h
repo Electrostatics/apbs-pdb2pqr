@@ -71,7 +71,7 @@ typedef struct _GeoflowOutput{
 } GeoflowOutput;
 
 typedef struct _GeoflowInput{
-    double dcel;
+    double* dcel;
 	int ffmodel;
 	double extvalue;
 	double* pqr;

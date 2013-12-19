@@ -62,11 +62,13 @@
 #include <Eigen/Sparse>
 
 void pbsolver(Mat<>& eps, Mat<>& phi, Mat<>& bgf, double dcel, double tol, int iter){
-    int nx = eps._nx, ny = eps._ny, nz = eps._nz;
+    size_t nx = eps.nx(), ny = eps.ny(), nz = eps.nz();
+    double dx = comdata.deltax, dy = comdata.deltay, dz = comdata.deltaz;
+
     Mat<> eps1(nx,ny,nz), eps2(nx,ny,nz), eps3(nx,ny,nz);
-    for(int i=1; i<nx; ++i){
-    for(int j=1; j<ny; ++j){
-    for(int k=1; k<nz; ++k){
+    for(size_t i=1; i<nx; ++i){
+    for(size_t j=1; j<ny; ++j){
+    for(size_t k=1; k<nz; ++k){
         eps1(i,j,k) = (eps(i+1,j,k) + eps(i,j,k))/2.0;
         eps2(i,j,k) = (eps(i,j+1,k) + eps(i,j,k))/2.0;
         eps3(i,j,k) = (eps(i,j,k+1) + eps(i,j,k))/2.0;
@@ -76,29 +78,28 @@ void pbsolver(Mat<>& eps, Mat<>& phi, Mat<>& bgf, double dcel, double tol, int i
     tripletList.reserve(nx*ny*nz);
     Eigen::VectorXd phi_flat(nx*ny*nz);
 
-    int n = nx*ny*nz;
-    for(int i=1; i<=nx; ++i){
-    for(int j=1; j<=ny; ++j){
-    for(int k=1; k<=nz; ++k){
-        int ijk = (i-1)*nz*ny + (j-1)*nz + k-1;
+    size_t n = nx*ny*nz;
+    for(size_t i=1; i<=nx; ++i){
+    for(size_t j=1; j<=ny; ++j){
+    for(size_t k=1; k<=nz; ++k){
+        size_t ijk = (i-1)*nz*ny + (j-1)*nz + k-1;
         if(i==1 || i==nx || j==1 || j==ny || k==1 || k==nz){
             tripletList.push_back( Eigen::Triplet<double>(ijk, ijk, 1.0) );
         }else{
-            double foo = -(  eps1(i,j,k) + eps1(i-1,j,k)
-                           + eps2(i,j,k) + eps2(i,j-1,k)
-                           + eps3(i,j,k) + eps3(i,j,k-1) )/dcel/dcel;
-            tripletList.push_back( Eigen::Triplet<double>(ijk, ijk, foo) ); 
+            double f = -(  (eps1(i,j,k) + eps1(i-1,j,k))/dx/dx
+                         + (eps2(i,j,k) + eps2(i,j-1,k))/dy/dy
+                         + (eps3(i,j,k) + eps3(i,j,k-1))/dz/dz );
+            tripletList.push_back( Eigen::Triplet<double>(ijk, ijk, f) ); 
 
-            std::valarray<double> weit(6);
-            weit[0] = eps1(i-1,j,k);
-            weit[1] = eps2(i,j-1,k);
-            weit[2] = eps3(i,j,k-1);
-            weit[3] = eps3(i,j,k);
-            weit[4] = eps2(i,j,k);
-            weit[5] = eps1(i,j,k);
-            weit /= dcel*dcel;
+            double weit[6];
+            weit[0] = eps1(i-1,j,k)/dx/dx;
+            weit[1] = eps2(i,j-1,k)/dy/dy;
+            weit[2] = eps3(i,j,k-1)/dz/dz;
+            weit[3] = eps3(i,j,k)/dz/dz;
+            weit[4] = eps2(i,j,k)/dy/dy;
+            weit[5] = eps1(i,j,k)/dx/dx;
 
-            int jj = ijk - nz*ny; 
+            size_t jj = ijk - nz*ny; 
             if(jj>=0){ tripletList.push_back( Eigen::Triplet<double>(ijk, jj, weit[0]) ); } 
             
             jj = ijk - nz; 
@@ -130,10 +131,10 @@ void pbsolver(Mat<>& eps, Mat<>& phi, Mat<>& bgf, double dcel, double tol, int i
 
     phi_flat = solver.solveWithGuess(bgf.vec, phi_flat);
 
-    for(int i=1; i<=nx; ++i){
-    for(int j=1; j<=ny; ++j){
-    for(int k=1; k<=nz; ++k){
-        int ijk = (i-1)*nz*ny + (j-1)*nz + k-1;
+    for(size_t i=1; i<=nx; ++i){
+    for(size_t j=1; j<=ny; ++j){
+    for(size_t k=1; k<=nz; ++k){
+        size_t ijk = (i-1)*nz*ny + (j-1)*nz + k-1;
         phi(i,j,k) = phi_flat(ijk);
     }}}
 }
