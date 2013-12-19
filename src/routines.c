@@ -4991,7 +4991,7 @@ VPUBLIC int solveGEOFLOW(Valist* molecules[NOSH_MAXMOL], NOsh *nosh, PBEparm *pb
     }}
 
     GeoflowInput gfin = (GeoflowInput){
-         apolparm->grid[0],     // dcel
+         apolparm->grid,     // dcel
          1,        // ffmodel
          1.90,     // extvalue
          pqr,           
