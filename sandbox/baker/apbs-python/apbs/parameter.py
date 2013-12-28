@@ -47,8 +47,94 @@ class OneStringParameter(Parameter):
             pass
     
     def __str__(self):
-        outstr = "%s %s\n" % (self.name, self.parm)
+        outstr = "%s %s" % (self.name, self.parm)
         return outstr
     
     def contents(self):
         return { self.name : self.parm }
+
+class OneIntegerParameter(Parameter):
+    """ Generic class for one-integer parameter """
+    def __init__(self):
+        self.parm = None
+
+    def parse(self, tokens):
+        self.parm = int(tokens.pop(0))
+    
+    def validate(self):
+        if not self.parm:
+            errstr = "Missing value for parameter %s" % self.name
+            raise ValueError, errstr
+    
+    def __str__(self):
+        outstr = "%s %d" % (self.name, self.parm)
+        return outstr
+    
+    def contents(self):
+        return { self.name : self.parm }
+
+class OneFloatParameter(Parameter):
+    """ Generic class for one-float parameter """
+    def __init__(self):
+        self.parm = None
+
+    def parse(self, tokens):
+        self.parm = float(tokens.pop(0))
+    
+    def validate(self):
+        if not self.parm:
+            errstr = "Missing value for parameter %s" % self.name
+            raise ValueError, errstr
+    
+    def __str__(self):
+        outstr = "%s %g" % (self.name, self.parm)
+        return outstr
+    
+    def contents(self):
+        return { self.name : self.parm }
+
+class ThreeFloatParameter(Parameter):
+    """ Generic class for three-float parameter """
+    def __init__(self):
+        self.xfloat = None
+        self.yfloat = None
+        self.zfloat = None
+    
+    def parse(self, tokens):
+        self.xfloat = float(tokens.pop(0))
+        self.yfloat = float(tokens.pop(0))
+        self.zfloat = float(tokens.pop(0))
+    
+    def validate(self):
+        # Validation happens through parsing
+        pass
+    
+    def __str__(self):
+        outstr = "%s %g %g %g" % (self.name, self.xfloat, self.yfloat, self.zfloat)
+        return outstr
+    
+    def contents(self):
+        return { "xfloat" : xfloat, "yfloat" : yfloat, "zfloat" : zfloat }
+
+class ThreeIntegerParameter(Parameter):
+    """ Generic class for three-int parameter """
+    def __init__(self):
+        self.xint = None
+        self.yint = None
+        self.zint = None
+    
+    def parse(self, tokens):
+        self.xint = int(tokens.pop(0))
+        self.yint = int(tokens.pop(0))
+        self.zint = int(tokens.pop(0))
+    
+    def validate(self):
+        # Validation happens through parsing
+        pass
+    
+    def __str__(self):
+        outstr = "%s %d %d %d" % (self.name, self.xint, self.yint, self.zint)
+        return outstr
+    
+    def contents(self):
+        return { "xint" : xint, "yint" : yint, "zint" : zint }
