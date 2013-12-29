@@ -39,7 +39,7 @@ class InputFile(Parameter):
                 apolar = Apolar()
                 apolar.parse(self.tokens)
                 apolar.validate()
-                self.content_dict.append(apolar)
+                self.content_dict["apolar"].append(apolar)
             elif sectionName == "print":
                 sys.stderr.write("PRINT not implemented yet.  Stopping...\n")
                 break

@@ -135,7 +135,20 @@ elec name mg-dummy
 	write pot gz "./directory with spaces/pot"
 end
 
-apolar
+apolar name apolar
+	bconc 0.1
+	calcenergy total
+	calcforce total
+	dpos 0.1
+	gamma 25.0 # Test inline comment
+	grid 0.1 0.1 0.1
+	mol 1
+	press 0.2
+	sdens 20.1
+	srad 1.2
+	srfm sacc
+	swin 0.3
+	temp 298
 end
 
 print

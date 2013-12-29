@@ -15,6 +15,25 @@ class Name(OneStringParameter):
     def name(self):
         return "name"
 
+class Glen(ThreeFloatParameter):
+    """ Specify the mesh domain lengths for multigrid mg-manual calculations.  These lengths may be
+    different in each direction. The syntax is:
+    
+    glen {xlen ylen zlen}
+    
+    where xlen ylen zlen are the (floating point) grid lengths in the x-, y-, and z-directions
+    (respectively) in &Aring;.
+    
+    See also: grid  """
+    @property
+    def name(self):
+        return "glen"
+    
+    def validate(self):
+        if (self.xfloat < float_epsilon) or (self.yfloat < float_epsilon) or (self.zfloat < float_epsilon):
+            errstr = "One of the grid lengths is zero or negative (%g, %g, %g)" % (self.xfloat, self.yfloat, self.zfloat)
+            raise ValueError, errstr
+
 class Solvtype(OneStringParameter):
     """ Usage:  solvtype {type}
         
@@ -244,7 +263,7 @@ class Cgcent(Gcent):
     def name(self):
         return "cgcent"
 
-class Cglen(ThreeFloatParameter):
+class Cglen(Glen):
     """ Specify the length of the coarse grid (in a focusing calculation) for an automatic multigrid
     (mg-auto, mg-para) Poisson-Boltzmann calculation.  This may be different in each direction. Its
     syntax is
@@ -260,11 +279,6 @@ class Cglen(ThreeFloatParameter):
     @property
     def name(self):
         return "cglen"
-    
-    def validate(self):
-        if (self.xfloat < float_epsilon) or (self.yfloat < float_epsilon) or (self.zfloat < float_epsilon):
-            errstr = "One of the grid lengths is zero or negative (%g, %g, %g)" % (self.xfloat, self.yfloat, self.zfloat)
-            raise ValueError, errstr
 
 class Chgm(OneStringParameter):
     """ Specify the method by which the biomolecular point charges (i.e., Dirac delta functions) by
@@ -357,6 +371,11 @@ class Domainlength(ThreeFloatParameter):
     @property
     def name(self):
         return "domainlength"
+    
+    def validate(self):
+        if (self.xfloat < float_epsilon or self.yfloat < float_epsilon or self.zfloat < float_epsilon):
+            errstr = "One of the domain length parameters is zero or negative"
+            raise ValueError, errstr
 
 class Ekey(OneStringParameter):
     """ Specify the method used to determine the error tolerance in the solve-estimate-refine
@@ -424,7 +443,7 @@ class Fgcent(Gcent):
     def name(self):
         return "fgcent"
 
-class Fglen(ThreeFloatParameter):
+class Fglen(Glen):
     """ Specifies the fine mesh domain lengths in a multigrid focusing calculation (mg-para or
     mg-auto); this may be different in each direction. The syntax is
     
@@ -438,30 +457,6 @@ class Fglen(ThreeFloatParameter):
     @property
     def name(self):
         return "fglen"
-    
-    def validate(self):
-        if (self.xfloat < float_epsilon) or (self.yfloat < float_epsilon) or (self.zfloat < float_epsilon):
-            errstr = "One of the grid lengths is zero or negative (%g, %g, %g)" % (self.xfloat, self.yfloat, self.zfloat)
-            raise ValueError, errstr
-
-class Glen(ThreeFloatParameter):
-    """ Specify the mesh domain lengths for multigrid mg-manual calculations.  These lengths may be
-    different in each direction. The syntax is:
-    
-    glen {xlen ylen zlen}
-    
-    where xlen ylen zlen are the (floating point) grid lengths in the x-, y-, and z-directions
-    (respectively) in &Aring;.
-    
-    See also: grid  """
-    @property
-    def name(self):
-        return "glen"
-    
-    def validate(self):
-        if (self.xfloat < float_epsilon) or (self.yfloat < float_epsilon) or (self.zfloat < float_epsilon):
-            errstr = "One of the grid lengths is zero or negative (%g, %g, %g)" % (self.xfloat, self.yfloat, self.zfloat)
-            raise ValueError, errstr
 
 class Grid(ThreeFloatParameter):
     """ Specify the mesh grid spacings for multigrid mg-manual calculations.  This value may be
@@ -474,6 +469,12 @@ class Grid(ThreeFloatParameter):
     @property
     def name(self):
         return "grid"
+    
+    def validate(self):
+        if (self.xfloat < float_epsilon or self.yfloat < float_epsilon or self.zfloat < float_epsilon):
+            errstr = "All grid spacings must be greater than zero!"
+            raise ValueError, errstr
+    
 
 class Ion(Parameter):
     """ Specify the bulk concentrations of mobile ion species present in the system. This command
@@ -499,8 +500,12 @@ class Ion(Parameter):
         return "ion"
     
     def validate(self):
-        # Validation happens during parsing
-        pass
+        if (self.conc < 0):
+            errstr = "Concentration is negative (%g)" % self.conc
+            raise ValueError, errstr
+        if self.radius < float_epsilon:
+            errstr = "Radius is zero or negative (%g)" % self.radius
+            raise ValueError, errstr
     
     def raiseError(self, token):
         errstr = "Unexpected token (%s) in ION keyword" % token
@@ -556,6 +561,11 @@ class Maxsolve(OneIntegerParameter):
     @property
     def name(self):
         return "maxsolve"
+    
+    def validate(self):
+        if self.parm < 1:
+            errstr = "maxsolve is less than 1"
+            raise ValueError, errstr
 
 class Maxvert(OneIntegerParameter):
     """ Specify the maximum number of vertices to allow during solve-estimate-refine cycle of
@@ -570,6 +580,9 @@ class Maxvert(OneIntegerParameter):
     @property
     def name(self):
         return "maxvert"
+    def validate(self):
+        if self.parm < 1:
+            raise ValueError, "maxvert is less than 1"
 
 class Mol(OneIntegerParameter):
     """ Specify the molecule for which the PBE is to be solved. IDs are based on the order in which
@@ -593,6 +606,9 @@ class Nlev(OneIntegerParameter):
     @property
     def name(self):
         return "nlev"
+    def validate(self):
+        if self.parm < 1:
+            raise ValueError, "nlev is less than 1"
 
 class Ofrac(OneFloatParameter):
     """ Specify the amount of overlap to include between the individual processors meshes in a
@@ -607,6 +623,9 @@ class Ofrac(OneFloatParameter):
     @property
     def name(self):
         return "ofrac"
+    def validate(self):
+        if self.parm < float_epsilon:
+            raise ValueError, "ofrac is less than or equal to 0"
 
 class Pdie(OneFloatParameter):
     """ Specify the dielectric constant of the biomolecule. This is usually a value between 2 to 20,
@@ -621,6 +640,9 @@ class Pdie(OneFloatParameter):
     @property
     def name(self):
         return "pdie"
+    def validate(self):
+        if self.parm < float_epsilon:
+            raise ValueError, "pdie is zero or negative"
 
 class Pdime(ThreeIntegerParameter):
     """ Specify the processor array to be used in a parallel focusing (mg-para) calculation. The
@@ -642,6 +664,11 @@ class Pdime(ThreeIntegerParameter):
     @property
     def name(self):
         return "pdime"
+    
+    def validate(self):
+        if (self.xint < 1 or self.yint < 1 or self.zint < 1):
+            errstr = "One of the dimensions is less than 1"
+            raise ValueError, errstr
 
 class Sdens(OneFloatParameter):
     """ Specify the number of grid points per square-angstrom to use in discontinuous surface
@@ -658,6 +685,9 @@ class Sdens(OneFloatParameter):
     @property
     def name(self):
         return "sdens"
+    def validate(self):
+        if self.parm < float_epsilon:
+            raise ValueError, "sdens is zero or negative"
 
 class Sdie(OneFloatParameter):
     """ Specify the dielectric constant of the solvent. Bulk water at biologically-relevant
@@ -671,6 +701,9 @@ class Sdie(OneFloatParameter):
     @property
     def name(self):
         return "sdie"
+    def validate(self):
+        if self.parm < float_epsilon:
+            raise ValueError, "sdie is zero or negative"
 
 class Srad(OneFloatParameter):
     """ Specify the radius of the solvent molecules; this parameter is used to define the dielectric
@@ -686,6 +719,9 @@ class Srad(OneFloatParameter):
     @property
     def name(self):
         return "srad"
+    def validate(self):
+        if self.parm < 0:
+            return ValueError, "srad is negative"
 
 class Srfm(OneStringParameter):
     """ Specify the model used to construct the dielectric and ion-accessibility coefficients. The
@@ -738,6 +774,9 @@ class Swin(OneFloatParameter):
     @property
     def name(self):
         return "swin"
+    def validate(self):
+        if self.parm < float_epsilon:
+            raise ValueError, "swin is zero or negative"
 
 class Targetnum(OneIntegerParameter):
     """ Specify the target number of vertices in the initial finite element mesh for fe-manual
@@ -751,6 +790,9 @@ class Targetnum(OneIntegerParameter):
     @property
     def name(self):
         return "targetnum"
+    def validate(self):
+        if self.parm < 1:
+            raise ValueError, "targetnum is less than 1"
 
 class Targetres(OneFloatParameter):
     """ Specify the target resolution of the simplices in a finite element mesh (fe-manual);
@@ -766,6 +808,10 @@ class Targetres(OneFloatParameter):
     @property
     def name(self):
         return "targetres"
+    def validate(self):
+        if self.parm < float_epsilon:
+            raise ValueError, "targetres is zero or negative"
+    
 
 class Temp(OneFloatParameter):
     """ Specify the temperature for the Poisson-Boltzmann calculation. The syntax is:
@@ -780,6 +826,9 @@ class Temp(OneFloatParameter):
     @property
     def name(self):
         return "temp"
+    def validate(self):
+        if self.parm < float_epsilon:
+            raise ValueError, "temperature is zero or negative -- you violated the 3rd law!"
 
 class Usemap(Parameter):
     """ Specify pre-calculated coefficient maps to be used in the Poisson-Boltzmann calculation.
@@ -932,7 +981,7 @@ class Write(Parameter):
         return { "type" : self.type, "format" : self.format, "stem" : self.stem }
     
     def __str__(self):
-        return "write %s %s %s" % (self.type, self.format, self.stem)
+        return "write %s %s \"%s\"" % (self.type, self.format, self.stem)
 
 class Writemat(FormatPathParameter):
     """ This controls the output of the mathematical operators in the Poisson-Boltzmann equation as
@@ -1034,8 +1083,7 @@ class Elec(ParameterSection):
                 raise ValueError, errstr
             token = tokens.pop(0)
     def validate(self):
-        import sys
-        sys.stderr.write("ELEC validation incomplete!\n")
+        stderr.write("ELEC validation incomplete!\n")
         
     def __str__(self):
         outstr = "elec\n"
