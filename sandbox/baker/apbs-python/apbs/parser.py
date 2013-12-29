@@ -2,9 +2,12 @@
 from parameter import *
 from input_file import *
 import string
+import re
 
-# Define comment character (single character)
-commentCharacter = "#"
+# Define comment characters (can be multiple characters)
+commentCharacters = "#"
+# Define quote character (single character)
+quoteCharacter = "\""
 
 class Parser():
     """ Parse APBS input file """    
@@ -20,8 +23,21 @@ class Parser():
             if not line:
                 break
             line = line.strip()
-            lineAndComments = line.split(commentCharacter)
+            # Get rid of comments
+            regex = "[%s]+" % commentCharacters
+            lineAndComments = re.split(regex, line)
             line = lineAndComments[0]
+            # Split on quotes as if everything inside the quote was a token
+            regex = "%s[^%s]+%s" % (quoteCharacter, quoteCharacter, quoteCharacter)
+            while True:
+                match = re.search(regex, line)
+                if not match:
+                    break
+                start = match.start()
+                end = match.end()
+                tokens = tokens + line[:start].split()
+                tokens = tokens + [line[(start+1):(end-1)]]
+                line = line[end:]
             if line:
                 tokens = tokens + line.split()
         return tokens

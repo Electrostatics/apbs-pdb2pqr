@@ -28,14 +28,18 @@ class InputFile(Parameter):
                 read.parse(self.tokens)
                 read.validate()
                 self.content_dict["read"].append(read)
+                print read
             elif sectionName == "elec":
                 elec = Elec()
                 elec.parse(self.tokens)
                 elec.validate()
                 self.content_dict["elec"].append(elec)
+                print elec
             elif sectionName == "apolar":
-                sys.stderr.write("APOLAR not implemented yet.  Stopping...\n")
-                break
+                apolar = Apolar()
+                apolar.parse(self.tokens)
+                apolar.validate()
+                self.content_dict.append(apolar)
             elif sectionName == "print":
                 sys.stderr.write("PRINT not implemented yet.  Stopping...\n")
                 break

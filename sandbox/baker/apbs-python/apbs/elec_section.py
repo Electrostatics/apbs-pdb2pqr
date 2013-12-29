@@ -1,5 +1,7 @@
 """ Parse APBS input file ELEC sections """
 from parameter import *
+from utility import factors, product
+from sys import stderr
 
 class Name(OneStringParameter):
     """ Usage: name {id}
@@ -258,6 +260,11 @@ class Cglen(ThreeFloatParameter):
     @property
     def name(self):
         return "cglen"
+    
+    def validate(self):
+        if (self.xfloat < float_epsilon) or (self.yfloat < float_epsilon) or (self.zfloat < float_epsilon):
+            errstr = "One of the grid lengths is zero or negative (%g, %g, %g)" % (self.xfloat, self.yfloat, self.zfloat)
+            raise ValueError, errstr
 
 class Chgm(OneStringParameter):
     """ Specify the method by which the biomolecular point charges (i.e., Dirac delta functions) by
@@ -310,6 +317,33 @@ class Dime(ThreeIntegerParameter):
     @property
     def name(self):
         return "dime"
+    
+    def fix_dimension(self, inDim):
+        """ Check the dimension for compatibility with multigrid.  Return the same dimension or a fixed
+        value if there are problems. """
+        facs = factors(inDim-1)
+        nlev = facs.count(2)-1
+        while nlev < 2:
+            facs.sort()
+            facs.pop(0)
+            facs.append(2)
+            nlev = nlev + 1
+        outDim = product(facs)
+        return outDim+1
+    
+    def validate(self):
+        newval = self.fix_dimension(self.xint)
+        if newval != self.xint:
+            stderr.write("Corrected dimension %d to %d for compatibility with multigrid.\n" % (self.xint, newval))
+            self.xint = newval
+        newval = self.fix_dimension(self.yint)
+        if newval != self.yint:
+            stderr.write("Corrected dimension %d to %d for compatibility with multigrid.\n" % (self.yint, newval))
+            self.yint = newval
+        newval = self.fix_dimension(self.zint)
+        if newval != self.zint:
+            stderr.write("Corrected dimension %d to %d for compatibility with multigrid.\n" % (self.zint, newval))
+            self.zint = newval
 
 class Domainlength(ThreeFloatParameter):
     """ Specify the rectangular finite element mesh domain lengths for fe-manual finite element
@@ -404,6 +438,11 @@ class Fglen(ThreeFloatParameter):
     @property
     def name(self):
         return "fglen"
+    
+    def validate(self):
+        if (self.xfloat < float_epsilon) or (self.yfloat < float_epsilon) or (self.zfloat < float_epsilon):
+            errstr = "One of the grid lengths is zero or negative (%g, %g, %g)" % (self.xfloat, self.yfloat, self.zfloat)
+            raise ValueError, errstr
 
 class Glen(ThreeFloatParameter):
     """ Specify the mesh domain lengths for multigrid mg-manual calculations.  These lengths may be
@@ -418,6 +457,11 @@ class Glen(ThreeFloatParameter):
     @property
     def name(self):
         return "glen"
+    
+    def validate(self):
+        if (self.xfloat < float_epsilon) or (self.yfloat < float_epsilon) or (self.zfloat < float_epsilon):
+            errstr = "One of the grid lengths is zero or negative (%g, %g, %g)" % (self.xfloat, self.yfloat, self.zfloat)
+            raise ValueError, errstr
 
 class Grid(ThreeFloatParameter):
     """ Specify the mesh grid spacings for multigrid mg-manual calculations.  This value may be
@@ -774,7 +818,7 @@ class Usemap(Parameter):
     def name(self):
         return "usemap"
     
-    def parse(tokens):
+    def parse(self, tokens):
         token = tokens.pop(0).lower()
         if token in self.allowed_values:
             self.type = token
@@ -861,7 +905,7 @@ class Write(Parameter):
     spaces/foo.in\". """
     allowed_type_values = ["charge", "pot", "atompot", "smol", "sspl", "vdw", "ivdw", "lap", "edens",
                            "ndens", "qdens", "dielx", "diely", "dielz", "kappa"]
-    allowed_format_values = ["avs", "uhbd", "gz", "flat"]
+    allowed_format_values = ["avs", "uhbd", "gz", "flat", "dx"]
     def __init__(self):
         self.type = None
         self.format = None
@@ -888,9 +932,9 @@ class Write(Parameter):
         return { "type" : self.type, "format" : self.format, "stem" : self.stem }
     
     def __str__(self):
-        return "write %s %s %s\n" % (self.type, self.format, self.stem)
+        return "write %s %s %s" % (self.type, self.format, self.stem)
 
-class Writemat(Parameter):
+class Writemat(FormatPathParameter):
     """ This controls the output of the mathematical operators in the Poisson-Boltzmann equation as
     matrices in Harwell-Boeing matrix format (multigrid only). The syntax is:
     
@@ -902,10 +946,6 @@ class Writemat(Parameter):
       - poisson - Write out the Poisson operator -\nabla \cdot \epsilon \nabla.
     *stem - A string that specifies the path for the matrix """
     allowed_values = ["poisson"]
-    def __init__(self):
-        self.type = None
-        self.stem = None
-    
     @property
     def name(self):
         return "writemat"
@@ -916,7 +956,7 @@ class Writemat(Parameter):
     
     def validate(self):
         if not self.type in self.allowed_values:
-            errstr = "Unknown type token (%s) for writemat" % self.type
+            errstr = "Unknown token (%s) for %s" % self.type
             raise ValueError, errstr
     
     def contents(self):
@@ -925,18 +965,13 @@ class Writemat(Parameter):
     def __str__(self):
         return "writemat %s %s\n" % (self.type, self.stem)
 
-class Elec(Parameter):
+class Elec(ParameterSection):
     """ ELEC section for APBS input file """
-    def __init__(self):
-        self.content_dict = {}
-        
-    @property
-    def name(self):
-        return "elec"
-    
     def createAndStoreSingleObject(self, tokenName, tokens):
         """ I'm not sure how safe this is but it sure saves a lot of code... This is designed to
-        store parameters that only appear once per ELEC block. """
+        store parameters that only appear once per section block. """
+        # TODO - The exec appears to execute in the current module namespace... can't figure out how
+        # to change that to avoid duplicating code between classes.
         objectName = tokenName.lower()
         className = objectName.capitalize()
         execstr = "obj = %s()" % className
@@ -947,7 +982,9 @@ class Elec(Parameter):
     
     def createAndStoreMultipleObjects(self, tokenName, tokens):
         """ I'm not sure how safe this is but it sure saves a lot of code... This is designed to
-        store parameters that appear multiple times per ELEC block. """
+        store parameters that appear multiple times per section block. """
+        # TODO - The exec appears to execute in the current module namespace... can't figure out how
+        # to change that to avoid duplicating code between classes.
         objectName = tokenName.lower()
         className = objectName.capitalize()
         execstr = "obj = %s()" % className
@@ -958,6 +995,10 @@ class Elec(Parameter):
             self.content_dict[objectName].append(obj)
         except KeyError:
             self.content_dict[objectName] = [obj]
+
+    @property
+    def name(self):
+        return "elec"
     
     def parse(self, tokens):
         token = tokens.pop(0)
@@ -966,9 +1007,9 @@ class Elec(Parameter):
             if tokenName in ["name", "solvtype", "akeypre", "akeysolve", "async", "bcfl", "calcenergy",
                              "calcforce", "cgcent", "cglen", "chgm", "dime", "domainlength", "ekey",
                              "etol", "fgcent", "fglen", "gcent", "glen", "grid", "eqntype",
-                             "maxsolve", "maxvert", "mol", "nlev", "npbe", "nrpbe", "ofrac", "pdie",
+                             "maxsolve", "maxvert", "mol", "nlev", "ofrac", "pdie",
                              "pdime", "sdens", "sdie", "srad", "srfm", "swin", "targetnum",
-                             "targetres", "temp", "usemap", "usemesh"]:
+                             "targetres", "temp", "usemap", "usemesh", "write", "writemat"]:
                 # This section handles simple command statements
                 self.createAndStoreSingleObject(tokenName, tokens)
             elif tokenName in ["ion"]:
@@ -996,9 +1037,6 @@ class Elec(Parameter):
         import sys
         sys.stderr.write("ELEC validation incomplete!\n")
         
-    def contents(self):
-        return self.content_dict
-        
     def __str__(self):
         outstr = "elec\n"
         keys = self.content_dict.keys()
@@ -1012,7 +1050,12 @@ class Elec(Parameter):
         outstr = outstr + "\t%s\n" % self.content_dict["eqntype"]
         keys.remove("eqntype")
         for key in keys:
-            outstr = outstr + "\t%s\n" % self.content_dict[key]
+            values = self.content_dict[key]
+            try:
+                for value in values:
+                    outstr = outstr + "\t%s\n" % value
+            except TypeError:
+                outstr = outstr + "\t%s\n" % values
         outstr = outstr + "end\n"
         return outstr
     

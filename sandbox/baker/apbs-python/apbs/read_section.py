@@ -1,5 +1,5 @@
 """ Parse the READ input file section """
-from parameters import *
+from parameter import *
 
 # Set the following flag to True to use deprecated input format
 useDeprecated = True
@@ -7,7 +7,7 @@ useDeprecated = True
 class Read:
     """ READ input file section """
     def __init__(self):
-        self.content_dict = { "diel" : [], "kappa" : [], "mesh" : [], "mol" : [], "parm" : [], "pot" : []}
+        self.content_dict = { "charge" : [], "diel" : [], "kappa" : [], "mesh" : [], "mol" : [], "parm" : [], "pot" : []}
     
     @property
     def name(self):
@@ -74,7 +74,7 @@ class Read:
                 raise ValueError, errstr
             token = tokens.pop(0)
 
-class Charge(Parameter):
+class Charge(FormatPathParameter):
     """ Charge input file
     
     Usage:  charge {format} {path}
@@ -91,31 +91,10 @@ class Charge(Parameter):
           - gz - gzipped (zlib) compressed OpenDX format. Files can be read directly in compressed form.
         * path - The location of the charge map file.
     """
-    def __init__(self):
-        self.content_dict = { "format" : None, "path" : None}
-    
+    allowed_values = ["dx", "gz"]
     @property
     def name(self):
         return "charge"
-    
-    def contents(self):
-        return self.content_dict
-
-    def parse(self, tokens):
-        self.content_dict["format"] = tokens.pop(0)
-        self.content_dict["path"] = tokens.pop(0)
-    
-    def validate(self):
-        format = self.content_dict["format"].lower()
-        if not format in ["dx", "dz"]:
-            errstr = "Unknown format %s for %s" % (format, self.name)
-            raise ValueError, errstr
-        if not self.content_dict["path"]:
-            errstr = "Missing path for %s" % self.name
-            raise ValueError, errstr
-    
-    def __str__(self):
-        return " ".join([self.name, self.content_dict["format"], self.content_dict["path"]])
 
 class Diel(Parameter):
     """ Dielectric input file
@@ -150,9 +129,12 @@ class Diel(Parameter):
 
     def parse(self, tokens):
         self.content_dict["format"] = tokens.pop(0)
-        self.content_dict["path-x"] = tokens.pop(0)
-        self.content_dict["path-y"] = tokens.pop(0)
-        self.content_dict["path-z"] = tokens.pop(0)
+        path = "\"%s\"" % tokens.pop(0)
+        self.content_dict["path-x"] = path
+        path = "\"%s\"" % tokens.pop(0)
+        self.content_dict["path-y"] = path
+        path = "\"%s\"" % tokens.pop(0)
+        self.content_dict["path-z"] = path
     
     def validate(self):
         format = self.content_dict["format"].lower()
@@ -167,7 +149,7 @@ class Diel(Parameter):
         return " ".join([self.name, self.content_dict["format"], self.content_dict["path-x"],
                          self.content_dict["path-y"], self.content_dict["path-z"]])
 
-class Kappa(Parameter):
+class Kappa(FormatPathParameter):
     """ Kappa input file
     
     Usage:  kappa {format} {path}
@@ -185,33 +167,12 @@ class Kappa(Parameter):
       - dx - OpenDX format
       - gz - gzipped (zlib) compressed OpenDX format. Files can be read directly in compressed form.
     * path - The location of the kappa map file."""
-    def __init__(self):
-        self.content_dict = { "format" : None, "path" : None}
-    
+    allowed_values = ["dx", "gz"]
     @property
     def name(self):
         return "kappa"
-    
-    def parse(self, tokens):
-        self.content_dict["format"] = tokens.pop(0)
-        self.content_dict["path"] = tokens.pop(0)
-    
-    def contents(self):
-        return self.content_dict
 
-    def validate(self):
-        format = self.content_dict["format"].lower()
-        if not format in ["dx", "gz"]:
-            errstr = "Unknown format %s for %s" % (format, self.name)
-            raise ValueError, errstr
-        if not (self.content_dict["path"]):
-            errstr = "Missing input path for %s" % self.name
-            raise ValueError, errstr
-    
-    def __str__(self):
-        return " ".join([self.name, self.content_dict["format"], self.content_dict["path"]])
-
-class Mesh(Parameter):
+class Mesh(FormatPathParameter):
     """ Mesh input file
     
     Usage:  mesh {format} {path}
@@ -223,33 +184,12 @@ class Mesh(Parameter):
     * format - The format of the input mesh. Acceptable values include:
       - mcsf - MCSF format 
     * path - The location of the mesh file. """
-    def __init__(self):
-        self.content_dict = { "format" : None, "path" : None}
-    
+    allowed_values = ["mcsf"]
     @property
     def name(self):
         return "mesh"
     
-    def parse(self, tokens):
-        self.content_dict["format"] = tokens.pop(0)
-        self.content_dict["path"] = tokens.pop(0)
-
-    def contents(self):
-        return self.content_dict
-    
-    def validate(self):
-        format = self.content_dict["format"].lower()
-        if not format in ["mcsf"]:
-            errstr = "Unknown format %s for %s" % (format, self.name)
-            raise ValueError, errstr
-        if not (self.content_dict["path"]):
-            errstr = "Missing input path for %s" % self.name
-            raise ValueError, errstr
-    
-    def __str__(self):
-        return " ".join([self.name, self.content_dict["format"], self.content_dict["path"]])
-
-class Mol(Parameter):
+class Mol(FormatPathParameter):
     """ Information about APBS molecule files
     
     Usage:  mol {format} {path} 
@@ -262,33 +202,12 @@ class Mol(Parameter):
       file is used, then a parameter file must also be specified to provide charge and radius
       parameters for the biomolecule's atoms. 
     * path - The location of the molecular data file. """
-    def __init__(self):
-        self.content_dict = { "format" : None, "path" : None}
-    
+    allowed_values = ["pqr", "pdb"]
     @property
     def name(self):
         return "mol"
 
-    def contents(self):
-        return self.content_dict
-    
-    def parse(self, tokens):
-        self.content_dict["format"] = tokens.pop(0)
-        self.content_dict["path"] = tokens.pop(0)
-    
-    def validate(self):
-        format = self.content_dict["format"].lower()
-        if not format in ["pdb", "pqr"]:
-            errstr = "Unknown format %s for %s" % (format, self.name)
-            raise ValueError, errstr
-        if not (self.content_dict["path"]):
-            errstr = "Missing input path for %s" % self.name
-            raise ValueError, errstr
-    
-    def __str__(self):
-        return " ".join([self.name, self.content_dict["format"], self.content_dict["path"]])
-
-class Parm(Parameter):
+class Parm(FormatPathParameter):
     """ Information about APBS parameter files
     
     Usage: parm {format} {path}
@@ -307,33 +226,12 @@ class Parm(Parameter):
     available for protein and nucleic acid parameters and are actively under development as a
     research project.  Please contact Nathan Baker for additional information about the state of
     this research, particularly if you are interested in helping. """
-    def __init__(self):
-        self.content_dict = { "format" : None, "path" : None}
-    
+    allowed_values = ["flat", "xml"]
     @property
     def name(self):
         return "parm"
 
-    def contents(self):
-        return self.content_dict
-
-    def parse(self, tokens):
-        self.content_dict["format"] = tokens.pop(0)
-        self.content_dict["path"] = tokens.pop(0)
-    
-    def validate(self):
-        format = self.content_dict["format"].lower()
-        if not format in ["flat", "xml"]:
-            errstr = "Unknown format %s for %s" % (format, self.name)
-            raise ValueError, errstr
-        if not (self.content_dict["path"]):
-            errstr = "Missing input path for %s" % self.name
-            raise ValueError, errstr
-    
-    def __str__(self):
-        return " ".join([self.name, self.content_dict["format"], self.content_dict["path"]])
-
-class Pot(Parameter):
+class Pot(FormatPathParameter):
     """ Information about APBS potential files
     
     Usage:  pot {format} {path}
@@ -349,29 +247,7 @@ class Pot(Parameter):
       - dx - OpenDX format
       - gz - gzipped (zlib) compressed OpenDX format. Files can be read directly in compressed form.
     * path - The location of the potential map file."""
-    def __init__(self):
-        self.content_dict = { "format" : None, "path" : None}
-    
+    allowed_values = ["gz", "dx"]
     @property
     def name(self):
         return "pot"
-
-    def contents(self):
-        return self.content_dict
-    
-    def parse(self, tokens):
-        self.content_dict["format"] = tokens.pop(0)
-        self.content_dict["path"] = tokens.pop(0)
-    
-    def validate(self):
-        format = self.content_dict["format"].lower()
-        if not format in ["dx", "gz"]:
-            errstr = "Unknown format %s for %s" % (format, self.name)
-            raise ValueError, errstr
-        if not (self.content_dict["path"]):
-            errstr = "Missing input path for %s" % self.name
-            raise ValueError, errstr
-    
-    def __str__(self):
-        return " ".join([self.name, self.content_dict["format"], self.content_dict["path"]])
-

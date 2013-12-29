@@ -6,7 +6,7 @@ if __name__ == '__main__':
     # Test mg-manual
     parser = parser.Parser()
     print "Testing mg-manual..."
-    inpath = "examples/mg-manual.in"
+    inpath = "examples/uber-input.in"
     infile = open(inpath, "rb")
     parser.feed(infile)
     inputFile = parser.parse()

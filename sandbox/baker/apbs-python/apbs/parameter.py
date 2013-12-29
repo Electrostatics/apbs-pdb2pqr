@@ -1,5 +1,8 @@
 """ Handle the storage of APBS input file parameters """
 from abc import ABCMeta, abstractmethod, abstractproperty
+import sys
+
+float_epsilon = sys.float_info.epsilon
 
 class Parameter:
     """ Parameter structure to simplify storing input file values """
@@ -73,6 +76,15 @@ class OneIntegerParameter(Parameter):
     def contents(self):
         return { self.name : self.parm }
 
+class ParameterSection(Parameter):
+    """ Complex parameters as found in an input file section """
+    def __init__(self):
+        self.content_dict = {}
+    
+    def contents(self):
+        return self.content_dict
+    
+
 class OneFloatParameter(Parameter):
     """ Generic class for one-float parameter """
     def __init__(self):
@@ -138,3 +150,25 @@ class ThreeIntegerParameter(Parameter):
     
     def contents(self):
         return { "xint" : xint, "yint" : yint, "zint" : zint }
+
+class FormatPathParameter(Parameter):
+    """ Generic READ statement with format and path """
+    def __init__(self):
+        self.format = None
+        self.path = None
+    
+    def contents(self):
+        return { "format" : self.format, "path" : self.path }
+
+    def parse(self, tokens):
+        self.format = tokens.pop(0)
+        path = "\"%s\"" % tokens.pop(0)
+        self.path = path
+    
+    def validate(self):
+        if not self.format in self.allowed_values:
+            errstr = "Unknown token %s in %s" % (self.format, self.name)
+            raise ValueError, errstr
+
+    def __str__(self):
+        return " ".join([self.name, self.format, self.path])
