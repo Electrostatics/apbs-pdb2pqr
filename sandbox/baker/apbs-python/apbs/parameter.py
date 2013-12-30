@@ -4,7 +4,7 @@ import sys
 
 float_epsilon = sys.float_info.epsilon
 
-class Parameter:
+class Parameter(object):
     """ Parameter structure to simplify storing input file values """
     __metaclass__ = ABCMeta
     
@@ -65,7 +65,7 @@ class OneIntegerParameter(Parameter):
         self.parm = int(tokens.pop(0))
     
     def validate(self):
-        if not self.parm:
+        if self.parm is None:
             errstr = "Missing value for parameter %s" % self.name
             raise ValueError, errstr
     
@@ -94,7 +94,7 @@ class OneFloatParameter(Parameter):
         self.parm = float(tokens.pop(0))
     
     def validate(self):
-        if not self.parm:
+        if self.parm is None:
             errstr = "Missing value for parameter %s" % self.name
             raise ValueError, errstr
     
