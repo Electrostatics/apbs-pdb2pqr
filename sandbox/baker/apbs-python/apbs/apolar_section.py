@@ -1,5 +1,5 @@
 """ Parse the APOLAR input file section """
-from parameter import *
+from parameter import float_epsilon, ParameterSection, OneStringParameter, OneFloatParameter
 import elec_section
 from sys import stderr
 

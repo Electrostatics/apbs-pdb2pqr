@@ -1,5 +1,7 @@
 """ Parse APBS input file ELEC sections """
-from parameter import *
+from parameter import (float_epsilon, Parameter, FormatPathParameter, ParameterSection,
+                       OneStringParameter, OneIntegerParameter, OneFloatParameter,
+                       ThreeIntegerParameter, ThreeFloatParameter)
 from utility import factors, product
 from sys import stderr
 

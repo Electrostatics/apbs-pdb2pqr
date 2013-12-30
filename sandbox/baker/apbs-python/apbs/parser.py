@@ -18,10 +18,7 @@ class Parser():
     def tokenize(self, data):
         """ Data must have readline() attribute """
         tokens = []
-        while True:
-            line = data.readline()
-            if not line:
-                break
+        for line in data:
             line = line.strip()
             # Get rid of comments
             regex = "[%s]+" % commentCharacters

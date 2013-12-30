@@ -1,5 +1,5 @@
 """ Parse the PRINT input file section """
-from parameter import *
+from parameter import Parameter
 
 class Print(Parameter):
     """ This is a very simple section that allows linear combinations of calculated properties to be

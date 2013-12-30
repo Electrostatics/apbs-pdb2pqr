@@ -1,9 +1,9 @@
 """ APBS input file class """
-from read_section import *
-from elec_section import *
-from apolar_section import *
-from print_section import *
-from parameter import *
+from read_section import Read
+from elec_section import Elec
+from apolar_section import Apolar
+from print_section import Print
+from parameter import Parameter
 import sys
 
 

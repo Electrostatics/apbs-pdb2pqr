@@ -1,10 +1,10 @@
 """ Parse the READ input file section """
-from parameter import *
+from parameter import Parameter, FormatPathParameter
 
 # Set the following flag to True to use deprecated input format
 useDeprecated = True
 
-class Read:
+class Read(object):
     """ READ input file section """
     def __init__(self):
         self.content_dict = { "charge" : [], "diel" : [], "kappa" : [], "mesh" : [], "mol" : [], "parm" : [], "pot" : []}
