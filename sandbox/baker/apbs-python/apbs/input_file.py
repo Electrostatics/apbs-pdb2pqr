@@ -11,7 +11,9 @@ class InputFile(Parameter):
     """ Top-level APBS input file class """
     def __init__(self):
         self.tokens = None
-        self.content_dict = { "read" : [], "elec" : [], "apolar" : [], "print" : []}
+        self.reads = []
+        self.calcs = []
+        self.prints = []
         
     @property
     def name(self):
@@ -27,29 +29,33 @@ class InputFile(Parameter):
                 read = Read()
                 read.parse(self.tokens)
                 read.validate()
-                self.content_dict["read"].append(read)
+                self.reads.append(read)
                 print read
             elif sectionName == "elec":
                 elec = Elec()
                 elec.parse(self.tokens)
                 elec.validate()
-                self.content_dict["elec"].append(elec)
+                self.calcs.append(elec)
                 print elec
             elif sectionName == "apolar":
                 apolar = Apolar()
                 apolar.parse(self.tokens)
                 apolar.validate()
-                self.content_dict["apolar"].append(apolar)
+                self.calcs.append(apolar)
             elif sectionName == "print":
-                sys.stderr.write("PRINT not implemented yet.  Stopping...\n")
-                break
+                printObj = Print()
+                printObj.parse(self.tokens)
+                printObj.validate()
+                self.prints.append(printObj)
+            elif sectionName == "quit":
+                return
             else:
                 errstr = "Unrecognized token %s" % token
                 raise ValueError, errstr
             token = self.tokens.pop(0)
     
     def contents(self):
-        return content_dict
+        return { "read" : self.reads, "calcs" : self.calcs, "print" : self.prints }
     
     def validate(self):
         for values in self.content_dict.values():
@@ -58,8 +64,12 @@ class InputFile(Parameter):
     
     def __str__(self):
         outstr = ""
-        for (key, values) in self.content_dict.items():
-            for value in values:
-                outstr = outstr + "%s\n" % value
+        for readSection in self.reads:
+            outstr = outstr + "%s\n" % readSection
+        for calcSection in self.calcs:
+            outstr = outstr + "%s\n" % calcSection
+        for printSection in self.prints:
+            outstr = outstr + "%s\n" % printSection
+        outstr = outstr + "quit\n"
         return outstr
         

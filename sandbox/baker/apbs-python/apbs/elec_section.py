@@ -1015,7 +1015,24 @@ class Writemat(FormatPathParameter):
         return "writemat %s %s\n" % (self.type, self.stem)
 
 class Elec(ParameterSection):
-    """ ELEC section for APBS input file """
+    """ The ELEC block of an APBS input file is used for polar solvation (electrostatics)
+    calculations and has the following syntax:
+
+    ELEC [ name {id} ]
+        {type}
+        {keywords...}
+    END
+    
+    where the indentation and linefeeds are included for clarity; only whitespace is needed in the
+    input file.  The {id} tag allows the user to name ELEC blocks, as described in the ELEC block
+    naming section.  The {type} command defines the Types of ELEC calculation to be performed.
+    Finally, the {keywords} are calculation-specific commands that customize the particular type of
+    calculation.
+    
+    This section is the main component for polar solvation calculations in APBS runs. There may be
+    several ELEC sections, operating on different molecules or using different parameters for
+    multiple runs on the same molecule. The order of the ELEC statement can matter since certain
+    types of boundary conditions (bcfl) can require information about previous calculations. """
     def createAndStoreSingleObject(self, tokenName, tokens):
         """ I'm not sure how safe this is but it sure saves a lot of code... This is designed to
         store parameters that only appear once per section block. """

@@ -151,7 +151,6 @@ apolar name apolar
 	temp 298
 end
 
-print
-end
+print elecEnergy 1 - 2 end
 
 quit
