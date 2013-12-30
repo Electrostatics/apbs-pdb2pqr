@@ -279,7 +279,12 @@ class Apolar(ParameterSection):
             token = tokens.pop(0)
     
     def validate(self):
-        stderr.write("APOLAR validation incomplete!\n")
+        required_values = ["name", "bconc", "dpos", "gamma", "grid",
+                             "mol", "press", "sdens", "srad", "srfm", "swin", "temp"]
+        for parm in required_values:
+            if not self.content_dict.has_key(parm):
+                errstr = "APOLAR missing required parameter %s" % parm
+                raise ValueError, errstr
 
     def __str__(self):
         outstr = "apolar\n"

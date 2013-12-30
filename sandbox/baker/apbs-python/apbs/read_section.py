@@ -14,7 +14,19 @@ class Read(object):
         return "read"
 
     def validate(self):
-        pass
+        if len(self.content_dict["mol"]) == 0:
+            molOK = False
+        else:
+            molOK = True
+        if (len(self.content_dict["charge"]) > 0) and (len(self.content_dict["diel"]) > 0) and (len(self.content_dict["kappa"]) > 0):
+            mapOK = True
+        else:
+            mapOK = False
+        if molOK or mapOK:
+            pass
+        else:
+            errstr = "Unable to find molecule file or relevant coefficient maps."
+            raise ValueError, errstr
     
     def contents(self):
         return self.content_dict

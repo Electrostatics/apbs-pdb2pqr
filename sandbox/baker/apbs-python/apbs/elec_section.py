@@ -1102,6 +1102,46 @@ class Elec(ParameterSection):
                 raise ValueError, errstr
             token = tokens.pop(0)
     def validate(self):
+        solvtype = self.content_dict["solvtype"].parm
+        if solvtype == "mg-auto":
+            required_parms = ["bcfl", "chgm", "cgcent", "cglen", "dime", "fgcent", "fglen",
+                              "eqntype", "mol", "pdie", "sdens", "sdie", "srad", "srfm", "swin",
+                              "temp"]
+            for parm in required_parms:
+                if not self.content_dict.has_key(parm):
+                    errstr = "Missing required parameter %s for %s" % (parm, solvtype)
+                    raise ValueError, errstr
+        elif solvtype == "mg-para":
+            required_parms = ["bcfl", "chgm", "cgcent", "cglen", "dime", "fgcent", "fglen",
+                              "eqntype", "mol", "ofrac", "pdie", "pdime", "sdens", "sdie", "srad",
+                              "srfm", "swin", "temp"]
+            for parm in required_parms:
+                if not self.content_dict.has_key(parm):
+                    errstr = "Missing required parameter %s for %s" % (parm, solvtype)
+                    raise ValueError, errstr
+        elif solvtype in ["mg-manual", "mg-dummy"]:
+            required_parms = ["bcfl", "chgm", "dime", "gcent", "eqntype", "mol", "nlev", "pdie",
+                              "sdens", "sdie", "srad", "srfm", "swin", "temp"]
+            for parm in required_parms:
+                if not self.content_dict.has_key(parm):
+                    errstr = "Missing required parameter %s for %s" % (parm, solvtype)
+                    raise ValueError, errstr
+            if (not self.content_dict.has_key("glen") and (not self.content_dict.has_key("grid"))):
+                errstr = "Either grid or glen needs to be specified for mg-manual"
+                raise ValueError, errstr
+            raise Exception, "Need to add nlev check for %s" % solvtype
+        elif solvtype == "fe-manual":
+            required_parms = ["akeypre", "akeysolve", "bcfl", "chgm", "domainlength", "ekey", "etol",
+                              "eqntype", "maxsolve", "maxvert", "mol", "pdie", "sdens", "sdie",
+                              "srad", "srfm", "swin", "temp"]
+            for parm in required_parms:
+                if not self.content_dict.has_key(parm):
+                    errstr = "Missing required parameter %s for %s" % (parm, solvtype)
+                    raise ValueError, errstr
+        else:
+            raise Exception, "Don't know how to process solver type %s" % solvtype
+
+        
         stderr.write("ELEC validation incomplete!\n")
         
     def __str__(self):
