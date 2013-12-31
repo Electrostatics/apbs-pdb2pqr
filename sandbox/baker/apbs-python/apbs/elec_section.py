@@ -1129,7 +1129,16 @@ class Elec(ParameterSection):
             if (not self.content_dict.has_key("glen") and (not self.content_dict.has_key("grid"))):
                 errstr = "Either grid or glen needs to be specified for mg-manual"
                 raise ValueError, errstr
-            raise Exception, "Need to add nlev check for %s" % solvtype
+            if solvtype == "mg-manual":
+                dime = self.content_dict["dime"]
+                nlev = self.content_dict["nlev"]
+                n = nlev.parm
+                for dim in [dime.xint, dime.yint, dime.zint]:
+                    facs = factors(dim-1)
+                    ncalc = facs.count(2)-1
+                    if ncalc < n:
+                        errstr = "Your given nlev (%d) is larger than the permissible value (%d)" % (n, ncalc)
+                        raise ValueError, errstr
         elif solvtype == "fe-manual":
             required_parms = ["akeypre", "akeysolve", "bcfl", "chgm", "domainlength", "ekey", "etol",
                               "eqntype", "maxsolve", "maxvert", "mol", "pdie", "sdens", "sdie",
