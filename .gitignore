@@ -5,3 +5,4 @@ include/maloc
 lib/
 **.out
 *.o
+*.dblite
