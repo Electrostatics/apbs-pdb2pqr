@@ -1,4 +1,5 @@
 *.pyc
+*.pyd
 bin/
 build/**
 include/maloc
@@ -6,3 +7,17 @@ lib/
 **.out
 *.o
 *.dblite
+test-output*
+*.project
+*.result
+*.pydevproject
+*.cache
+pdb2pqr/visualize.cgi
+pdb2pqr/src/aconf.py
+pdb2pqr/querystatus.cgi
+pdb2pqr/pdb2pqr.py
+pdb2pqr/pdb2pqr.cgi
+pdb2pqr/html/server.html
+pdb2pqr/fabfile.py
+pdb2pqr/changes.tgz
+pdb2pqr/apbs_cgi.cgi
