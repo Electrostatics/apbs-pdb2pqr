@@ -12,6 +12,7 @@ test-output*
 *.result
 *.pydevproject
 *.cache
+~*
 pdb2pqr/visualize.cgi
 pdb2pqr/src/aconf.py
 pdb2pqr/querystatus.cgi
