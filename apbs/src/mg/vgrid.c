@@ -177,7 +177,8 @@ VPUBLIC void Vgrid_dtor2(Vgrid *thee) {
 /////////////////////////////////////////////////////////////////////////// */
 VPUBLIC int Vgrid_value(Vgrid *thee, double pt[3], double *value) {
 
-    int nx, ny, nz, ihi, jhi, khi, ilo, jlo, klo;
+    int nx, ny, nz;
+    size_t ihi, jhi, khi, ilo, jlo, klo;
     double hx, hy, hzed, xmin, ymin, zmin, ifloat, jfloat, kfloat;
     double xmax, ymax, zmax;
     double u, dx, dy, dz;
@@ -459,9 +460,9 @@ VPUBLIC int Vgrid_gradient(Vgrid *thee, double pt[3], double grad[3]) {
 VPUBLIC int Vgrid_readGZ(Vgrid *thee, const char *fname) {
 
 #ifdef HAVE_ZLIB
-    int i, j, k;
-    int len; // Temporary counter variable for loop conditionals
-    int q, itmp, u, header, incr;
+    size_t i, j, k, u;
+    size_t len; // Temporary counter variable for loop conditionals
+    size_t header, incr;
     double *temp;
     double dtmp1, dtmp2, dtmp3;
     gzFile infile;
@@ -587,11 +588,7 @@ VPUBLIC int Vgrid_readDX(Vgrid *thee,
                          const char *fname
                         ) {
 
-    int i,
-        j,
-        k,
-        itmp,
-        u;
+    size_t i, j, k, itmp, u;
     double dtmp;
     char tok[VMAX_BUFSIZE];
     Vio *sock;
@@ -749,8 +746,9 @@ VPUBLIC int Vgrid_readDX(Vgrid *thee,
     VJMPERR1(!strcmp(tok, "items"));
     /* Get # */
     VJMPERR2(1 == Vio_scanf(sock, "%s", tok));
-    VJMPERR1(1 == sscanf(tok, "%d", &itmp));
-    VJMPERR1(((thee->nx)*(thee->ny)*(thee->nz)) == itmp);
+    VJMPERR1(1 == sscanf(tok, "%lu", &itmp));
+    u = (size_t)thee->nx * thee->ny * thee->nz;
+    VJMPERR1(u == itmp);
     /* Get "data" */
     VJMPERR2(1 == Vio_scanf(sock, "%s", tok));
     VJMPERR1(!strcmp(tok, "data"));
@@ -762,8 +760,7 @@ VPUBLIC int Vgrid_readDX(Vgrid *thee,
     Vnm_print(0, "Vgrid_readDX:  allocating %d x %d x %d doubles for storage\n",
       thee->nx, thee->ny, thee->nz);
     thee->data = VNULL;
-    thee->data = (double*)Vmem_malloc(thee->mem, (thee->nx)*(thee->ny)*(thee->nz),
-      sizeof(double));
+    thee->data = (double*)Vmem_malloc(thee->mem, u, sizeof(double));
     if (thee->data == VNULL) {
         Vnm_print(2, "Vgrid_readDX:  Unable to allocate space for data!\n");
         return 0;
@@ -818,11 +815,12 @@ VPUBLIC void Vgrid_writeGZ(Vgrid *thee, const char *iodev, const char *iofmt,
 #ifdef HAVE_ZLIB
     double xmin, ymin, zmin, hx, hy, hzed;
 
-    int nx, ny, nz;
-    int icol, i, j, k, u, usepart, nxPART, nyPART, nzPART, gotit;
+    int nx, ny, nz, nxPART, nyPART, nzPART;
+    int usepart, gotit;
+    size_t icol, i, j, k, u;
     double x, y, z, xminPART, yminPART, zminPART;
 
-    int txyz;
+    size_t txyz;
     double txmin, tymin, tzmin;
 
     char header[8196];
@@ -955,7 +953,7 @@ VPUBLIC void Vgrid_writeGZ(Vgrid *thee, const char *iodev, const char *iofmt,
             "delta 0.000000e+00 %12.6e 0.000000e+00\n"		\
             "delta 0.000000e+00 0.000000e+00 %12.6e\n"		\
             "object 2 class gridconnections counts %i %i %i\n"\
-            "object 3 class array type double rank 0 items %i data follows\n",
+            "object 3 class array type double rank 0 items %lu data follows\n",
             PACKAGE_STRING,title,nx,ny,nz,txmin,tymin,tzmin,
             hx,hy,hzed,nx,ny,nz,txyz);
     gzwrite(outfile, header, strlen(header)*sizeof(char));
@@ -1010,8 +1008,9 @@ VPUBLIC void Vgrid_writeDX(Vgrid *thee, const char *iodev, const char *iofmt,
   const char *thost, const char *fname, char *title, double *pvec) {
 
     double xmin, ymin, zmin, hx, hy, hzed;
-    int nx, ny, nz;
-    int icol, i, j, k, u, usepart, nxPART, nyPART, nzPART, gotit;
+    int nx, ny, nz, nxPART, nyPART, nzPART;
+    int usepart, gotit;
+    size_t icol, i, j, k, u;
     double x, y, z, xminPART, yminPART, zminPART;
     Vio *sock;
     char precFormat[VMAX_BUFSIZE];
@@ -1159,7 +1158,7 @@ VPUBLIC void Vgrid_writeDX(Vgrid *thee, const char *iodev, const char *iofmt,
           nxPART, nyPART, nzPART);
 
         /* Write off the DX data */
-        Vio_printf(sock, "object 3 class array type double rank 0 items %d \
+        Vio_printf(sock, "object 3 class array type double rank 0 items %lu \
 data follows\n", (nxPART*nyPART*nzPART));
         icol = 0;
         for (i=0; i<nx; i++) {
@@ -1220,7 +1219,7 @@ class field\n");
           nx, ny, nz);
 
         /* Write off the DX data */
-        Vio_printf(sock, "object 3 class array type double rank 0 items %d \
+        Vio_printf(sock, "object 3 class array type double rank 0 items %lu \
 data follows\n", (nx*ny*nz));
         icol = 0;
         for (i=0; i<nx; i++) {
@@ -1259,7 +1258,8 @@ class field\n");
 VPUBLIC void Vgrid_writeUHBD(Vgrid *thee, const char *iodev, const char *iofmt,
   const char *thost, const char *fname, char *title, double *pvec) {
 
-    int icol, i, j, k, u, nx, ny, nz, gotit;
+    size_t u, icol, i, j, k;
+    size_t gotit, nx, ny, nz;
     double xmin, ymin, zmin, hzed, hy, hx;
     Vio *sock;
 
@@ -1355,7 +1355,8 @@ will have significant overlap.\n");
 
 VPUBLIC double Vgrid_integrate(Vgrid *thee) {
 
-    int i, j, k, nx, ny, nz;
+    size_t i, j, k;
+    int nx, ny, nz;
     double sum, w;
 
     if (thee == VNULL) {
@@ -1392,7 +1393,8 @@ VPUBLIC double Vgrid_integrate(Vgrid *thee) {
 
 VPUBLIC double Vgrid_normL1(Vgrid *thee) {
 
-    int i, j, k, nx, ny, nz;
+    size_t i, j, k;
+    int nx, ny, nz;
     double sum;
 
     if (thee == VNULL) {
@@ -1421,7 +1423,8 @@ VPUBLIC double Vgrid_normL1(Vgrid *thee) {
 
 VPUBLIC double Vgrid_normL2(Vgrid *thee) {
 
-    int i, j, k, nx, ny, nz;
+    size_t i, j, k;
+    int nx, ny, nz;
     double sum;
 
     if (thee == VNULL) {
@@ -1450,7 +1453,8 @@ VPUBLIC double Vgrid_normL2(Vgrid *thee) {
 
 VPUBLIC double Vgrid_seminormH1(Vgrid *thee) {
 
-    int i, j, k, d, nx, ny, nz;
+    size_t i, j, k;
+    int nx, ny, nz, d;
     double pt[3], grad[3], sum, hx, hy, hzed, xmin, ymin, zmin;
 
     if (thee == VNULL) {
@@ -1507,7 +1511,8 @@ VPUBLIC double Vgrid_normH1(Vgrid *thee) {
 
 VPUBLIC double Vgrid_normLinf(Vgrid *thee) {
 
-    int i, j, k, nx, ny, nz, gotval;
+    size_t i, j, k;
+    int nx, ny, nz, gotval;
     double sum, val;
 
     if (thee == VNULL) {
