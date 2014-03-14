@@ -12,4 +12,4 @@ codePath = os.getcwd()
 pythonBin = sys.executable
 
 buildTime = datetime.today()
-productVersion = 'master BRANCH'# + buildTime.strftime('%Y%m%d%H%M')
+productVersion = '1.9.0'# + buildTime.strftime('%Y%m%d%H%M')
