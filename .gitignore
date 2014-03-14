@@ -2,6 +2,8 @@
 *.pyd
 bin/
 build/**
+pdb2pqr/build/**
+pdb2pqr/dist/**
 include/maloc
 lib/
 **.out
