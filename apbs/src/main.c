@@ -90,7 +90,9 @@ int main(
 
     MGparm *mgparm = VNULL;
     FEMparm *feparm = VNULL;
+#ifdef ENABLE_BEM
     BEMparm *bemparm = VNULL;
+#endif
     GEOFLOWparm *geoflowparm = VNULL;
     PBEparm *pbeparm = VNULL;
     APOLparm *apolparm = VNULL;
@@ -640,9 +642,10 @@ int main(
                     VJMPERR1(0);
                 }
                 break;
-
- 		/* Boundary Element (tabi) */
+                
+        /* Boundary Element (tabi) */
             case NCT_BEM:
+#ifdef ENABLE_BEM
                 /* What is this?  This seems like a very awkward way to find
                 the right ELEC statement... */
                 for (k=0; k<nosh->nelec; k++) {
@@ -701,7 +704,10 @@ int main(
 
                 fflush(stdout);
                 fflush(stderr);
-
+#else /* ifdef ENABLE_BEM */
+                    Vnm_print(2, "Error!  APBS not compiled with BEM!\n");
+                exit(2);
+#endif
                 break;
 
  		/* geometric flow */
