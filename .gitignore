@@ -1,5 +1,6 @@
 *.pyc
 *.pyd
+*.komodoproject
 bin/
 **/build/CMakeFiles/
 **/build/Win32/
