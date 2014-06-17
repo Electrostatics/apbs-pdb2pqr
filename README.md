@@ -1,4 +1,4 @@
 apbs-pdb2pqr
 ============
 
-This is the home for the [APBS and PDB2PQR software](http://www.poissonboltzmann.org) as we consider migrating away from [SourceForge](https://sourceforge.net/projects/apbs/).  Our plans for GitHub migration are in flux so please do not count on this repository being available in the future.
+This is the home for the [APBS and PDB2PQR software](http://www.poissonboltzmann.org) source repository.  Binary downloads can be found on [SourceForge](https://sourceforge.net/projects/apbs/). 
