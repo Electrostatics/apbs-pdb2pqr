@@ -1,0 +1,22 @@
+language: cpp
+
+os:
+    - osx
+    - linux
+    
+compiler:
+    - gcc
+    - clang
+
+branches:
+    only:
+        - master
+
+before_script:
+    - cd apbs
+    - mkdir travis
+    - cd travis
+    - cmake -DENABLE_FETK=OFF -DBUILD_SHARED_LIBS=OFF -DENABLE_BEM=OFF ..
+
+script:
+    - make
