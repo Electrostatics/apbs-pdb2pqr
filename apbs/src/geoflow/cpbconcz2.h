@@ -13,7 +13,7 @@
 ///
 ///  Additional contributing authors listed in the code documentation.
 ///
-/// Copyright (c) 2010-2012 Battelle Memorial Institute. Developed at the
+/// Copyright (c) 2010-2014 Battelle Memorial Institute. Developed at the
 /// Pacific Northwest National Laboratory,operated by Battelle Memorial
 /// Institute,Pacific Northwest Division for the U.S. Department of Energy.
 ///
@@ -102,6 +102,8 @@ typedef struct _GeoflowInput
 	double density;
 	double epsilonw;
 } GeoflowInput;
+
+#include <stddef.h>
 
 #ifdef __cplusplus
 extern "C"
