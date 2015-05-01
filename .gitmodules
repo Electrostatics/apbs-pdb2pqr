@@ -1,0 +1,3 @@
+[submodule "apbs/externals/geoflow_c"]
+	path = apbs/externals/geoflow_c
+	url = https://github.com/Electrostatics/geoflow_c
