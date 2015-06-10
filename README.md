@@ -16,5 +16,6 @@ If you want to use the geometric flow implementation, do the following:
 1. Get the submodule from github:
   * git submodule init
   * git submodule update
-2. Set ENABLE_GEOFLOW to ON
+2. In CMake:
+  * Set ENABLE_GEOFLOW to ON
 3. Build as usual
