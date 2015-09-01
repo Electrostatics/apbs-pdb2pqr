@@ -3,7 +3,7 @@ language: cpp
 os:
     - osx
     - linux
-    
+
 compiler:
     - gcc
     - clang
@@ -16,10 +16,14 @@ before_script:
     - cd apbs
     - mkdir travis
     - cd travis
-    - cmake -DENABLE_FETK=OFF -DBUILD_SHARED_LIBS=OFF -DENABLE_BEM=OFF ..
+    - cmake -DBUILD_DOC=OFF ..
 
 script:
     - make
+
+after_success:
+    - cd ../tests
+    - PATH=$PATH:`pwd`../travis/bin python apbs_tester.py
 
 notifications:
   slack: electrostatics:U4cSeRAFGXl9vUqdg4WOubnc
