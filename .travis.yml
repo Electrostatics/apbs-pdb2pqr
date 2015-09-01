@@ -17,14 +17,13 @@ before_script:
     - mkdir travis
     - cd travis
     - cmake -DBUILD_DOC=OFF ..
-    - ls bin
 
 script:
     - make
 
 after_success:
     - cd ../tests
-    - ls ../travis
+    - ls ../travis/bin
     - PATH=$PATH:$TRAVIS_BUILD_DIR/travis/bin python apbs_tester.py
 
 notifications:
