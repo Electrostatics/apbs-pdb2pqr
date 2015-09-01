@@ -20,3 +20,6 @@ before_script:
 
 script:
     - make
+
+notifications:
+  slack: electrostatics:U4cSeRAFGXl9vUqdg4WOubnc
