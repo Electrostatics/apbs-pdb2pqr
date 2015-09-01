@@ -23,9 +23,7 @@ script:
 
 after_success:
     - cd ../tests
-    - ls ../travis/bin
-    - echo $TRAVIS_BUILD_DIR
-    - PATH=$PATH:$TRAVIS_BUILD_DIR/travis/bin python apbs_tester.py
+    - PATH=$PATH:$TRAVIS_BUILD_DIR/apbs/travis/bin python apbs_tester.py
 
 notifications:
   slack: electrostatics:U4cSeRAFGXl9vUqdg4WOubnc
