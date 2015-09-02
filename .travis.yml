@@ -8,6 +8,8 @@ compiler:
     - gcc
     - clang
 
+env:
+    - TEST=
 branches:
     only:
         - master
@@ -23,7 +25,7 @@ script:
 
 after_success:
     - cd ../tests
-    - PATH=$PATH:$TRAVIS_BUILD_DIR/apbs/travis/bin python apbs_tester.py
+    - PATH=$PATH:$TRAVIS_BUILD_DIR/apbs/travis/bin ./apbs_tester.py
 
 notifications:
   slack: electrostatics:U4cSeRAFGXl9vUqdg4WOubnc
