@@ -35,7 +35,7 @@ before_script:
 script:
     - make
     - cd ../tests
-    - PATH=$PATH:$TRAVIS_BUILD_DIR/apbs/travis/bin ./apbs_tester.py -c $TEST_SUITE
+    - PATH=$PATH:$TRAVIS_BUILD_DIR/apbs/travis/bin python apbs_tester.py -c $TEST_SUITE
     - ! grep FAILED test.log
 
 notifications:
