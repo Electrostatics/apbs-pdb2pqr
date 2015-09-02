@@ -8,6 +8,20 @@ compiler:
     - gcc
     - clang
 
+env:
+    - TEST_SUITE=test_actin-dimer.cfg
+    - TEST_SUITE=test_alkanes.cfg
+    - TEST_SUITE=test_born.cfg
+    - TEST_SUITE=test_FKBP.cfg
+    - TEST_SUITE=test_geoflow.cfg
+    - TEST_SUITE=test_hca-bind.cfg
+    - TEST_SUITE=test_ion-pmf.cfg
+    - TEST_SUITE=test_ion-protein.cfg
+    - TEST_SUITE=test_ionize.cfg
+    - TEST_SUITE=test_pka-lig.cfg
+    - TEST_SUITE=test_point-pmf.cfg
+    - TEST_SUITE=test_solv.cfg
+
 branches:
     only:
         - master
@@ -20,10 +34,9 @@ before_script:
 
 script:
     - make
-
-after_success:
     - cd ../tests
-    - PATH=$PATH:$TRAVIS_BUILD_DIR/apbs/travis/bin python apbs_tester.py
+    - PATH=$PATH:$TRAVIS_BUILD_DIR/apbs/travis/bin ./apbs_tester.py -c $TEST_SUITE
+    - ! grep FAILED test.log
 
 notifications:
   slack: electrostatics:U4cSeRAFGXl9vUqdg4WOubnc
