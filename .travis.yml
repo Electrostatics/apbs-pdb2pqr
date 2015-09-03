@@ -11,7 +11,8 @@ compiler:
 sudo: false
 
 env:
-    - TEST_SUITE=test_actin-dimer.cfg
+    - TEST_SUITE=test_actin-dimer-auto.cfg
+    - TEST_SUITE=test_actin-dimer-parallel.cfg
     - TEST_SUITE=test_alkanes.cfg
     - TEST_SUITE=test_born.cfg
     - TEST_SUITE=test_FKBP.cfg
