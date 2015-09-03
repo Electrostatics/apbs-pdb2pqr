@@ -8,6 +8,8 @@ compiler:
     - gcc
     - clang
 
+sudo: false
+
 env:
     - TEST_SUITE=test_actin-dimer.cfg
     - TEST_SUITE=test_alkanes.cfg
@@ -35,8 +37,7 @@ before_script:
 script:
     - make
     - cd ../tests
-    - PATH=$PATH:$TRAVIS_BUILD_DIR/apbs/travis/bin python apbs_tester.py -c $TEST_SUITE
-    - ! grep FAILED test.log
+    - bash run_travis_test.sh $TRAVIS_BUILD_DIR/apbs/travis/bin $TEST_SUITE
 
 notifications:
   slack: electrostatics:U4cSeRAFGXl9vUqdg4WOubnc
