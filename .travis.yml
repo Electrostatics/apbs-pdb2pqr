@@ -11,6 +11,9 @@ compiler:
 sudo: false
 
 env:
+    - FETK=ON
+    - FETK=OFF
+
     - TEST_SUITE=test_actin-dimer-auto.cfg
     - TEST_SUITE=test_actin-dimer-parallel.cfg
     - TEST_SUITE=test_alkanes.cfg
@@ -33,7 +36,7 @@ before_script:
     - cd apbs
     - mkdir travis
     - cd travis
-    - cmake -DBUILD_DOC=OFF ..
+    - cmake -DBUILD_DOC=OFF -DENABLE_FETK=$FETK ..
 
 script:
     - make
