@@ -11,6 +11,8 @@ compiler:
 sudo: false
 
 env:
+    - FETK=ON   TEST_SUITE=test_fem.cfg
+
     - FETK=OFF  TEST_SUITE=test_actin-dimer-auto.cfg
     - FETK=OFF  TEST_SUITE=test_actin-dimer-parallel.cfg
     - FETK=OFF  TEST_SUITE=test_alkanes.cfg
