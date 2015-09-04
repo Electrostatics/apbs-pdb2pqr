@@ -11,20 +11,6 @@ compiler:
 sudo: false
 
 env:
-    - FETK=ON   TEST_SUITE=test_actin-dimer-auto.cfg
-    - FETK=ON   TEST_SUITE=test_actin-dimer-parallel.cfg
-    - FETK=ON   TEST_SUITE=test_alkanes.cfg
-    - FETK=ON   TEST_SUITE=test_born.cfg
-    - FETK=ON   TEST_SUITE=test_FKBP.cfg
-    - FETK=ON   TEST_SUITE=test_geoflow.cfg
-    - FETK=ON   TEST_SUITE=test_hca-bind.cfg
-    - FETK=ON   TEST_SUITE=test_ion-pmf.cfg
-    - FETK=ON   TEST_SUITE=test_ion-protein.cfg
-    - FETK=ON   TEST_SUITE=test_ionize.cfg
-    - FETK=ON   TEST_SUITE=test_pka-lig.cfg
-    - FETK=ON   TEST_SUITE=test_point-pmf.cfg
-    - FETK=ON   TEST_SUITE=test_solv.cfg
-
     - FETK=OFF  TEST_SUITE=test_actin-dimer-auto.cfg
     - FETK=OFF  TEST_SUITE=test_actin-dimer-parallel.cfg
     - FETK=OFF  TEST_SUITE=test_alkanes.cfg
