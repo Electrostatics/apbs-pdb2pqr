@@ -71,6 +71,10 @@
 #    include "mcx/mcx.h"
 #endif
 
+#ifdef ENABLE_GEOFLOW
+  #include "cpbconcz2.h"
+#endif
+
 /**
  * @brief  Return code for APBS during failure
  * @ingroup  Frontend */
@@ -803,6 +807,7 @@ VEXTERNC int writedataBEM(int rank, NOsh *nosh, PBEparm *pbeparm);
 VEXTERNC int writematBEM(int rank, NOsh *nosh, PBEparm *pbeparm);
 #endif
 
+#ifdef ENABLE_GEOFLOW
 /**
  * @brief  Initialize an GEOFLOW calculation
  * @ingroup  Frontend
@@ -901,3 +906,4 @@ VEXTERNC int writedataGEOFLOW(int rank, NOsh *nosh, PBEparm *pbeparm);
  * @return  1 if successful, 0 otherwise */
 VEXTERNC int writematGEOFLOW(int rank, NOsh *nosh, PBEparm *pbeparm);
 
+#endif

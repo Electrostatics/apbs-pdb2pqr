@@ -46,7 +46,6 @@ endmacro()
 add_subdirectory(generic)
 add_subdirectory(pmgc)
 add_subdirectory(mg)
-add_subdirectory(geoflow)
 
 if(ENABLE_FETK)
    add_subdirectory(fem)
@@ -60,10 +59,10 @@ message(STATUS "${APBS_LIBS} ${APBS_INTERNAL_LIBS}")
 message(STATUS " ")
 
 target_link_libraries(apbs ${APBS_LIBS} ${APBS_INTERNAL_LIBS} ${APBS_LIBS})
- 
+
 configure_file(
     ${APBS_ROOT}/src/.config/apbscfg.h.in
-    ${APBS_ROOT}/src/apbscfg.h
+    ${APBS_BUILD}/src/apbscfg.h
     )
 
 if(ENABLE_iAPBS)
@@ -76,3 +75,12 @@ INSTALL(FILES apbs.h routines.h DESTINATION ${HEADER_INSTALL_PATH})
 INSTALL(TARGETS apbs DESTINATION ${EXECUTABLE_INSTALL_PATH})
 
 message(STATUS ${CMAKE_C_FLAGS})
+
+if(ENABLE_GEOFLOW)
+    MESSAGE( "Building GEOFLOW src" )
+    add_subdirectory(${APBS_ROOT}/externals/geoflow_c/src/
+            ${APBS_BUILD}/externals/geoflow_c/src/)
+    add_definitions(-DENABLE_GEOFLOW)
+    include_directories(${APBS_ROOT}/externals/geoflow_c/src/)
+endif()
+
