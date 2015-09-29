@@ -39,7 +39,7 @@ include(CheckIncludeFiles)
 include(CheckFunctionExists)
 include(ExternalProject)
 
-set(APBS_VERSION "1.4")
+set(APBS_VERSION "1.4.1")
 set(PACKAGE_STRING ${APBS_VERSION})
 set(CMAKE_BUILD_TYPE "RELWITHDEBINFO")
 
@@ -53,13 +53,13 @@ OPTION (BUILD_SHARED_LIBS "Build shared libraries." OFF)
 
 message(STATUS "Setting project paths")
 
-set(CMAKE_C_FLAGS -std=c99)
-set(CMAKE_CXX_FLAGS -fpermissive)
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fpermissive")
 
 set(APBS_ROOT ${PROJECT_SOURCE_DIR})
-set(EXECUTABLE_OUTPUT_PATH ${APBS_ROOT}/bin)
-set(LIBRARY_OUTPUT_PATH ${APBS_ROOT}/lib)
-set(TOOLS_PATH ${APBS_ROOT}/tools)
+set(APBS_BUILD ${PROJECT_BINARY_DIR})
+set(EXECUTABLE_OUTPUT_PATH ${APBS_BUILD}/bin)
+set(LIBRARY_OUTPUT_PATH ${APBS_BUILD}/lib)
+set(TOOLS_PATH ${APBS_BUILD}/tools)
 set(APBS_BINARY ${EXECUTABLE_OUTPUT_PATH}/apbs)
 
 set(LIBRARY_INSTALL_PATH lib)
@@ -70,6 +70,9 @@ set(SHARE_INSTALL_PATH share/apbs)
 find_file(CONTRIB_PATH "contrib" PATHS "${APBS_ROOT}"
     DOC "The path to contributed modules for apbs"
     )
+find_file(EXTERNALS_PATH "externals" PATHS "${APBS_ROOT}"
+	DOC "The path to the external git submodules"
+	)
 
 set(SYS_LIBPATHS /usr/lib64)
 #list(APPEND SYS_LIBPATHS /usr/lib64)
@@ -94,7 +97,10 @@ set(CMAKE_INCLUDE_PATH "${CMAKE_INCLUDE_PATH}")
 list(APPEND CMAKE_INCLUDE_PATH /usr/include)
 list(APPEND CMAKE_INCLUDE_PATH /usr/local/include)
 
-set(APBS_LIBS "-L${APBS_ROOT}/lib -lapbs_geoflow")
+if(ENABLE_GEOFLOW)
+  list(APPEND APBS_LIBS "apbs_geoflow")
+endif()
+
 
 ################################################################################
 # Enable ansi pedantic compiling                                               #
@@ -177,7 +183,7 @@ if(NOT HAVE_SRAND_FUNC)
     message(FATAL_ERROR "Required srand function not found")
 endif()
 
-option(ENABLE_BEM "Boundary element method using TABIPB" ON)
+option(ENABLE_BEM "Boundary element method using TABIPB" OFF)
 if(ENABLE_BEM)
     add_definitions(-DENABLE_BEM)
     set(TABI tabipb)
@@ -185,16 +191,16 @@ if(ENABLE_BEM)
     ExternalProject_add(
         ${TABI}
         URL file://${TABI_PATH}
-        CMAKE_ARGS -DCMAKE_INSTALL_PREFIX:PATH=${APBS_ROOT}
+        CMAKE_ARGS -DCMAKE_INSTALL_PREFIX:PATH=${APBS_BUILD}
             -DBUILD_SHARED_LIBS=${BUILD_SHARED_LIBS}
     )
-    
+
     if(BUILD_SHARED_LIBS)
         set(TABI_LIBRARY_BASENAME ${CMAKE_SHARED_LIBRARY_PREFIX}${TABI}${CMAKE_SHARED_LIBRARY_SUFFIX})
     else()
         set(TABI_LIBRARY_BASENAME ${CMAKE_STATIC_LIBRARY_PREFIX}${TABI}${CMAKE_STATIC_LIBRARY_SUFFIX})
     endif()
-    
+
     install(
         FILES ${LIBRARY_OUTPUT_PATH}/${TABI_LIBRARY_BASENAME}
         DESTINATION ${LIBRARY_INSTALL_PATH}
@@ -204,8 +210,8 @@ if(ENABLE_BEM)
         DESTINATION ${CMAKE_INSTALL_PREFIX}
         FILES_MATCHING PATTERN "*.mod"
     )
-    set(TABI_LIBRARY ${APBS_ROOT}/${LIBRARY_INSTALL_PATH}/${TABI_LIBRARY_BASENAME})
-    
+    set(TABI_LIBRARY ${LIBRARY_OUTPUT_PATH}/${TABI_LIBRARY_BASENAME})
+
     set(LIBGFORTRAN_NAME ${CMAKE_SHARED_LIBRARY_PREFIX}gfortran${CMAKE_SHARED_LIBRARY_SUFFIX})
     execute_process(COMMAND gfortran --print-file-name ${LIBGFORTRAN_NAME} 
                     OUTPUT_VARIABLE LIBGFORTRANPATH
@@ -216,69 +222,23 @@ if(ENABLE_BEM)
     endif()
     get_filename_component(LIBGFORTRANPATH ${LIBGFORTRANPATH} PATH)
     find_path(LIBGFORTRAN_PATH ${LIBGFORTRAN_NAME} PATH ${LIBGFORTRANPATH})
-    list(APPEND APBS_LIBS "-L${APBS_ROOT}/${LIBRARY_INSTALL_PATH} -L${LIBGFORTRAN_PATH} -lgfortran -ltabipb -lstdc++" )
+    list(APPEND APBS_LIBS "-L${LIBRARY_OUTPUT_PATH} -L${LIBGFORTRAN_PATH} -lgfortran -ltabipb -lstdc++" )
 endif() # ENABLE_BEM
 
-find_file( # this should be find path...
-    FETK_PATH
-    NAMES fetk
-    PATHS ${SYS_LIBPATHS} /data/work/source . ..
-    DOC "Use an external fetk library")
-
-if(FETK_PATH)
-    include_directories(${FETK_PATH}/include)
-    message(STATUS "Found fetk: ${FETK_PATH}")
-else()
-    message(WARNING "Did not find fetk")
+################################################################################
+# Deal with MALOC                                                              #
+# Note that we depend exclusively on the MALOC that is in our external FETK    #
+# repository.  Also note, that in order for this to work on Windows, we've had #
+# to add CMake support to MALOC, and that FETK has no such support, in general.#
+################################################################################
+if(NOT ENABLE_FETK)
+	# We'll use autotools to build MALOC if FETK is enabled.
+	set(MALOC_ROOT ${EXTERNALS_PATH}/fetk/maloc)
+	add_subdirectory(${MALOC_ROOT})
+	include_directories(${MALOC_ROOT}/src/base ${MALOC_ROOT}/src/vsys
+		${MALOC_ROOT}/src/vsh ${MALOC_ROOT}/src/psh)
+	list(APPEND APBS_LIBS -L${EXTERNALS_PATH}/fetk/maloc/lib -lmaloc)
 endif()
-
-
-find_library(MALOC_LIBRARY  "maloc"
-    PATHS ${FETK_PATH}/lib ${CONTRIB_PATH}
-    DOC   "The fetk/maloc library"
-)
-if(MALOC_LIBRARY)
-    message(STATUS "External maloc library was found: ${MALOC_LIBRARY}")
-else()
-    message(WARNING "External maloc library was not found.")
-endif()
-
-if(MALOC_LIBRARY AND ENABLE_FETK)
-    include_directories(${FETK_PATH}/include/maloc)
-    SET(HAVE_MALOC_H YES)
-else()
-    CHECK_INCLUDE_FILES(maloc/maloc.h HAVE_MALOC_H)
-endif()
-
-if(HAVE_MALOC_H)
-    message(STATUS "External maloc headers found")
-else()
-    message(WARNING "External maloc headers not found.")
-endif()
-
-if(NOT (HAVE_MALOC_H AND MALOC_LIBRARY))
-    message(STATUS "Using internal contributed maloc library")
-    ExternalProject_add(
-        "maloc"
-        URL file://${CONTRIB_PATH}/maloc.tar.gz
-        SOURCE_DIR ${CONTRIB_PATH}/maloc
-        CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${APBS_ROOT}
-            -DBUILD_SHARED_LIBS=${BUILD_SHARED_LIBS}
-    )
-    include_directories(${APBS_ROOT}/include)
-    if(BUILD_SHARED_LIBS)
-        set(MALOC_LIBRARY_BASENAME ${CMAKE_SHARED_LIBRARY_PREFIX}maloc${CMAKE_SHARED_LIBRARY_SUFFIX})
-    else()
-        set(MALOC_LIBRARY_BASENAME ${CMAKE_STATIC_LIBRARY_PREFIX}maloc${CMAKE_STATIC_LIBRARY_SUFFIX})
-    endif()
-    install(
-        FILES ${LIBRARY_OUTPUT_PATH}/${MALOC_LIBRARY_BASENAME}
-        DESTINATION ${LIBRARY_INSTALL_PATH}
-    )
-    set(MALOC_LIBRARY ${LIBRARY_OUTPUT_PATH}/${MALOC_LIBRARY_BASENAME})
-endif()
-list(APPEND APBS_LIBS -lmaloc)
-
 
 ##############################################################################
 ##
@@ -298,15 +258,51 @@ endif()
 option(ENABLE_FETK "Enable the finite element solver" OFF)
 
 if(ENABLE_FETK)
-    message(STATUS "Checking for fetk components")
-    set(FETK_ENALBED 1)
+	if(WIN32)
+		message(FATAL_ERROR "FETK will not built on Windows because it uses autotools!")
+	else()
+		message(STATUS "Building FETK components.")
+		ExternalProject_Add(maloc
+			PREFIX fetk
+			SOURCE_DIR ${EXTERNALS_PATH}/fetk/maloc/src
+			CONFIGURE_COMMAND ${EXTERNALS_PATH}/fetk/maloc/configure --prefix=<INSTALL_DIR>
+			BUILD_COMMAND ${MAKE})
 
-    list(APPEND APBS_LIBS "-lstdc++")
-    list(APPEND APBS_LIBS "-L${FETK_PATH}/lib")
-    list(APPEND APBS_LIBS -lamd -lpunc -lmc -lgamer -lsuperlu -lumfpack
--lblas -lvf2c -ltetgen -ltriangle -lg2c -lreadline )
-    
-    SET(HAVE_MC_H YES)
+		ExternalProject_Add(punc
+			PREFIX fetk
+			DEPENDS maloc
+			SOURCE_DIR ${EXTERNALS_PATH}/fetk/punc/src
+			CONFIGURE_COMMAND FETK_INCLUDE=<INSTALL_DIR>/include FETK_LIBRARY=<INSTALL_DIR>/lib ${EXTERNALS_PATH}/fetk/punc/configure --prefix=<INSTALL_DIR>
+			BUILD_COMMAND ${MAKE})
+
+		ExternalProject_Add(gamer
+			PREFIX fetk
+			DEPENDS maloc
+			SOURCE_DIR ${EXTERNALS_PATH}/fetk/gamer/src
+			CONFIGURE_COMMAND FETK_INCLUDE=<INSTALL_DIR>/include FETK_LIBRARY=<INSTALL_DIR>/lib ${EXTERNALS_PATH}/fetk/gamer/configure --prefix=<INSTALL_DIR>
+			BUILD_COMMAND ${MAKE})
+
+		ExternalProject_Add(mc
+			PREFIX fetk
+			DEPENDS maloc punc
+			SOURCE_DIR ${EXTERNALS_PATH}/fetk/mc/src
+			CONFIGURE_COMMAND FETK_INCLUDE=<INSTALL_DIR>/include FETK_LIBRARY=<INSTALL_DIR>/lib ${EXTERNALS_PATH}/fetk/mc/configure --prefix=<INSTALL_DIR>
+			BUILD_COMMAND ${MAKE})
+
+		set(FETK_ENABLED 1)
+	
+		ExternalProject_Get_Property(maloc install_dir)
+		include_directories(${install_dir}/include)
+
+	    list(APPEND APBS_LIBS "-lstdc++")
+		list(APPEND APBS_LIBS "-L${install_dir}/lib")
+	    list(APPEND APBS_LIBS -lmaloc -lamd -lpunc -lmc -lgamer -lsuperlu -lumfpack
+	-lblas -lvf2c -ltetgen -ltriangle -lreadline -ltermcap)
+	
+	    SET(HAVE_MC_H 1)
+		SET(HAVE_PUNC_H 1)
+		SET(HAVE_BIOM_H 1)
+	endif()
 endif()
 
 
@@ -342,7 +338,7 @@ endif()
 
 try_compile(
     HAVE_EMBED
-    ${APBS_ROOT}/build
+    ${APBS_BUILD}/build
     ${APBS_ROOT}/src/.config/embed_test.c
 )
 
@@ -569,7 +565,7 @@ message("libs: " ${APBS_LIBS})
 # Build APBS sources                                                           #
 ################################################################################
 
-include_directories(${APBS_ROOT}/src)
+include_directories(${APBS_ROOT}/src ${APBS_BUILD}/src ${APBS_ROOT}/include)
 add_subdirectory(src)
 
 
@@ -578,7 +574,7 @@ add_subdirectory(src)
 # Build APBS documentation                                                     #
 ################################################################################
 
-option(BUILD_DOC "Build/Rebuild documentation using doxygen" OFF)
+option(BUILD_DOC "Build/Rebuild documentation using doxygen" ON)
 
 if(BUILD_DOC)
     message(STATUS "Building documentation enabled")
@@ -607,7 +603,19 @@ endif()
 install(
     DIRECTORY ${APBS_ROOT}/doc
     DESTINATION ${SHARE_INSTALL_PATH}
+    PATTERN "programmer" EXCLUDE
+    PATTERN "CMakeLists.txt" EXCLUDE
 )
+
+if(BUILD_DOC)
+    install(
+        DIRECTORY ${APBS_BUILD}/doc/programmer
+        DESTINATION ${SHARE_INSTALL_PATH}/doc
+        PATTERN "Doxyfile" EXCLUDE
+        PATTERN "latex" EXCLUDE
+        PATTERN "mainpage.h" EXCLUDE
+    )
+endif()
 
 install(
     DIRECTORY ${APBS_ROOT}/examples
@@ -628,11 +636,10 @@ install(
     PATTERN "CMakeLists.txt" EXCLUDE
 )
 
-if(NOT HAVE_MALOC_H)
-    message(STATUS "Installing maloc headers")
+if(NOT "${APBS_ROOT}" STREQUAL "${APBS_BUILD}")
     install(
-        DIRECTORY ${APBS_ROOT}/include/maloc
-        DESTINATION ${HEADER_INSTALL_PATH}/..
+        DIRECTORY ${APBS_BUILD}/tools/bin
+        DESTINATION ${SHARE_INSTALL_PATH}/tools
     )
 endif()
 
@@ -676,3 +683,15 @@ if(NOT WIN32)
                 DESTINATION ${EXECUTABLE_INSTALL_PATH})
     endif()
 endif()
+
+################################################################################
+# Optionally build geoflow (git submodule)
+################################################################################
+
+option(ENABLE_GEOFLOW "geoflow method" OFF)
+if(ENABLE_GEOFLOW)
+    MESSAGE( "Building GEOFLOW" )
+    add_definitions(-DENABLE_GEOFLOW)
+	include_directories(${EXTERNALS_PATH}/geoflow_c/src/)
+endif()
+

@@ -3,10 +3,29 @@ language: cpp
 os:
     - osx
     - linux
-    
+
 compiler:
     - gcc
     - clang
+
+sudo: false
+
+env:
+    - FETK=ON   TEST_SUITE=test_fem.cfg
+
+    - FETK=OFF  TEST_SUITE=test_actin-dimer-auto.cfg
+    - FETK=OFF  TEST_SUITE=test_actin-dimer-parallel.cfg
+    - FETK=OFF  TEST_SUITE=test_alkanes.cfg
+    - FETK=OFF  TEST_SUITE=test_born.cfg
+    - FETK=OFF  TEST_SUITE=test_FKBP.cfg
+    - FETK=OFF  TEST_SUITE=test_geoflow.cfg
+    - FETK=OFF  TEST_SUITE=test_hca-bind.cfg
+    - FETK=OFF  TEST_SUITE=test_ion-pmf.cfg
+    - FETK=OFF  TEST_SUITE=test_ion-protein.cfg
+    - FETK=OFF  TEST_SUITE=test_ionize.cfg
+    - FETK=OFF  TEST_SUITE=test_pka-lig.cfg
+    - FETK=OFF  TEST_SUITE=test_point-pmf.cfg
+    - FETK=OFF  TEST_SUITE=test_solv.cfg
 
 branches:
     only:
@@ -16,7 +35,12 @@ before_script:
     - cd apbs
     - mkdir travis
     - cd travis
-    - cmake -DENABLE_FETK=OFF -DBUILD_SHARED_LIBS=OFF -DENABLE_BEM=OFF ..
+    - cmake -DBUILD_DOC=OFF -DENABLE_FETK=$FETK ..
 
 script:
     - make
+    - cd ../tests
+    - bash run_travis_test.sh $TRAVIS_BUILD_DIR/apbs/travis/bin $TEST_SUITE
+
+notifications:
+  slack: electrostatics:U4cSeRAFGXl9vUqdg4WOubnc
