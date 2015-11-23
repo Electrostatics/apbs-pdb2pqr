@@ -1,5 +1,8 @@
 """ Test APBS Python modules """
 import unittest
+import logging
+
+logging.basicConfig(level=logging.DEBUG)
 
 def print_test_results(result):
     """ Format and print results of tests """
