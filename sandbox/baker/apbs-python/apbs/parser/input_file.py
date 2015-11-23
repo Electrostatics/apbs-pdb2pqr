@@ -1,11 +1,9 @@
 """ APBS input file class """
-from read_section import Read
-from elec_section import Elec
-from apolar_section import Apolar
-from print_section import Print
-from parameter import Parameter
-import sys
-
+from .read_section import Read
+from .elec_section import Elec
+from .apolar_section import Apolar
+from .print_section import Print
+from .parameter import Parameter
 
 class InputFile(Parameter):
     """ Top-level APBS input file class """
@@ -14,62 +12,54 @@ class InputFile(Parameter):
         self.reads = []
         self.calcs = []
         self.prints = []
-        
     @property
     def name(self):
         return "APBS INPUT FILE"
-    
     def parse(self, tokens):
         """ This parses data read in with the feed() command """
         self.tokens = tokens
         token = self.tokens.pop(0)
         while True:
-            sectionName = token.lower()
-            if sectionName == "read":
+            section_name = token.lower()
+            if section_name == "read":
                 read = Read()
                 read.parse(self.tokens)
                 read.validate()
                 self.reads.append(read)
-                print read
-            elif sectionName == "elec":
+            elif section_name == "elec":
                 elec = Elec()
                 elec.parse(self.tokens)
                 elec.validate()
                 self.calcs.append(elec)
-                print elec
-            elif sectionName == "apolar":
+            elif section_name == "apolar":
                 apolar = Apolar()
                 apolar.parse(self.tokens)
                 apolar.validate()
                 self.calcs.append(apolar)
-            elif sectionName == "print":
-                printObj = Print()
-                printObj.parse(self.tokens)
-                printObj.validate()
-                self.prints.append(printObj)
-            elif sectionName == "quit":
+            elif section_name == "print":
+                print_object = Print()
+                print_object.parse(self.tokens)
+                print_object.validate()
+                self.prints.append(print_object)
+            elif section_name == "quit":
                 return
             else:
                 errstr = "Unrecognized token %s" % token
-                raise ValueError, errstr
+                raise ValueError(errstr)
             token = self.tokens.pop(0)
-    
     def contents(self):
-        return { "read" : self.reads, "calcs" : self.calcs, "print" : self.prints }
-    
+        return {"read" : self.reads, "calcs" : self.calcs, "print" : self.prints}
     def validate(self):
-        for values in self.content_dict.values():
+        for values in self.reads + self.calcs + self.prints:
             for param in values:
                 param.validate()
-    
     def __str__(self):
         outstr = ""
-        for readSection in self.reads:
-            outstr = outstr + "%s\n" % readSection
-        for calcSection in self.calcs:
-            outstr = outstr + "%s\n" % calcSection
-        for printSection in self.prints:
-            outstr = outstr + "%s\n" % printSection
+        for read_section in self.reads:
+            outstr = outstr + "%s\n" % read_section
+        for calc_section in self.calcs:
+            outstr = outstr + "%s\n" % calc_section
+        for print_section in self.prints:
+            outstr = outstr + "%s\n" % print_section
         outstr = outstr + "quit\n"
         return outstr
-        
