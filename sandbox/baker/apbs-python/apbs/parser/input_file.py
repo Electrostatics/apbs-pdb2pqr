@@ -1,9 +1,7 @@
 """ APBS input file class """
 from .read_section import Read
-from .elec_section import Elec
-from .apolar_section import Apolar
 from .print_section import Print
-from .parameter import Parameter
+from .parameter import Parameter, Elec, Apolar
 
 class InputFile(Parameter):
     """ Top-level APBS input file class """

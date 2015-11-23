@@ -8,7 +8,7 @@ import re
 import unittest
 
 import logging
-_PARSER_LOGGER = logging.getLogger("parser")
+_LOGGER = logging.getLogger("parser")
 
 class Parser():
     """ Parse APBS input file """
@@ -62,8 +62,8 @@ class _TestParser(unittest.TestCase):
     def test_parser(self):
         """ Limited parser testing """
         self.parser = Parser()
-        _PARSER_LOGGER.info("Testing mg-manual...")
+        _LOGGER.info("Testing mg-manual...")
         infile = open(self.INPATH, "rt")
         self.parser.feed(infile)
         self.input_file = self.parser.parse()
-        _PARSER_LOGGER.info(self.input_file)
+        _LOGGER.info(self.input_file)
