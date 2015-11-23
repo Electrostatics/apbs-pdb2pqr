@@ -1,14 +1,14 @@
 """ Parse the PRINT input file section """
-from parameter import Parameter
+from .parameter import Parameter
 
 class Print(Parameter):
     """ This is a very simple section that allows linear combinations of calculated properties to be
     written to standard output.
-    
+
     The syntax of this section is
-    
+
     PRINT {what} [id op id op...] END
-    
+
     The first mandatory argument is what, the quantity to manipulate or print. This variable is a
     string that can assume the following values:
 
@@ -24,7 +24,7 @@ class Print(Parameter):
     * elecForce - Print forces as calculated with an earlier calcforce ELEC command.
     * apolEnergy - Print energies as calculated with an earlier calcenergy APOLAR command.
     * apolForce - Print forces as calculated with an earlier calcforce APOLAR command.
-    
+
     The next arguments are a series of id op id op id op ... id commands where every id is
     immediately followed by an op and another id. These options have the following form:
 
@@ -42,41 +42,38 @@ class Print(Parameter):
         self.what = None
         self.ids = []
         self.ops = []
-    
     @property
     def name(self):
+        """ Return section name """
         return "print"
-    
     def parse(self, tokens):
-        whatToken = tokens.pop(0).lower()
-        self.what = whatToken
-        calcID = int(tokens.pop(0))
-        self.ids.append(calcID)
+        """ Parse tokens associated with this section """
+        what_token = tokens.pop(0).lower()
+        self.what = what_token
+        calc_id = int(tokens.pop(0))
+        self.ids.append(calc_id)
         while True:
             token = tokens.pop(0)
             if token == "end":
                 return
             self.ops.append(token)
-            calcID = int(tokens.pop(0))
-            self.ids.append(calcID)
-            
+            calc_id = int(tokens.pop(0))
+            self.ids.append(calc_id)
     def validate(self):
         if not self.what in self.allowed_what_values:
             errstr = "Unexpected token %s in PRINT" % self.what
-            raise ValueError, errstr
-        for op in self.ops:
-            if not op in self.allowed_op_values:
-                errstr = "Unexpected operator %s in PRINT" % op
-                raise ValueError, op
-    
+            raise ValueError(errstr)
+        for operation in self.ops:
+            if not operation in self.allowed_op_values:
+                errstr = "Unexpected operator %s in PRINT" % operation
+                raise ValueError(operation)
     def __str__(self):
         outstr = "print %s " % self.what
         outstr = outstr + "%d " % self.ids[0]
-        for iop, op in enumerate(self.ops):
-            calcID = self.ids[iop+1]
-            outstr = outstr + "%s %d " % (op, calcID)
+        for iop, operation in enumerate(self.ops):
+            calc_id = self.ids[iop+1]
+            outstr = outstr + "%s %d " % (operation, calc_id)
         outstr = outstr + "end"
         return outstr
-    
     def contents(self):
-        return { "what" : self.what, "ops" : self.ops, "ids" : self.ids }
+        return {"what" : self.what, "ops" : self.ops, "ids" : self.ids}
