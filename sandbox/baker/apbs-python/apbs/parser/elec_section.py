@@ -1,26 +1,11 @@
 """ Parse APBS input file ELEC sections """
 from .parameter import (FLOAT_EPSILON, Parameter, FormatPathParameter, ParameterSection,
                         OneStringParameter, OneIntegerParameter, OneFloatParameter,
-                        ThreeIntegerParameter, ThreeFloatParameter)
+                        ThreeIntegerParameter, ThreeFloatParameter, Name)
 from .utility import factors, product
 import logging
 
-_ELEC_PARSER_LOGGER = logging.getLogger("elec-parser")
-
-
-class Name(OneStringParameter):
-    """ Usage: name {id}
-
-    Since numerous ELEC blocks may appear in an APBS input file, it can be difficult to keep
-    track of them all. It is possible to assign an optional name to each ELEC block to simplify
-    the organizational process.
-
-    {id} is an alphanumeric string denoting the "name" of the calculation block."""
-    def __init__(self):
-        super(Name, self).__init__()
-    @property
-    def name(self):
-        return "name"
+_LOGGER = logging.getLogger("parser")
 
 class Glen(ThreeFloatParameter):
     """ Specify the mesh domain lengths for multigrid mg-manual calculations.  These lengths may be
@@ -368,17 +353,17 @@ class Dime(ThreeIntegerParameter):
     def validate(self):
         newval = self.fix_dimension(self.xint)
         if newval != self.xint:
-            _ELEC_PARSER_LOGGER.error("Corrected dimension %d to %d for compatibility with \
+            _LOGGER.error("Corrected dimension %d to %d for compatibility with \
 multigrid.\n", self.xint, newval)
             self.xint = newval
         newval = self.fix_dimension(self.yint)
         if newval != self.yint:
-            _ELEC_PARSER_LOGGER.error("Corrected dimension %d to %d for compatibility with \
+            _LOGGER.error("Corrected dimension %d to %d for compatibility with \
 multigrid.\n", self.yint, newval)
             self.yint = newval
         newval = self.fix_dimension(self.zint)
         if newval != self.zint:
-            _ELEC_PARSER_LOGGER.error("Corrected dimension %d to %d for compatibility with \
+            _LOGGER.error("Corrected dimension %d to %d for compatibility with \
 multigrid.\n", self.zint, newval)
             self.zint = newval
 
@@ -1053,32 +1038,9 @@ class Elec(ParameterSection):
     several ELEC sections, operating on different molecules or using different parameters for
     multiple runs on the same molecule. The order of the ELEC statement can matter since certain
     types of boundary conditions (bcfl) can require information about previous calculations. """
-    def create_store_single_object(self, token_name, tokens):
-        """ I'm not sure how safe this is but it sure saves a lot of code... This is designed to
-        store parameters that only appear once per section block. """
-        object_name = token_name.lower()
-        class_name = object_name.capitalize()
-        ctor = globals()[class_name]
-        obj = ctor()
-        obj.parse(tokens)
-        obj.validate()
-        self.content_dict[object_name] = obj
-    def create_store_multiple_objects(self, token_name, tokens):
-        """ I'm not sure how safe this is but it sure saves a lot of code... This is designed to
-        store parameters that appear multiple times per section block. """
-        object_name = token_name.lower()
-        class_name = object_name.capitalize()
-        ctor = globals()[class_name]
-        obj = ctor()
-        obj.parse(tokens)
-        obj.validate()
-        try:
-            self.content_dict[object_name].append(obj)
-        except KeyError:
-            self.content_dict[object_name] = [obj]
-    @property
-    def name(self):
-        return "elec"
+    def __init__(self):
+        super(Elec, self).__init__()
+        self.my_name = "elec"
     def parse(self, tokens):
         token = tokens.pop(0)
         while True:
@@ -1178,15 +1140,10 @@ class Elec(ParameterSection):
             self.validate_femanual()
         else:
             raise TypeError("Don't know how to process solver type %s" % solvtype)
-
     def __str__(self):
-        outstr = "elec\n"
-        keys = self.content_dict.keys()
-        try:
-            outstr = outstr + "\t%s\n" % self.content_dict["name"]
-            keys.remove("name")
-        except KeyError:
-            pass
+        outstr = self.format_block_start()
+        keys = list(self.content_dict.keys())
+        keys.remove("name")
         outstr = outstr + "\t%s\n" % self.content_dict["solvtype"]
         keys.remove("solvtype")
         outstr = outstr + "\t%s\n" % self.content_dict["eqntype"]
