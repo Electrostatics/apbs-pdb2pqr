@@ -1,7 +1,9 @@
-""" Parse the PRINT input file section """
-from .parameter import Parameter
+""" Handle the storage of APBS PRINT block input file parameters """
+import sys
+from .utility import factors, product
+from . import parameter
 
-class Print(Parameter):
+class Print(parameter.Parameter):
     """ This is a very simple section that allows linear combinations of calculated properties to be
     written to standard output.
 
@@ -36,16 +38,14 @@ class Print(Parameter):
     * op - Specify the arithmetic operation to be performed on the calculated quantities:
         + Addition
         - Subtraction """
-    allowed_what_values = ["elecenergy", "elecforce", "apolenergy", "apolforce"]
-    allowed_op_values = ["+", "-"]
     def __init__(self):
+        super(Print, self).__init__()
+        self.allowed_what_values = ["elecenergy", "elecforce", "apolenergy", "apolforce"]
+        self.allowed_op_values = ["+", "-"]
         self.what = None
         self.ids = []
         self.ops = []
-    @property
-    def name(self):
-        """ Return section name """
-        return "print"
+        self._short_name = "print"
     def parse(self, tokens):
         """ Parse tokens associated with this section """
         what_token = tokens.pop(0).lower()
@@ -75,5 +75,3 @@ class Print(Parameter):
             outstr = outstr + "%s %d " % (operation, calc_id)
         outstr = outstr + "end"
         return outstr
-    def contents(self):
-        return {"what" : self.what, "ops" : self.ops, "ids" : self.ids}
