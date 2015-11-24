@@ -1,6 +1,6 @@
 """ Handle the storage of APBS input file parameters """
-# TODO - I really need to break this into separate input files but I can't figure out how to make
-# the globals() call work across the input files.
+# TODO - Replace globals()[class_name] with elegant decorator solution.
+# TODO - Break this back into multiple source files -- it's too long.
 import sys
 import logging
 
@@ -210,9 +210,7 @@ class Name(OneStringParameter):
     {id} is an alphanumeric string denoting the "name" of the calculation block."""
     def __init__(self):
         super(Name, self).__init__()
-    @property
-    def name(self):
-        return "name"
+        self.my_name = "name"
     def validate(self):
         if len(self.parm) == 0:
             raise ValueError("Can't have empty string parameter")
@@ -227,9 +225,9 @@ class Temp(OneFloatParameter):
     Note that the temperature term is used for adjusting the ion distribution and scaling
     electrostatic potentials.  It is not used to model the temperature dependence of any
     dielectric terms. """
-    @property
-    def name(self):
-        return "temp"
+    def __init__(self):
+        super(Temp, self).__init__()
+        self.my_name = "temp"
     def validate(self):
         if self.parm < FLOAT_EPSILON:
             raise ValueError("temperature is zero or negative -- you violated the 3rd law!")
