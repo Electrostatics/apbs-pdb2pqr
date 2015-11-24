@@ -1,6 +1,4 @@
 """ Handle the storage of APBS PRINT block input file parameters """
-import sys
-from .utility import factors, product
 from . import parameter
 
 class Print(parameter.Parameter):

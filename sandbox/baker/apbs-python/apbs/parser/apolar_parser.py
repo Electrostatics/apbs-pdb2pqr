@@ -1,6 +1,8 @@
 """ Handle the storage of APBS APOLAR block input file parameters """
-import sys
-from .utility import factors, product
+import logging
+
+_LOGGER = logging.getLogger("apolar-parser")
+
 from . import parameter
 
 class Name(parameter.Name):
@@ -123,9 +125,9 @@ class Apolar(parameter.ParameterSection):
         super(Apolar, self).__init__()
         self._short_name = "apolar"
         self._allowed_keywords = {"name" : Name, "bconc" : Bconc, "calcenergy" : Calcenergy,
-                                 "calcforce" : Calcforce, "dpos" : Dpos, "gamma" : Gamma,
-                                 "grid" : Grid, "mol" : Mol, "press" : Press, "sdens" : Sdens,
-                                 "srad" : Srad, "srfm" : Srfm, "swin" : Swin, "temp" : Temp }
+                                  "calcforce" : Calcforce, "dpos" : Dpos, "gamma" : Gamma,
+                                  "grid" : Grid, "mol" : Mol, "press" : Press, "sdens" : Sdens,
+                                  "srad" : Srad, "srfm" : Srfm, "swin" : Swin, "temp" : Temp}
     def parse(self, tokens: list):
         token = tokens.pop(0)
         while True:
@@ -142,8 +144,8 @@ class Apolar(parameter.ParameterSection):
                 raise ValueError(errstr)
             token = tokens.pop(0)
     def validate(self):
-        required_values = ["name", "bconc", "dpos", "gamma", "grid",
-                           "mol", "press", "sdens", "srad", "srfm", "swin", "temp"]
+        required_values = {"name", "bconc", "dpos", "gamma", "grid",
+                           "mol", "press", "sdens", "srad", "srfm", "swin", "temp"}
         for parm in required_values:
             if parm not in self.contents():
                 errstr = "APOLAR missing required parameter %s" % parm
