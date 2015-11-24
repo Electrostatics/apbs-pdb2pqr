@@ -52,6 +52,7 @@ class InputFile:
                 raise ValueError(errstr)
             token = self.tokens.pop(0)
     def validate(self):
+        """ Test the correctness of the object -- everything loaded correctly? """
         for values in self.reads + self.calcs + self.prints:
             for param in values:
                 param.validate()
@@ -115,6 +116,10 @@ class Parser():
 class _TestParser(unittest.TestCase):
     """ Test the parser """
     INPATH = "./examples/uber-input.in"
+    def __init__(self):
+        super(_TestParser, self).__init__()
+        self.parser = None
+        self.input_file = None
     def test_parser(self):
         """ Limited parser testing """
         self.parser = Parser()

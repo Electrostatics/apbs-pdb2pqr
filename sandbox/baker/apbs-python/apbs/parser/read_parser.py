@@ -1,5 +1,4 @@
 """ Handle the storage of APBS PRINT block input file parameters """
-import sys
 from . import parameter
 
 class Read(parameter.Parameter):
@@ -7,7 +6,7 @@ class Read(parameter.Parameter):
     def __init__(self):
         super(Read, self).__init__()
         self._allowed_keywords = {"charge" : Charge, "diel" : Diel, "kappa" : Kappa, "mesh" : Mesh,
-                                 "mol" : Mol, "parm" : Parm, "pot" : Pot}
+                                  "mol" : Mol, "parm" : Parm, "pot" : Pot}
         self._short_name = "read"
     def validate(self):
         """ Validate section contents """

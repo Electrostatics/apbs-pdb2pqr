@@ -1,5 +1,4 @@
 """ Handle the storage of APBS ELEC block input file parameters """
-import sys
 import logging
 
 _LOGGER = logging.getLogger("elec-parser")
@@ -194,6 +193,10 @@ class Gcent(parameter.Parameter):
         for attr in {"mol", "xcent", "ycent", "zcent"}:
             setattr(self, attr, None)
         self._short_name = "gcent"
+        self.mol = None
+        self.xcent = None
+        self.ycent = None
+        self.zcent = None
     def parse(self, tokens):
         token = tokens.pop(0).lower()
         if token == "mol":
@@ -846,18 +849,18 @@ class Elec(parameter.ParameterSection):
         super(Elec, self).__init__()
         self._short_name = "elec"
         self._allowed_keywords = {"name" : Name, "solvtype" : Solvtype, "akeypre" : Akeypre,
-                                 "akeysolve" : Akeysolve, "async" : Async, "bcfl" : Bcfl,
-                                 "calcenergy" : Calcenergy, "calcforce" : Calcforce,
-                                 "cgcent" : Cgcent, "cglen" : Cglen, "chgm" : Chgm, "dime" : Dime,
-                                 "domainlength" : Domainlength, "ekey" : Ekey, "etol" : Etol,
-                                 "fgcent" : Fgcent, "fglen" : Fglen, "gcent" : Gcent, "glen" : Glen,
-                                 "grid" : Grid, "eqntype" : Eqntype, "maxsolve" : Maxsolve,
-                                 "maxvert" : Maxvert, "mol" : Mol, "nlev" : Nlev, "ofrac" : Ofrac,
-                                 "pdie" : Pdie, "pdime" : Pdime, "sdens" : Sdens, "sdie" : Sdie,
-                                 "srad" : Srad, "srfm" : Srfm, "swin" : Swin,
-                                 "targetnum" : Targetnum, "targetres" : Targetres, "temp" : Temp,
-                                 "usemap" : Usemap, "usemesh" : Usemesh, "write" : Write,
-                                 "writemat" : Writemat}
+                                  "akeysolve" : Akeysolve, "async" : Async, "bcfl" : Bcfl,
+                                  "calcenergy" : Calcenergy, "calcforce" : Calcforce,
+                                  "cgcent" : Cgcent, "cglen" : Cglen, "chgm" : Chgm, "dime" : Dime,
+                                  "domainlength" : Domainlength, "ekey" : Ekey, "etol" : Etol,
+                                  "fgcent" : Fgcent, "fglen" : Fglen, "gcent" : Gcent,
+                                  "glen" : Glen, "grid" : Grid, "eqntype" : Eqntype,
+                                  "maxsolve" : Maxsolve, "maxvert" : Maxvert, "mol" : Mol,
+                                  "nlev" : Nlev, "ofrac" : Ofrac, "pdie" : Pdie, "pdime" : Pdime,
+                                  "sdens" : Sdens, "sdie" : Sdie, "srad" : Srad, "srfm" : Srfm,
+                                  "swin" : Swin, "targetnum" : Targetnum, "targetres" : Targetres,
+                                  "temp" : Temp, "usemap" : Usemap, "usemesh" : Usemesh,
+                                  "write" : Write, "writemat" : Writemat}
         # Ions are different because you can have many of them
         self._allowed_keywords["ion"] = None
     def parse(self, tokens):
@@ -872,14 +875,14 @@ class Elec(parameter.ParameterSection):
                     self.ion.append(ion)
                 else:
                     self.ion = [ion]
-            elif token_name in Solvtype()._allowed_values:
+            elif token_name in Solvtype().allowed_values():
                 # This is a special section to handle the old-format ELEC solver type declaration
                 solvtype = Solvtype()
                 solvtype.parse([token_name])
                 solvtype.validate()
                 self.solvtype = solvtype
                 _LOGGER.debug(solvtype)
-            elif token_name in Eqntype()._allowed_values:
+            elif token_name in Eqntype().allowed_values():
                 # This is a special section to handle the old-format ELEC equation type declaration
                 eqntype = Eqntype()
                 eqntype.parse([token_name])
@@ -889,10 +892,10 @@ class Elec(parameter.ParameterSection):
             elif token_name == "end":
                 return
             elif token_name in self._allowed_keywords:
-                    token_object = self._allowed_keywords[token_name]()
-                    token_object.parse(tokens)
-                    token_object.validate()
-                    setattr(self, token_name, token_object)
+                token_object = self._allowed_keywords[token_name]()
+                token_object.parse(tokens)
+                token_object.validate()
+                setattr(self, token_name, token_object)
             else:
                 errstr = "Unknown token (%s) for %s" % (token, self.short_name())
                 raise ValueError(errstr)
