@@ -1,14 +1,27 @@
-""" APBS Python parser replacement """
-from apbs import parser
+""" Test APBS Python modules """
+import unittest
+import logging
 
-if __name__ == '__main__':
-    """ Test various aspects of the code """
-    # Test mg-manual
-    parser = parser.Parser()
-    print "Testing mg-manual..."
-    inpath = "examples/uber-input.in"
-    infile = open(inpath, "rb")
-    parser.feed(infile)
-    inputFile = parser.parse()
-    print inputFile
-    
+logging.basicConfig(level=logging.DEBUG)
+
+def print_test_results(result):
+    """ Format and print results of tests """
+    if result.wasSuccessful():
+        print("Passed %s." % result)
+    else:
+        for error in result.errors:
+            test_case = error[0]
+            traceback = error[1]
+            print(test_case, traceback)
+        for failure in result.failures:
+            print(failure)
+
+def run_tests():
+    """ Run tests """
+    suite = unittest.defaultTestLoader.discover("apbs", "*.py")
+    result = unittest.TestResult()
+    suite.run(result)
+    print_test_results(result)
+
+if __name__ == "__main__":
+    run_tests()
