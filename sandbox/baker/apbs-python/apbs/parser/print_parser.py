@@ -38,8 +38,8 @@ class Print(parameter.Parameter):
         - Subtraction """
     def __init__(self):
         super(Print, self).__init__()
-        self.allowed_what_values = ["elecenergy", "elecforce", "apolenergy", "apolforce"]
-        self.allowed_op_values = ["+", "-"]
+        self._allowed_what_values = ["elecenergy", "elecforce", "apolenergy", "apolforce"]
+        self._allowed_op_values = ["+", "-"]
         self.what = None
         self.ids = []
         self.ops = []
@@ -58,11 +58,11 @@ class Print(parameter.Parameter):
             calc_id = int(tokens.pop(0))
             self.ids.append(calc_id)
     def validate(self):
-        if not self.what in self.allowed_what_values:
+        if not self.what in self._allowed_what_values:
             errstr = "Unexpected token %s in PRINT" % self.what
             raise ValueError(errstr)
         for operation in self.ops:
-            if not operation in self.allowed_op_values:
+            if not operation in self._allowed_op_values:
                 errstr = "Unexpected operator %s in PRINT" % operation
                 raise ValueError(operation)
     def __str__(self):

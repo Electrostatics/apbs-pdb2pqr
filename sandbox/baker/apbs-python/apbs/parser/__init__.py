@@ -1,56 +1,27 @@
 """ APBS Python parser replacement. """
 # TODO - eventually, this should be replaced with a JSON input format.
 
+import json
+import io
 import re
 import unittest
 import logging
 _LOGGER = logging.getLogger("parser")
 
+from . import parameter
 from .elec_parser import Elec
 from .apolar_parser import Apolar
 from .print_parser import Print
 from .read_parser import Read
 
-class InputFile:
+class APBSCalculation(parameter.Parameter):
     """ Top-level APBS input file class """
     def __init__(self):
-        self.tokens = None
+        self._tokens = None
         self.reads = []
         self.calcs = []
         self.prints = []
         self._short_name = "APBS INPUT FILE"
-    def parse(self, tokens):
-        """ This parses data read in with the feed() command """
-        self.tokens = tokens
-        token = self.tokens.pop(0)
-        while True:
-            section_name = token.lower()
-            if section_name == "read":
-                read = Read()
-                read.parse(self.tokens)
-                read.validate()
-                self.reads.append(read)
-            elif section_name == "elec":
-                elec = Elec()
-                elec.parse(self.tokens)
-                elec.validate()
-                self.calcs.append(elec)
-            elif section_name == "apolar":
-                apolar = Apolar()
-                apolar.parse(self.tokens)
-                apolar.validate()
-                self.calcs.append(apolar)
-            elif section_name == "print":
-                print_object = Print()
-                print_object.parse(self.tokens)
-                print_object.validate()
-                self.prints.append(print_object)
-            elif section_name == "quit":
-                return
-            else:
-                errstr = "Unrecognized token %s" % token
-                raise ValueError(errstr)
-            token = self.tokens.pop(0)
     def validate(self):
         """ Test the correctness of the object -- everything loaded correctly? """
         for values in self.reads + self.calcs + self.prints:
@@ -67,17 +38,21 @@ class InputFile:
         outstr = outstr + "quit\n"
         return outstr
 
-class Parser():
-    """ Parse APBS input file """
+class TextEncoder:
+    """ Parse APBS input file objects into plain text """
+    def encode(self, apbs_calculation):
+        """ Encode an APBS APBSCalculation object into text """
+        return apbs_calculation.__str__()
+
+class TextDecoder:
+    """ Parse APBS input file from plain text into Python object form """
     # Define comment characters (can be multiple characters)
     COMMENT_CHARACTERS = "#"
     # Define quote character (single character)
     QUOTE_CHARACTERS = "\""
-
     def __init__(self):
-        self.tokens = []
-        self.input_file = None
-
+        self._tokens = []
+        self.apbs_calculation = None
     def tokenize(self, data):
         """ Data must have readline() attribute """
         tokens = []
@@ -102,29 +77,79 @@ class Parser():
             if line:
                 tokens = tokens + line.split()
         return tokens
+    def decode(self, input_string):
+        """ Decode an APBS input file string and return an APBSCalculation object """
+        with io.StringIO(input_string) as infile:
+            self.feed(infile)
+            return self.parse()
     def feed(self, data):
         """ Feed data into the parser. The data object must have a readline function. This function
         loads all of the data into the parser at once which is probably OK given how small APBS
         input files are. """
-        self.tokens = self.tokens + self.tokenize(data)
+        self._tokens = self._tokens + self.tokenize(data)
     def parse(self):
-        """ Parse the fed data, return InputFile object """
-        self.input_file = InputFile()
-        self.input_file.parse(self.tokens)
-        return self.input_file
+        """ Parse the fed data (after self.feed() is called), return APBSCalculation object """
+        apbs_calculation = APBSCalculation()
+        token = self._tokens.pop(0)
+        while True:
+            section_name = token.lower()
+            if section_name == "read":
+                read = Read()
+                read.parse(self._tokens)
+                read.validate()
+                apbs_calculation.reads.append(read)
+            elif section_name == "elec":
+                elec = Elec()
+                elec.parse(self._tokens)
+                elec.validate()
+                apbs_calculation.calcs.append(elec)
+            elif section_name == "apolar":
+                apolar = Apolar()
+                apolar.parse(self._tokens)
+                apolar.validate()
+                apbs_calculation.calcs.append(apolar)
+            elif section_name == "print":
+                print_object = Print()
+                print_object.parse(self._tokens)
+                print_object.validate()
+                apbs_calculation.prints.append(print_object)
+            elif section_name == "quit":
+                break
+            else:
+                errstr = "Unrecognized token %s" % token
+                raise ValueError(errstr)
+            token = self._tokens.pop(0)
+        return apbs_calculation
+
+class JSONEncoder(json.JSONEncoder):
+    """ Encode APBS APBSCalculation Python objects into JSON """
+    def __init__(self, *args, **kwargs):
+        super(JSONEncoder, self).__init__(*args, **kwargs)
+    def default(self, obj):
+        """ Encode object into JSON """
+        obj_dict = {}
+        for key in obj.contents():
+            value = getattr(obj, key)
+            try:
+                obj_dict[value.short_name()] = value.parm()
+            except AttributeError:
+                _LOGGER.warn("No specific handler for type %s", type(value))
+                obj_dict[key] = value
+        return obj_dict
 
 class _TestParser(unittest.TestCase):
     """ Test the parser """
     INPATH = "./examples/uber-input.in"
-    def __init__(self):
-        super(_TestParser, self).__init__()
-        self.parser = None
-        self.input_file = None
-    def test_parser(self):
-        """ Limited parser testing """
-        self.parser = Parser()
-        _LOGGER.info("Testing mg-manual...")
-        infile = open(self.INPATH, "rt")
-        self.parser.feed(infile)
-        self.input_file = self.parser.parse()
-        _LOGGER.info(self.input_file)
+    def setUp(self):
+        self.input_string = open(self.INPATH, "rt").read()
+        text_decoder = TextDecoder()
+        _LOGGER.info("Parsing TEXT input file...")
+        self.apbs_calculation = text_decoder.decode(self.input_string)
+    def test_text(self):
+        text_encoder = TextEncoder()
+        _LOGGER.info("Input data in TEXT format:\n%s", text_encoder.encode(self.apbs_calculation))
+        _LOGGER.warn("This isn't a real unit test. Please review the output manually.")
+    def test_json(self):
+        json_encoder = JSONEncoder()
+        _LOGGER.info("Input data in JSON format:\n%s",
+                     json.dumps(self.apbs_calculation, indent=2, cls=JSONEncoder))
