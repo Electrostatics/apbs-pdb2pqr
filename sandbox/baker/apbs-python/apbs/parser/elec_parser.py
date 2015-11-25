@@ -194,7 +194,7 @@ class Gcent(parameter.Parameter):
         self._short_name = "gcent"
         self.mol = None
         self._parm = [None, None, None]
-    def parm(self):
+    def get_value(self):
         if not self.mol:
             return self._parm
         else:
@@ -705,7 +705,7 @@ class Usemap(parameter.Parameter):
             errstr = "Unknown map type (%s) in usemap" % token
             raise ValueError(errstr)
         self.map_id = int(tokens.pop(0))
-    def parm(self):
+    def get_value(self):
         return { "type" : self.type, "map id" : self.map_id }
     def validate(self):
         # Validation happens in parsing
@@ -794,7 +794,7 @@ class Write(parameter.Parameter):
         self.type = tokens.pop(0).lower()
         self.format = tokens.pop(0).lower()
         self.stem = tokens.pop(0)
-    def parm(self):
+    def get_value(self):
         return { "type" : self.type, "format" : self.format, "stem" : self.stem }
     def validate(self):
         if not self.type in self._allowed_type_values:
@@ -936,8 +936,8 @@ class Elec(parameter.ParameterSection):
         if self.solvtype == "mg-manual":
             dime = self.dime
             nlev = self.nlev
-            ncurr = nlev.parm()
-            for dim in [dime._parm[0], dime._parm[1], dime._parm[2]]:
+            ncurr = nlev.get_value()
+            for dim in dime.get_value():
                 facs = factors(dim-1)
                 ncalc = facs.count(2)-1
                 if ncalc < ncurr:
@@ -955,7 +955,7 @@ class Elec(parameter.ParameterSection):
                 raise ValueError(errstr)
     def validate(self):
         """ Validate current input file contents """
-        solvtype = self.solvtype.parm()
+        solvtype = self.solvtype.get_value()
         if solvtype == "mg-auto":
             self.validate_mgauto()
         elif solvtype == "mg-para":

@@ -146,9 +146,9 @@ class Apolar(parameter.ParameterSection):
     def validate(self):
         required_values = {"name", "bconc", "dpos", "gamma", "grid",
                            "mol", "press", "sdens", "srad", "srfm", "swin", "temp"}
-        for parm in required_values:
-            if parm not in self.contents():
-                errstr = "APOLAR missing required parameter %s" % parm
+        for req_parm in required_values:
+            if req_parm not in self.contents():
+                errstr = "APOLAR missing required parameter %s" % req_parm
                 _LOGGER.error("Incomplete parameters: %s", self.contents())
                 raise ValueError(errstr)
     def __str__(self):

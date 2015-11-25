@@ -17,7 +17,7 @@ class Parameter(object):
     def short_name(self):
         """ Each parameter class should define a name """
         return self._short_name
-    def parm(self):
+    def get_value(self):
         """ Parameter value (where applicable) """
         return self._parm
     def parse(self, tokens):
@@ -45,7 +45,7 @@ class OneStringParameter(Parameter):
         self._allowed_values = None
     def parse(self, tokens):
         self._parm = tokens.pop(0)
-    def parm(self):
+    def get_value(self):
         """ Return the parameter value """
         return self._parm
     def allowed_values(self):
@@ -70,7 +70,7 @@ class OneIntegerParameter(Parameter):
         self._parm = None
     def parse(self, tokens):
         self._parm = int(tokens.pop(0))
-    def parm(self):
+    def get_value(self):
         """ Return parameter value """
         return self._parm
     def validate(self):
@@ -88,7 +88,7 @@ class OneFloatParameter(Parameter):
         self._parm = None
     def parse(self, tokens):
         self._parm = float(tokens.pop(0))
-    def parm(self):
+    def get_value(self):
         return self._parm
     def validate(self):
         if self._parm is None:
@@ -172,7 +172,7 @@ class FormatPathParameter(Parameter):
         self.format = None
         self.path = None
         self._allowed_values = None
-    def parm(self):
+    def get_value(self):
         return { "format" : self.format, "path" : self.path }
     def parse(self, tokens):
         self.format = tokens.pop(0)
