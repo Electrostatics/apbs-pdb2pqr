@@ -17,6 +17,9 @@ class Parameter(object):
     def short_name(self):
         """ Each parameter class should define a name """
         return self._short_name
+    def parm(self):
+        """ Parameter value (where applicable) """
+        return self._parm
     def parse(self, tokens):
         """ This function should pop tokens off the top of a stack and parse them.  The stack should
         be modified. """
@@ -78,6 +81,23 @@ class OneIntegerParameter(Parameter):
         outstr = "%s %d" % (self.short_name(), self._parm)
         return outstr
 
+class OneFloatParameter(Parameter):
+    """ Generic class for one-float parameter """
+    def __init__(self):
+        super(OneFloatParameter, self).__init__()
+        self._parm = None
+    def parse(self, tokens):
+        self._parm = float(tokens.pop(0))
+    def parm(self):
+        return self._parm
+    def validate(self):
+        if self._parm is None:
+            errstr = "Missing value for parameter %s" % self.short_name
+            raise ValueError(errstr)
+    def __str__(self):
+        outstr = "%s %g" % (self.short_name(), self._parm)
+        return outstr
+
 class ParameterSection(Parameter):
     """ Complex parameters as found in an input file section """
     def __init__(self):
@@ -113,55 +133,36 @@ class ParameterSection(Parameter):
     def __str__(self):
         raise NotImplementedError
 
-class OneFloatParameter(Parameter):
-    """ Generic class for one-float parameter """
-    def __init__(self):
-        super(OneFloatParameter, self).__init__()
-        self._parm = None
-    def parse(self, tokens):
-        self._parm = float(tokens.pop(0))
-    def validate(self):
-        if self._parm is None:
-            errstr = "Missing value for parameter %s" % self.short_name
-            raise ValueError(errstr)
-    def __str__(self):
-        outstr = "%s %g" % (self.short_name(), self._parm)
-        return outstr
-
 class ThreeFloatParameter(Parameter):
     """ Generic class for three-float parameter """
     def __init__(self):
         super(ThreeFloatParameter, self).__init__()
-        self.xfloat = None
-        self.yfloat = None
-        self.zfloat = None
+        self._parm = [None, None, None]
     def parse(self, tokens):
-        self.xfloat = float(tokens.pop(0))
-        self.yfloat = float(tokens.pop(0))
-        self.zfloat = float(tokens.pop(0))
+        self._parm[0] = float(tokens.pop(0))
+        self._parm[1] = float(tokens.pop(0))
+        self._parm[2] = float(tokens.pop(0))
     def validate(self):
         # Validation happens through parsing
         pass
     def __str__(self):
-        outstr = "%s %g %g %g" % (self.short_name(), self.xfloat, self.yfloat, self.zfloat)
+        outstr = "%s %g %g %g" % (self.short_name(), self._parm[0], self._parm[1], self._parm[2])
         return outstr
 
 class ThreeIntegerParameter(Parameter):
     """ Generic class for three-int parameter """
     def __init__(self):
         super(ThreeIntegerParameter, self).__init__()
-        self.xint = None
-        self.yint = None
-        self.zint = None
+        self._parm = [None, None, None]
     def parse(self, tokens):
-        self.xint = int(tokens.pop(0))
-        self.yint = int(tokens.pop(0))
-        self.zint = int(tokens.pop(0))
+        self._parm[0] = int(tokens.pop(0))
+        self._parm[1] = int(tokens.pop(0))
+        self._parm[2] = int(tokens.pop(0))
     def validate(self):
         # Validation happens through parsing
         pass
     def __str__(self):
-        outstr = "%s %d %d %d" % (self.short_name(), self.xint, self.yint, self.zint)
+        outstr = "%s %d %d %d" % (self.short_name(), self._parm[0], self._parm[1], self._parm[2])
         return outstr
 
 class FormatPathParameter(Parameter):
@@ -171,6 +172,8 @@ class FormatPathParameter(Parameter):
         self.format = None
         self.path = None
         self._allowed_values = None
+    def parm(self):
+        return { "format" : self.format, "path" : self.path }
     def parse(self, tokens):
         self.format = tokens.pop(0)
         path = "\"%s\"" % tokens.pop(0)
@@ -269,8 +272,9 @@ class Grid(ThreeFloatParameter):
         super(Grid, self).__init__()
         self._short_name = "grid"
     def validate(self):
-        if (self.xfloat < FLOAT_EPSILON) or (self.yfloat < FLOAT_EPSILON) \
-        or (self.zfloat < FLOAT_EPSILON):
+        if (self._parm[0] < FLOAT_EPSILON) \
+        or (self._parm[1] < FLOAT_EPSILON) \
+        or (self._parm[2] < FLOAT_EPSILON):
             errstr = "All grid spacings must be greater than zero!"
             raise ValueError(errstr)
 

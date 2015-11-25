@@ -51,10 +51,11 @@ class Glen(parameter.ThreeFloatParameter):
         super(Glen, self).__init__()
         self._short_name = "glen"
     def validate(self):
-        if (self.xfloat < parameter.FLOAT_EPSILON) \
-        or (self.yfloat < parameter.FLOAT_EPSILON) or (self.zfloat < parameter.FLOAT_EPSILON):
+        if (self._parm[0] < parameter.FLOAT_EPSILON) \
+        or (self._parm[1] < parameter.FLOAT_EPSILON) \
+        or (self._parm[2] < parameter.FLOAT_EPSILON):
             errstr = "One of the grid lengths is zero or negative (%g, %g, %g)" % \
-            (self.xfloat, self.yfloat, self.zfloat)
+            (self._parm[0], self._parm[1], self._parm[2])
             raise ValueError(errstr)
 
 class Solvtype(parameter.OneStringParameter):
@@ -190,22 +191,23 @@ class Gcent(parameter.Parameter):
     Based on the PDB coordinate frame."""
     def __init__(self):
         super(Gcent, self).__init__()
-        for attr in {"mol", "xcent", "ycent", "zcent"}:
-            setattr(self, attr, None)
         self._short_name = "gcent"
         self.mol = None
-        self.xcent = None
-        self.ycent = None
-        self.zcent = None
+        self._parm = [None, None, None]
+    def parm(self):
+        if not self.mol:
+            return self._parm
+        else:
+            return {"mol" : self.mol}
     def parse(self, tokens):
         token = tokens.pop(0).lower()
         if token == "mol":
             id_token = int(tokens.pop(0))
             self.mol = id_token
         else:
-            self.xcent = float(token)
-            self.ycent = float(tokens.pop(0))
-            self.zcent = float(tokens.pop(0))
+            self._parm[0] = float(token)
+            self._parm[1] = float(tokens.pop(0))
+            self._parm[2] = float(tokens.pop(0))
     def validate(self):
         # No validation here since it happens in the parsing above
         pass
@@ -215,7 +217,7 @@ class Gcent(parameter.Parameter):
         if mol_id:
             outstr = outstr + "mol %d" % mol_id
         else:
-            outstr = outstr + "%g %g %g" % (self.xcent, self.ycent, self.zcent)
+            outstr = outstr + "%g %g %g" % (self._parm[0], self._parm[1], self._parm[2])
         return outstr
 
 class Cgcent(Gcent):
@@ -322,21 +324,21 @@ class Dime(parameter.ThreeIntegerParameter):
         out_dim = product(facs)
         return out_dim+1
     def validate(self):
-        newval = self.fix_dimension(self.xint)
-        if newval != self.xint:
+        newval = self.fix_dimension(self._parm[0])
+        if newval != self._parm[0]:
             _LOGGER.error("Corrected dimension %d to %d for compatibility with \
-multigrid.\n", self.xint, newval)
-            self.xint = newval
-        newval = self.fix_dimension(self.yint)
-        if newval != self.yint:
+multigrid.\n", self._parm[0], newval)
+            self._parm[0] = newval
+        newval = self.fix_dimension(self._parm[1])
+        if newval != self._parm[1]:
             _LOGGER.error("Corrected dimension %d to %d for compatibility with \
-multigrid.\n", self.yint, newval)
-            self.yint = newval
-        newval = self.fix_dimension(self.zint)
-        if newval != self.zint:
+multigrid.\n", self._parm[1], newval)
+            self._parm[1] = newval
+        newval = self.fix_dimension(self._parm[2])
+        if newval != self._parm[2]:
             _LOGGER.error("Corrected dimension %d to %d for compatibility with \
-multigrid.\n", self.zint, newval)
-            self.zint = newval
+multigrid.\n", self._parm[2], newval)
+            self._parm[2] = newval
 
 class Domainlength(parameter.ThreeFloatParameter):
     """ Specify the rectangular finite element mesh domain lengths for fe-manual finite element
@@ -351,8 +353,9 @@ class Domainlength(parameter.ThreeFloatParameter):
         super(Domainlength, self).__init__()
         self._short_name = "domainlength"
     def validate(self):
-        if (self.xfloat < parameter.FLOAT_EPSILON) \
-        or (self.yfloat < parameter.FLOAT_EPSILON) or (self.zfloat < parameter.FLOAT_EPSILON):
+        if (self._parm[0] < parameter.FLOAT_EPSILON) \
+        or (self._parm[1] < parameter.FLOAT_EPSILON) \
+        or (self._parm[2] < parameter.FLOAT_EPSILON):
             errstr = "One of the domain length parameters is zero or negative"
             raise ValueError(errstr)
 
@@ -606,7 +609,7 @@ class Pdime(parameter.ThreeIntegerParameter):
         super(Pdime, self).__init__()
         self._short_name = "pdime"
     def validate(self):
-        if (self.xint < 1) or (self.yint < 1) or (self.zint < 1):
+        if (self._parm[0] < 1) or (self._parm[1] < 1) or (self._parm[2] < 1):
             errstr = "One of the dimensions is less than 1"
             raise ValueError(errstr)
 
@@ -702,6 +705,8 @@ class Usemap(parameter.Parameter):
             errstr = "Unknown map type (%s) in usemap" % token
             raise ValueError(errstr)
         self.map_id = int(tokens.pop(0))
+    def parm(self):
+        return { "type" : self.type, "map id" : self.map_id }
     def validate(self):
         # Validation happens in parsing
         pass
@@ -777,10 +782,10 @@ class Write(parameter.Parameter):
     spaces/foo.in\". """
     def __init__(self):
         super(Write, self).__init__()
-        self.allowed_type_values = ["charge", "pot", "atompot", "smol", "sspl", "vdw", "ivdw",
+        self._allowed_type_values = ["charge", "pot", "atompot", "smol", "sspl", "vdw", "ivdw",
                                     "lap", "edens", "ndens", "qdens", "dielx", "diely", "dielz",
                                     "kappa"]
-        self.allowed_format_values = ["avs", "uhbd", "gz", "flat", "dx"]
+        self._allowed_format_values = ["avs", "uhbd", "gz", "flat", "dx"]
         self.type = None
         self.format = None
         self.stem = None
@@ -789,11 +794,13 @@ class Write(parameter.Parameter):
         self.type = tokens.pop(0).lower()
         self.format = tokens.pop(0).lower()
         self.stem = tokens.pop(0)
+    def parm(self):
+        return { "type" : self.type, "format" : self.format, "stem" : self.stem }
     def validate(self):
-        if not self.type in self.allowed_type_values:
+        if not self.type in self._allowed_type_values:
             errstr = "Unexpected type token (%s) for write" % self.type
             raise ValueError(errstr)
-        if not self.format in self.allowed_format_values:
+        if not self.format in self._allowed_format_values:
             errstr = "Unexpected format token (%s) for write" % self.format
             raise ValueError(errstr)
     def __str__(self):
@@ -867,7 +874,6 @@ class Elec(parameter.ParameterSection):
         token = tokens.pop(0)
         while True:
             token_name = token.lower()
-            _LOGGER.debug(token_name)
             if token_name in ["ion"]:
                 ion = Ion()
                 ion.parse(tokens)
@@ -881,14 +887,12 @@ class Elec(parameter.ParameterSection):
                 solvtype.parse([token_name])
                 solvtype.validate()
                 self.solvtype = solvtype
-                _LOGGER.debug(solvtype)
             elif token_name in Eqntype().allowed_values():
                 # This is a special section to handle the old-format ELEC equation type declaration
                 eqntype = Eqntype()
                 eqntype.parse([token_name])
                 eqntype.validate()
                 self.eqntype = eqntype
-                _LOGGER.debug(eqntype)
             elif token_name == "end":
                 return
             elif token_name in self._allowed_keywords:
@@ -933,7 +937,7 @@ class Elec(parameter.ParameterSection):
             dime = self.dime
             nlev = self.nlev
             ncurr = nlev.parm()
-            for dim in [dime.xint, dime.yint, dime.zint]:
+            for dim in [dime._parm[0], dime._parm[1], dime._parm[2]]:
                 facs = factors(dim-1)
                 ncalc = facs.count(2)-1
                 if ncalc < ncurr:
