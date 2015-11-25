@@ -131,7 +131,7 @@ class JSONEncoder(json.JSONEncoder):
         for key in obj.contents():
             value = getattr(obj, key)
             try:
-                obj_dict[value.short_name()] = value.parm()
+                obj_dict[value.short_name()] = value.get_value()
             except AttributeError:
                 _LOGGER.warn("No specific handler for type %s", type(value))
                 obj_dict[key] = value
