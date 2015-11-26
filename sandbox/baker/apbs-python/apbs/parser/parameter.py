@@ -106,28 +106,6 @@ class ParameterSection(Parameter):
         """ Format the start of the block/section """
         outstr = self.short_name() + "\n"
         return outstr
-    def create_store_multiple_objects(self, token_name, tokens):
-        """ This is designed to store parameters that appear multiple times per section block. """
-        object_name = token_name.lower()
-        class_name = object_name.capitalize()
-        ctor = globals()[class_name]
-        obj = ctor()
-        obj.parse(tokens)
-        obj.validate()
-        try:
-            getattr(self, object_name).append(obj)
-        except KeyError:
-            setattr(self, object_name, [obj])
-    def create_store_single_object(self, token_name, tokens):
-        """ This is designed to store parameters that only appear once per section block. """
-        object_name = token_name.lower()
-        class_name = object_name.capitalize()
-        ctor = globals()[class_name]
-        obj = ctor()
-        obj.parse(tokens)
-        _LOGGER.debug("Creating object of class %s", class_name)
-        obj.validate()
-        setattr(self, object_name, obj)
     def parse(self, tokens):
         raise NotImplementedError
     def __str__(self):

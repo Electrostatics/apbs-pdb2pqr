@@ -1,5 +1,5 @@
 """ The goal of this module is to wrap as much APBS functionality as possible in Python. """
-# TODO add more documentation, copyright, authors, etc.
+# TODO - add more docstrings with copyright, authors, etc.
 
 import sys
 if sys.version_info < (3, 4):
