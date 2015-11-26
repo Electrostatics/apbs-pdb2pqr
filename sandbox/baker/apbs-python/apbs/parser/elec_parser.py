@@ -51,12 +51,10 @@ class Glen(parameter.ThreeFloatParameter):
         super(Glen, self).__init__()
         self._short_name = "glen"
     def validate(self):
-        if (self._parm[0] < parameter.FLOAT_EPSILON) \
-        or (self._parm[1] < parameter.FLOAT_EPSILON) \
-        or (self._parm[2] < parameter.FLOAT_EPSILON):
-            errstr = "One of the grid lengths is zero or negative (%g, %g, %g)" % \
-            (self._parm[0], self._parm[1], self._parm[2])
-            raise ValueError(errstr)
+        for idim in range(3):
+            if self._parm[idim] < parameter.FLOAT_EPSILON:
+                errstr = "One of the grid lengths is zero or negative"
+                raise ValueError(errstr)
 
 class Solvtype(parameter.OneStringParameter):
     """ Usage:  solvtype {type}
@@ -324,21 +322,12 @@ class Dime(parameter.ThreeIntegerParameter):
         out_dim = product(facs)
         return out_dim+1
     def validate(self):
-        newval = self.fix_dimension(self._parm[0])
-        if newval != self._parm[0]:
-            _LOGGER.error("Corrected dimension %d to %d for compatibility with \
-multigrid.\n", self._parm[0], newval)
-            self._parm[0] = newval
-        newval = self.fix_dimension(self._parm[1])
-        if newval != self._parm[1]:
-            _LOGGER.error("Corrected dimension %d to %d for compatibility with \
-multigrid.\n", self._parm[1], newval)
-            self._parm[1] = newval
-        newval = self.fix_dimension(self._parm[2])
-        if newval != self._parm[2]:
-            _LOGGER.error("Corrected dimension %d to %d for compatibility with \
-multigrid.\n", self._parm[2], newval)
-            self._parm[2] = newval
+        for idim in range(3):
+            newval = self.fix_dimension(self._parm[idim])
+            if newval != self._parm[idim]:
+                _LOGGER.warn("Corrected dimension %d to %d for compatibility with \
+multigrid.", self._parm[idim], newval)
+                self._parm[idim] = newval
 
 class Domainlength(parameter.ThreeFloatParameter):
     """ Specify the rectangular finite element mesh domain lengths for fe-manual finite element
@@ -353,11 +342,10 @@ class Domainlength(parameter.ThreeFloatParameter):
         super(Domainlength, self).__init__()
         self._short_name = "domainlength"
     def validate(self):
-        if (self._parm[0] < parameter.FLOAT_EPSILON) \
-        or (self._parm[1] < parameter.FLOAT_EPSILON) \
-        or (self._parm[2] < parameter.FLOAT_EPSILON):
-            errstr = "One of the domain length parameters is zero or negative"
-            raise ValueError(errstr)
+        for idim in range(3):
+            if self._parm[idim] < parameter.FLOAT_EPSILON:
+                errstr = "One of the domain length parameters is zero or negative"
+                raise ValueError(errstr)
 
 class Ekey(parameter.OneStringParameter):
     """ Specify the method used to determine the error tolerance in the solve-estimate-refine
@@ -609,9 +597,10 @@ class Pdime(parameter.ThreeIntegerParameter):
         super(Pdime, self).__init__()
         self._short_name = "pdime"
     def validate(self):
-        if (self._parm[0] < 1) or (self._parm[1] < 1) or (self._parm[2] < 1):
-            errstr = "One of the dimensions is less than 1"
-            raise ValueError(errstr)
+        for idim in range(3):
+            if self._parm[idim] < 1:
+                errstr = "One of the dimensions is less than 1"
+                raise ValueError(errstr)
 
 class Sdie(parameter.OneFloatParameter):
     """ Specify the dielectric constant of the solvent. Bulk water at biologically-relevant
@@ -706,7 +695,7 @@ class Usemap(parameter.Parameter):
             raise ValueError(errstr)
         self.map_id = int(tokens.pop(0))
     def get_value(self):
-        return { "type" : self.type, "map id" : self.map_id }
+        return {"type" : self.type, "map id" : self.map_id}
     def validate(self):
         # Validation happens in parsing
         pass
@@ -783,8 +772,8 @@ class Write(parameter.Parameter):
     def __init__(self):
         super(Write, self).__init__()
         self._allowed_type_values = ["charge", "pot", "atompot", "smol", "sspl", "vdw", "ivdw",
-                                    "lap", "edens", "ndens", "qdens", "dielx", "diely", "dielz",
-                                    "kappa"]
+                                     "lap", "edens", "ndens", "qdens", "dielx", "diely", "dielz",
+                                     "kappa"]
         self._allowed_format_values = ["avs", "uhbd", "gz", "flat", "dx"]
         self.type = None
         self.format = None
@@ -795,7 +784,7 @@ class Write(parameter.Parameter):
         self.format = tokens.pop(0).lower()
         self.stem = tokens.pop(0)
     def get_value(self):
-        return { "type" : self.type, "format" : self.format, "stem" : self.stem }
+        return {"type" : self.type, "format" : self.format, "stem" : self.stem}
     def validate(self):
         if not self.type in self._allowed_type_values:
             errstr = "Unexpected type token (%s) for write" % self.type
