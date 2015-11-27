@@ -35,7 +35,7 @@ class Parameter(object):
         for key in vars(self).keys():
             if key[0] != "_":
                 var_list.append(key)
-        return var_list
+        return sorted(var_list)
 
 class OneStringParameter(Parameter):
     """ Generic class for one-string parameter """

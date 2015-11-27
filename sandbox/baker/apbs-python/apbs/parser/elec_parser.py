@@ -957,12 +957,7 @@ class Elec(parameter.ParameterSection):
             raise TypeError("Don't know how to process solver type %s" % solvtype)
     def __str__(self):
         outstr = self.format_block_start()
-        keys = self.contents()
-        keys.remove("name")
-        outstr = outstr + "\t%s\n" % self.solvtype
-        keys.remove("solvtype")
-        outstr = outstr + "\t%s\n" % self.eqntype
-        keys.remove("eqntype")
+        keys = sorted(self.contents())
         for key in keys:
             values = getattr(self, key)
             try:
