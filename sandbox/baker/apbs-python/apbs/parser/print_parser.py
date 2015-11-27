@@ -66,10 +66,10 @@ class Print(parameter.Parameter):
                 errstr = "Unexpected operator %s in PRINT" % operation
                 raise ValueError(operation)
     def __str__(self):
-        outstr = "print %s " % self.what
+        outstr = "print\n%s " % self.what
         outstr = outstr + "%d " % self.ids[0]
         for iop, operation in enumerate(self.ops):
             calc_id = self.ids[iop+1]
             outstr = outstr + "%s %d " % (operation, calc_id)
-        outstr = outstr + "end"
+        outstr = outstr + "\nend"
         return outstr

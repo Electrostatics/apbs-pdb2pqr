@@ -153,8 +153,7 @@ class Apolar(parameter.ParameterSection):
                 raise ValueError(errstr)
     def __str__(self):
         outstr = self.format_block_start()
-        keys = self.contents()
-        keys.remove("name")
+        keys = sorted(self.contents())
         for key in keys:
             values = getattr(self, key)
             try:

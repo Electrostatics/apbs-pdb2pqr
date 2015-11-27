@@ -2,7 +2,7 @@
 import unittest
 import logging
 
-logging.basicConfig(level=logging.DEBUG)
+logging.basicConfig(level=logging.INFO)
 
 def print_test_results(result):
     """ Format and print results of tests """
