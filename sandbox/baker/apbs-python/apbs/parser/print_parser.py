@@ -36,14 +36,16 @@ class Print(parameter.Parameter):
     * op - Specify the arithmetic operation to be performed on the calculated quantities:
         + Addition
         - Subtraction """
-    def __init__(self):
-        super(Print, self).__init__()
+    def __init__(self, opstring=None, *args, **kwargs):
+        super(Print, self).__init__(*args, **kwargs)
         self._allowed_what_values = ["elecenergy", "elecforce", "apolenergy", "apolforce"]
         self._allowed_op_values = ["+", "-"]
         self.what = None
         self.ids = []
         self.ops = []
         self._short_name = "print"
+        if opstring:
+            self.parse(opstring.split() + ["end"])
     def parse(self, tokens):
         """ Parse tokens associated with this section """
         what_token = tokens.pop(0).lower()

@@ -3,7 +3,7 @@ import sys
 import logging
 
 FLOAT_EPSILON = sys.float_info.epsilon
-_LOGGER = logging.getLogger("parser")
+_LOGGER = logging.getLogger(__name__)
 
 # Set the following flag to True to use deprecated input format
 USE_DEPRECATED = True
@@ -39,9 +39,9 @@ class Parameter(object):
 
 class OneStringParameter(Parameter):
     """ Generic class for one-string parameter """
-    def __init__(self):
-        super(OneStringParameter, self).__init__()
-        self._parm = None
+    def __init__(self, value=None, *args, **kwargs):
+        super(OneStringParameter, self).__init__(*args, **kwargs)
+        self._parm = value
         self._allowed_values = None
     def parse(self, tokens):
         self._parm = tokens.pop(0)
@@ -65,15 +65,16 @@ class OneStringParameter(Parameter):
 
 class OneIntegerParameter(Parameter):
     """ Generic class for one-integer parameter """
-    def __init__(self):
-        super(OneIntegerParameter, self).__init__()
-        self._parm = None
+    def __init__(self, value=None, *args, **kwargs):
+        super(OneIntegerParameter, self).__init__(*args, **kwargs)
+        self._parm = value
     def parse(self, tokens):
         self._parm = int(tokens.pop(0))
     def get_value(self):
         """ Return parameter value """
         return self._parm
     def validate(self):
+        self._parm = int(self._parm)
         if self._parm is None:
             errstr = "Missing value for parameter %s" % self.short_name()
             raise ValueError(errstr)
@@ -83,14 +84,17 @@ class OneIntegerParameter(Parameter):
 
 class OneFloatParameter(Parameter):
     """ Generic class for one-float parameter """
-    def __init__(self):
-        super(OneFloatParameter, self).__init__()
-        self._parm = None
+    def __init__(self, value=None, *args, **kwargs):
+        super(OneFloatParameter, self).__init__(*args, **kwargs)
+        self._parm = value
     def parse(self, tokens):
         self._parm = float(tokens.pop(0))
     def get_value(self):
         return self._parm
+    def set_value(self, value):
+        self._parm = float(value)
     def validate(self):
+        self._parm = float(self._parm)
         if self._parm is None:
             errstr = "Missing value for parameter %s" % self.short_name
             raise ValueError(errstr)
@@ -100,8 +104,8 @@ class OneFloatParameter(Parameter):
 
 class ParameterSection(Parameter):
     """ Complex parameters as found in an input file section """
-    def __init__(self):
-        super(ParameterSection, self).__init__()
+    def __init__(self, *args, **kwargs):
+        super(ParameterSection, self).__init__(*args, **kwargs)
     def format_block_start(self):
         """ Format the start of the block/section """
         outstr = self.short_name() + "\n"
@@ -113,42 +117,44 @@ class ParameterSection(Parameter):
 
 class ThreeFloatParameter(Parameter):
     """ Generic class for three-float parameter """
-    def __init__(self):
-        super(ThreeFloatParameter, self).__init__()
-        self._parm = [None, None, None]
+    def __init__(self, float_tup=(None, None, None), *args, **kwargs):
+        super(ThreeFloatParameter, self).__init__(*args, **kwargs)
+        self._parm = list(float_tup)
     def parse(self, tokens):
         self._parm[0] = float(tokens.pop(0))
         self._parm[1] = float(tokens.pop(0))
         self._parm[2] = float(tokens.pop(0))
     def validate(self):
         # Validation happens through parsing
-        pass
+        for parm in self._parm:
+            parm = float(parm)
     def __str__(self):
         outstr = "%s %g %g %g" % (self.short_name(), self._parm[0], self._parm[1], self._parm[2])
         return outstr
 
 class ThreeIntegerParameter(Parameter):
     """ Generic class for three-int parameter """
-    def __init__(self):
-        super(ThreeIntegerParameter, self).__init__()
-        self._parm = [None, None, None]
+    def __init__(self, int_tup=(None, None, None), *args, **kwargs):
+        super(ThreeIntegerParameter, self).__init__(*args, **kwargs)
+        self._parm = list(int_tup)
     def parse(self, tokens):
         self._parm[0] = int(tokens.pop(0))
         self._parm[1] = int(tokens.pop(0))
         self._parm[2] = int(tokens.pop(0))
     def validate(self):
         # Validation happens through parsing
-        pass
+        for parm in self._parm:
+            parm = int(parm)
     def __str__(self):
         outstr = "%s %d %d %d" % (self.short_name(), self._parm[0], self._parm[1], self._parm[2])
         return outstr
 
 class FormatPathParameter(Parameter):
     """ Generic READ statement with format and path """
-    def __init__(self):
-        super(FormatPathParameter, self).__init__()
-        self.format = None
-        self.path = None
+    def __init__(self, format_=None, path=None, *args, **kwargs):
+        super(FormatPathParameter, self).__init__(*args, **kwargs)
+        self.format = format_
+        self.path = path
         self._allowed_values = None
     def get_value(self):
         return { "format" : self.format, "path" : self.path }
@@ -171,10 +177,11 @@ class Name(OneStringParameter):
     organizational process.
 
     {id} is an alphanumeric string denoting the "name" of the calculation block."""
-    def __init__(self):
-        super(Name, self).__init__()
+    def __init__(self, *args, **kwargs):
+        super(Name, self).__init__(*args, **kwargs)
         self._short_name = "name"
     def validate(self):
+        parm = str(self._parm)
         if len(self._parm) == 0:
             raise ValueError("Can't have empty string parameter")
 
@@ -188,8 +195,8 @@ class Temp(OneFloatParameter):
     Note that the temperature term is used for adjusting the ion distribution and scaling
     electrostatic potentials.  It is not used to model the temperature dependence of any
     dielectric terms. """
-    def __init__(self):
-        super(Temp, self).__init__()
+    def __init__(self, *args, **kwargs):
+        super(Temp, self).__init__(*args, **kwargs)
         self._short_name = "temp"
     def validate(self):
         if self._parm < FLOAT_EPSILON:
@@ -211,8 +218,8 @@ class Calcenergy(OneStringParameter):
     * total - Calculate and return total electrostatic energy for the entire molecule.
     * comps - Calculate and return total electrostatic energy for the entire molecule as well
     as electrostatic energy components for each atom. """
-    def __init__(self):
-        super(Calcenergy, self).__init__()
+    def __init__(self, *args, **kwargs):
+        super(Calcenergy, self).__init__(*args, **kwargs)
         self._allowed_values = ["no", "total", "comps"]
         self._short_name = "calcenergy"
 
@@ -233,8 +240,8 @@ class Calcforce(OneStringParameter):
     molecule.
     * comps -     Calculate and return total electrostatic and apolar forces for the entire
     molecule as well as force components for each atom. """
-    def __init__(self):
-        super(Calcforce, self).__init__()
+    def __init__(self, *args, **kwargs):
+        super(Calcforce, self).__init__(*args, **kwargs)
         self._allowed_values = ["no", "total", "comps"]
         self._short_name = "calcforce"
 
@@ -246,8 +253,8 @@ class Grid(ThreeFloatParameter):
 
     where hx hy hz are the (floating point) grid spacings in the x-, y-, and z-directions
     (respectively) in &Aring;. """
-    def __init__(self):
-        super(Grid, self).__init__()
+    def __init__(self, *args, **kwargs):
+        super(Grid, self).__init__(*args, **kwargs)
         self._short_name = "grid"
     def validate(self):
         if (self._parm[0] < FLOAT_EPSILON) \
@@ -265,8 +272,8 @@ class CalcMol(OneIntegerParameter):
 
     where id is the integer ID of the molecule for which the Poisson-Boltzmann equation is to be
     solved. """
-    def __init__(self):
-        super(CalcMol, self).__init__()
+    def __init__(self, *args, **kwargs):
+        super(CalcMol, self).__init__(*args, **kwargs)
         self._short_name = "mol"
 
 class Sdens(OneFloatParameter):
@@ -281,8 +288,8 @@ class Sdens(OneFloatParameter):
     where density is the floating point surface sphere density (in grid points/&Aring;^2).
 
     See also: srfm """
-    def __init__(self):
-        super(Sdens, self).__init__()
+    def __init__(self, *args, **kwargs):
+        super(Sdens, self).__init__(*args, **kwargs)
         self._short_name = "sdens"
     def validate(self):
         if self._parm < FLOAT_EPSILON:
@@ -299,8 +306,8 @@ class Srad(OneFloatParameter):
     where radius is the floating point solvent radius (in &Aring).
 
     See also: srfm """
-    def __init__(self):
-        super(Srad, self).__init__()
+    def __init__(self, *args, **kwargs):
+        super(Srad, self).__init__(*args, **kwargs)
         self._short_name = "srad"
     def validate(self):
         if self._parm < FLOAT_EPSILON:
@@ -345,8 +352,8 @@ class Srfm(OneStringParameter):
     fields (up to quadrupole).
     * sacc (APOLAR only) - Solvent-accessible (also called "probe-inflated") surface and volume. """
     # TODO - better to make this generic and then specialize derived classes for ELEC/APOLAR
-    def __init__(self):
-        super(Srfm, self).__init__()
+    def __init__(self, *args, **kwargs):
+        super(Srfm, self).__init__(*args, **kwargs)
         self._allowed_values = ["mol", "smol", "spl2", "spl4", "sacc"]
         self._short_name = "srfm"
 
@@ -359,8 +366,8 @@ class Swin(OneFloatParameter):
     where win is a floating point number for the spline window width (in &Aring;). Note that, per
     the analysis of Nina, Im, and Roux (doi:10.1016/S0301-4622(98)00236-1), the force field
     parameters (radii) generally need to be adjusted if the spline window is changed. """
-    def __init__(self):
-        super(Swin, self).__init__()
+    def __init__(self, *args, **kwargs):
+        super(Swin, self).__init__(*args, **kwargs)
         self._short_name = "swin"
     def validate(self):
         if self._parm < FLOAT_EPSILON:

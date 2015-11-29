@@ -3,10 +3,12 @@ from . import parameter
 
 class Read(parameter.Parameter):
     """ READ input file section """
-    def __init__(self):
-        super(Read, self).__init__()
+    def __init__(self, *args, **kwargs):
+        super(Read, self).__init__(*args, **kwargs)
         self._allowed_keywords = {"charge" : Charge, "diel" : Diel, "kappa" : Kappa, "mesh" : Mesh,
                                   "mol" : Mol, "parm" : Parm, "pot" : Pot}
+        for key, val in self._allowed_keywords.items():
+            setattr(self, key, [])
         self._short_name = "read"
     def validate(self):
         """ Validate section contents """
@@ -68,8 +70,8 @@ class Charge(parameter.FormatPathParameter):
       - gz - gzipped (zlib) compressed OpenDX format. Files can be read directly in compressed form.
     * path - The location of the charge map file.
     """
-    def __init__(self):
-        super(Charge, self).__init__()
+    def __init__(self, *args, **kwargs):
+        super(Charge, self).__init__(*args, **kwargs)
         self._allowed_values = ["dx", "gz"]
         self._short_name = "charge"
 
@@ -96,8 +98,8 @@ class Diel(parameter.Parameter):
         * path-x - The location of the x-shifted dielectric map file.
         * path-y - The location of the y-shifted dielectric map file.
         * path-z - The location of the z-shifted dielectric map file. """
-    def __init__(self):
-        super(Diel, self).__init__()
+    def __init__(self, *args, **kwargs):
+        super(Diel, self).__init__(*args, **kwargs)
         self._allowed_values = ["dx", "gz"]
         self.format = None
         self.xpath = None
@@ -141,8 +143,8 @@ class Kappa(parameter.FormatPathParameter):
       - dx - OpenDX format
       - gz - gzipped (zlib) compressed OpenDX format. Files can be read directly in compressed form.
     * path - The location of the kappa map file."""
-    def __init__(self):
-        super(Kappa, self).__init__()
+    def __init__(self, *args, **kwargs):
+        super(Kappa, self).__init__(*args, **kwargs)
         self._allowed_values = ["dx", "gz"]
         self._short_name = "kappa"
 
@@ -158,8 +160,8 @@ class Mesh(parameter.FormatPathParameter):
     * format - The format of the input mesh. Acceptable values include:
       - mcsf - MCSF format
     * path - The location of the mesh file. """
-    def __init__(self):
-        super(Mesh, self).__init__()
+    def __init__(self, *args, **kwargs):
+        super(Mesh, self).__init__(*args, **kwargs)
         self._allowed_values = ["mcsf"]
         self._short_name = "mesh"
 
@@ -176,8 +178,8 @@ class Mol(parameter.FormatPathParameter):
       file is used, then a parameter file must also be specified to provide charge and radius
       parameters for the biomolecule's atoms.
     * path - The location of the molecular data file. """
-    def __init__(self):
-        super(Mol, self).__init__()
+    def __init__(self, *args, **kwargs):
+        super(Mol, self).__init__(*args, **kwargs)
         self._allowed_values = ["pqr", "pdb"]
         self._short_name = "mol"
 
@@ -200,8 +202,8 @@ class Parm(parameter.FormatPathParameter):
     available for protein and nucleic acid parameters and are actively under development as a
     research project.  Please contact Nathan Baker for additional information about the state of
     this research, particularly if you are interested in helping. """
-    def __init__(self):
-        super(Parm, self).__init__()
+    def __init__(self, *args, **kwargs):
+        super(Parm, self).__init__(*args, **kwargs)
         self._allowed_values = ["flat", "xml"]
         self._short_name = "parm"
 
@@ -221,7 +223,7 @@ class Pot(parameter.FormatPathParameter):
       - dx - OpenDX format
       - gz - gzipped (zlib) compressed OpenDX format. Files can be read directly in compressed form.
     * path - The location of the potential map file."""
-    def __init__(self):
-        super(Pot, self).__init__()
+    def __init__(self, *args, **kwargs):
+        super(Pot, self).__init__(*args, **kwargs)
         self._allowed_values = ["gz", "dx"]
         self._short_name = "pot"
