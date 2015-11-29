@@ -5,7 +5,7 @@ import io
 import re
 import unittest
 import logging
-_LOGGER = logging.getLogger("parser")
+_LOGGER = logging.getLogger(__name__)
 
 from . import parameter
 from .elec_parser import Elec
@@ -15,8 +15,8 @@ from .read_parser import Read
 
 class CalcInput(parameter.Parameter):
     """ Top-level APBS input file class """
-    def __init__(self):
-        super(CalcInput, self).__init__()
+    def __init__(self, *args, **kwargs):
+        super(CalcInput, self).__init__(*args, **kwargs)
         self._tokens = None
         self.reads = []
         self.calcs = []
@@ -291,16 +291,16 @@ class _TestParser(unittest.TestCase):
                             ref_line = ref_lines[0].lower()
                             self.assertTrue(test_line == ref_line)
                         else:
-                            print(opcode)
-                            print(keyword)
-                            print(test_lines, ref_lines)
-                            print(matcher.find_longest_match(0, len(test_lines), 0, len(ref_lines)))
+                            _LOGGER.debug(opcode)
+                            _LOGGER.debug(keyword)
+                            _LOGGER.debug(test_lines, ref_lines)
+                            _LOGGER.debug(matcher.find_longest_match(0, len(test_lines), 0, len(ref_lines)))
                             self.assertTrue(test_lines[0].lower() == ref_lines[0].lower())
 
     def test_valid_text(self):
         """ Test valid text input """
         # This part loads the text
-        _LOGGER.info("Testing parsing with valid text input file...")
+        _LOGGER.info("Testing APBS text input file parsing...")
         calc_input = TextDecoder().decode(self.text_input)
         # This creates the output for comparison with input
         _LOGGER.info("Creating TEXT output file...")
@@ -324,17 +324,8 @@ class _TestParser(unittest.TestCase):
         self.compare_results(calc_indices, end_indices, text_output_lines, self.calc_texts)
     def test_encode_json(self):
         """ Test JSON output """
+        _LOGGER.info("Testing APBS JSON output file generation...")
         _LOGGER.warn("This isn't a real unit test -- sorry.")
-        _LOGGER.info("Writing JSON format output file...")
         apbs_from_text = TextDecoder().decode(self.text_input)
         json_input = json.dumps(apbs_from_text, indent=2, cls=JSONEncoder)
-        _LOGGER.info("JSON output:\n%s", json_input)
-    @unittest.expectedFailure
-    def test_decode_json(self):
-        """ Test JSON input """
-        # TODO - fix JSONDecoder so this test works
-        apbs_from_text = TextDecoder().decode(self.text_input)
-        json_input = json.dumps(apbs_from_text, indent=2, cls=JSONEncoder)
-        _LOGGER.info("Parsing JSON input file...")
-        _LOGGER.info("Result: %s", json.loads(json_input, cls=JSONDecoder))
-        _LOGGER.warn("This isn't a real unit test. Please review the output manually.")
+        _LOGGER.debug("JSON output:\n%s", json_input)

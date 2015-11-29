@@ -8,4 +8,4 @@ if sys.version_info < (3, 4):
 import logging
 DEFAULT_LOGGING_LEVEL = logging.INFO
 
-__all__ = ["parser"]
+__all__ = ["parser", "calculation"]

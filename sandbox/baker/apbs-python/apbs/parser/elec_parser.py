@@ -1,7 +1,7 @@
 """ Handle the storage of APBS ELEC block input file parameters """
 import logging
 
-_LOGGER = logging.getLogger("elec-parser")
+_LOGGER = logging.getLogger(__name__)
 
 from .utility import factors, product
 from . import parameter
@@ -47,8 +47,8 @@ class Glen(parameter.ThreeFloatParameter):
     (respectively) in &Aring;.
 
     See also: grid  """
-    def __init__(self):
-        super(Glen, self).__init__()
+    def __init__(self, *args, **kwargs):
+        super(Glen, self).__init__(*args, **kwargs)
         self._short_name = "glen"
     def validate(self):
         for idim in range(3):
@@ -69,8 +69,8 @@ class Solvtype(parameter.OneStringParameter):
 
     This isn't actually official yet.  I would like to change the default behavior of APBS
     from stating the ELEC calculation type without any parameters to adding the "type" keyword."""
-    def __init__(self):
-        super(Solvtype, self).__init__()
+    def __init__(self, *args, **kwargs):
+        super(Solvtype, self).__init__(*args, **kwargs)
         self._allowed_values = ["mg-auto", "mg-para", "mg-manual", "mg-dummy", "fe-manual"]
         self._short_name = "solvtype"
 
@@ -86,8 +86,8 @@ class Akeypre(parameter.OneStringParameter):
 
     * unif - Uniform refinement
     * geom - Geometry-based refinement at molecular surfaces and charges """
-    def __init__(self):
-        super(Akeypre, self).__init__()
+    def __init__(self, *args, **kwargs):
+        super(Akeypre, self).__init__(*args, **kwargs)
         self._allowed_values = ["unif", "geom"]
         self._short_name = "akeyPRE"
 
@@ -101,8 +101,8 @@ class Akeysolve(parameter.OneStringParameter):
 
     * resi - Residual-based a posteriori refinement
     """
-    def __init__(self):
-        super(Akeysolve, self).__init__()
+    def __init__(self, *args, **kwargs):
+        super(Akeysolve, self).__init__(*args, **kwargs)
         self._allowed_values = ["resi"]
         self._short_name = "akeySOLVE"
 
@@ -125,8 +125,8 @@ class Async(parameter.OneIntegerParameter):
     the y-direction, nz is the number of processors in the z-direction, i is the index of the
     processor in the x-direction, j is the index of the processor in the y-direction, k is the
     index of the processor in the z-direction, and p is the overall rank of the processor."""
-    def __init__(self):
-        super(Async, self).__init__()
+    def __init__(self, *args, **kwargs):
+        super(Async, self).__init__(*args, **kwargs)
         self._short_name = "async"
 
 class Bcfl(parameter.OneStringParameter):
@@ -164,8 +164,8 @@ class Bcfl(parameter.OneStringParameter):
     in subsequent runs to bypass the need to recalculate the coarse grid. See the READ keyword
     pot and the attached example files for its use.  NOTE:  this functionality is only available
     in the current developmental release of APBS."""
-    def __init__(self):
-        super(Bcfl, self).__init__()
+    def __init__(self, *args, **kwargs):
+        super(Bcfl, self).__init__(*args, **kwargs)
         self._allowed_values = ["zero", "sdh", "mdh", "focus", "map"]
         self._short_name = "bcfl"
 
@@ -187,11 +187,16 @@ class Gcent(parameter.Parameter):
 
     * xcent ycent zcent - The floating point coordinates (in &Aring;) at which the grid is centered.
     Based on the PDB coordinate frame."""
-    def __init__(self):
-        super(Gcent, self).__init__()
+    def __init__(self, value=None, *args, **kwargs):
+        super(Gcent, self).__init__(*args, **kwargs)
         self._short_name = "gcent"
         self.mol = None
         self._parm = [None, None, None]
+        if value:
+            if isinstance(value, str):
+                self.parse(value.split())
+            else:
+                self._parm = list(value)
     def get_value(self):
         if not self.mol:
             return self._parm
@@ -211,11 +216,15 @@ class Gcent(parameter.Parameter):
         pass
     def __str__(self):
         outstr = "%s " % self.short_name()
-        mol_id = self.mol
-        if mol_id:
-            outstr = outstr + "mol %d" % mol_id
+        mol = self.mol
+        if mol:
+            outstr = outstr + "mol %d" % mol
         else:
-            outstr = outstr + "%g %g %g" % (self._parm[0], self._parm[1], self._parm[2])
+            try:
+                outstr = outstr + "%g %g %g" % (self._parm[0], self._parm[1], self._parm[2])
+            except TypeError as inst:
+                print(vars(self))
+                raise TypeError(inst)
         return outstr
 
 class Cgcent(Gcent):
@@ -235,8 +244,8 @@ class Cgcent(Gcent):
     the grid is centered. Based on the PDB coordinate frame.
 
     See also: gcent, fgcent """
-    def __init__(self):
-        super(Cgcent, self).__init__()
+    def __init__(self, *args, **kwargs):
+        super(Cgcent, self).__init__(*args, **kwargs)
         self._short_name = "cgcent"
 
 class Cglen(Glen):
@@ -253,8 +262,8 @@ class Cglen(Glen):
     &Aring.
 
     See also: fglen or glen """
-    def __init__(self):
-        super(Cglen, self).__init__()
+    def __init__(self, *args, **kwargs):
+        super(Cglen, self).__init__(*args, **kwargs)
         self._short_name = "cglen"
 
 class Chgm(parameter.OneStringParameter):
@@ -277,8 +286,8 @@ class Chgm(parameter.OneStringParameter):
     * spl4 - Quintic B-spline discretization. Similar to spl2, except the charge/multipole is
     additionally mapped to include next-next-nearest neighbors (125 grid points receive charge
     density). """
-    def __init__(self):
-        super(Chgm, self).__init__()
+    def __init__(self, *args, **kwargs):
+        super(Chgm, self).__init__(*args, **kwargs)
         self._allowed_values = ["spl0", "spl2", "spl4"]
         self._short_name = "chgm"
 
@@ -306,8 +315,8 @@ class Dime(parameter.ThreeIntegerParameter):
     NOTE: dime should be interpreted as the number of grid points per processor for all
     calculations, including mg-para. This interpretation helps manage the amount of memory
     per-processor -- generally the limiting resource for most calculations."""
-    def __init__(self):
-        super(Dime, self).__init__()
+    def __init__(self, *args, **kwargs):
+        super(Dime, self).__init__(*args, **kwargs)
         self._short_name = "dime"
     def fix_dimension(self, in_dim):
         """ Check the dimension for compatibility with multigrid.  Return the same dimension or a
@@ -338,8 +347,8 @@ class Domainlength(parameter.ThreeFloatParameter):
 
     where the parameters xlen, ylen, zlen are floating point numbers that specify the mesh lengths
     in the x-, y-, and z-directions (respectively) in units of &Aring;. """
-    def __init__(self):
-        super(Domainlength, self).__init__()
+    def __init__(self, *args, **kwargs):
+        super(Domainlength, self).__init__(*args, **kwargs)
         self._short_name = "domainlength"
     def validate(self):
         for idim in range(3):
@@ -360,8 +369,8 @@ class Ekey(parameter.OneStringParameter):
     * frac - Fraction of simplices you'd like to see refined at each iteration
 
     See also: etol """
-    def __init__(self):
-        super(Ekey, self).__init__()
+    def __init__(self, *args, **kwargs):
+        super(Ekey, self).__init__(*args, **kwargs)
         self._allowed_values = ["simp", "global", "frac"]
         self._short_name = "ekey"
 
@@ -388,8 +397,8 @@ class Etol(parameter.OneFloatParameter):
     where tol is the (floating point) numerical value for the error tolerance.
 
     See also: ekey """
-    def __init__(self):
-        super(Etol, self).__init__()
+    def __init__(self, *args, **kwargs):
+        super(Etol, self).__init__(*args, **kwargs)
         self._short_name = "etol"
 
 class Fgcent(Gcent):
@@ -409,8 +418,8 @@ class Fgcent(Gcent):
     which the grid is centered. Based on the input molecule PDB coordinate frame.
 
     See also: cgcent """
-    def __init__(self):
-        super(Fgcent, self).__init__()
+    def __init__(self, *args, **kwargs):
+        super(Fgcent, self).__init__(*args, **kwargs)
         self._short_name = "fgcent"
 
 class Fglen(Glen):
@@ -425,8 +434,8 @@ class Fglen(Glen):
     &Aring;.
 
     See also: cglen """
-    def __init__(self):
-        super(Fglen, self).__init__()
+    def __init__(self, *args, **kwargs):
+        super(Fglen, self).__init__(*args, **kwargs)
         self._short_name = "fglen"
 
 class Ion(parameter.Parameter):
@@ -443,18 +452,19 @@ class Ion(parameter.Parameter):
     * charge - Mobile ion species charge (floating point number in ec)
     * conc - Mobile ion species concentration (floating point number in M)
     * radius - Mobile ion species radius (floating point number in &Aring;) """
-    def __init__(self):
-        super(Ion, self).__init__()
-        self.charge = None
-        self.conc = None
-        self.radius = None
+    def __init__(self, charge=None, conc=None, radius=None, *args, **kwargs):
+        super(Ion, self).__init__(*args, **kwargs)
+        self.charge = charge
+        self.conc = conc
+        self.radius = radius
         self._short_name = "ion"
     def validate(self):
-        if self.conc < 0:
+        charge = float(charge)
+        if self.conc < 0.0:
             errstr = "Concentration is negative (%g)" % self.conc
             raise ValueError(errstr)
-        if self.radius < parameter.FLOAT_EPSILON:
-            errstr = "Radius is zero or negative (%g)" % self.radius
+        if self.radius < 0.0:
+            errstr = "Radius is negative (%g)" % self.radius
             raise ValueError(errstr)
     def raise_error(self, token):
         """ General method for raising errors about bad keyword values """
@@ -489,8 +499,8 @@ class Eqntype(parameter.OneStringParameter):
     * npbe - Nonlinear Poisson-Boltzmann
     * nrpbe - Nonlinear regularized Poisson-Boltzmann """
     # TODO - This isn't documented yet; needs to be updated in documentation, etc.
-    def __init__(self):
-        super(Eqntype, self).__init__()
+    def __init__(self, *args, **kwargs):
+        super(Eqntype, self).__init__(*args, **kwargs)
         self._allowed_values = ["lpbe", "lrpbe", "npbe", "nrpbe"]
         self._short_name = "eqntype"
 
@@ -503,8 +513,8 @@ class Maxsolve(parameter.OneIntegerParameter):
     where num is an integer indicating the desired maximum number of iterations.
 
     See also: maxvert, targetRes  """
-    def __init__(self):
-        super(Maxsolve, self).__init__()
+    def __init__(self, *args, **kwargs):
+        super(Maxsolve, self).__init__(*args, **kwargs)
         self._short_name = "maxsolve"
     def validate(self):
         if self._parm < 1:
@@ -521,8 +531,8 @@ class Maxvert(parameter.OneIntegerParameter):
     where num is an integer indicating the maximum number of vertices.
 
     See also: targetRes, maxsolve. """
-    def __init__(self):
-        super(Maxvert, self).__init__()
+    def __init__(self, *args, **kwargs):
+        super(Maxvert, self).__init__(*args, **kwargs)
         self._short_name = "maxvert"
     def validate(self):
         if self._parm < 1:
@@ -535,8 +545,8 @@ class Nlev(parameter.OneIntegerParameter):
     nlev {lev}
 
     where lev is an integer indicating the desired depth of the multigrid hierarchy. """
-    def __init__(self):
-        super(Nlev, self).__init__()
+    def __init__(self, *args, **kwargs):
+        super(Nlev, self).__init__(*args, **kwargs)
         self._short_name = "nlev"
     def validate(self):
         if self._parm < 1:
@@ -552,8 +562,8 @@ class Ofrac(parameter.OneFloatParameter):
     processors.  Empirical evidence suggests that an ofrac value of 0.1 is sufficient to generate
     stable energies. However, this value may not be sufficient to generate stable forces and/or good
     quality isocontours. """
-    def __init__(self):
-        super(Ofrac, self).__init__()
+    def __init__(self, *args, **kwargs):
+        super(Ofrac, self).__init__(*args, **kwargs)
         self._short_name = "ofrac"
     def validate(self):
         if self._parm < parameter.FLOAT_EPSILON:
@@ -569,8 +579,8 @@ class Pdie(parameter.OneFloatParameter):
     where diel is the floating point value of the unitless biomolecular dielectric constant.
 
     See also: sdie """
-    def __init__(self):
-        super(Pdie, self).__init__()
+    def __init__(self, *args, **kwargs):
+        super(Pdie, self).__init__(*args, **kwargs)
         self._short_name = "pdie"
     def validate(self):
         if self._parm < 1.0:
@@ -593,8 +603,8 @@ class Pdime(parameter.ThreeIntegerParameter):
     spl4) away from the partition boundary.
 
     See also: ofrac """
-    def __init__(self):
-        super(Pdime, self).__init__()
+    def __init__(self, *args, **kwargs):
+        super(Pdime, self).__init__(*args, **kwargs)
         self._short_name = "pdime"
     def validate(self):
         for idim in range(3):
@@ -611,8 +621,8 @@ class Sdie(parameter.OneFloatParameter):
     where diel is a floating point number representing the solvent dielectric constant (unitless).
 
     See also: pdie """
-    def __init__(self):
-        super(Sdie, self).__init__()
+    def __init__(self, *args, **kwargs):
+        super(Sdie, self).__init__(*args, **kwargs)
         self._short_name = "sdie"
     def validate(self):
         if self._parm < 1.0:
@@ -627,8 +637,8 @@ class Targetnum(parameter.OneIntegerParameter):
 
     where num is an integer denoting the target number of vertices in initial mesh. See also:
     targetRes """
-    def __init__(self):
-        super(Targetnum, self).__init__(self)
+    def __init__(self, *args, **kwargs):
+        super(Targetnum, self).__init__(*args, **kwargs)
         self._short_name = "targetnum"
     def validate(self):
         if self._parm < 1:
@@ -645,8 +655,8 @@ class Targetres(parameter.OneFloatParameter):
     simplices in mesh (in &Aring;).
 
     See also: maxvert, maxsolve, targetNum. """
-    def __init__(self):
-        super(Targetres, self).__init__(self)
+    def __init__(self, *args, **kwargs):
+        super(Targetres, self).__init__(*args, **kwargs)
         self._short_name = "targetres"
     def validate(self):
         if self._parm < parameter.FLOAT_EPSILON:
@@ -680,8 +690,8 @@ class Usemap(parameter.Parameter):
     files, one parameter file, three charge maps, and four dielectric maps would have PQR files
     with IDs 1-2, a parameter file with ID 1, charge maps with IDs 1-3, and dielectric maps with
     IDs 1-4. """
-    def __init__(self):
-        super(Usemap, self).__init__()
+    def __init__(self, *args, **kwargs):
+        super(Usemap, self).__init__(*args, **kwargs)
         self.type = None
         self._allowed_values = ["diel", "kappa", "charge", "pot"]
         self.map_id = None
@@ -713,8 +723,8 @@ class Usemesh(parameter.OneIntegerParameter):
     where id is an integer ID specifying the particular map read in with READ mesh. These IDs are
     assigned sequentially, starting from 1, and incremented independently for each mesh read by
     APBS. """
-    def __init__(self):
-        super(Usemesh, self).__init__()
+    def __init__(self, *args, **kwargs):
+        super(Usemesh, self).__init__(*args, **kwargs)
         self._short_name = "usemesh"
 
 class Write(parameter.Parameter):
@@ -769,8 +779,8 @@ class Write(parameter.Parameter):
     XYZ is determined by the file format (and processor rank for parallel calculations). If the
     pathname contains spaces, then it must be surrounded by double quotes; e.g., \"/path with
     spaces/foo.in\". """
-    def __init__(self):
-        super(Write, self).__init__()
+    def __init__(self, *args, **kwargs):
+        super(Write, self).__init__(*args, **kwargs)
         self._allowed_type_values = ["charge", "pot", "atompot", "smol", "sspl", "vdw", "ivdw",
                                      "lap", "edens", "ndens", "qdens", "dielx", "diely", "dielz",
                                      "kappa"]
@@ -806,8 +816,8 @@ class Writemat(parameter.FormatPathParameter):
     * type - A string that indicates what type of operator to output:
       - poisson - Write out the Poisson operator - nabla cdot epsilon nabla.
     *stem - A string that specifies the path for the matrix """
-    def __init__(self):
-        super(Writemat, self).__init__()
+    def __init__(self, *args, **kwargs):
+        super(Writemat, self).__init__(*args, **kwargs)
         self.type = None
         self.stem = None
         self._allowed_values = ["poisson"]
@@ -841,8 +851,8 @@ class Elec(parameter.ParameterSection):
     several ELEC sections, operating on different molecules or using different parameters for
     multiple runs on the same molecule. The order of the ELEC statement can matter since certain
     types of boundary conditions (bcfl) can require information about previous calculations. """
-    def __init__(self):
-        super(Elec, self).__init__()
+    def __init__(self, *args, **kwargs):
+        super(Elec, self).__init__(*args, **kwargs)
         self._short_name = "elec"
         self._allowed_keywords = {"name" : Name, "solvtype" : Solvtype, "akeypre" : Akeypre,
                                   "akeysolve" : Akeysolve, "async" : Async, "bcfl" : Bcfl,
@@ -960,10 +970,10 @@ class Elec(parameter.ParameterSection):
         keys = sorted(self.contents())
         for key in keys:
             values = getattr(self, key)
-            try:
+            if isinstance(values, list):
                 for value in values:
                     outstr = outstr + "\t%s\n" % value
-            except TypeError:
+            else:
                 outstr = outstr + "\t%s\n" % values
         outstr = outstr + "end\n"
         return outstr

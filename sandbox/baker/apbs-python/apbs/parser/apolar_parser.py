@@ -1,7 +1,7 @@
 """ Handle the storage of APBS APOLAR block input file parameters """
 import logging
 
-_LOGGER = logging.getLogger("apolar-parser")
+_LOGGER = logging.getLogger(__name__)
 
 from . import parameter
 
@@ -45,8 +45,8 @@ class Bconc(parameter.OneFloatParameter):
     bconc {density}
 
     where density is a floating point number giving the bulk solvent density in &Aring;^-3. """
-    def __init__(self):
-        super(Bconc, self).__init__()
+    def __init__(self, *args, **kwargs):
+        super(Bconc, self).__init__(*args, **kwargs)
         self._short_name = "bconc"
     def validate(self):
         if self._parm < 0:
@@ -69,8 +69,8 @@ class Dpos(parameter.OneFloatParameter):
 
     Important: this parameter is very dependent on sdens; e.g., smaller values of dpos require
     larger values of sdens. """
-    def __init__(self):
-        super(Dpos, self).__init__()
+    def __init__(self, *args, **kwargs):
+        super(Dpos, self).__init__(*args, **kwargs)
         self._short_name = "dpos"
     def validate(self):
         if self._parm < parameter.FLOAT_EPSILON:
@@ -86,8 +86,8 @@ class Gamma(parameter.OneFloatParameter):
     where value is a floating point number designating the surface tension in units of kJ mol^-1
     &Aring;^-1. This term can be set to zero to eliminate SASA contributions to the apolar solvation
     calculations. """
-    def __init__(self):
-        super(Gamma, self).__init__()
+    def __init__(self, *args, **kwargs):
+        super(Gamma, self).__init__(*args, **kwargs)
         self._short_name = "gamma"
     def validate(self):
         if self._parm < 0:
@@ -103,8 +103,8 @@ class Press(parameter.OneFloatParameter):
     press {value}
 
     where value is the floating point value of the pressure coefficient in kJ mol^-1 &Aring;-3. """
-    def __init__(self):
-        super(Press, self).__init__()
+    def __init__(self, *args, **kwargs):
+        super(Press, self).__init__(*args, **kwargs)
         self._short_name = "press"
     def validate(self):
         if self._parm < 0:
@@ -121,8 +121,8 @@ class Apolar(parameter.ParameterSection):
         {keywords...}
     END
     """
-    def __init__(self):
-        super(Apolar, self).__init__()
+    def __init__(self, *args, **kwargs):
+        super(Apolar, self).__init__(*args, **kwargs)
         self._short_name = "apolar"
         self._allowed_keywords = {"name" : Name, "bconc" : Bconc, "calcenergy" : Calcenergy,
                                   "calcforce" : Calcforce, "dpos" : Dpos, "gamma" : Gamma,
