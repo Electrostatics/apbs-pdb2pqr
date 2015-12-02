@@ -1,14 +1,14 @@
-""" Parse the PRINT input file section """
-from parameter import Parameter
+""" Handle the storage of APBS PRINT block input file parameters """
+from . import parameter
 
-class Print(Parameter):
+class Print(parameter.Parameter):
     """ This is a very simple section that allows linear combinations of calculated properties to be
     written to standard output.
-    
+
     The syntax of this section is
-    
+
     PRINT {what} [id op id op...] END
-    
+
     The first mandatory argument is what, the quantity to manipulate or print. This variable is a
     string that can assume the following values:
 
@@ -24,7 +24,7 @@ class Print(Parameter):
     * elecForce - Print forces as calculated with an earlier calcforce ELEC command.
     * apolEnergy - Print energies as calculated with an earlier calcenergy APOLAR command.
     * apolForce - Print forces as calculated with an earlier calcforce APOLAR command.
-    
+
     The next arguments are a series of id op id op id op ... id commands where every id is
     immediately followed by an op and another id. These options have the following form:
 
@@ -36,47 +36,42 @@ class Print(Parameter):
     * op - Specify the arithmetic operation to be performed on the calculated quantities:
         + Addition
         - Subtraction """
-    allowed_what_values = ["elecenergy", "elecforce", "apolenergy", "apolforce"]
-    allowed_op_values = ["+", "-"]
-    def __init__(self):
+    def __init__(self, opstring=None, *args, **kwargs):
+        super(Print, self).__init__(*args, **kwargs)
+        self._allowed_what_values = ["elecenergy", "elecforce", "apolenergy", "apolforce"]
+        self._allowed_op_values = ["+", "-"]
         self.what = None
         self.ids = []
         self.ops = []
-    
-    @property
-    def name(self):
-        return "print"
-    
+        self._short_name = "print"
+        if opstring:
+            self.parse(opstring.split() + ["end"])
     def parse(self, tokens):
-        whatToken = tokens.pop(0).lower()
-        self.what = whatToken
-        calcID = int(tokens.pop(0))
-        self.ids.append(calcID)
+        """ Parse tokens associated with this section """
+        what_token = tokens.pop(0).lower()
+        self.what = what_token
+        calc_id = int(tokens.pop(0))
+        self.ids.append(calc_id)
         while True:
             token = tokens.pop(0)
             if token == "end":
                 return
             self.ops.append(token)
-            calcID = int(tokens.pop(0))
-            self.ids.append(calcID)
-            
+            calc_id = int(tokens.pop(0))
+            self.ids.append(calc_id)
     def validate(self):
-        if not self.what in self.allowed_what_values:
+        if not self.what in self._allowed_what_values:
             errstr = "Unexpected token %s in PRINT" % self.what
-            raise ValueError, errstr
-        for op in self.ops:
-            if not op in self.allowed_op_values:
-                errstr = "Unexpected operator %s in PRINT" % op
-                raise ValueError, op
-    
+            raise ValueError(errstr)
+        for operation in self.ops:
+            if not operation in self._allowed_op_values:
+                errstr = "Unexpected operator %s in PRINT" % operation
+                raise ValueError(operation)
     def __str__(self):
-        outstr = "print %s " % self.what
+        outstr = "print\n%s " % self.what
         outstr = outstr + "%d " % self.ids[0]
-        for iop, op in enumerate(self.ops):
-            calcID = self.ids[iop+1]
-            outstr = outstr + "%s %d " % (op, calcID)
-        outstr = outstr + "end"
+        for iop, operation in enumerate(self.ops):
+            calc_id = self.ids[iop+1]
+            outstr = outstr + "%s %d " % (operation, calc_id)
+        outstr = outstr + "\nend"
         return outstr
-    
-    def contents(self):
-        return { "what" : self.what, "ops" : self.ops, "ids" : self.ids }
