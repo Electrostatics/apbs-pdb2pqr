@@ -1,26 +1,22 @@
-""" Parse the READ input file section """
-from .parameter import Parameter, FormatPathParameter
+""" Handle the storage of APBS PRINT block input file parameters """
+from . import parameter
 
-# Set the following flag to True to use deprecated input format
-USE_DEPRECATED = True
-
-class Read(object):
+class Read(parameter.Parameter):
     """ READ input file section """
-    def __init__(self):
-        self.content_dict = {"charge" : [], "diel" : [], "kappa" : [], "mesh" : [], "mol" : [],
-                             "parm" : [], "pot" : []}
-    @property
-    def name(self):
-        """ Return section name """
-        return "read"
+    def __init__(self, *args, **kwargs):
+        super(Read, self).__init__(*args, **kwargs)
+        self._allowed_keywords = {"charge" : Charge, "diel" : Diel, "kappa" : Kappa, "mesh" : Mesh,
+                                  "mol" : Mol, "parm" : Parm, "pot" : Pot}
+        for key, val in self._allowed_keywords.items():
+            setattr(self, key, [])
+        self._short_name = "read"
     def validate(self):
         """ Validate section contents """
-        if len(self.content_dict["mol"]) == 0:
+        if len(self.mol) == 0:
             mol_ok = False
         else:
             mol_ok = True
-        if (len(self.content_dict["charge"]) > 0) and (len(self.content_dict["diel"]) > 0) \
-and (len(self.content_dict["kappa"]) > 0):
+        if (len(self.charge) > 0) and (len(self.diel) > 0) and (len(self.kappa) > 0):
             map_ok = True
         else:
             map_ok = False
@@ -29,57 +25,27 @@ and (len(self.content_dict["kappa"]) > 0):
         else:
             errstr = "Unable to find molecule file or relevant coefficient maps."
             raise ValueError(errstr)
-    def contents(self):
-        """ Return contents of this section """
-        return self.content_dict
     def __str__(self):
         outstr = "read\n"
-        for values in self.content_dict.values():
+        for key in self.contents():
+            values = getattr(self, key)
             for value in values:
                 outstr = outstr + "\t%s\n" % value
         outstr = outstr + "end\n"
         return outstr
-
     def parse(self, tokens):
         """ Parse input file """
         token = tokens.pop(0)
         while True:
             token_name = token.lower()
-            if token_name == "charge":
-                charge = Charge()
-                charge.parse(tokens)
-                charge.validate()
-                self.content_dict["charge"].append(charge)
-            elif token_name == "diel":
-                diel = Diel()
-                diel.parse(tokens)
-                diel.validate()
-                self.content_dict["diel"].append(diel)
-            elif token_name == "kappa":
-                kappa = Kappa()
-                kappa.parse(tokens)
-                kappa.validate()
-                self.content_dict["kappa"].append(kappa)
-            elif token_name == "mesh":
-                mesh = Mesh()
-                mesh.parse(tokens)
-                mesh.validate()
-                self.content_dict["mesh"].append(mesh)
-            elif token_name == "mol":
-                mol = Mol()
-                mol.parse(tokens)
-                mol.validate()
-                self.content_dict["mol"].append(mol)
-            elif token_name == "parm":
-                parm = Parm()
-                parm.parse(tokens)
-                parm.validate()
-                self.content_dict["parm"].append(parm)
-            elif token_name == "pot":
-                pot = Pot()
-                pot.parse(tokens)
-                pot.validate()
-                self.content_dict["pot"].append(pot)
+            if token_name in self._allowed_keywords:
+                token_object = self._allowed_keywords[token_name]()
+                token_object.parse(tokens)
+                token_object.validate()
+                if hasattr(self, token_name):
+                    getattr(self, token_name).append(token_object)
+                else:
+                    setattr(self, token_name, [token_object])
             elif token_name == "end":
                 return
             else:
@@ -87,7 +53,7 @@ and (len(self.content_dict["kappa"]) > 0):
                 raise ValueError(errstr)
             token = tokens.pop(0)
 
-class Charge(FormatPathParameter):
+class Charge(parameter.FormatPathParameter):
     """ Charge input file
 
     Usage:  charge {format} {path}
@@ -104,14 +70,12 @@ class Charge(FormatPathParameter):
       - gz - gzipped (zlib) compressed OpenDX format. Files can be read directly in compressed form.
     * path - The location of the charge map file.
     """
-    def __init__(self):
-        super(Charge, self).__init__()
-        self.allowed_values = ["dx", "gz"]
-    @property
-    def name(self):
-        return "charge"
+    def __init__(self, *args, **kwargs):
+        super(Charge, self).__init__(*args, **kwargs)
+        self._allowed_values = ["dx", "gz"]
+        self._short_name = "charge"
 
-class Diel(Parameter):
+class Diel(parameter.Parameter):
     """ Dielectric input file
 
     Usage:  diel {format} {path-x} {path-y} {path-z}
@@ -134,37 +98,34 @@ class Diel(Parameter):
         * path-x - The location of the x-shifted dielectric map file.
         * path-y - The location of the y-shifted dielectric map file.
         * path-z - The location of the z-shifted dielectric map file. """
-    def __init__(self):
-        super(Diel, self).__init__()
-        self.allowed_values = ["dx", "gz"]
-        self.content_dict = {"format" : None, "path-x" : None, "path-y" : None, "path-z" : None}
-    @property
-    def name(self):
-        return "diel"
-    def contents(self):
-        return self.content_dict
+    def __init__(self, *args, **kwargs):
+        super(Diel, self).__init__(*args, **kwargs)
+        self._allowed_values = ["dx", "gz"]
+        self.format = None
+        self.xpath = None
+        self.ypath = None
+        self.zpath = None
+        self._short_name = "diel"
     def parse(self, tokens):
-        self.content_dict["format"] = tokens.pop(0)
+        self.format = tokens.pop(0)
         path = "\"%s\"" % tokens.pop(0)
-        self.content_dict["path-x"] = path
+        self.xpath = path
         path = "\"%s\"" % tokens.pop(0)
-        self.content_dict["path-y"] = path
+        self.ypath = path
         path = "\"%s\"" % tokens.pop(0)
-        self.content_dict["path-z"] = path
+        self.zpath = path
     def validate(self):
-        map_format = self.content_dict["format"].lower()
+        map_format = self.format.lower()
         if not map_format in ["dx", "gz"]:
-            errstr = "Unknown format %s for %s" % (map_format, self.name)
+            errstr = "Unknown format %s for %s" % (map_format, self.short_name)
             raise ValueError(errstr)
-        if not (self.content_dict["path-x"] or self.content_dict["path-y"] or \
-self.content_dict["path-y"]):
-            errstr = "Missing input path for %s" % self.name
+        if not (self.xpath or self.ypath or self.zpath):
+            errstr = "Missing input path for %s" % self.short_name
             raise ValueError(errstr)
     def __str__(self):
-        return " ".join([self.name, self.content_dict["format"], self.content_dict["path-x"],
-                         self.content_dict["path-y"], self.content_dict["path-z"]])
+        return " ".join([self.short_name(), self.format, self.xpath, self.ypath, self.zpath])
 
-class Kappa(FormatPathParameter):
+class Kappa(parameter.FormatPathParameter):
     """ Kappa input file
 
     Usage:  kappa {format} {path}
@@ -182,14 +143,12 @@ class Kappa(FormatPathParameter):
       - dx - OpenDX format
       - gz - gzipped (zlib) compressed OpenDX format. Files can be read directly in compressed form.
     * path - The location of the kappa map file."""
-    def __init__(self):
-        super(Kappa, self).__init__()
-        self.allowed_values = ["dx", "gz"]
-    @property
-    def name(self):
-        return "kappa"
+    def __init__(self, *args, **kwargs):
+        super(Kappa, self).__init__(*args, **kwargs)
+        self._allowed_values = ["dx", "gz"]
+        self._short_name = "kappa"
 
-class Mesh(FormatPathParameter):
+class Mesh(parameter.FormatPathParameter):
     """ Mesh input file
 
     Usage:  mesh {format} {path}
@@ -201,14 +160,12 @@ class Mesh(FormatPathParameter):
     * format - The format of the input mesh. Acceptable values include:
       - mcsf - MCSF format
     * path - The location of the mesh file. """
-    def __init__(self):
-        super(Mesh, self).__init__()
-        self.allowed_values = ["mcsf"]
-    @property
-    def name(self):
-        return "mesh"
+    def __init__(self, *args, **kwargs):
+        super(Mesh, self).__init__(*args, **kwargs)
+        self._allowed_values = ["mcsf"]
+        self._short_name = "mesh"
 
-class Mol(FormatPathParameter):
+class Mol(parameter.FormatPathParameter):
     """ Information about APBS molecule files
 
     Usage:  mol {format} {path}
@@ -221,14 +178,12 @@ class Mol(FormatPathParameter):
       file is used, then a parameter file must also be specified to provide charge and radius
       parameters for the biomolecule's atoms.
     * path - The location of the molecular data file. """
-    def __init__(self):
-        super(Mol, self).__init__()
-        self.allowed_values = ["pqr", "pdb"]
-    @property
-    def name(self):
-        return "mol"
+    def __init__(self, *args, **kwargs):
+        super(Mol, self).__init__(*args, **kwargs)
+        self._allowed_values = ["pqr", "pdb"]
+        self._short_name = "mol"
 
-class Parm(FormatPathParameter):
+class Parm(parameter.FormatPathParameter):
     """ Information about APBS parameter files
 
     Usage: parm {format} {path}
@@ -247,14 +202,12 @@ class Parm(FormatPathParameter):
     available for protein and nucleic acid parameters and are actively under development as a
     research project.  Please contact Nathan Baker for additional information about the state of
     this research, particularly if you are interested in helping. """
-    def __init__(self):
-        super(Parm, self).__init__()
-        self.allowed_values = ["flat", "xml"]
-    @property
-    def name(self):
-        return "parm"
+    def __init__(self, *args, **kwargs):
+        super(Parm, self).__init__(*args, **kwargs)
+        self._allowed_values = ["flat", "xml"]
+        self._short_name = "parm"
 
-class Pot(FormatPathParameter):
+class Pot(parameter.FormatPathParameter):
     """ Information about APBS potential files
 
     Usage:  pot {format} {path}
@@ -270,9 +223,7 @@ class Pot(FormatPathParameter):
       - dx - OpenDX format
       - gz - gzipped (zlib) compressed OpenDX format. Files can be read directly in compressed form.
     * path - The location of the potential map file."""
-    def __init__(self):
-        super(Pot, self).__init__()
-        self.allowed_values = ["gz", "dx"]
-    @property
-    def name(self):
-        return "pot"
+    def __init__(self, *args, **kwargs):
+        super(Pot, self).__init__(*args, **kwargs)
+        self._allowed_values = ["gz", "dx"]
+        self._short_name = "pot"
