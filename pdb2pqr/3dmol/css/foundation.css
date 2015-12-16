@@ -63,7 +63,7 @@ body {
   font-weight: normal;
   font-style: normal;
   line-height: 1.5;
-  position: relative;
+  //position: relative;
   cursor: auto; }
 
 a:hover {
@@ -1571,7 +1571,7 @@ select {
   color: rgba(0, 0, 0, 0.75);
   line-height: normal;
   border-radius: 0;
-  height: 2.3125rem; }
+  height: 2rem; }
   select::-ms-expand {
     display: none; }
   select.radius {
@@ -5216,8 +5216,8 @@ ul.off-canvas-list {
       left: 0 !important; }
 
 table {
-  //background: #FFFFFF;
-  margin-bottom: 1.25rem;
+   //background: #FFFFFF;
+  //margin-bottom: 1.25rem;
   //element.styleborder: solid 1px #DDDDDD;
   table-layout: auto; }
   table caption {
