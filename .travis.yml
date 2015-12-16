@@ -38,7 +38,7 @@ before_script:
     - cmake -DBUILD_DOC=OFF -DENABLE_FETK=$FETK ..
 
 script:
-    - make
+    - make VERBOSE=1
     - cd ../tests
     - bash run_travis_test.sh $TRAVIS_BUILD_DIR/apbs/travis/bin $TEST_SUITE
 
