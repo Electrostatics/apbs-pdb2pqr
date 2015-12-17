@@ -1,0 +1,386 @@
+@prefix : <http://www.poissonboltzmann.org/ontologies/apbs-pdb2pqr#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xml: <http://www.w3.org/XML/1998/namespace> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@base <http://www.poissonboltzmann.org/ontologies/apbs-pdb2pqr> .
+
+<http://www.poissonboltzmann.org/ontologies/apbs-pdb2pqr> rdf:type owl:Ontology .
+
+
+#################################################################
+#
+#    Object Properties
+#
+#################################################################
+
+
+###  http://www.poissonboltzmann.org/ontologies/apbs-pdb2pqr#hasBoundary
+
+:hasBoundary rdf:type owl:ObjectProperty ;
+             
+             rdfs:range :Boundary ;
+             
+             rdfs:domain :Manifold ;
+             
+             rdfs:subPropertyOf :hasThing .
+
+
+
+###  http://www.poissonboltzmann.org/ontologies/apbs-pdb2pqr#hasDomain
+
+:hasDomain rdf:type owl:ObjectProperty ;
+           
+           rdfs:domain :Operator ;
+           
+           rdfs:range :Operator_domain ;
+           
+           rdfs:subPropertyOf :hasThing .
+
+
+
+###  http://www.poissonboltzmann.org/ontologies/apbs-pdb2pqr#hasRange
+
+:hasRange rdf:type owl:ObjectProperty ;
+          
+          rdfs:domain :Operator ;
+          
+          rdfs:range :Operator_range ;
+          
+          rdfs:subPropertyOf :hasThing .
+
+
+
+###  http://www.poissonboltzmann.org/ontologies/apbs-pdb2pqr#hasThing
+
+:hasThing rdf:type owl:ObjectProperty .
+
+
+
+###  http://www.poissonboltzmann.org/ontologies/apbs-pdb2pqr#isBoundaryOf
+
+:isBoundaryOf rdf:type owl:ObjectProperty ;
+              
+              rdfs:domain :Boundary ;
+              
+              rdfs:range :Manifold ;
+              
+              rdfs:subPropertyOf :isThingOf .
+
+
+
+###  http://www.poissonboltzmann.org/ontologies/apbs-pdb2pqr#isDomainOf
+
+:isDomainOf rdf:type owl:ObjectProperty ;
+            
+            rdfs:range :Operator ;
+            
+            rdfs:domain :Operator_domain ;
+            
+            rdfs:subPropertyOf :isThingOf .
+
+
+
+###  http://www.poissonboltzmann.org/ontologies/apbs-pdb2pqr#isRangeOf
+
+:isRangeOf rdf:type owl:ObjectProperty ;
+           
+           rdfs:range :Operator ;
+           
+           rdfs:domain :Operator_range ;
+           
+           rdfs:subPropertyOf :isThingOf .
+
+
+
+###  http://www.poissonboltzmann.org/ontologies/apbs-pdb2pqr#isThingOf
+
+:isThingOf rdf:type owl:ObjectProperty .
+
+
+
+
+
+#################################################################
+#
+#    Classes
+#
+#################################################################
+
+
+###  http://www.poissonboltzmann.org/ontologies/apbs-pdb2pqr#Boundary
+
+:Boundary rdf:type owl:Class ;
+          
+          rdfs:subClassOf :Manifold ;
+          
+          rdfs:comment "\"A manifold with boundary is a manifold with an edge.\""^^xsd:string ,
+                       "https://en.wikipedia.org/wiki/Manifold#Manifold_with_boundary"^^xsd:anyURI .
+
+
+
+###  http://www.poissonboltzmann.org/ontologies/apbs-pdb2pqr#Cube_surface
+
+:Cube_surface rdf:type owl:Class ;
+              
+              rdfs:subClassOf :Three_dimensional_surface ,
+                              [ rdf:type owl:Restriction ;
+                                owl:onProperty :isBoundaryOf ;
+                                owl:someValuesFrom :Cube_volume
+                              ] .
+
+
+
+###  http://www.poissonboltzmann.org/ontologies/apbs-pdb2pqr#Cube_volume
+
+:Cube_volume rdf:type owl:Class ;
+             
+             rdfs:subClassOf :Three_dimensional_volume ,
+                             [ rdf:type owl:Restriction ;
+                               owl:onProperty :hasBoundary ;
+                               owl:someValuesFrom :Cube_surface
+                             ] .
+
+
+
+###  http://www.poissonboltzmann.org/ontologies/apbs-pdb2pqr#Discretization
+
+:Discretization rdf:type owl:Class ;
+                
+                rdfs:subClassOf :Operator .
+
+
+
+###  http://www.poissonboltzmann.org/ontologies/apbs-pdb2pqr#Domain
+
+:Domain rdf:type owl:Class ;
+        
+        rdfs:subClassOf :Space ;
+        
+        rdfs:comment "\"In mathematical analysis, a domain is any connected open subset of a finite-dimensional vector space. This is a different concept than the domain of a function, though it is often used for that purpose, for example in partial differential equations and Sobolev spaces.\""^^xsd:string ;
+        
+        rdfs:seeAlso "https://en.wikipedia.org/wiki/Domain_(mathematical_analysis)"^^xsd:anyURI .
+
+
+
+###  http://www.poissonboltzmann.org/ontologies/apbs-pdb2pqr#Equation
+
+:Equation rdf:type owl:Class ;
+          
+          rdfs:subClassOf owl:Thing .
+
+
+
+###  http://www.poissonboltzmann.org/ontologies/apbs-pdb2pqr#Finite_difference_discretization
+
+:Finite_difference_discretization rdf:type owl:Class ;
+                                  
+                                  rdfs:subClassOf :Discretization .
+
+
+
+###  http://www.poissonboltzmann.org/ontologies/apbs-pdb2pqr#Finite_element_discretization
+
+:Finite_element_discretization rdf:type owl:Class ;
+                               
+                               rdfs:subClassOf :Discretization .
+
+
+
+###  http://www.poissonboltzmann.org/ontologies/apbs-pdb2pqr#Integral_equation
+
+:Integral_equation rdf:type owl:Class ;
+                   
+                   rdfs:subClassOf :Equation .
+
+
+
+###  http://www.poissonboltzmann.org/ontologies/apbs-pdb2pqr#Manifold
+
+:Manifold rdf:type owl:Class ;
+          
+          rdfs:subClassOf :Domain ;
+          
+          rdfs:comment "\"In mathematics, a manifold is a topological space that resembles Euclidean space near each point.\""^^xsd:string ,
+                       "https://en.wikipedia.org/wiki/Manifold"^^xsd:anyURI .
+
+
+
+###  http://www.poissonboltzmann.org/ontologies/apbs-pdb2pqr#Molecule_surface
+
+:Molecule_surface rdf:type owl:Class ;
+                  
+                  rdfs:subClassOf :Three_dimensional_surface ,
+                                  [ rdf:type owl:Restriction ;
+                                    owl:onProperty :isBoundaryOf ;
+                                    owl:someValuesFrom :Molecule_surface
+                                  ] ;
+                  
+                  rdfs:comment "This is the general definition for the boundary of a molecule and *not* the Connolly molecular surface."^^xsd:string .
+
+
+
+###  http://www.poissonboltzmann.org/ontologies/apbs-pdb2pqr#Molecule_volume
+
+:Molecule_volume rdf:type owl:Class ;
+                 
+                 rdfs:subClassOf :Three_dimensional_volume ,
+                                 [ rdf:type owl:Restriction ;
+                                   owl:onProperty :hasBoundary ;
+                                   owl:someValuesFrom :Molecule_surface
+                                 ] ;
+                 
+                 rdfs:comment "This refers to the general concept of the interior volume of a molecule -- and not any specific definition by which the volume is constructed."^^xsd:string .
+
+
+
+###  http://www.poissonboltzmann.org/ontologies/apbs-pdb2pqr#Operator
+
+:Operator rdf:type owl:Class ;
+          
+          rdfs:subClassOf owl:Thing ,
+                          [ rdf:type owl:Restriction ;
+                            owl:onProperty :hasDomain ;
+                            owl:someValuesFrom :Operator_domain
+                          ] ,
+                          [ rdf:type owl:Restriction ;
+                            owl:onProperty :hasRange ;
+                            owl:someValuesFrom :Operator_range
+                          ] ;
+          
+          rdfs:comment "\"An operator is a mapping from one vector space or module to another.\""^^xsd:string ,
+                       "https://en.wikipedia.org/wiki/Operator_(mathematics)"^^xsd:anyURI .
+
+
+
+###  http://www.poissonboltzmann.org/ontologies/apbs-pdb2pqr#Operator_domain
+
+:Operator_domain rdf:type owl:Class ;
+                 
+                 rdfs:subClassOf :Domain .
+
+
+
+###  http://www.poissonboltzmann.org/ontologies/apbs-pdb2pqr#Operator_range
+
+:Operator_range rdf:type owl:Class ;
+                
+                rdfs:subClassOf :Domain .
+
+
+
+###  http://www.poissonboltzmann.org/ontologies/apbs-pdb2pqr#Partial_differential_equation
+
+:Partial_differential_equation rdf:type owl:Class ;
+                               
+                               rdfs:subClassOf :Equation .
+
+
+
+###  http://www.poissonboltzmann.org/ontologies/apbs-pdb2pqr#Space
+
+:Space rdf:type owl:Class ;
+       
+       rdfs:comment "\"In mathematics, a space is a set (sometimes called a universe) with some added structure.\""^^xsd:string ,
+                    "https://en.wikipedia.org/wiki/Space_(mathematics)"^^xsd:anyURI .
+
+
+
+###  http://www.poissonboltzmann.org/ontologies/apbs-pdb2pqr#Sphere_surface
+
+:Sphere_surface rdf:type owl:Class ;
+                
+                rdfs:subClassOf :Three_dimensional_surface ,
+                                [ rdf:type owl:Restriction ;
+                                  owl:onProperty :isBoundaryOf ;
+                                  owl:someValuesFrom :Sphere_volume
+                                ] .
+
+
+
+###  http://www.poissonboltzmann.org/ontologies/apbs-pdb2pqr#Sphere_volume
+
+:Sphere_volume rdf:type owl:Class ;
+               
+               rdfs:subClassOf :Three_dimensional_volume ,
+                               [ rdf:type owl:Restriction ;
+                                 owl:onProperty :hasBoundary ;
+                                 owl:someValuesFrom :Sphere_surface
+                               ] .
+
+
+
+###  http://www.poissonboltzmann.org/ontologies/apbs-pdb2pqr#Surface
+
+:Surface rdf:type owl:Class ;
+         
+         rdfs:subClassOf :Manifold ;
+         
+         owl:disjointWith :Volume .
+
+
+
+###  http://www.poissonboltzmann.org/ontologies/apbs-pdb2pqr#System_of_equations
+
+:System_of_equations rdf:type owl:Class ;
+                     
+                     rdfs:subClassOf :Equation .
+
+
+
+###  http://www.poissonboltzmann.org/ontologies/apbs-pdb2pqr#Three_dimensional_surface
+
+:Three_dimensional_surface rdf:type owl:Class ;
+                           
+                           rdfs:subClassOf :Surface .
+
+
+
+###  http://www.poissonboltzmann.org/ontologies/apbs-pdb2pqr#Three_dimensional_volume
+
+:Three_dimensional_volume rdf:type owl:Class ;
+                          
+                          rdfs:subClassOf :Volume .
+
+
+
+###  http://www.poissonboltzmann.org/ontologies/apbs-pdb2pqr#Volume
+
+:Volume rdf:type owl:Class ;
+        
+        rdfs:subClassOf :Manifold ,
+                        [ rdf:type owl:Restriction ;
+                          owl:onProperty :hasBoundary ;
+                          owl:someValuesFrom :Surface
+                        ] .
+
+
+
+
+
+#################################################################
+#
+#    General axioms
+#
+#################################################################
+
+
+[ rdf:type owl:AllDisjointClasses ;
+  owl:members ( :Domain
+                :Equation
+                :Operator
+              )
+] .
+[ rdf:type owl:AllDisjointClasses ;
+  owl:members ( :Equation
+                :Operator
+                :Space
+              )
+] .
+
+
+
+
+###  Generated by the OWL API (version 3.5.1) http://owlapi.sourceforge.net
+
