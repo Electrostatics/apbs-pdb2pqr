@@ -34,9 +34,7 @@ test-output*
 *.obj
 *.exp
 *.log
-*.pqr
 *.mol2
-*.pdb
 pdb2pqr/visualize.cgi
 pdb2pqr/src/aconf.py
 pdb2pqr/querystatus.cgi
