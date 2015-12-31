@@ -4,9 +4,3 @@
 [submodule "apbs/externals/fetk"]
 	path = apbs/externals/fetk
 	url = https://github.com/Electrostatics/FETK.git
-[submodule "sandbox/baker/APBS_Sphinx"]
-	path = sandbox/baker/APBS_Sphinx
-	url = https://github.com/Electrostatics/APBS_Sphinx.git
-[submodule "sandbox/baker/apbs-python/nglview"]
-	path = sandbox/baker/apbs-python/nglview
-	url = https://github.com/arose/nglview.git
