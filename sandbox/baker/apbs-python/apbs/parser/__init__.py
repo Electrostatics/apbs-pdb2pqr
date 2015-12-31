@@ -123,6 +123,7 @@ class TextDecoder:
                 errstr = "Unrecognized token %s" % token
                 raise ValueError(errstr)
             token = self._tokens.pop(0)
+            self.apbs_input = apbs_input
         return apbs_input
 
 class JSONEncoder(json.JSONEncoder):
