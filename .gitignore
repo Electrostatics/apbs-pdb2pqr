@@ -45,3 +45,4 @@ pdb2pqr/changes.tgz
 pdb2pqr/apbs_cgi.cgi
 pdb2pqr/site_scons/defaults.py
 pdb2pqr/msvs
+.ipynb_checkpoints
