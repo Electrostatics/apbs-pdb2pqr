@@ -366,7 +366,7 @@ VPUBLIC NOsh_calc* NOsh_calc_ctor(
             thee->bemparm = BEMparm_ctor(BCT_MANUAL);
             break;
         case NCT_GEOFLOW:
-            thee->geoflowparm = GEOFLOWparm_ctor(GFCT_NONE);
+            thee->geoflowparm = GEOFLOWparm_ctor(GFCT_AUTO);
             thee->apolparm = APOLparm_ctor();
             break;
         default:
@@ -434,6 +434,9 @@ VPUBLIC int NOsh_calc_copy(
         PBEparm_copy(thee->pbeparm, source->pbeparm);
     if (source->apolparm != VNULL)
         APOLparm_copy(thee->apolparm, source->apolparm);
+    /*I think here is where the the geoflow changes get lost*/
+    if(source->geoflowparm != VNULL)
+    	GEOFLOWparm_copy(thee->geoflowparm, source->geoflowparm);
 
     return 1;
 
@@ -506,6 +509,7 @@ VPUBLIC int NOsh_parseInput(
         sections is allowed.
         */
         if (Vstring_strcasecmp(tok, "read") == 0) {
+           printf("read\n");
             Vnm_print(0, "NOsh: Parsing READ section\n");
             if (!NOsh_parseREAD(thee, sock)) return 0;
             Vnm_print(0, "NOsh: Done parsing READ section \
@@ -1206,11 +1210,16 @@ ELEC section!\n");
             calc->bemparm->type = BCT_MANUAL;
             return NOsh_parseBEM(thee, sock, calc);
         } else if (Vstring_strcasecmp(tok, "geoflow-manual") == 0) {
-            thee->elec[thee->nelec] = NOsh_calc_ctor(NCT_GEOFLOW);
-            calc = thee->elec[thee->nelec];
-            (thee->nelec)++;
-            calc->geoflowparm->type = GFCT_MANUAL;
-            return NOsh_parseGEOFLOW(thee, sock, calc);
+//            thee->elec[thee->nelec] = NOsh_calc_ctor(NCT_GEOFLOW);
+//            calc = thee->elec[thee->nelec];
+//            (thee->nelec)++;
+//            calc->geoflowparm->type = GFCT_MANUAL;
+//        	return NOsh_parseGEOFLOW(thee, sock, calc);
+        	Vnm_print(2, "Geoflow currently does not support geoflow-manual please use geoflow-auto instead!\n");
+        	return 0;
+        } else if(Vstring_strcasecmp(tok, "geoflow-none") == 0) {
+        	Vnm_print(2, "Geoflow currently does not support geoflow-none please use geoflow-auto instead!\n");
+        	return 0;
         } else if (Vstring_strcasecmp(tok, "geoflow-auto") == 0) {
             thee->elec[thee->nelec] = NOsh_calc_ctor(NCT_GEOFLOW);
             calc = thee->elec[thee->nelec];
@@ -1589,7 +1598,7 @@ VPRIVATE int NOsh_setupCalcGEOFLOW(NOsh *thee, NOsh_calc *calc) {
 
     /* Now we're ready to whatever sorts of post-processing operations that are
         necessary for the various types of calculations */
-    if(parm->type == GFCT_MANUAL || parm->type == GFCT_AUTO){
+    if(/*parm->type == GFCT_MANUAL ||*/ parm->type == GFCT_AUTO){
         return NOsh_setupCalcGEOFLOWMANUAL(thee, calc);
     }else{
         Vnm_print(2, "NOsh_setupCalcGEOFLOW:  undefined GEOFLOW calculation type (%d)!\n", parm->type);
@@ -2800,6 +2809,12 @@ VPUBLIC int NOsh_parseGEOFLOW(
         Vnm_print(2, "NOsh:  GEOFLOW parameters not set correctly!\n");
         return 0;
     }
+    /*currently the only bc handle by geoflow is mdh so we check here if mdh was read*/
+	if(pbeparm->bcfl != BCFL_MDH){
+		Vnm_print(2, "NOsh_parseGEOFLOW: Geoflow currently only supports mdh boundary conditions!\n");
+		Vnm_print(2, "NOsh_parseGEOFLOW: please change bcfl keyword.\n");
+		return 0;
+	}
 
     return 1;
 }

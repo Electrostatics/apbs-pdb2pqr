@@ -75,9 +75,10 @@
  * @ingroup GEOFLOWparm
  */
 enum eGEOFLOWparm_CalcType {
-    GFCT_MANUAL=0,  /**< GEOFLOW-manual */
+    //other methods disabled for now only auto currently implemented.
+	//GFCT_MANUAL=0,  /**< GEOFLOW-manual */
     GFCT_AUTO=1,  /**< GEOFLOW-auto */
-    GFCT_NONE=2 /**< not defined */
+    //GFCT_NONE=2 /**< not defined */
 };
 
 /**
@@ -100,15 +101,9 @@ typedef struct sGEOFLOWparm {
     int parsed;  /**< Has this structure been filled? (0 = no, 1 = yes) */
 
     /* *** GENERIC PARAMETERS *** */
-//    double dcel;
-//    double pres;
-//    double gama;
     int vdw;
-    
-//    int setdcel;
-//    int setpres;
-//   int setgama;
     int setvdw;
+    double etol; /**< user defined error tolerance */
 
 } GEOFLOWparm;
 
@@ -162,8 +157,20 @@ VEXTERNC Vrc_Codes      GEOFLOWparm_check(GEOFLOWparm *thee);
  */
 VEXTERNC Vrc_Codes      GEOFLOWparm_parseToken(GEOFLOWparm *thee, char tok[VMAX_BUFSIZE],
                     Vio *sock);
+/**
+ * @brief copy GEOFLOWparm object int thee.
+ * @ingroup GEOFLOWparm
+ * @author
+ * @param thee GEOFLOWparm object to be copied into
+ * @param parm GEOFLOWparm object.
+ */
+VEXTERNC void GEOFLOWparm_copy(GEOFLOWparm *thee, GEOFLOWparm *parm);
 
 VPRIVATE Vrc_Codes GEOFLOWparm_parseVDW(GEOFLOWparm *thee, Vio *sock);
+
+VPRIVATE Vrc_Codes GEOFLOWparm_parseETOL(GEOFLOWparm *thee, Vio *sock);
+
+
 
 #endif
 

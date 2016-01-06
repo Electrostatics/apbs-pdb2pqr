@@ -4,7 +4,7 @@ README for ionize APBS examples
 The example input files in this directory calculate electrostatic contributions to the ionization energy of acetic acid.
 
 Input File|Description|APBS Version|Results (kJ/mol)||||UHBD (kJ/mol)||||
--|-|-|-|-|-|-|-|-|-|-
+---|---|---|---|---|---|---|---|---|---|---
 ||||Acetic Acid|Acetate|Proton|Ionization Energy|Acetic Acid|Acetate|Proton|Ionization Energy
 [apbs-mol.in](apbs-mol.in)|3-level focusing to 0.094 A, srfm mol|**1.4.1-binary**|**-22.6788**|**-199.7463**|**-297.4598**|**-474.5273**|-22.22|-198.04|-295.79|-471.61
 |||1.4|-22.6788|-199.7463|-297.4598|-474.5273
@@ -38,7 +38,7 @@ Input File|Description|APBS Version|Results (kJ/mol)||||UHBD (kJ/mol)||||
 |||0.5.0|-22.3304|-198.4881|-295.9670|-472.1247
 |||0.4.0|-22.3304|-198.4881|-295.9670|-472.1247
 
-<a name=1></a><sup>1</sup> APBS 1.2 has switched the multigrid smoothing algorithm from standard Gauss-Seidel to Gauss-Seidel red/black in order to facilitate parallelization. This switch has caused small differences in individual calculation energies which, when combined to the final answer, create larger errors (up to 0.04%). These errors can be reduced by resetting the APBS error tolerance to 1e-9 or smaller values. For a more detailed explanation, please see [here](http://is.gd/45AzN).
+<a name=1></a><sup>1</sup> APBS 1.2 has switched the multigrid smoothing algorithm from standard Gauss-Seidel to Gauss-Seidel red/black in order to facilitate parallelization. This switch has caused small differences in individual calculation energies which, when combined to the final answer, create larger errors (up to 0.04%). These errors can be reduced by resetting the APBS error tolerance to 1e-9 or smaller values. For a more detailed explanation, please see the APBS FAQ, [here](http://www.poissonboltzmann.org/docs/apbs-faq/#sources error calculation).
 
 Please see the ChangeLog or the [APBS website](http://www.poissonboltzmann.org/) for more information.
 
