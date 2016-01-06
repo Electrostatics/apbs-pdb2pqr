@@ -34,9 +34,7 @@ test-output*
 *.obj
 *.exp
 *.log
-*.pqr
 *.mol2
-*.pdb
 pdb2pqr/visualize.cgi
 pdb2pqr/src/aconf.py
 pdb2pqr/querystatus.cgi
@@ -47,3 +45,4 @@ pdb2pqr/changes.tgz
 pdb2pqr/apbs_cgi.cgi
 pdb2pqr/site_scons/defaults.py
 pdb2pqr/msvs
+.ipynb_checkpoints

@@ -6,7 +6,7 @@ The example input files in this directory calculate the binding of a small molec
 The UHBD calculations where performed using a van der Waals surface definition for the dielectric coefficient. This is simulated in the APBS input files by setting srad to 0.0.
 
 Input File|Description|APBS Version|Results (kJ/mol)|UHBD (kJ/mol)
--|-|-|-|-
+---|---|---|---|---
 [apbs-mol.in](apbs-mol.in)|2-level focusing to 0.225 A, VdW surface, srfm mol|**1.4.1-binary**|**-52.4648<sup>[6](#6)</sup>**|-70.00
 |||1.4|-51.4648<sup>[5](#5)</sup>
 |||1.3|-52.4647
@@ -52,7 +52,7 @@ Input File|Description|APBS Version|Results (kJ/mol)|UHBD (kJ/mol)
 
 -   Bug fix regarding multipole behavior for neutral proteins
 
-<a name=4></a><sup>4</sup> APBS 1.2 has switched the multigrid smoothing algorithm from standard Gauss-Seidel to Gauss-Seidel red/black in order to facilitate parallelization. This switch has caused small differences in individual calculation energies which, when combined to the final answer, create larger errors (up to 0.04%). These errors can be reduced by resetting the APBS error tolerance to 1e-9 or smaller values. For a more detailed explanation, please see [here](http://is.gd/45AzN).
+<a name=4></a><sup>4</sup> APBS 1.2 has switched the multigrid smoothing algorithm from standard Gauss-Seidel to Gauss-Seidel red/black in order to facilitate parallelization. This switch has caused small differences in individual calculation energies which, when combined to the final answer, create larger errors (up to 0.04%). These errors can be reduced by resetting the APBS error tolerance to 1e-9 or smaller values. For a more detailed explanation, please see the APBS FAQ, [here](http://www.poissonboltzmann.org/docs/apbs-faq/#sources error calculation).
 
 <a name=5></a><sup>5</sup> The discrepancy in values between versions 1.3 and 1.4 is most likely due to the following factor(s):
 
