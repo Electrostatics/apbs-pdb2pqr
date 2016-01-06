@@ -36,7 +36,7 @@ before_script:
     - cd apbs
     - mkdir travis
     - cd travis
-    - cmake -DBUILD_DOC=OFF -DENABLE_FETK=$FETK ..
+    - cmake -DENABLE_GEOFLOW=ON -DBUILD_DOC=OFF -DENABLE_FETK=$FETK ..
 
 script:
     - make VERBOSE=1
