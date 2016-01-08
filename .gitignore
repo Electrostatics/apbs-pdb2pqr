@@ -1,5 +1,6 @@
 .DS_Store
 io.mc
+*~
 *.pyc
 *.pyd
 *.komodoproject
