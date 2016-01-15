@@ -1,6 +1,18 @@
 apbs-pdb2pqr
 ============
 
-This is the home for the [APBS and PDB2PQR software](http://www.poissonboltzmann.org) source repository.  Binary downloads can be found on [SourceForge](https://sourceforge.net/projects/apbs/). 
+Welcome to the home for the [APBS and PDB2PQR software](http://www.poissonboltzmann.org)!.  
 
-APBS specific details are available by browsing to the [apbs subdirectory](https://github.com/Electrostatics/apbs-pdb2pqr/tree/master/apbs).
+Binary releases can be found here:
+* [GitHub](https://github.com/Electrostatics/apbs-pdb2pqr/releases)
+* [SourceForge](https://sourceforge.net/projects/apbs/). 
+
+Souce code build instructions are here:
+* [APBS](https://github.com/Electrostatics/apbs-pdb2pqr/blob/master/apbs/README.md).
+* [pdb2pqr](https://github.com/Electrostatics/apbs-pdb2pqr/blob/master/pdb2pqr/README.md)
+
+Support:
+* [Mailing lists](http://www.poissonboltzmann.org/support/home/)
+* [chat](https://gitter.im/Electrostatics/help)
+
+
