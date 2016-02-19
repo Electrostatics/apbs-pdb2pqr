@@ -12,4 +12,4 @@ codePath = os.getcwd()
 pythonBin = sys.executable
 
 buildTime = datetime.today()
-productVersion = 'master'
+productVersion = '2.1.1'
