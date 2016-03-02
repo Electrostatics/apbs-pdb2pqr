@@ -9,7 +9,7 @@ testList = []
 
 #PDB2PKA Test
 
-for residue in ('1a1p', '1etm', '1p9i', '1yzm', '2gus', '2m0w', '4g3o'):
+for residue in ('1a1p', '1etm', '1yzm', '2gus', '2m0w', '4g3o'):
 
     runTest = env.Command([residue+'/pdb2pka-output-user', residue+'/test-output-user.pqr'], residue+'/'+residue+'.pdb',
 	                      commandLineStart + ' --with-ph=7.00 --ph-calc-method=pdb2pka --pdb2pka-out=${TARGETS[0]} --ff=PARSE $SOURCE ${TARGETS[1]}')
