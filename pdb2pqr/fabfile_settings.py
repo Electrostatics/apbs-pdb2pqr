@@ -1,13 +1,12 @@
 
 #Host address of OSX machine to build on.
-#osx_host = 'osx.host'
+#osx_host = 'PT24098'
 
 #Host address of Linux machine to build on.
-#linux_host = 'linux.host'
+#linux_host = 'juan@localhost:2222'
 
 #Run tests after build.
 #run_tests=True
-
 
 #The remaining setting are for running "install_on_deployed"
 #APBS install location (Same as the APBS build setting)

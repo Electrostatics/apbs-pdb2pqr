@@ -107,7 +107,7 @@ def merge_curves(curve1, curve2):
 
 def CompareTitCurvesAction(outputFileName, testDirName, correctDirName):
     results = []
-    EPSILON = 0.01
+    EPSILON = 0.025
 
     test_data = get_curve_data(testDirName)
     correct_data = get_curve_data(correctDirName)
