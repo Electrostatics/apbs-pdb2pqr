@@ -1,23 +1,13 @@
 # These are notes for the current version of PDB2PQR
-
 Please see http://www.poissonboltzmann.org/pdb2pqr/release-history for the complete release history
 
-
 ## NEW FEATURES
-* Added alternate method to do visualization using 3dmol.
 * Replaced the Monte Carlo method for generating titration curves with graph cut. See http://arxiv.org/abs/1507.07021
-* Added compile options to allow for arbitrary flags to be added. Helps work around some platforms where scons does not detect the needed settings correctly.
 
 ## BUG FIXES
-* Fixed broken links on APBS submission page.
-* Added some missing files to querystaus page results.
-* Fixed some pages to use the proper CSS file.
-* Better error message for --assign-only and HIS residues.
-* Fix PROPKA crash for unrecognized residue.
-* Debumping routines are now more consistent across platforms. This fixes pdb2pka not giving the same results on different platforms.
+* Added a check before calculating pKa's for large interactions energies.
 
 ## CHANGES
-* Added fabric script used to build and test releases.
 * The networkx library is now required for pdb2pka.
 
 ## KNOWN BUGS

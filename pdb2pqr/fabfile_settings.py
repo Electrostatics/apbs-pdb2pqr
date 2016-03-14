@@ -1,22 +1,23 @@
 
 #Host address of OSX machine to build on.
-#osx_host = 'PT24098'
+#osx_host = 'osx.host'
 
 #Host address of Linux machine to build on.
-#linux_host = 'juan@localhost:2222'
+#linux_host = 'linux.host'
 
 #Run tests after build.
 #run_tests=True
 
+
 #The remaining setting are for running "install_on_deployed"
 #APBS install location (Same as the APBS build setting)
-#APBS='/Users/name/bin/apbs'
+#APBS='/Users/bran780/Programs/apbs-pdb2pqr/apbs/MasterBuild/bin/apbs'
 
 #URL (Same as the URL build setting)
 #URL='http://host/pdb2pqr'
 
 #Prefix (Same as the PREFIX build setting)
-#PREFIX='/Users/name/pdb2pqr/'
+#PREFIX='/Users/bran780/Programs/Deploy/pdb2pqr/'
 
 #OPAL URL, if any. (Same as the OPAL build setting)
 #OPAL='http://nbcr-222.ucsd.edu/opal2/services/pdb2pqr_2.0.0'
