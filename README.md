@@ -8,11 +8,11 @@ Binary releases can be found here:
 * [SourceForge](https://sourceforge.net/projects/apbs/). 
 
 Souce code build instructions are here:
-* [APBS](https://github.com/Electrostatics/apbs-pdb2pqr/blob/master/apbs/README.md).
-* [pdb2pqr](https://github.com/Electrostatics/apbs-pdb2pqr/blob/master/pdb2pqr/README.md)
+* [APBS](https://github.com/Electrostatics/apbs-pdb2pqr/blob/master/apbs/README.md)
+* [PDB2PQR](https://github.com/Electrostatics/apbs-pdb2pqr/blob/master/pdb2pqr/README.md)
 
 Support:
 * [Mailing lists](http://www.poissonboltzmann.org/support/home/)
-* [chat](https://gitter.im/Electrostatics/help)
+* [Chat](https://gitter.im/Electrostatics/help)
 
 
