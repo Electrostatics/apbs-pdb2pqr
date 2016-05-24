@@ -19,6 +19,8 @@ CMakeCache.txt
 *.sln
 *.suo
 pdb2pqr/build/**
+apbs/build/**
+apbs/externals/**
 pdb2pqr/dist/**
 include/maloc
 lib/
