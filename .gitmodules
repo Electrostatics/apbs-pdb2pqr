@@ -1,6 +1,3 @@
-[submodule "apbs/externals/pb_s_am"]
-	path = apbs/externals/pb_s_am
-	url = https://github.com/davas301/pb_solvers.git
 [submodule "apbs/externals/geoflow_c"]
 	path = apbs/externals/geoflow_c
 	url = https://github.com/Electrostatics/geoflow_c
