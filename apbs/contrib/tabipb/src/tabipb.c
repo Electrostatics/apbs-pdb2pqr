@@ -8,15 +8,15 @@
 
 int apbs2tabipb_(char** apbs_pqr_filename, int* nion, double* ionc,
                 double* ionq, double* ionr, double* pdie,
-                double* sdie, double* sdens, double* temp,
+                double* sdie, double* sdens, double* temp, double* srad,
                 int* tree_order, int* tree_n0, double* mac){
 
   /* variables local to main */
   int i,j,k;
   double s[3],pot=0.0,sum=0.0,pot_temp=0.0;
   double ptl,soleng,t1,t2;
-  char fname[5],density[16],fnamepqr[16];
-  extern void readin(char *fname, char *density);
+  char fname[5],density[16],fnamepqr[16],probe_radius[16];
+  extern void readin();
   extern double potential_molecule(double s[3]);
   extern int comp_source();
   extern int output_potential();
@@ -52,12 +52,14 @@ int apbs2tabipb_(char** apbs_pqr_filename, int* nion, double* ionc,
   fname[4]='\0';
 
   sprintf(density,"%f",*sdens);
+  sprintf(probe_radius,"%f",*srad);
 
   epsp=*pdie;
   epsw=*sdie;
   bulk_strength=0.0;
-  for (i=0;i<*nion;i++)
+  for (i=0;i<*nion;i++){
     bulk_strength+=ionc[i]*ionq[i]*ionq[i];
+  }
   order=*tree_order;
   maxparnode=*tree_n0;
   theta=*mac;
@@ -74,7 +76,7 @@ int apbs2tabipb_(char** apbs_pqr_filename, int* nion, double* ionc,
   kappa2=bulk_coef*bulk_strength/epsw;
   kappa=sqrt(kappa2);
 
-  readin(fname,density);
+  readin(fname,density,probe_radius);
 
   comp_source();
   /* tr_xyz=[x[i],y[i],z[i]] */

@@ -24,7 +24,7 @@ double triangle_area(double v[3][3])
 }
 
 /* function read in molecule information */
-int readin(char fname[16], char density[16])
+int readin(char fname[16], char density[16], char probe_radius[16])
 {
   FILE *fp,*wfp;
   char c,c1[10],c2[10],c3[10],c4[10],c5[10];
@@ -60,8 +60,8 @@ int readin(char fname[16], char density[16])
   fclose(wfp);
 
   /* Run msms */
-  sprintf(fname_tp,"msms -if %s%s.xyzr -prob 1.4 -dens %s -of %s%s ",
-          fpath,fname,density,fpath,fname);
+  sprintf(fname_tp,"msms -if %s%s.xyzr -prob %s -dens %s -of %s%s ",
+          fpath,fname,probe_radius,density,fpath,fname);
   printf("%s\n",fname_tp);
   ierr=system(fname_tp);
 
