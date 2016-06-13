@@ -1,5 +1,8 @@
 /*constant variables */
 
+double pi,one_over_4pi,bulk_coef,units_coef,epsw,epsp,eps,
+       bulk_strength,kappa2,kappa;
+
 /*#define pi 3.14159265358979324;
 #define one_over_4pi 0.079577471545948; //Note: Stupid putting f
 
