@@ -4960,7 +4960,7 @@ VPUBLIC void killBEM(NOsh *nosh, Vpbe *pbe[NOSH_MAXCALC]
 }
 
 
-void apbs2tabipb_(char**, int*, double*,double* , double*, double*, double*, double*, double*, int*, int*, double*);
+void apbs2tabipb_(char**, int*, double*,double* , double*, double*, double*, double*, double*, double*, int*, int*, double*);
 
 VPUBLIC int solveBEM(NOsh *nosh, PBEparm *pbeparm, BEMparm *bemparm,
                     BEMparm_CalcType type
@@ -4987,6 +4987,7 @@ VPUBLIC int solveBEM(NOsh *nosh, PBEparm *pbeparm, BEMparm *bemparm,
                  (double*)&(pbeparm->sdie),
                  (double*)&(pbeparm->sdens),
                  (double*)&(pbeparm->temp),
+                 (double*)&(pbeparm->srad),
                  &(bemparm->tree_order),
                  &(bemparm->tree_n0),
                  (double*)&(bemparm->mac)
@@ -5093,10 +5094,10 @@ VPUBLIC int writematBEM(int rank, NOsh *nosh, PBEparm *pbeparm) {
 /**
  * Initialize a geometric flow calculation.
  */
-VPUBLIC int solveGeometricFlow( Valist* molecules[NOSH_MAXMOL], 
-                                NOsh *nosh, 
-                                PBEparm *pbeparm, 
-                                APOLparm *apolparm, 
+VPUBLIC int solveGeometricFlow( Valist* molecules[NOSH_MAXMOL],
+                                NOsh *nosh,
+                                PBEparm *pbeparm,
+                                APOLparm *apolparm,
                                 GEOFLOWparm *parm )
 {
    //printf("solveGeometricFlow!!!\n");
@@ -5113,7 +5114,7 @@ VPUBLIC int solveGeometricFlow( Valist* molecules[NOSH_MAXMOL],
    geoflowIn.m_grid[0] = apolparm->grid[0];
    geoflowIn.m_grid[1] = apolparm->grid[1];
    geoflowIn.m_grid[2] = apolparm->grid[2];
-   geoflowIn.m_gamma =  apolparm->gamma; 
+   geoflowIn.m_gamma =  apolparm->gamma;
    geoflowIn.m_pdie = pbeparm->pdie ;
    geoflowIn.m_sdie = pbeparm->sdie ;
    geoflowIn.m_press = apolparm->press ;
@@ -5124,9 +5125,9 @@ VPUBLIC int solveGeometricFlow( Valist* molecules[NOSH_MAXMOL],
 
    // debug
    //printGeometricFlowStruct( geoflowIn );
-  
+
    //printf("num mols: %i\n", nosh->nmol);
-   struct GeometricFlowOutput geoflowOut = 
+   struct GeometricFlowOutput geoflowOut =
       runGeometricFlowWrapAPBS( geoflowIn, molecules[0] );
 
    Vnm_tprint( 1,"  Global net energy = %1.12E\n", geoflowOut.m_totalSolvation);
