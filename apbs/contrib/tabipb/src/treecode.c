@@ -1198,6 +1198,7 @@ int treecode_finalization(){
 /***********clean tree structure**********/
 
   remove_node(troot);
+  free(troot);
   printf("Clean up the tree structure\n");
 
 /***********variables in setup************/
