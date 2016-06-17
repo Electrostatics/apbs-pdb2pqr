@@ -7,3 +7,6 @@
 [submodule "apbs/externals/TABIPB"]
 	path = apbs/externals/TABIPB
 	url = git@github.com:lwwilson1/TABIPB.git
+[submodule "apbs/externals/mesh_routines"]
+	path = apbs/externals/mesh_routines
+	url = git@github.com:lwwilson1/mesh_routines.git
