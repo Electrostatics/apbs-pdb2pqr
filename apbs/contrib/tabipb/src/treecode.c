@@ -187,7 +187,7 @@ int treecode_initialization(int main_order,int main_maxparnode,double main_theta
 /* and setup global variables. Also, copy variables into global copy arrays. */
   setup(x,y,z,q,numpars,order,iflag,xyzminmax);
 
-  troot = (tnode*)malloc(1*sizeof(tnode));
+  troot = (tnode*)calloc(1,sizeof(tnode));
   printf("Creating tree for %d particles with max %d per node\n",numpars,maxparnode);
 
   create_tree(troot,0,numpars-1,xyzminmax,level);
@@ -441,8 +441,8 @@ int create_tree(tnode* p,int ibeg,int iend,double xyzmm[6],int level){
   if (maxlevel < level) maxlevel=level;
   p->num_children = 0;
 /* old version */  /* struct tnode* child[8] */
-  p->child=(tnode**)malloc(8*sizeof(tnode*));
-  for (i=0;i<8;i++) p->child[i]=(tnode*)malloc(1*sizeof(tnode));
+  p->child=(tnode**)calloc(8,sizeof(tnode*));
+  for (i=0;i<8;i++) p->child[i]=(tnode*)calloc(1,sizeof(tnode));
 
   if (p->numpar > maxparnode){
 /* set IND array to 0 and then call PARTITION routine. IND array holds indices
