@@ -4,6 +4,12 @@
 [submodule "apbs/externals/fetk"]
 	path = apbs/externals/fetk
 	url = https://github.com/Electrostatics/FETK.git
+[submodule "apbs/externals/TABIPB"]
+	path = apbs/externals/TABIPB
+	url = https://github.com/lwwilson1/TABIPB.git
+[submodule "apbs/externals/mesh_routines"]
+	path = apbs/externals/mesh_routines
+	url = https://github.com/lwwilson1/mesh_routines.git
 [submodule "apbs/externals/pb_s_am"]
 	path = apbs/externals/pb_s_am
 	url = https://github.com/davas301/pb_solvers
