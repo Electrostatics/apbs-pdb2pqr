@@ -16,7 +16,7 @@ Support:
 * [Chat](https://gitter.im/Electrostatics/help)
 
 Contributing Software:
-* PB-AM
-* PB-SAM
-* TABI
+* [PB-AM](https://github.com/davas301/pb_solvers)
+* [PB-SAM](https://github.com/davas301/pb_solvers)
+* [TABI](https://github.com/lwwilson1/TABIPB)
 
