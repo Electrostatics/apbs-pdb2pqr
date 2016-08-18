@@ -50,3 +50,4 @@ pdb2pqr/site_scons/defaults.py
 pdb2pqr/msvs
 .ipynb_checkpoints
 
+*.bin
