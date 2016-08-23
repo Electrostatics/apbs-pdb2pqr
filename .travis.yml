@@ -13,7 +13,8 @@ sudo: false
 env:
     - FETK=ON   TEST_SUITE=fem
 
-    - FETK=OFF  TEST_SUITE=actin-dimer
+    - FETK=OFF  TEST_SUITE=actin-dimer-auto
+    - FETK=OFF  TEST_SUITE=actin-dimer-parallel
     - FETK=OFF  TEST_SUITE=alkanes
     - FETK=OFF  TEST_SUITE=born
     - FETK=OFF  TEST_SUITE=FKBP
