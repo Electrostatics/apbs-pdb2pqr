@@ -1,7 +1,7 @@
 apbs-pdb2pqr
 ============
 
-Welcome to the home for the [APBS and PDB2PQR software](http://www.poissonboltzmann.org)!
+Welcome to the home for the APBS and PDB2PQR software!  Please visit our home page for more information: [www.poissonboltzmann.org](http://www.poissonboltzmann.org).
 
 Binary releases can be found here:
 * [GitHub](https://github.com/Electrostatics/apbs-pdb2pqr/releases)
