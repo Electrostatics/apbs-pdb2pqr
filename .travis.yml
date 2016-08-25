@@ -12,7 +12,7 @@ sudo: required
 dist: trusty
 
 env:
-    - FETK=ON   TEST_SUITE=fem
+    - FETK=ON   TEST_SUITE=born
 
     - FETK=OFF  TEST_SUITE=actin-dimer-auto
     - FETK=OFF  TEST_SUITE=actin-dimer-parallel
