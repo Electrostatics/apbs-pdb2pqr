@@ -1,0 +1,330 @@
+\begin{thebibliography}{10}
+
+\bibitem{Holst2000}
+M~Holst, N~Baker, and F~Wang.
+\newblock Adaptive multilevel finite element solution of the
+  {Poisson-Boltzmann} equation {I.} algorithms and examples.
+\newblock {\em J. Comput. Chem.}, 21(15):1319--1342, November 2000.
+
+\bibitem{Baker2000}
+N~Baker, M~Holst, and F~Wang.
+\newblock Adaptive multilevel finite element solution of the
+  {Poisson-Boltzmann} equation {II.} refinement at solvent-accessible surfaces
+  in biomolecular systems.
+\newblock {\em J. Comput. Chem.}, 21(15):1343--1352, November 2000.
+
+\bibitem{Baker2001}
+N~A Baker, D.~Sept, M~J Holst, and J~A McCammon.
+\newblock The adaptive multilevel finite element solution of the
+  {Poisson-Boltzmann} equation on massively parallel computers.
+\newblock {\em IBM J. Res. Dev.}, 45(3-4):427--438, May-Jul 2001.
+
+\bibitem{APBSweb}
+{APBS} website.
+
+\bibitem{Davis1990}
+M.~E. Davis and J~A McCammon.
+\newblock Electrostatics in biomolecular structure and dynamics.
+\newblock {\em Chemical Reviews}, 90(3):509--521, 1990.
+
+\bibitem{Perutz1978}
+M~F Perutz.
+\newblock Electrostatic effects in proteins.
+\newblock {\em Science}, 201(4362):1187--91, Sep 1978.
+
+\bibitem{Ren2012}
+P~Ren, J~Chun, D~G Thomas, M~J Schnieders, M~Marucho, J~Zhang, and N~A Baker.
+\newblock Biomolecular electrostatics and solvation: a computational
+  perspective.
+\newblock {\em Q Rev Biophys}, 45(4):427--91, Nov 2012.
+
+\bibitem{Sharp1990}
+K~A Sharp and B~Honig.
+\newblock Electrostatic interactions in macromolecules: theory and
+  applications.
+\newblock {\em Annu Rev Biophys Biophys Chem}, 19:301--32, 1990.
+
+\bibitem{Roux1999}
+B~Roux and T~Simonson.
+\newblock Implicit solvent models.
+\newblock {\em Biophys Chem}, 78(1-2):1--20, Apr 1999.
+
+\bibitem{Warshel2006}
+A~Warshel, P~K Sharma, M~Kato, and W~W Parson.
+\newblock Modeling electrostatic effects in proteins.
+\newblock {\em Biochim Biophys Acta}, 1764(11):1647--76, Nov 2006.
+
+\bibitem{Fixman1979}
+M~Fixman.
+\newblock The {Poisson-Boltzmann} equation and its application to
+  polyelectrolytes.
+\newblock {\em J. Chem. Phys.}, 70:4995--5005, 1979.
+
+\bibitem{Grochowski2008}
+P~Grochowski and J~Trylska.
+\newblock Continuum molecular electrostatics, salt effects, and counterion
+  binding--a review of the {Poisson-Boltzmann} theory and its modifications.
+\newblock {\em Biopolymers}, 89(2):93--113, 2008.
+
+\bibitem{Lamm2003}
+G~Lamm, K~B Lipkowitz, R~Larter, T~R Cundari, and D~B Boyd.
+\newblock The {Poisson-Boltzmann} equation.
+\newblock {\em Rev. Comput. Chem.}, 19:147--365, 2003.
+
+\bibitem{Netz2000}
+R.~R. Netz and H.~Orland.
+\newblock Beyond {Poisson-Boltzmann}: Fluctuation effects and correlation
+  functions.
+\newblock {\em Eur. Phys. J. E}, 1(2-3):203--214, Feb-Mar 2000.
+
+\bibitem{Brooks2009}
+B~R Brooks, C~L Brooks, 3rd, A~D Mackerell, Jr, L~Nilsson, R~J Petrella,
+  B~Roux, Y~Won, G~Archontis, C~Bartels, S~Boresch, A~Caflisch, L~Caves, Q~Cui,
+  A~R Dinner, M~Feig, S~Fischer, J~Gao, M~Hodoscek, W~Im, K~Kuczera,
+  T~Lazaridis, J~Ma, V~Ovchinnikov, E~Paci, R~W Pastor, C~B Post, J~Z Pu,
+  M~Schaefer, B~Tidor, R~M Venable, H~L Woodcock, X~Wu, W~Yang, D~M York, and
+  M~Karplus.
+\newblock Charmm: the biomolecular simulation program.
+\newblock {\em J Comput Chem}, 30(10):1545--614, Jul 2009.
+
+\bibitem{Case2005}
+D~A Case, T~E Cheatham, 3rd, T~Darden, H~Gohlke, R~Luo, K~M Merz, Jr,
+  A~Onufriev, C~Simmerling, B~Wang, and R~J Woods.
+\newblock The {AMBER} biomolecular simulation programs.
+\newblock {\em J Comput Chem}, 26(16):1668--88, Dec 2005.
+
+\bibitem{Sarkar2013}
+S~Sarkar, S~Witham, J~Zhang, M~Zhenirovskyy, W~Rocchia, and E~Alexov.
+\newblock Delphi web server: A comprehensive online suite for electrostatic
+  calculations of biological macromolecules and their complexes.
+\newblock {\em Comm. Comp. Phys.}, 13(1):269--284, 2013.
+
+\bibitem{Bochevarov2013}
+AD~Bochevarov, E~Harder, TF~Hughes, JR~Greenwood, DA~Braden, DM~Philipp,
+  D~Rinaldo, MD~Halls, J~Zhang, and RA~Friesner.
+\newblock Jaguar: A high-performance quantum chemistry software program with
+  strengths in life and materials sciences.
+\newblock {\em International J. of Quantum Chem.}, 113(18):2110--2142, 2013.
+
+\bibitem{Grant2001}
+JA~Grant, BT~Pickup, and A~Nicholls.
+\newblock A smooth permittivity function for poisson-boltzmann solvation
+  methods.
+\newblock {\em J. Comp. Chem.}, 22:608--640, 2001.
+
+\bibitem{Chen2011}
+Z~Chen, N~A Baker, and G~W Wei.
+\newblock Differential geometry based solvation model {II}: {Lagrangian}
+  formulation.
+\newblock {\em J Math Biol}, 63(6):1139--200, Dec 2011.
+
+\bibitem{Konecny2012}
+R~Konecny, N~A Baker, and J~A McCammon.
+\newblock {i{APBS}}: a programming interface to adaptive {Poisson-Boltzmann}
+  solver ({APBS}).
+\newblock {\em Comput Sci Discov}, 5(1), Jul 2012.
+
+\bibitem{iAPBSweb}
+{iAPBS} website.
+
+\bibitem{Dolinsky2004}
+Todd~J Dolinsky, Jens~E Nielsen, J~Andrew McCammon, and Nathan~A Baker.
+\newblock Pdb2pqr: an automated pipeline for the setup of poisson--boltzmann
+  electrostatics calculations.
+\newblock {\em Nucleic Acids Res.}, 32(suppl 2):W665--W667, 2004.
+
+\bibitem{Dolinsky2007}
+T~J Dolinsky, P~Czodrowski, Hui Li, J~E Nielsen, Jan~H Jen, G~Klebe, and N~A
+  Baker.
+\newblock {PDB2PQR}: expanding and upgrading automated preparation of
+  biomolecular structures for molecular simulations.
+\newblock {\em Nucleic Acids Res}, 35:W522--5, Jul 2007.
+
+\bibitem{Sondergaard2011}
+Chresten~R. Sondergaard, Mats~HM Olsson, Michal Rostkowski, and Jan~H. Jensen.
+\newblock Improved treatment of ligands and coupling effects in empirical
+  calculation and rationalization of pka values.
+\newblock {\em J. Chem. Theory Comp.}, 7(7):2284--2295, 2011.
+
+\bibitem{Li2005}
+H.~Li, A.~D. Robertson, and J.~H. Jensen.
+\newblock Very fast empirical prediction and rationalization of protein pka
+  values.
+\newblock {\em Proteins}, 61:704�721, 2005.
+
+\bibitem{Purvine2016}
+Emilie Purvine, Kyle Monson, Elizabeth Jurrus, Keith Starr, and Nathan~A.
+  Baker.
+\newblock Energy minimization of discrete protein titration state models using
+  graph theory.
+\newblock {\em J. Phys. Chem.}, 120:8354--8360, 2016.
+
+\bibitem{Nielsen2001}
+J~E Nielsen and G~Vriend.
+\newblock Optimizing the hydrogen-bond network in {Poisson-Boltzmann}
+  equation-based {p$K_a$} calculations.
+\newblock {\em Proteins}, 43(4):403--12, Jun 2001.
+
+\bibitem{Czodrowski2006}
+Paul Czodrowski, Ingo Dramburg, Christoph~A. Sotriffer, and Gerhard Klebe.
+\newblock Development, validation, and application of adapted {PEOE} charges to
+  estimate {p$K_a$} values of functional groups in protein-ligand complexes.
+\newblock {\em Proteins}, 65(2):424--437, November 2006.
+
+\bibitem{Swanson2005a}
+J~M~J Swanson, S~A Adcock, and J~A McCammon.
+\newblock Optimized radii for {Poisson-Boltzmann} calculations with the {AMBER}
+  force field.
+\newblock {\em J Chem Theory Comput}, 1(3):484--93, May 2005.
+
+\bibitem{Tan2006}
+Chunhu Tan, Lijiang Yang, and Ray Luo.
+\newblock How well does poisson−boltzmann implicit solvent agree with
+  explicit solvent? a quantitative analysis.
+\newblock {\em J. Phys. Chem. B}, 110(37):18680--18687, September 2006.
+
+\bibitem{Thomas2013}
+D~G Thomas, S~Gaheen, S~L Harper, M~Fritts, F~Klaessig, E~Hahn-Dantona, D~Paik,
+  S~Pan, G~A Stafford, E~T Freund, J~D Klemm, and N~A Baker.
+\newblock {ISA-TAB-Nano}: a specification for sharing nanomaterial research
+  data in spreadsheet-based format.
+\newblock {\em BMC Biotechnol}, 13:2, 2013.
+
+\bibitem{Geng2013}
+Weihua Geng and Robert Krasny.
+\newblock A treecode-accelerated boundary integral poisson-boltzmann solver for
+  electrostatics of solvated biomolecules.
+\newblock {\em J. Comp. Phys.}, 247:62--78, 2013.
+
+\bibitem{Sanner1995}
+Michel Sanner, Arthur Olson, and Jean~Claude Spehner.
+\newblock Fast and robust computation of molecular surfaces.
+\newblock In {\em Proc 11th ACM Symp Comp Geom}, pages C6--C7. ACM, 1995.
+
+\bibitem{Decherchi2013}
+Sergio Decherchi and Walter Rocchia.
+\newblock A general and robust ray-casting-based algorithm for triangulating
+  surfaces at the nanoscale.
+\newblock {\em PLoS ONE}, 8(4):e59744, 2013.
+
+\bibitem{Saad1986}
+Y.~Saad and M.~Schultz.
+\newblock Gmres: A generalized minimal residual algorithm for solving
+  nonsymmetric linear systems.
+\newblock {\em J. Sci. Statist. Comput.}, 7:856--869, 1986.
+
+\bibitem{Li2009}
+Peijun Li, Hans Johnston, and Robert Krasney.
+\newblock A cartesian treecode for screened coulomb interactions.
+\newblock {\em J. Comp. Phys.}, 228:3858--3868, 2009.
+
+\bibitem{Juffer1991}
+Andr\'{e} Juffer, Eugen Botta, Bert van Keulen, Auke van~der Ploeg, and Herman
+  Berendsen.
+\newblock The electric potential of a macromolecule in a solvent: A fundamental
+  approach.
+\newblock {\em J. Comp. Phys.}, 97(1):144--171, 1991.
+
+\bibitem{Lotan2006}
+Itay Lotan and Teresa Head-Gordon.
+\newblock An analytical electrostatic model for salt screened interactions
+  between multiple proteins.
+\newblock {\em J. Chem. Theory and Comp.}, 2(3):541--555, 2006.
+\newblock PMID: 26626662.
+
+\bibitem{Humphrey1996}
+W~Humphrey, A~Dalke, and K~Schulten.
+\newblock {VMD}: visual molecular dynamics.
+\newblock {\em J Mol Graph}, 14(1):33--8, 27--8, Feb 1996.
+
+\bibitem{Yap2010}
+E-H Yap and T~Head-Gordon.
+\newblock New and efficient {Poisson-Boltzmann} solver for interaction of
+  multiple proteins.
+\newblock {\em J. Chem. Theory Comput.}, 6(7):2214--2224, July 2010.
+
+\bibitem{Ermak1978}
+Donald Ermak and J.~A. McCammon.
+\newblock Brownian dynamics with hydrodynamic interactions.
+\newblock {\em J. Chem. Phys.}, 69(4):1352--1360, 1978.
+
+\bibitem{Pettersen2004}
+E~F Pettersen, T~D Goddard, C~C Huang, G~S Couch, D~M Greenblatt, E~C Meng, and
+  T~E Ferrin.
+\newblock Ucsf chimera--a visualization system for exploratory research and
+  analysis.
+\newblock {\em J Comput Chem}, 25(13):1605--12, Oct 2004.
+
+\bibitem{Herraez2006}
+Angel Herraez.
+\newblock Biomolecules in the computer: Jmol to the rescue.
+\newblock {\em Biochemistry and Molecular Biology Education}, 34(4):255--261,
+  2006.
+
+\bibitem{Rego2015}
+Nicholas Rego and David Koes.
+\newblock 3dmol. js: molecular visualization with webgl.
+\newblock {\em Bioinformatics}, 31(8):1322--1324, 2015.
+
+\bibitem{Dror2013}
+RO~Dror, HF~Green, C~Valant, DW~Borhani, JR~Valcourt, AC~Pan, DH~Arlow,
+  M~Canals, JR~Lane, R~Rahmani, JB~Baell, PM~Sexton, A~Christopoulos, and
+  DE~Shaw.
+\newblock Structural basis for modulation of a g-protein-coupled receptor by
+  allosteric drugs.
+\newblock {\em Nature}, 503(7475):295--299, 2013.
+
+\bibitem{Treuel2013}
+L~Treuel, S~Brandholt, P~Maffre, S~Wiegele, L~Shang, and GU~Nienhaus.
+\newblock Impact of protein modification on the protein corona on nanoparticles
+  and nanoparticle�cell interactions.
+\newblock {\em ACS Nano}, 8(1):503--513, 2013.
+
+\bibitem{Lipfert2014}
+J~Lipfert, Sebastian Doniach, R~Das, and D~Herschlag.
+\newblock Understanding nucleic acid-ion interactions.
+\newblock {\em Annu Rev Biochem}, 83:813--41, 2014.
+
+\bibitem{Roberts2013}
+V~A Roberts, E~E Thompson, M~E Pique, M~S Perez, and L~F Ten~Eyck.
+\newblock {DOT2}: Macromolecular docking with improved biophysical models.
+\newblock {\em J Comput Chem}, 34(20):1743--58, Jul 2013.
+
+\bibitem{Spiga2013}
+E~Spiga, D~Alemani, M~T. Degiacomi, M~Cascella, and M~Dal~Peraro.
+\newblock Electrostatic-consistent coarse-grained potentials for molecular
+  simulations of proteins.
+\newblock {\em J. Chem. Theory Comput.}, 9(8):3515--3526, August 2013.
+
+\bibitem{Stansfeld2015}
+Phillip~J Stansfeld, Joseph~E Goose, M~Caffrey, Elisabeth~P Carpenter, Joanne~L
+  Parker, S~Newstead, and Mark~SP Sansom.
+\newblock Memprotmd: Automated insertion of membrane protein structures into
+  explicit lipid membranes.
+\newblock {\em Structure}, 23(7):1350--1361, 2015.
+
+\bibitem{richter2008}
+S~Richter, A~Wenzel, M~Stein, R~R Gabdoulline, and R~C Wade.
+\newblock {webPIPSA}: a web server for the comparison of protein interaction
+  properties.
+\newblock {\em Nucleic Acids Res}, 36(Web Server issue):W276--80, Jul 2008.
+
+\bibitem{martinez2015}
+Michael Martinez, Neil~J Bruce, Julia Romanowska, Daria~B Kokh, Musa Ozboyaci,
+  Xiaofeng Yu, Mehmet~Ali {\"O}zt{\"u}rk, Stefan Richter, and Rebecca~C Wade.
+\newblock Sda 7: A modular and parallel implementation of the simulation of
+  diffusional association software.
+\newblock {\em J Comput Chem}, 36(21):1631--45, Aug 2015.
+
+\bibitem{holst2001}
+Michael Holst.
+\newblock Adaptive numerical treatment of elliptic systems on manifolds.
+\newblock {\em J. Comp. Math.}, 15:139--191, 2001.
+
+\bibitem{chen2010}
+Z~Chen, N~A Baker, and G~W Wei.
+\newblock Differential geometry based solvation model {I}: {Eulerian}
+  formulation.
+\newblock {\em J Comput Phys}, 229(22):8231--8258, Nov 2010.
+
+\end{thebibliography}
