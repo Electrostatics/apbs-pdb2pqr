@@ -303,20 +303,38 @@ Phillip~J Stansfeld, Joseph~E Goose, M~Caffrey, Elisabeth~P Carpenter, Joanne~L
   explicit lipid membranes.
 \newblock {\em Structure}, 23(7):1350--1361, 2015.
 
-\bibitem{richter2008}
+\bibitem{Richter2008}
 S~Richter, A~Wenzel, M~Stein, R~R Gabdoulline, and R~C Wade.
 \newblock {webPIPSA}: a web server for the comparison of protein interaction
   properties.
 \newblock {\em Nucleic Acids Res}, 36(Web Server issue):W276--80, Jul 2008.
 
-\bibitem{martinez2015}
+\bibitem{Martinez2015}
 Michael Martinez, Neil~J Bruce, Julia Romanowska, Daria~B Kokh, Musa Ozboyaci,
   Xiaofeng Yu, Mehmet~Ali {\"O}zt{\"u}rk, Stefan Richter, and Rebecca~C Wade.
 \newblock Sda 7: A modular and parallel implementation of the simulation of
   diffusional association software.
 \newblock {\em J Comput Chem}, 36(21):1631--45, Aug 2015.
 
-\bibitem{holst2001}
+\bibitem{Song2004a}
+Y~Song, Y~Zhang, CL~Bajaj, and NA~Baker.
+\newblock Continuum diffusion reaction rate calculations of wild-type and
+  mutant mouse acetylcholinesterase: adaptive finite element analysis.
+\newblock {\em Biophysical Journal}, 87(3):1558--1566, 2004.
+
+\bibitem{Elcock2004}
+A~H Elcock.
+\newblock Molecular simulations of diffusion and association in
+  multimacromolecular systems.
+\newblock {\em Methods Enzymol}, 383:166--98, 2004.
+
+\bibitem{Mereghetti2012}
+P~Mereghetti and RC~Wade.
+\newblock Atomic detail brownian dynamics simulations of concentrated protein
+  solutions with a mean field treatment of hydrodynamic interactions.
+\newblock {\em J. Phy. Chem.}, 116(29):8523--8533, 2012.
+
+\bibitem{Holst2001}
 Michael Holst.
 \newblock Adaptive numerical treatment of elliptic systems on manifolds.
 \newblock {\em J. Comp. Math.}, 15:139--191, 2001.

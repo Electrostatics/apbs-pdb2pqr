@@ -43,7 +43,7 @@
 \author[\UCBaffil]{Lisa~E.~Felberg}
 \author[\UCBaffil]{David~Brookes}
 \author[\UMaffil]{Leighton~Wilson}
-\author[\SMUaffil]{Jiahua~Chen}
+\author[\SMUaffil]{Jiahui~Chen}
 \author[\PNNLaffil]{Karina~Liles}
 \author[\PNNLaffil]{Minju~Chun}
 \author[\PNNLaffil]{Peter~Li}
@@ -79,11 +79,12 @@
 	The understanding of electrostatic interactions is essential for the study of biomolecular processes and impacts many chemical, biological, and biomedical applications.
 	APBS addresses three key technology challenges for understanding solvation and electrostatics in biomedical applications: accurate and efficient models for biomolecular solvation and electrostatics, robust and scalable software for applying those theories to biomolecular systems, and mechanisms for sharing and analyzing biomolecular electrostatics data in the scientific community.
 	To address new research applications and advancing computational capabilities, we have continually updated APBS and its suite of accompanying software since its release in 2001.
-	In this paper, we discuss the models and capabilities that have recently been implemented within the APBS software package including: a Poisson-Boltzmann analytical and a semi-analytical solver, an optimized boundary element solver, a geometry-based geometric flow solvation model, a graph theory based algorithm for determining $pK_a$ values, and an improved web-based visualization tool for viewing electrostatics.
+	In this paper, we discuss the models and capabilities that have recently been implemented within the APBS software package including: a Poisson-Boltzmann analytical and a semi-analytical solver, an optimized boundary element solver, a geometry-based geometric flow solvation model, a graph theory based algorithm for determining p$K_a$ values, and an improved web-based visualization tool for viewing electrostatics.
 \end{abstract}
 
 \section{Introduction}
-This manuscript provides an overview of the new capabilities in the APBS software and its associated tools since their release in 2001 \cite{Holst2000, Baker2000, Baker2001b, Baker2001}; more detailed documentation for these tools is available on the APBS website \cite{APBSweb}
+This manuscript provides an overview of the new capabilities in the APBS software and its associated tools since their release in 2001 \cite{Holst2000, Baker2000, Baker2001b, Baker2001}; more detailed documentation for these tools is available on the APBS website \cite{APBSweb}.
+\todo{Dave:  please make sure this is true!}
 The manuscript is not intended to be a review of solvation models; readers interested in this area should refer to several previous reviews \cite{Davis1990, Perutz1978, Ren2012, Sharp1990, Roux1999, Warshel2006}.
 Robust models of electrostatic interactions are important for understanding intermolecular interactions and the effects of solvation on biomolecular processes.
 Such models can be loosely grouped into two categories:  explicit and implicit.
@@ -313,27 +314,19 @@ Examples of 3Dmol visualization options are shown in Figure~\ref{fig:features}.
 \subsection{Other applications}
 Besides visualization and the processes described in Section~\ref{sec:workflow}, there are a number of other applications where APBS can be used.
 For example, during the past four years, the APBS-PDB2PQR software has been used in the post-simulation energetic analyses of molecular dynamics trajectories \cite{Dror2013}, understanding protein-nanoparticle interactions \cite{Treuel2013, Nienhaus2013, Depaoli2014}, understanding nucleic acid-ion interactions \cite{Lipfert2014, Giambasu2014}, biomolecular docking \cite{Roberts2013} and ligand binding \cite{Evangelidis2012}, developing new coarse-grained protein models \cite{Spiga2013}, setting up membrane protein simulations \cite{Stansfeld2015}, etc.
-APBS also plays a key role in  PIPSA for protein surface electrostatics analysis \cite{richter2008} and SDA for simulation of protein-protein interactions through Brownian dynamics \cite{martinez2015}.
+APBS also plays a key role in  PIPSA for protein surface electrostatics analysis \cite{Richter2008} and SDA for simulation of protein-protein interactions through Brownian dynamics \cite{Martinez2015}.
 As discussed above with PB-SAM, another application area for implicit solvent methods is in the evaluation of biomolecular kinetics where implicit solvent models are generally used to provide solvation forces (or energies) for performing (or analyzing) discrete molecular or continuum diffusion simulations with APBS in both of these areas \cite{Dror2013, Martinez2015, Chen2007, Song2004a, Song2004b, Elcock2004, Mereghetti2012}.
 
+\section{The future of APBS}
+To help with modularity and to facilitate extensibility, APBS was based on a object-oriented programming paradigm with strict ANSI-C compliance.
+This ``Clean OO C'' \cite{Holst2001} has enabled the long-term sustainability of APBS and by combining an object-oriented design framework with the portability and speed of C.
+This object-oriented design framework has made it relatively straightforward to extend APBS functionality and incorporate new features.
 
-
-\section{Extending APBS capabilities}
-\todo{STOPPED HERE}
-There are several challenges when working with large code bases. Careful planning must go into the design, especially if the program is to be extended. Ideally, one would like the ability to link new code, which extends functionality, without having to change the existing base code. However, this is rarely the case. In the best scenario, a few line changes may be required. On the other hand, if proper care has not been taken, large modifications may be unavoidable.
-
-To help with modularity, several programming paradigms have been introduced over the years. Object Oriented Programming (OOP), the paradigm used in the design of APBS, focuses on principal objects. Classes are used to define objects with given characteristics and functionality. This gives rise to a natural hierarchical structure where subclasses share any number of characteristics with the main class. APBS works with atoms, that form residues, that form molecules, etc, which naturally lends itself to the OOP paradigm. The C programming language is known for fast performance but does not natively supports OOP. To overcome this drawback, APBS was written using a subset of ANSI C called Clean OO C style by Mike Holst \cite{holst2001}. 
-
-The main APBS file takes inputs from the command line and initializes some of the variables necessary for I/O and passing data to the Routines manager. The Routines manager, in turn, creates atom objects and invokes whichever solver is to be used. The advantages of using Clean OO C becomes clear when adding new solver methods to APBS. Because of APBS' OOP style, all one must do is make Routines aware of the new method. As long as the new methods adhere to Clean OO C calling conventions, the passing and return of data is seamless and most other methods (e.g. reading and writing to DX files) can be used. New methods which are external or do not adhere to Clean OO C standards can be managed by writing auxiliary methods for translating data from one to the other. These auxiliary methods are given in a header and source file. The external methods are linked at compilation time.
-
-\section{Future directions}
-The focus of APBS and its accompanying software is the modeling of solvation and electrostatic properties of macromolecules in biomedical research. As such, continued research and development of APBS is focused on modeling different possible application scenarios that may arise in the modeling of the solvation and electrostatic properties. 
-
-APBS contains many different models and methods, which gives it a unique capability as a software package to be utilized in many different research applications. Methods that have been examined for future implementation into APBS and PDB2PQR include: advanced methods (gPC) for quantifying the influence of uncertainty on simple solvation-related properties (such as solvent-accessible surface area), ensemble averaging methods for titration state predictions, and virtual reality visualization of electrostatic potentials and related properties.
-
-Our vision for APBS is to build the infrastructure that can enable our users to implement their own models and methods so that they can run on a common system. Imagine all the duplication of effort in building UIs, file loaders, parsers, output writers, etc. All that could be eliminated. 
-
-Our goal is to have a well designed, well tested and well documented industry grade framework that will make it possible for all of these various bimolecular software packages to work together. To leverage each other's capabilities, to exceed the sum of the individual software package capabilities.
+The Clean OO C design has served APBS well for the past 17 years.
+This design still forms the basis for many modules of APBS and PDB2PQR.
+Additionally, we have begun to explore a framework for integrating components that exploits the common workflows used by APBS-PDB2PQR users and maps naturally to cloud-based resources.
+Our vision for APBS is to build the infrastructure that can enable our users to implement their own models and methods so that they can run on a common system.
+Our goal is to have a well-designed, well-tested and well-documented industry-grade framework that will integrate the APBS-PDB2PQR capabilities and make straightforward the incorporation of new features and new workflows.
 
 \section*{Acknowledgments}
 The authors gratefully acknowledge NIH grant GM069702 for support of this research.
@@ -356,6 +349,8 @@ More detailed information can be found on the APBS website \cite{APBSweb}.
 
 \section{Finite element and finite difference calculations in APBS} \label{app:fd}
 \subsection{Finite difference calculation configuration}
+APBS users have several ways to invoke the finite difference solver capabilities of APBS:
+
 \todo{FIX}
 APBS users can invoke TABI-PB with the \keyword{bem-manual} flag in the ELEC section of the input file.
 \todo{Finish this section. Include keywords and typical setting values.}
@@ -399,7 +394,7 @@ These equations were solved using a second-order central finite difference schem
 
 The sensitivity and accuracy of an implicit solvent method typically depends on the values selected for the force-field parameters. However, the geometric flow method is only dependent on the parameters of the implicit solvent model (surface tension, dielectric coefficient, solvent pressure, etc.).
 
-In a sensitivity analysis performed by Thomas et. al. \cite{thomas2013}, changing the distance between the axis boundary and the surface of each molecule and the grid spacing for the solver showed little effect on the results (3-5$\%$). However, changes in the internal dielectric ($\epsilon_m$) resulted in much larger sensitivity (i.e., changes in the results).
+In a sensitivity analysis performed by Thomas et. al. \cite{Thomas2013}, changing the distance between the axis boundary and the surface of each molecule and the grid spacing for the solver showed little effect on the results (3-5$\%$). However, changes in the internal dielectric ($\epsilon_m$) resulted in much larger sensitivity (i.e., changes in the results).
 
 
 \subsection{Geometric flow calculation configuration}
@@ -528,7 +523,7 @@ By definition, the torque on a charge in the molecule is the cross product of it
 \tau^{(i)} =  \frac{1}{\epsilon_s}\left [  ^xH^{(i)}, ^yH^{(i)}, ^zH^{(i)} \right] \times   \left [  \nabla_i L^{(i)} \right ]
 \end{equation} 
 %
-where $^\alpha H_{n,m}^{(i)}  = \sum_{j=1}^{M_i} \alpha_{j}^{(i)} \gamma_n^{(i)} q_j^{(i)} (\rho_j^{(i)})^n Y_{n,m} (\vartheta_j^{(i)}, \varphi_j^{(i)}) \, , \, \alpha = x , y, z$, is a coefficient vector for each of the charges in the molecule, $M_i$ is the number of charges in molecule $i$, $q_J^{(i)}$ is the magnitude of the $j^{th}$ charge, and $p_j^{(i)}=\Big[\rho_j^{(i)},\vartheta_j^{(i)},\varphi_j^{(i)}\Big]$ is its position in spherical coordinates. For more details on the PB-AM derivation, see Lotan, Head-Gordon \cite{lotan2006}.
+where $^\alpha H_{n,m}^{(i)}  = \sum_{j=1}^{M_i} \alpha_{j}^{(i)} \gamma_n^{(i)} q_j^{(i)} (\rho_j^{(i)})^n Y_{n,m} (\vartheta_j^{(i)}, \varphi_j^{(i)}) \, , \, \alpha = x , y, z$, is a coefficient vector for each of the charges in the molecule, $M_i$ is the number of charges in molecule $i$, $q_J^{(i)}$ is the magnitude of the $j^{th}$ charge, and $p_j^{(i)}=\Big[\rho_j^{(i)},\vartheta_j^{(i)},\varphi_j^{(i)}\Big]$ is its position in spherical coordinates. For more details on the PB-AM derivation, see Lotan, Head-Gordon \cite{Lotan2006}.
 
 \subsection{Semi-Analytical method background}
 The derivation details of PB-SAM have been reported  previously \cite{yap2010,yap2013}, with the main points being summarized in this section. The electrostatic potential ($\phi_r$) of the system at any point $r$ is governed by the linearized form of the PB equation:
