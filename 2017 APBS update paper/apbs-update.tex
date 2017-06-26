@@ -13,6 +13,7 @@
 \usepackage{authblk}
 \usepackage[margin=1in]{geometry}
 \usepackage[hidelinks]{hyperref}
+\usepackage{setspace}
 
 \newcommand{\todo}[1]{\textbf{$\star \star$ {#1} $\star \star$}}
 \newcommand{\PNNLaffil}{$\star$}
@@ -70,6 +71,8 @@
 \affil[\PIaffil]{To whom correspondence should be addressed. Advanced Computing, Mathematics, and Data Division; Pacific Northwest National Laboratory; Richland, WA 99352, USA.  Division of Applied Mathematics; Brown University; Providence, RI 02912, USA. Email:~\href{mailto:nathan.baker@pnnl.gov}{nathan.baker@pnnl.gov}}
 
 \maketitle
+
+\doublespacing
 
 \begin{abstract}
 	The Adaptive Poisson-Boltzmann Solver (APBS) software was developed to solve the equations of continuum electrostatics for large biomolecular assemblages.
@@ -345,15 +348,41 @@ More detailed information can be found on the APBS website \cite{APBSweb}.
 
 \section{Finite element and finite difference calculations in APBS} \label{app:fd}
 \subsection{Finite difference calculation configuration}
-APBS users have several ways to invoke the finite difference solver capabilities of APBS:
+APBS users have several ways to invoke the finite difference solver capabilities of APBS through keywords in the APBS input file \keyword{ELEC} block.
+The different types of finite difference calculations include:
+\begin{itemize}
+	\item \keyword{mg-manual}: This specifies a manually configured multigrid finite difference calculation in APBS.
+	\item \keyword{mg-auto}: This specifies an automatically configured multigrid finite difference calculation in APBS, using focusing \cite{Focus} to increase the resolution of the calculation in areas of interest.
+	\item \keyword{mg-para}:  This specifies a parallel version of the multigrid finite difference calculating, using parallel focusing to increase the resolution of the calculation in areas of interest \cite{Baker2001a}.
+\end{itemize}
+These different types of calculations have several keywords described in detail on the APBS website \cite{APBSweb}.
+Some of the most important settings are described below.
 
-\todo{FIX}
-APBS users can invoke TABI-PB with the \keyword{bem-manual} flag in the ELEC section of the input file.
-\todo{Finish this section. Include keywords and typical setting values.}
+\paragraph{Boundary conditions}
+\todo{FINISH}
+
+\paragraph{Grid dimensions, center, and spacing}
+Finite difference calculations in APBS are performed in rectangular domains.  
+The key aspects of this domain include its length $L_i$ and number of grid points $n_i$ in each direction $i$.
+These parameters are related to the spacing $h_i$ of the finite difference grid by $h_i = L_i/(n_i-1)$.
+Grid spacings below 0.5 \AA\ are recommended for most calculations.
+The number of grid points is specified by the \keyword{dime} keyword.
+For \keyword{mg-manual} calculations, the grid spacing can be specified by \emph{either} the \keyword{grid} or the \keyword{glen} keywords, which specify the grid spacing or length, respectively.
+For \keyword{mg-auto} or \keyword{mg-para} calculations, the grid spacing is determined by the \keyword{cglen} and \keyword{fglen} keywords, which specify the lengths of the coarse and fine grids for the focusing calculations.
+Grid lengths should extend \todo{Recommended settings}
+The center of the finite difference grid can be specified by the \keyword{gcent} command for \keyword{mg-manual} calculations or by the \keyword{cgcent} and {fgcent} keywords for the coarse and fine grids (respectively) in \keyword{mg-auto} or \keyword{mg-para} focusing calculations.
+\todo{Recommended settings}
+
+
+\paragraph{Charge discretization}
+\todo{FINISH}
+
+\paragraph{Surface definition}
+\todo{FINISH}
 
 \subsection{Finite elements calculation configuration}
 \todo{FIX}
-APBS users can invoke TABI-PB with the \keyword{bem-manual} flag in the ELEC section of the input file.
+APBS users can invoke TABI-PB with the \keyword{bem-manual} flag in the \keyword{ELEC} section of the input file.
 \todo{Finish this section and/or move all of these sections to an appendix.  Include keywords and typical setting values.}
 
 \section{Geometric flow calculations in APBS} \label{app:geoflow}
@@ -469,7 +498,7 @@ where $q_k$ is the charge on the $k$th atom of the solute molecule, and ${\bf x}
 Several unique features of the boundary integral formulation are worth mentioning. Because the integral equations are defined on the molecular boundary, the singular charges are handled analytically and do not introduce the same issues present in grid-based schemes. The integral equations also rigorously enforce the interface conditions on the surface, and the boundary condition at infinity is exactly satisfied. Thus, the boundary integral formulation can potentially be superior to other methods for investigating electrostatic potential on the boundary. However, because the method is only well defined for the linearized PB equation, it may perform poorly for high salt concentration in the solvent.
 
 \subsection{Boundary element calculation configuration}
-APBS users can invoke TABI-PB with the \keyword{bem-manual} flag in the ELEC section of the input file.
+APBS users can invoke TABI-PB with the \keyword{bem-manual} flag in the \keyword{ELEC} section of the input file.
 Major options include:
 \begin{itemize}
 	\item \keyword{tree\_order} \param{order}:  An integer indicating the order of the Taylor expansion for determining treecode coefficients.
@@ -619,7 +648,7 @@ H_{P,n,m}^{(I,k)} =h(\theta_p, \phi_p) Y_{n,m}^{(I,k)} (\theta_p, \phi_p)
 where \(\alpha = x , y, z\). For the derivation of the PB-SAM solver please see the previous publications \cite{Yap2010, Yap2013} .
 
 \subsection{PB-AM and PB-SAM configuration in APBS}
-PB-AM and PB-SAM have been fully integrated into APBS, and is invoked using the keyword \keyword{pbam-auto} or \keyword{pbsam-auto} in the ELEC section of an APBS input file.
+PB-AM and PB-SAM have been fully integrated into APBS, and is invoked using the keyword \keyword{pbam-auto} or \keyword{pbsam-auto} in the \keyword{ELEC} section of an APBS input file.
 Major options include:
 \begin{itemize}
 	\item \keyword{runname} \param{name}: Desired name to be used for outputs of each run.
