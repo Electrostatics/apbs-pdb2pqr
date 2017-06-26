@@ -327,7 +327,11 @@ PNNL is operated by Battelle for the U.S. DOE under contract DE-AC05-76RL01830.
 THG and DHB were supported by the Director, Office of Science, Office of Basic Energy Sciences, of the U.S. Department of Energy under Contract No. DE-AC02-05CH11231.
 LEF was supported by the National Science Foundation Graduate Research Fellowship under Grant No. DGE 110640.
 
+\pagebreak
 \appendix
+
+These appendices provide basic information about configuring APBS electrostatics calculations. 
+Rather than duplicating the user manual on the APBS website~\cite{APBSweb}, we have only focused on input file keywords that directly relate to the setup and execution of solvation calculations.
 
 \section{General keywords for implicit solvent calculations} \label{app:general}
 This section contains information about the general keywords used to configure implicit solvent calculations in the \keyword{ELEC} section of APBS input files.
@@ -336,16 +340,19 @@ These keywords are used in all of the solver types described in this paper:
 	\item \keyword{ion} \keyword{charge} \param{charge} \keyword{conc} \param{conc} \keyword{radius} \param{radius}:  This line can appear multiple times to specify the ionic species in the calculation.
 	This specifies the following terms in Eq.~\ref{eqn:pbe}: \param{charge} gives $q_i$ in units of electrons, \param{conc} gives $c_i$ in units of M, and \param{radius} specifies the ionic radius (in \AA) used to calculate $V_i$.
 	\item \keyword{lpbe|npbe}: This keyword indicates whether to solve the full nonlinear version of Eq.~\ref{eqn:pbe} (\keyword{npbe}) or a linearized version (\keyword{lpbe}).
+	\item \keyword{mol} \param{id}:  Specify the ID of the molecule on which the calculations are to be performed.
+	This ID is determined by \keyword{READ} statements which specify the molecules to import.
 	\item \keyword{pdie} and \keyword{sdie}:  These keywords specify the di\-elec\-tric coefficient values for the bio\-mol\-ec\-ular interior (\keyword{pdie}) and bulk solvent (\keyword{sdie}).
 	A typical value for \keyword{sdie} is 78.54; values for \keyword{pdie} are much more variable and often range from 2 to 40.
 	\item \keyword{temp} \param{temp}:  The temperature (in K) for the calculation.  A typical value is 298 K.
 \end{itemize}
-More detailed information can be found on the APBS website~\cite{APBSweb}.
+Additionally, \keyword{READ} statements in APBS input files are used to load molecule information, parameter sets, and finite element meshes.
+More detailed information about these and other commands can be found on the APBS website~\cite{APBSweb}.
 
 \section{Finite element and finite difference calculations in APBS} \label{app:fd}
 The finite difference and finite element methods used by APBS have been described extensively in previous publications~\cite{Baker2000, Holst2000, Holst1993, Baker2001, Baker2001a}; this section focuses on the configuration and use of these methods in APBS.
 
-\subsection{Finite difference calculation configuration}
+\subsection{Finite difference calculation configuration} \label{sec:fd-config}
 APBS users have several ways to invoke the PMG finite difference solver~\cite{Holst1993} capabilities of APBS through keywords in the APBS input file \keyword{ELEC} block.
 The different types of finite difference calculations include:
 \begin{itemize}
@@ -446,42 +453,20 @@ This iteration is repeated until a target error level \keyword{etol} is reached 
 This section contains additional information about the geometric flow equation implementation in APBS introduced in Section~\ref{sec:geoflow}.
 The geometric flow methods used by APBS have been described extensively in previous publications~\cite{Chen2010, Chen2011, Chen2012, Daily2013, Thomas2013a}; this section focuses on the configuration and use of these methods in APBS.
 
-\todo{STOPPED HERE}
-
-\subsection{Geometric flow equation background}
-For our modeling, a generalized form of the Poisson equation for computing the electrostatic is used as shown in Eq.~\ref{eq:GFpoisson}, where $\epsilon_m$ and $\epsilon_s$ are the dielectric coefficients of the solute and solvent, respectively, and $\rho_m$ is the charge distribution of the fixed solute molecule. For this model, the solutions for the electrostatic potential ($\phi$) and the characteristic function ($S$) are obtained by minimizing the free energy functional. The dielectric function $\epsilon$($S$) takes on the value $\epsilon_m$ in the solute region ($S$=1) and the value $\epsilon_s$ in the solvent region ($S$=0).
-
-\begin{equation}\label{eq:GFpoisson}
--\nabla \cdot\left(\epsilon\left(S\right)\nabla\phi\right)=S\rho_m
-\end{equation}
-
-For this model, we have utilized an Eulerian formulation of the geometric flow problem. This means that $S$ varies smoothly across the solute-solvent interfaces and leads to a non-linear partial differential equation for the characteristic function, $S$, as shown in Eq.~\ref{eq:Spde}.
-
-\begin{equation}\label{eq:Spde}
--\nabla\cdot\left(\gamma\frac{\nabla S}{\parallel\nabla S\parallel}\right)+p-\rho_0U^{att}+\rho_m\phi - \frac{1}{2}\epsilon_m\mid\nabla\phi\mid^2+\frac{1}{2}\epsilon_s\mid\nabla\phi\mid^2=0
-\end{equation}
-where $\gamma$ is the microscopic surface tension, $p$ is the hydrodynamic pressure, and $U^{att}$ is the attractive potential of the van der Waals dispersion interaction between the solute and the solvent.
-
-The solution to this non-linear PDE can be solved by utilizing the parabolic PDE shown in Eq.~\ref{eq:NLpde}. This equation is known as the generalized geometric flow equation and it is coupled with the Poisson equation through the characteristic function $S$~\cite{Chen2010}.
-
-\begin{equation}\label{eq:NLpde}
-\frac{\partial S}{\partial t}=\gamma\parallel\nabla S\parallel\left[\nabla\cdot\left(\frac{\nabla S}{\parallel\nabla S\parallel}\right)+\frac{V}{\gamma}\right],
-\end{equation}
-where $V$ is known as the generalized flow potential as described in Eq.~\ref{eq:flowpotential}. 
-
-\begin{equation}\label{eq:flowpotential}
-V=-p+\rho_0U^{att}-\rho_m\phi+\frac{\epsilon_m}{2}\mid\nabla\phi\mid^2-\frac{\epsilon_s}{2}\mid\nabla\phi\mid^2.
-\end{equation}
-%
-These equations were solved using a second-order central finite difference scheme, which utilizes a bi-conjugate gradient stabilized solver.
-
-The sensitivity and accuracy of an implicit solvent method typically depends on the values selected for the force-field parameters. However, the geometric flow method is only dependent on the parameters of the implicit solvent model (surface tension, dielectric coefficient, solvent pressure, etc.).
-
-In a sensitivity analysis performed by Thomas et. al.~\cite{Thomas2013}, changing the distance between the axis boundary and the surface of each molecule and the grid spacing for the solver showed little effect on the results (3-5$\%$). However, changes in the internal dielectric ($\epsilon_m$) resulted in much larger sensitivity (i.e., changes in the results).
-
 \subsection{Geometric flow calculation configuration}
-\todo{FINISH}
-\todo{STOPPED HERE}
+Users invoke the geometric flow solver in APBS by including the \keyword{geoflow-auto} keyword in the \keyword{ELEC} section of the input file.
+Because the geometric flow solver is based on finite difference solvers, many of the keywords for this section are similar to those described in Section~\ref{sec:fd-config}.
+Three additional parameters are needed for geometric flow calculations to specify how nonpolar solvation is linked to the polar implicit solvent models:
+\begin{itemize}
+	\item \keyword{gamma} \param{tension}:  Specify the surface tension of the solvent in units of kJ~mol$^{-1}$~\AA$^{-2}$.
+	Based on Daily et al.~\cite{Daily2013}, a recommended value for small molecules is 0.431~kJ~mol$^{-1}$~\AA$^{-2}$.
+	\item \keyword{press} \param{pressure}:  Specify the internal pressure of the solvent in units of kJ~mol$^{-1}$~\AA$^{-3}$.
+	Based on Daily et al.~\cite{Daily2013}, a recommended value for small molecules is 0.104~kJ~mol$^{-1}$~\AA$^{-3}$.
+	\item \keyword{bconc} \param{concentration}:  Specify the bulk concentration of solvent in \AA$^{-3}$.
+	The bulk density of water, 0.0334~\AA$^{-3}$, is recommended.
+	\item \keyword{vdwdisp} \param{bool}:  Indicate whether van der Waals interactions should be included in the geometric flow calculation through \param{bool} (1~=~include, 0~=~exclude).
+	If these interactions are included, then a force field with van der Waals terms must be included through a \keyword{READ} statement in the APBS input file.
+\end{itemize}
 
 \section{Boundary element method implementation} \label{app:bem}
 This appendix provides additional information about the boundary element method introduced in Section~\ref{sec:bem}.
