@@ -1,32 +1,4 @@
-\begin{thebibliography}{10}
-
-\bibitem{Holst2000}
-M~Holst, N~Baker, and F~Wang.
-\newblock Adaptive multilevel finite element solution of the
-  {Poisson-Boltzmann} equation {I.} algorithms and examples.
-\newblock {\em J. Comput. Chem.}, 21(15):1319--1342, November 2000.
-
-\bibitem{Baker2000}
-N~Baker, M~Holst, and F~Wang.
-\newblock Adaptive multilevel finite element solution of the
-  {Poisson-Boltzmann} equation {II.} refinement at solvent-accessible surfaces
-  in biomolecular systems.
-\newblock {\em J. Comput. Chem.}, 21(15):1343--1352, November 2000.
-
-\bibitem{Baker2001a}
-N~A Baker, D~Sept, S~Joseph, M~J Holst, and J~A McCammon.
-\newblock Electrostatics of nanosystems: application to microtubules and the
-  ribosome.
-\newblock {\em Proc Natl Acad Sci U S A}, 98(18):10037--41, Aug 2001.
-
-\bibitem{Baker2001}
-N~A Baker, D.~Sept, M~J Holst, and J~A McCammon.
-\newblock The adaptive multilevel finite element solution of the
-  {Poisson-Boltzmann} equation on massively parallel computers.
-\newblock {\em IBM J. Res. Dev.}, 45(3-4):427--438, May-Jul 2001.
-
-\bibitem{APBSweb}
-{APBS} website.
+\begin{thebibliography}{100}
 
 \bibitem{Davis1990}
 M.~E. Davis and J~A McCammon.
@@ -130,6 +102,15 @@ Z~Chen, N~A Baker, and G~W Wei.
   formulation.
 \newblock {\em J Math Biol}, 63(6):1139--200, Dec 2011.
 
+\bibitem{Baker2001a}
+N~A Baker, D~Sept, S~Joseph, M~J Holst, and J~A McCammon.
+\newblock Electrostatics of nanosystems: application to microtubules and the
+  ribosome.
+\newblock {\em Proc Natl Acad Sci U S A}, 98(18):10037--41, Aug 2001.
+
+\bibitem{APBSweb}
+{APBS} website.
+
 \bibitem{Krishnan2009}
 Sriram Krishnan, Luca Clementi, Jingyuan Ren, Philip Papadopoulos, and Wilfred
   Li.
@@ -156,6 +137,51 @@ R~Konecny, N~A Baker, and J~A McCammon.
 
 \bibitem{iAPBSweb}
 {iAPBS} website.
+
+\bibitem{Holst2000}
+M~Holst, N~Baker, and F~Wang.
+\newblock Adaptive multilevel finite element solution of the
+  {Poisson-Boltzmann} equation {I.} algorithms and examples.
+\newblock {\em J. Comput. Chem.}, 21(15):1319--1342, November 2000.
+
+\bibitem{Baker2000}
+N~Baker, M~Holst, and F~Wang.
+\newblock Adaptive multilevel finite element solution of the
+  {Poisson-Boltzmann} equation {II.} refinement at solvent-accessible surfaces
+  in biomolecular systems.
+\newblock {\em J. Comput. Chem.}, 21(15):1343--1352, November 2000.
+
+\bibitem{Baker2001}
+N~A Baker, D.~Sept, M~J Holst, and J~A McCammon.
+\newblock The adaptive multilevel finite element solution of the
+  {Poisson-Boltzmann} equation on massively parallel computers.
+\newblock {\em IBM J. Res. Dev.}, 45(3-4):427--438, May-Jul 2001.
+
+\bibitem{Lotan2006}
+Itay Lotan and Teresa Head-Gordon.
+\newblock An analytical electrostatic model for salt screened interactions
+  between multiple proteins.
+\newblock {\em J. Chem. Theory and Comp.}, 2(3):541--555, 2006.
+\newblock PMID: 26626662.
+
+\bibitem{Felberg2017}
+Lisa~E. Felberg, David~H. Brookes, Eng-Hui Yap, Elizabeth Jurrus, Nathan~A.
+  Baker, and Teresa Head-Gordon.
+\newblock Pb-am: An open-source, fully analytical linear poisson-boltzmann
+  solver.
+\newblock {\em Journal of Computational Chemistry}, 38(15):1275--1282, 2017.
+
+\bibitem{Yap2010}
+E-H Yap and T~Head-Gordon.
+\newblock New and efficient {Poisson-Boltzmann} solver for interaction of
+  multiple proteins.
+\newblock {\em J. Chem. Theory Comput.}, 6(7):2214--2224, July 2010.
+
+\bibitem{Yap2013}
+E.~H. Yap and T.~Head-Gordon.
+\newblock Calculating the bimolecular rate of protein-protein association with
+  interacting crowders.
+\newblock {\em J. Chem. Theory Comp.}, 9(5):2481--9, 2013.
 
 \bibitem{Bashford1997}
 Donald Bashford.
@@ -349,23 +375,10 @@ D.~Bashford and D.~A. Case.
 \newblock Generalized born models of macromolecular solvation effects.
 \newblock {\em Annual Review in Physical Chemistry}, 51:129--152, 10 2000.
 
-\bibitem{Lotan2006}
-Itay Lotan and Teresa Head-Gordon.
-\newblock An analytical electrostatic model for salt screened interactions
-  between multiple proteins.
-\newblock {\em J. Chem. Theory and Comp.}, 2(3):541--555, 2006.
-\newblock PMID: 26626662.
-
 \bibitem{Humphrey1996}
 W~Humphrey, A~Dalke, and K~Schulten.
 \newblock {VMD}: visual molecular dynamics.
 \newblock {\em J Mol Graph}, 14(1):33--8, 27--8, Feb 1996.
-
-\bibitem{Yap2010}
-E-H Yap and T~Head-Gordon.
-\newblock New and efficient {Poisson-Boltzmann} solver for interaction of
-  multiple proteins.
-\newblock {\em J. Chem. Theory Comput.}, 6(7):2214--2224, July 2010.
 
 \bibitem{Ermak1978}
 Donald Ermak and J.~A. McCammon.
@@ -527,6 +540,37 @@ P~Mereghetti and RC~Wade.
 Michael~J Holst.
 \newblock Clean object-oriented {C}.
 
+\bibitem{Gilson1988}
+Michael~K. Gilson, Kim~A. Sharp, and Barry~H. Honig.
+\newblock Calculating the electrostatic potential of molecules in solution:
+  Method and error assessment.
+\newblock {\em Journal of Computational Chemistry}, 9(4):327--335, 06 1988.
+
+\bibitem{IBR98}
+W.~Im, D.~Beglov, and B.~Roux.
+\newblock Continuum solvation model: Computation of electrostatic forces from
+  numerical solutions to the poisson-boltzmann equation.
+\newblock {\em Computer Physics Communications}, 111:59--75, 1998.
+
+\bibitem{Schnieders2007}
+M.~J. Schnieders, N.~A. Baker, P.~Ren, and J.~W. Ponder.
+\newblock Polarizable atomic multipole solutes in a poisson-boltzmann
+  continuum.
+\newblock {\em Journal of Chemical Physics}, 126:124114, 2007.
+
+\bibitem{Bruccoleri1997}
+Robert~E. Bruccoleri, Jiri Novotny, Malcolm~E. Davis, and Kim~A. Sharp.
+\newblock Finite difference poisson-boltzmann electrostatic calculations:
+  Increased accuracy achieved by harmonic dielectric smoothing and charge
+  antialiasing.
+\newblock {\em Journal of Computational Chemistry}, 18(2):268--276, 01 1997.
+
+\bibitem{Nina1999}
+Mafalda Nina, Wonpil Im, and Benoit Roux.
+\newblock Optimized atomic radii for protein continuum electrostatics solvation
+  forces.
+\newblock {\em Biophysical Chemistry}, 78(1-2):89--96, 04 1999.
+
 \bibitem{OpenDX}
 {OpenDX}.
 
@@ -534,11 +578,5 @@ Michael~J Holst.
 James Ahrens, Berk Geveci, and Charles Law.
 \newblock {\em ParaView: An End-User Tool for Large Data Visualization}.
 \newblock Elsevier, 2005.
-
-\bibitem{Yap2013}
-E.~H. Yap and T.~Head-Gordon.
-\newblock Calculating the bimolecular rate of protein-protein association with
-  interacting crowders.
-\newblock {\em J. Chem. Theory Comp.}, 9(5):2481--9, 2013.
 
 \end{thebibliography}

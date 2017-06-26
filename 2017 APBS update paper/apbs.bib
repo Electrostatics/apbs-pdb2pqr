@@ -2234,13 +2234,6 @@ We have quantitatively studied the performance of a finite-difference Poisson−
   url       = {http://3dmol.csb.pitt.edu/},
 }
 
-@Article{Nienhaus,
-  author    = {Nienhaus, G. Ulrich and Maffre, Pauline and Nienhaus, Karin},
-  title     = {Studying the protein corona on nanoparticles by {FCS}},
-  owner     = {to-file},
-  timestamp = {2017-06-25},
-}
-
 @Article{DePaoli2014,
   author        = {De Paoli, Silvia H. and Diduch, Lukas L. and Tegegn, Tseday Z. and Orecna, Martina and Strader, Michael B. and Karnaukhova, Elena and Bonevich, John E. and Holada, Karel and Simak, Jan},
   title         = {The effect of protein corona composition on the interaction of carbon nanotubes with human blood platelets},
@@ -2281,6 +2274,86 @@ We have quantitatively studied the performance of a finite-difference Poisson−
   author    = {Ahrens, James and Geveci, Berk and Law, Charles},
   owner     = {to-file},
   timestamp = {2017-06-25},
+}
+
+@Article{Felberg2017,
+  author   = {Felberg, Lisa E. and Brookes, David H. and Yap, Eng-Hui and Jurrus, Elizabeth and Baker, Nathan A. and Head-Gordon, Teresa},
+  title    = {PB-AM: An open-source, fully analytical linear Poisson-Boltzmann solver},
+  journal  = {Journal of Computational Chemistry},
+  year     = {2017},
+  volume   = {38},
+  number   = {15},
+  pages    = {1275-1282},
+  issn     = {1096-987X},
+  doi      = {10.1002/jcc.24528},
+  keywords = {recent},
+}
+
+@Article{Gilson1988,
+  author    = {Gilson, Michael K. and Sharp, Kim A. and Honig, Barry H.},
+  title     = {Calculating the electrostatic potential of molecules in solution: Method and error assessment},
+  journal   = {Journal of Computational Chemistry},
+  year      = {1988},
+  volume    = {9},
+  number    = {4},
+  pages     = {327-335},
+  month     = {06},
+  abstract  = {We present a numerical method for calculating the electrostatic potential of molecules in solution, using the linearized Poisson-Boltzmann equation. The emphasis in this work is on applications to biological macromolecules. The accuracy of the method is assessed by comparisons with analytic solutions for the case of a single charge in a dielectric sphere (Tanford-Kirkwood theory), which serves as a model for a macromolecule. We find that the solutions are generally accurate to within 5%. Larger errors occur close to the charge and the dielectric boundary, but the maximum error found at ion-bonding distance (3 Å) from a charge close to the boundary (1 Å deep) is only ∼15%. Several algorithmic improvements, described here, contribute to the accuracy of the method. The programs involved compose a coherent software package, called Del Phi, which goes from a Brookhaven Protein Data Bank format file to calculated electrostatic fields.},
+  doi       = {10.1002/jcc.540090407},
+  owner     = {to-file},
+  timestamp = {2017-06-26},
+}
+
+@Article{IBR98,
+  author    = {Im, W. and Beglov, D. and Roux, B.},
+  title     = {Continuum Solvation Model: Computation of electrostatic forces from numerical solutions to the Poisson-Boltzmann equation},
+  journal   = {Computer Physics Communications},
+  year      = {1998},
+  volume    = {111},
+  pages     = {59-75},
+  owner     = {to-file},
+  timestamp = {2017-06-26},
+}
+
+@Article{Schnieders2007,
+  author    = {Schnieders, M. J. and Baker, N. A. and Ren, P. and Ponder, J. W.},
+  title     = {Polarizable atomic multipole solutes in a Poisson-Boltzmann continuum},
+  journal   = {Journal of Chemical Physics},
+  year      = {2007},
+  volume    = {126},
+  pages     = {124114},
+  abstract  = {Modeling the change in the electrostatics of organic molecules upon moving from vacuum into solvent, due to polarization, has long been an interesting problem. In vacuum, experimental values for the dipole moments and polarizabilities of small, rigid molecules are known to high accuracy; however, it has generally been difficult to determine these quantities for a polar molecule in water. A theoretical approach introduced by Onsager [J. Am. Chem. Soc. 58, 1486 (1936)] used vacuum properties of small molecules, including polarizability, dipole moment, and size, to predict experimentally known permittivities of neat liquids via the Poisson equation. Since this important advance in understanding the condensed phase, a large number of computational methods have been developed to study solutes embedded in a continuum via numerical solutions to the Poisson-Boltzmann equation. Only recently have the classical force fields used for studying biomolecules begun to include explicit polarization in their functional forms. Here the authors describe the theory underlying a newly developed polarizable multipole Poisson-Boltzmann (PMPB) continuum electrostatics model, which builds on the atomic multipole optimized energetics for biomolecular applications (AMOEBA) force field. As an application of the PMPB methodology, results are presented for several small folded proteins studied by molecular dynamics in explicit water as well as embedded in the PMPB continuum. The dipole moment of each protein increased on average by a factor of 1.27 in explicit AMOEBA water and 1.26 in continuum solvent. The essentially identical electrostatic response in both models suggests that PMPB electrostatics offers an efficient alternative to sampling explicit solvent molecules for a variety of interesting applications, including binding energies, conformational analysis, and pK(a) prediction. Introduction of 150 mM salt lowered the electrostatic solvation energy between 2 and 13 kcalmole, depending on the formal charge of the protein, but had only a small influence on dipole moments.},
+  owner     = {to-file},
+  timestamp = {2017-06-26},
+  url       = {https://www.ncbi.nlm.nih.gov/pubmed/17411115},
+}
+
+@Article{Bruccoleri1997,
+  author    = {Bruccoleri, Robert E. and Novotny, Jiri and Davis, Malcolm E. and Sharp, Kim A.},
+  title     = {Finite difference Poisson-Boltzmann electrostatic calculations: Increased accuracy achieved by harmonic dielectric smoothing and charge antialiasing},
+  journal   = {Journal of Computational Chemistry},
+  year      = {1997},
+  volume    = {18},
+  number    = {2},
+  pages     = {268-276},
+  month     = {01},
+  abstract  = {A common problem in the calculation of electrostatic potentials with the Poisson-Boltzmann equation using finite difference methods is the effect of molecular position relative to the grid. Previously a uniform charging method was shown to reduce the grid dependence substantially over the point charge model used in commercially available codes. In this article we demonstrate that smoothing the charge and dielectric values on the grid can improve the grid independence, as measured by the spread of calculated values, by another order of magnitude. Calculations of Born ion solvation energies, small molecule solvation energies, the electrostatic field of superoxide dismutase, and protein-protein binding energies are used to demonstrate that this method yields the same results as the point charge model while reducing the positional errors by several orders of magnitude. © 1997 by John Wiley & Sons, Inc.},
+  owner     = {to-file},
+  timestamp = {2017-06-26},
+}
+
+@Article{Nina1999,
+  author    = {Nina, Mafalda and Im, Wonpil and Roux, Benoit},
+  title     = {Optimized atomic radii for protein continuum electrostatics solvation forces},
+  journal   = {Biophysical Chemistry},
+  year      = {1999},
+  volume    = {78},
+  number    = {1-2},
+  pages     = {89-96},
+  month     = {04},
+  doi       = {10.1016/S0301-4622(98)00236-1},
+  owner     = {to-file},
+  timestamp = {2017-06-26},
 }
 
 @Comment{jabref-meta: databaseType:bibtex;}
