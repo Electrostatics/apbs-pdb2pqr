@@ -1,4 +1,4 @@
-\documentclass[11pt,titlepage]{article}
+\documentclass[12pt,titlepage]{article}
 
 \usepackage[sort&compress]{natbib}
 \bibliographystyle{unsrt}
@@ -12,7 +12,7 @@
 \usepackage{amsmath}
 \usepackage{authblk}
 \usepackage[margin=1in]{geometry}
-\usepackage[hidelinks=true]{hyperref}
+\usepackage[hidelinks]{hyperref}
 
 \newcommand{\todo}[1]{\textbf{$\star \star$ {#1} $\star \star$}}
 \newcommand{\PNNLaffil}{$\star$}
@@ -22,7 +22,6 @@
 \newcommand{\FLaffil}{$\|$}
 \newcommand{\Novoaffil}{$\P$}
 \newcommand{\UCSDaffil}{$\Delta$}
-\newcommand{\CUNYaffil}{$\diamond$}
 \newcommand{\PIaffil}{$\lhd$}
 \newcommand{\MSUaffil}{$\nabla$}
 \newcommand{\Pittaffil}{$\rhd$}
@@ -54,7 +53,6 @@
 \author[\UCBaffil]{Theresa~Head-Gordon}
 \author[\SMUaffil]{Weihua Geng}
 \author[\UMaffil]{Robert~Krasny}
-\author[\CUNYaffil]{Marilyn~Gunner}
 \author[\MSUaffil]{Guo-Wei~Wei}
 \author[\UCSDaffil]{Michael~J.~Holst}
 \author[\UCSDaffil]{J.~Andrew~McCammon}
@@ -69,13 +67,12 @@
 \affil[\Novoaffil]{Novozymes}
 \affil[\MSUaffil]{Michigan State University}
 \affil[\UCSDaffil]{University of California San Diego} 
-\affil[\CUNYaffil]{City University of New York}
 \affil[\PIaffil]{To whom correspondence should be addressed. Advanced Computing, Mathematics, and Data Division; Pacific Northwest National Laboratory; Richland, WA 99352, USA.  Division of Applied Mathematics; Brown University; Providence, RI 02912, USA. Email:~\href{mailto:nathan.baker@pnnl.gov}{nathan.baker@pnnl.gov}}
 
 \maketitle
 
 \begin{abstract}
-	The Adaptive Poisson-Boltzmann Solver (APBS) software was developed to solve the equations of continuum electrostatics for large biomolecular assemblages \cite{Baker2001b}.
+	The Adaptive Poisson-Boltzmann Solver (APBS) software was developed to solve the equations of continuum electrostatics for large biomolecular assemblages.
 	The understanding of electrostatic interactions is essential for the study of biomolecular processes and impacts many chemical, biological, and biomedical applications.
 	APBS addresses three key technology challenges for understanding solvation and electrostatics in biomedical applications: accurate and efficient models for biomolecular solvation and electrostatics, robust and scalable software for applying those theories to biomolecular systems, and mechanisms for sharing and analyzing biomolecular electrostatics data in the scientific community.
 	To address new research applications and advancing computational capabilities, we have continually updated APBS and its suite of accompanying software since its release in 2001.
@@ -83,7 +80,7 @@
 \end{abstract}
 
 \section{Introduction}
-This manuscript provides an overview of the new capabilities in the APBS software and its associated tools since their release in 2001 \cite{Holst2000, Baker2000, Baker2001b, Baker2001}; more detailed documentation for these tools is available on the APBS website \cite{APBSweb}.
+This manuscript provides an overview of the new capabilities in the APBS software and its associated tools since their release in 2001 \cite{Holst2000, Baker2000, Baker2001a, Baker2001}; more detailed documentation for these tools is available on the APBS website \cite{APBSweb}.
 \todo{Dave:  please make sure this is true!}
 The manuscript is not intended to be a review of solvation models; readers interested in this area should refer to several previous reviews \cite{Davis1990, Perutz1978, Ren2012, Sharp1990, Roux1999, Warshel2006}.
 Robust models of electrostatic interactions are important for understanding intermolecular interactions and the effects of solvation on biomolecular processes.
@@ -102,7 +99,7 @@ The PB equation \cite{Fixman1979, Grochowski2008, Lamm2003} provides a global so
 The solvent is described by the bulk solvent dielectric constant $\varepsilon_s$ as well as the properties of $i=1,\ldots,M$ mobile ion species, described by their charges $q_i$, concentrations $c_i$, and steric ion-solute interaction potential $V_i$.
 The biomolecular structure incorporated into the equation through $V_i$, a dielectric coefficient function $\epsilon$, and a charge distribution function $\rho$.
 The dielectric $\epsilon$ is often set to a constant value $\varepsilon_m$ in the interior of the molecule and varies sharply across the molecular boundary to the value $\varepsilon_s$ which describes the bulk solvent.
-The shape of the boundary is determined by the size and location of the solute atoms as well as model-specific parameters such as a characteristic solvent molecule size \cite{LeeRichards}.
+The shape of the boundary is determined by the size and location of the solute atoms as well as model-specific parameters such as a characteristic solvent molecule size \cite{Lee1971}.
 The charge distribution $\rho$ is usually a sum of atomic charge distributions which are located at atom centers.
 Finally, $\beta = \left( kT \right)^{-1}$ is the inverse thermal energy where $k$ is the Boltzmann constant and $T$ is the temperature.
 
@@ -111,15 +108,15 @@ The PB theory is approximate and, as a result, has several well-known limitation
 Despite these limitations, PB methods are still very important for biomolecular structural analysis, modeling, and simulation.
 
 Several software packages have been developed to analyze the solvation properties of small and macro-molecules, solving the Poisson-Boltzmann equations to evaluate energies, potentials, and other solvation properties.
-The most significant (based on user base and citations) of these include CHARMM \cite{Brooks2009}, AMBER \cite{Case2005}, DelPhi \cite{Sarkar2013}, Jaguar \cite{Bochevarov2013}, Zap \cite{Grant2001}, MIBPB \cite{Chen2011}, and APBS \cite{APBS}.
+The most significant (based on user base and citations) of these include CHARMM \cite{Brooks2009}, AMBER \cite{Case2005}, DelPhi \cite{Sarkar2013}, Jaguar \cite{Bochevarov2013}, Zap \cite{Grant2001}, MIBPB \cite{Chen2011}, and APBS \cite{Baker2001a}.
 This article describes the new functionality added to APBS, and its associated software, since its release in 2001.
 
 Many users interact with APBS and PDB2PQR through web servers linked from the APBS website \cite{APBSweb}.
 These servers support preparation of biomolecular structures (see Section~\ref{sec:prep}) and finite-difference solution of the Poisson-Boltzmann equation (see Section~\ref{sec:fd}).
 However, a broader range of features and more flexible configuration is available when APBS and PDB2PQR are run from the command line (on Linux, Mac, and Windows).
-Command-line versions of APBS can be run locally or through web services provided by the NBCR-devloped Opal toolkit \cite{Opal}.
+Command-line versions of APBS can be run locally or through web services provided by the NBCR-developed Opal toolkit \cite{Krishnan2009}.
 This toolkit allows for the computing load for processor intensive scientific applications to be shifted to remote computing resources such as those provided by the National Biomedical Computation Resource (NCBR).
-Finally, APBS can run through other molecular simulation programs such ash AMBER \cite{AMBER}, CHARMM \cite{CHARMM}, NAMD \cite{NAMD}, and TINKER \cite{TINKER}.
+Finally, APBS can run through other molecular simulation programs such as AMBER \cite{Case2005}, CHARMM \cite{Brooks2009}, NAMD \cite{Phillips2005}, and TINKER \cite{TINKER}.
 General support for integration of APBS with 3\textsuperscript{rd}-party programs is provided by the iAPBS library \cite{Konecny2012, iAPBSweb}.
 
 Most APBS electrostatics calculations follow the general workflow outlined in Figure~\ref{fig:PDB2PQR-APBS}.
@@ -131,15 +128,15 @@ Most APBS electrostatics calculations follow the general workflow outlined in Fi
 	\label{fig:PDB2PQR-APBS}
 \end{figure}
 %%%
-This workflow is supported by the APBS tool suite with specific support by PDB2PQR for preparing biomolecular structures (see Section~\ref{sec:pdb2pqr}) and support by APBS for performing electrostatics calculations (see Section~\ref{sec:apbs}).
+This workflow is supported by the APBS tool suite with specific support by PDB2PQR for preparing biomolecular structures (see Section~\ref{sec:prep}) and support by APBS for performing electrostatics calculations (see Section~\ref{sec:apbs}).
 
-\section{Preparing biomolecular structures}
+\section{Preparing biomolecular structures} \label{sec:prep}
 Electrostatics calculations begin with specification of the molecule structure and parameters for the charge and size of the constituent atoms.
 Constituent atoms are generally grouped in types with charge and size values specified by atom type in a variety of force field files developed for implicit solvent calculations \cite{Ren2012}.
 APBS incorporates this information into calculations via the ``PQR'' format.
-PQR is a file format of unknown origins used by several software packages such as MEAD \cite{MEAD} and AutoDock \cite{AutoDock}. 
-The PQR file simply replaces the temperature and occupancy columns of a PDB flat file \cite{PDB} with the per-atom charge ($Q$) and radius ($R$).
-There are much more elegant ways to implement the PQR functionality through more modern extensible file formats such as mmCIF \cite{mmCIF} or PDB-XML; however, the simple PDB format is still one of the most widely used formats and, therefore, continued use of the PQR format supports broad compatibility across biomolecular modeling tools and workflows.
+PQR is a file format of unknown origins used by several software packages such as MEAD \cite{Bashford1997} and AutoDock \cite{Morris2009}. 
+The PQR file simply replaces the temperature and occupancy columns of a PDB flat file \cite{PDBflat} with the per-atom charge ($Q$) and radius ($R$).
+There are much more elegant ways to implement the PQR functionality through more modern extensible file formats such as mmCIF \cite{mmCIF} or PDBML \cite{PDBML}; however, the simple PDB format is still one of the most widely used formats and, therefore, continued use of the PQR format supports broad compatibility across biomolecular modeling tools and workflows.
 
 The PDB2PQR software is part of the APBS suite that was developed to assist with the conversion of PDB files to PQR format \cite{Dolinsky2004, Dolinsky2007}.
 PDB2PQR began its existence as a \texttt{sed} \cite{sed} script and evolved to work with APBS and support the functionality shown in Figure~\ref{fig:PDB2PQR-APBS}.
@@ -152,7 +149,7 @@ Missing heavy atoms can be rebuilt using standard amino acid topologies in conju
 A \textit{debump} option performs very limited minimization of sidechain $\chi$ angles to reduce steric clashes between rebuilt and existing atoms.
 
 \paragraph{Optimizing titration states}
-Amino acid titration states are important determinants of biomolecular (particularly enzymatic) function and can be used to assess functional activity and identify active sites. The APBS-PDB2PQR system contains several methods for this analysis.
+Amino acid tit\-rat\-ion states are important determinants of bio\-molecular (particularly enzymatic) function and can be used to assess functional activity and identify active sites. The APBS-PDB2PQR system contains several methods for this analysis.
 \begin{itemize}
 	\item \textit{Empirical methods.}
 	PDB2PQR provides an empirical model (PROPKA \cite{Sondergaard2011}) which uses a heuristic method to compute p$K_a$ perturbations due to desolvation, hydrogen bonding, and charge-charge interactions is included in PDB2PQR.
@@ -171,11 +168,10 @@ Given a titration state assignment, PDB2PQR uses Monte Carlo sampling to positio
 Newly added hydrogen atoms are checked for steric conflicts and optimized via the debumping procedure discussed above.
 
 \paragraph{Assigning charge and radius parameters} 
-Given the titration state, atomic charges (for $\rho$) and radii (for $\epsilon$ and $V_i$) are assigned based on the chosen force field.
-PDB2PQR currently supports charge/radii force fields from AMBER99 \cite{AMBER99}, CHARMM22 (\texttt{par\_all27\_prot\_na.prm}) \cite{CHARMM22}, PARSE \cite{Sitkoff1994}, PEOEPB \cite{Czodrowski2006}, Swanson et al.~\cite{Swanson2005a}, and Tan et al.~\cite{Tan2006}.
+Given the tit\-rat\-ion state, atomic charges (for $\rho$) and radii (for $\epsilon$ and $V_i$) are assigned based on the chosen force field.
+PDB2PQR currently supports charge/radii force fields from AMBER99 \cite{AMBER99}, CHARMM22 \cite{MacKerell2004}, PARSE \cite{Sitkoff1994}, PEOE\_PB \cite{Czodrowski2006}, Swanson et al.~\cite{Swanson2005a}, and Tan et al.~\cite{Tan2006}.
 
-\section{Solving the Poisson-Boltzmann and related solvation equations}
-
+\section{Solving the Poisson-Boltzmann and related solvation equations} \label{sec:apbs}
 The APBS software was designed from the ground up using modern design principles to ensure its ability to interface with other computational packages and evolve as methods and applications change over time.
 APBS input files contain several keywords that are generic with respect to the type of calculation being performed; these are described in Appendix~\ref{app:general}.
 The remainder of this section describes the specific solvers available for electrostatic calculations, also described in more detail on the APBS website \cite{APBSweb}.
@@ -184,14 +180,14 @@ The remainder of this section describes the specific solvers available for elect
 The original version of APBS was based on two key libraries from the Holst research group.
 FEtk is a general-purpose multi-level adaptive finite element library \cite{FEtk, FEtkweb}.
 Adaptive finite element methods can resolve extremely fine features of a complex system (like biomolecules) while solving the associated equations over large problem domain.
-For example, FEtk has been used to solve electrostatic and diffusion equations over six orders of magnitude in length scale \cite{Tai}.
-The finite difference PMG solver \cite{PMGweb, PMG} trades speed and efficiency for the high-accuracy and high-detail solutions of the finite element FEtk library.
+For example, FEtk has been used to solve electrostatic and diffusion equations over six orders of magnitude in length scale \cite{Tai2003}.
+The finite difference PMG solver \cite{FEtkweb, Holst1993} trades speed and efficiency for the high-accuracy and high-detail solutions of the finite element FEtk library.
 However, many APBS users need only a relatively coarse-grained solution of $\phi$ for their visualization or simulation applications.
 Therefore, most APBS users employ the Holst group's finite difference grid-based PMG solver for biomolecular electrostatics calculations.
 Appendix \ref{app:fd} describes some of the common configuration options for finite difference and finite element calculations in APBS.
 
 \subsection{Geometric flow} \label{sec:geoflow}
-Several recent papers have described our work on a geometric flow formulation of Poisson-based implicit solvent models \cite{geoflow, Thomas2013}.
+Several recent papers have described our work on a geometric flow formulation of Poisson-based implicit solvent models \cite{Chen2010, Chen2011, Chen2012, Daily2013, Thomas2013}.
 The geometric flow approach couples the polar and nonpolar components of the implicit solvent model with two primary benefits.
 First, this coupling eliminates the need for an \textit{ad hoc} geometric definition for the solute-solvent boundary.
 In particular, the solute-solvent interface is optimized as part of the geometric flow calculation.
@@ -233,8 +229,8 @@ Typical results from a boundary element calculation are shown in Figure.~\ref{fi
 Additional information about the boundary element method and its in APBS is provided in Appendix~\ref{app:bem}.
 
 \subsection{Analytical and semi-analytical methods} \label{sec:pbam}
-Numerical solution methods tend to be computationally intensive which has led to the adoption analytical approaches for solvation calculations such as generalized Born \cite{Still} and the approaches developed by Head-Gordon implemented in APBS.
-The Poisson-Boltzmann Analytical Method (PB-AM), was developed by Lotan and Head-Gordon in 2006 \cite{Lotan2006}.
+Numerical solution methods tend to be computationally intensive which has led to the adoption analytical approaches for solvation calculations such as generalized Born \cite{Bashford2000} and the approaches developed by Head-Gordon and implemented in APBS.
+In particular, the Poisson-Boltzmann Analytical Method (PB-AM), was developed by Lotan and Head-Gordon in 2006 \cite{Lotan2006}.
 PB-AM produces a fully analytical solution to the linearized PB equation for multiple macromolecules, represented as coarse-grained low-dielectric spheres.
 This spherical domain enables the use of a multipole expansion to represent charge-charge interactions and higher order cavity polarization effects.
 The interactions can then be used to compute physical properties such as interaction energies, forces, and torques.
@@ -283,10 +279,10 @@ Additional details about these methods and their use in APBS are presented in Ap
 \subsection{Visualization}
 One of the primary uses of the APBS tools is to generate electrostatic potentials for use in biomolecular visualization software.
 These packages offer both the ability to visualize APBS results as well as a graphical interface for setting up the calculation.
-Several of these software packages are thick clients that run from users' computers, including PyMOL\footnote{PyMOL website: \url{http://www.pymol.org}.} \cite{PyMOL}, VMD\footnote{VMD website: \url{http://www.ks.uiuc.edu/Research/vmd/}.} \cite{Humphrey1996}, 
-PMV\footnote{PMV website: \url{http://mgltools.scripps.edu/}.} \cite{PMV}, and Chimera\footnote{Chimera website: \url{https://www.cgl.ucsf.edu/chimera/}.} \cite{Pettersen2004}.
-We have also worked with the developers of Jmol\footnote{Jmol website: \url{http://jmol.sourceforge.net/}.} \cite{Herraez2006} and 3Dmol\footnote{3Dmol website: \url{http://3dmol.csb.pitt.edu/}.} \cite{Rego2015}. to provide web-based setup and visualization of APBS-PDBD2PQR calculations and related workflows.
-APBS integration with Jmol has been described previously \cite{PDB2PQRJmol}.
+Several of these software packages are thick clients that run from users' computers, including PyMOL \cite{PyMOL, PyMOLweb}, VMD \cite{VMDweb, Humphrey1996}, 
+PMV \cite{PMV, MGLToolsweb}, and Chimera \cite{Chimeraweb, Pettersen2004}.
+We have also worked with the developers of Jmol \cite{Jmolweb, Herraez2006} and 3Dmol \cite{, 3Dmolweb, Rego2015}. to provide web-based setup and visualization of APBS-PDBD2PQR calculations and related workflows.
+APBS integration with Jmol has been described previously \cite{Unni2011}.
 3Dmol is a molecular viewer that offers the performance of a desktop application and convenience of a web-based viewer which broadens accessibility for all users.
 In order to integrate 3Dmol, enhancements were need for our tools, including extending our output file formats and creating a customized user interface.
 Data from the APBS output file is used to generate surfaces, apply color schemes, and display different molecular styles such as cartoons and spheres.
@@ -312,14 +308,14 @@ Examples of 3Dmol visualization options are shown in Figure~\ref{fig:features}.
 %%%
 
 \subsection{Other applications}
-Besides visualization and the processes described in Section~\ref{sec:workflow}, there are a number of other applications where APBS can be used.
-For example, during the past four years, the APBS-PDB2PQR software has been used in the post-simulation energetic analyses of molecular dynamics trajectories \cite{Dror2013}, understanding protein-nanoparticle interactions \cite{Treuel2013, Nienhaus2013, Depaoli2014}, understanding nucleic acid-ion interactions \cite{Lipfert2014, Giambasu2014}, biomolecular docking \cite{Roberts2013} and ligand binding \cite{Evangelidis2012}, developing new coarse-grained protein models \cite{Spiga2013}, setting up membrane protein simulations \cite{Stansfeld2015}, etc.
+Besides visualization and the processes described in Section~\ref{sec:prep}, there are a number of other applications where APBS can be used.
+For example, during the past four years, the APBS-PDB2PQR software has been used in the post-simulation energetic analyses of molecular dynamics trajectories \cite{Dror2013}, understanding protein-nanoparticle interactions \cite{Treuel2013, DePaoli2014}, understanding nucleic acid-ion interactions \cite{Lipfert2014}, biomolecular docking \cite{Roberts2013} and ligand binding \cite{Evangelidis2009}, developing new coarse-grained protein models \cite{Spiga2013}, setting up membrane protein simulations \cite{Stansfeld2015}, etc.
 APBS also plays a key role in  PIPSA for protein surface electrostatics analysis \cite{Richter2008} and SDA for simulation of protein-protein interactions through Brownian dynamics \cite{Martinez2015}.
-As discussed above with PB-SAM, another application area for implicit solvent methods is in the evaluation of biomolecular kinetics where implicit solvent models are generally used to provide solvation forces (or energies) for performing (or analyzing) discrete molecular or continuum diffusion simulations with APBS in both of these areas \cite{Dror2013, Martinez2015, Chen2007, Song2004a, Song2004b, Elcock2004, Mereghetti2012}.
+As discussed above with PB-SAM, another application area for implicit solvent methods is in the evaluation of biomolecular kinetics where implicit solvent models are generally used to provide solvation forces (or energies) for performing (or analyzing) discrete molecular or continuum diffusion simulations with APBS in both of these areas \cite{Dror2013, Martinez2015, Cheng2007, Cheng2007a, Song2004a, Song2004a, Elcock2004, Mereghetti2012}.
 
 \section{The future of APBS}
 To help with modularity and to facilitate extensibility, APBS was based on a object-oriented programming paradigm with strict ANSI-C compliance.
-This ``Clean OO C'' \cite{Holst2001} has enabled the long-term sustainability of APBS and by combining an object-oriented design framework with the portability and speed of C.
+This ``Clean OO C'' \cite{CleanOOC} has enabled the long-term sustainability of APBS and by combining an object-oriented design framework with the portability and speed of C.
 This object-oriented design framework has made it relatively straightforward to extend APBS functionality and incorporate new features.
 
 The Clean OO C design has served APBS well for the past 17 years.
@@ -334,14 +330,14 @@ PNNL is operated by Battelle for the U.S. DOE under contract DE-AC05-76RL01830.
 
 \appendix
 
-\section{General keywords for implicit solvent calculations}
+\section{General keywords for implicit solvent calculations} \label{app:general}
 This section contains information about the general keywords used to configure implicit solvent calculations in the \keyword{ELEC} section of APBS input files.
 These keywords are used in all of the solver types described in this paper:
 \begin{itemize}
 	\item \keyword{ion} \keyword{charge} \param{charge} \keyword{conc} \param{conc} \keyword{radius} \param{radius}:  This line can appear multiple times to specify the ionic species in the calculation.
 	This specifies the following terms in Eq.~\ref{eqn:pbe}: \param{charge} gives $q_i$ in units of electrons, \param{conc} gives $c_i$ in units of M, and \param{radius} specifies the ionic radius (in \AA) used to calculate $V_i$.
 	\item \keyword{lpbe|npbe}: This keyword indicates whether to solve the full nonlinear version of Eq.~\ref{eqn:pbe} (\keyword{npbe}) or a linearized version (\keyword{lpbe}).
-	\item \keyword{pdie} and \keyword{sdie}:  These keywords specify the dielectric coefficient values for the biomolecular interior (\keyword{pdie}) and bulk solvent (\keyword{sdie}).
+	\item \keyword{pdie} and \keyword{sdie}:  These keywords specify the di\-elec\-tric coefficient values for the bio\-mol\-ec\-ular interior (\keyword{pdie}) and bulk solvent (\keyword{sdie}).
 	A typical value for \keyword{sdie} is 78.54; values for \keyword{pdie} are much more variable and often range from 2 to 40.
 	\item \keyword{temp} \param{temp}:  The temperature (in K) for the calculation.  A typical value is 298 K.
 \end{itemize}
@@ -379,7 +375,7 @@ For this model, we have utilized an Eulerian formulation of the geometric flow p
 \end{equation}
 where $\gamma$ is the microscopic surface tension, $p$ is the hydrodynamic pressure, and $U^{att}$ is the attractive potential of the van der Waals dispersion interaction between the solute and the solvent.
 
-The solution to this non-linear PDE can be solved by utilizing the parabolic PDE shown in Eq. \ref{eq:NLpde}. This equation is known as the generalized geometric flow equation and it is coupled with the Poisson equation through the characteristic function $S$ \cite{chen2010}.
+The solution to this non-linear PDE can be solved by utilizing the parabolic PDE shown in Eq. \ref{eq:NLpde}. This equation is known as the generalized geometric flow equation and it is coupled with the Poisson equation through the characteristic function $S$ \cite{Chen2010}.
 
 \begin{equation}\label{eq:NLpde}
 \frac{\partial S}{\partial t}=\gamma\parallel\nabla S\parallel\left[\nabla\cdot\left(\frac{\nabla S}{\parallel\nabla S\parallel}\right)+\frac{V}{\gamma}\right],
@@ -484,7 +480,7 @@ Major options include:
 	\item \keyword{mac} \param{criterion}:  Multipole acceptance criterion specifies the distance ratio at which the Taylor expansion is used.
 	In general, a higher value of \param{criterion} will result in a more accurate but more expensive computation; while a lower value causes more direct summations and forces the particle-cluster interaction to descend to a finer cluster level. 
 	A typical choice for this parameter is 0.8.
-	\item \keyword{mesh} \param{flag}:  The software used to mesh the molecular surface; 0~=~MSMS, 1~=~NanoShaper's SES implementation, and 2~=~NanoShaper's Skin implementation.
+	\item \keyword{mesh} \param{flag}:  The software used to mesh the molecular surface; 0~=~MSMS, 1~=~Nano\-Shaper's SES implementation, and 2~=~NanoShaper's Skin implementation.
 	See Figure~\ref{fig:surface-mesher} for an example of surface meshes.
 	\item \keyword{outdata} \param{flag}: Type of output data file generated; 0~=~APBS OpenDX format \cite{OpenDX} and 1~=~ParaView format \cite{ParaView}.
 \end{itemize}
@@ -526,7 +522,7 @@ By definition, the torque on a charge in the molecule is the cross product of it
 where $^\alpha H_{n,m}^{(i)}  = \sum_{j=1}^{M_i} \alpha_{j}^{(i)} \gamma_n^{(i)} q_j^{(i)} (\rho_j^{(i)})^n Y_{n,m} (\vartheta_j^{(i)}, \varphi_j^{(i)}) \, , \, \alpha = x , y, z$, is a coefficient vector for each of the charges in the molecule, $M_i$ is the number of charges in molecule $i$, $q_J^{(i)}$ is the magnitude of the $j^{th}$ charge, and $p_j^{(i)}=\Big[\rho_j^{(i)},\vartheta_j^{(i)},\varphi_j^{(i)}\Big]$ is its position in spherical coordinates. For more details on the PB-AM derivation, see Lotan, Head-Gordon \cite{Lotan2006}.
 
 \subsection{Semi-Analytical method background}
-The derivation details of PB-SAM have been reported  previously \cite{yap2010,yap2013}, with the main points being summarized in this section. The electrostatic potential ($\phi_r$) of the system at any point $r$ is governed by the linearized form of the PB equation:
+The derivation details of PB-SAM have been reported  previously \cite{Yap2010, Yap2013}, with the main points being summarized in this section. The electrostatic potential ($\phi_r$) of the system at any point $r$ is governed by the linearized form of the PB equation:
 
 \begin{equation}
 \nabla \cdot [ \epsilon(\mathbf{r}) \nabla \phi (\mathbf{r}) ] - \epsilon (\mathbf{r}) \kappa^2 \phi(\mathbf{r}) = 4 \pi \rho(\mathbf{r})
@@ -620,7 +616,7 @@ H_{P,n,m}^{(I,k)} =h(\theta_p, \phi_p) Y_{n,m}^{(I,k)} (\theta_p, \phi_p)
 \label{eq:pbsam_derv_hp}
 \end{equation}
 %
-where \(\alpha = x , y, z\). For the derivation of the PB-SAM solver please see the previous publications \cite{yap2010, yap2013} .
+where \(\alpha = x , y, z\). For the derivation of the PB-SAM solver please see the previous publications \cite{Yap2010, Yap2013} .
 
 \subsection{PB-AM and PB-SAM configuration in APBS}
 PB-AM and PB-SAM have been fully integrated into APBS, and is invoked using the keyword \keyword{pbam-auto} or \keyword{pbsam-auto} in the ELEC section of an APBS input file.
