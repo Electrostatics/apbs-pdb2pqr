@@ -48,7 +48,7 @@
 \author[\PNNLaffil]{Peter~Li}
 \author[\FLaffil]{Todd~Dolinsky}
 \author[\UCSDaffil]{Robert~Konecny}
-\author[\Pittaffil]{David Koes}
+\author[\Pittaffil]{David~R.~Koes}
 \author[\Novoaffil]{Jens~Erik~Nielsen}
 \author[\UCBaffil]{Teresa~Head-Gordon}
 \author[\SMUaffil]{Weihua Geng}
@@ -146,7 +146,8 @@ Amino acid tit\-rat\-ion states are important determinants of bio\-molecular (pa
 The APBS-PDB2PQR system contains several methods for this analysis.
 \begin{itemize}
 	\item \textit{Empirical methods.}
-	PDB2PQR provides an empirical model (PROPKA~\cite{Sondergaard2011}) which uses a heuristic method to compute p$K_a$ perturbations due to desolvation, hydrogen bonding, and charge-charge interactions is included in PDB2PQR.
+	PDB2PQR provides an empirical model (PROPKA~\cite{Sondergaard2011}) that uses a heuristic method to compute p$K_a$ perturbations due to desolvation, hydrogen bonding, and charge-charge interactions.
+	PROPKA is included with PDB2PQR.
 	The empirical PROPKA method has surprising accuracy for fast evaluation of protein p$K_a$ values~\cite{Li2005}.
 	\item \textit{Implicit solvent methods.}
 	PDB2PQR also contains two methods for using implicit solvent (Poisson-Boltzmann) models for predicting residue titration states.
@@ -277,21 +278,21 @@ One of the primary uses of the APBS tools is to generate electrostatic potential
 These packages offer both the ability to visualize APBS results as well as a graphical interface for setting up the calculation.
 Several of these software packages are thick clients that run from users' computers, including PyMOL~\cite{PyMOL, PyMOLweb}, VMD~\cite{VMDweb, Humphrey1996}, 
 PMV~\cite{PMV, MGLToolsweb}, and Chimera~\cite{Chimeraweb, Pettersen2004}.
-We have also worked with the developers of Jmol~\cite{Jmolweb, Herraez2006} and 3Dmol~\cite{, 3Dmolweb, Rego2015}. to provide web-based setup and visualization of APBS-PDB2PQR calculations and related workflows.
+We have also worked with the developers of Jmol~\cite{Jmolweb, Herraez2006} and 3Dmol.js~\cite{3Dmolweb, Rego2015}. to provide web-based setup and visualization of APBS-PDB2PQR calculations and related workflows.
 APBS integration with Jmol has been described previously~\cite{Unni2011}.
-3Dmol is a molecular viewer that offers the performance of a desktop application and convenience of a web-based viewer which broadens accessibility for all users.
-In order to integrate 3Dmol, enhancements were need for our tools, including extending our output file formats and creating a customized user interface.
+3Dmol.js is a molecular viewer that offers the performance of a desktop application and convenience of a web-based viewer which broadens accessibility for all users.
+As part of the integration with 3Dmol.js, we implemented additional enhancements, including extending our output file formats and creating a customized user interface.
 Data from the APBS output file is used to generate surfaces, apply color schemes, and display different molecular styles such as cartoons and spheres.
-An example of the 3Dmol interface is shown in Figure~\ref{fig:3dmol_interface}.
+An example of the 3Dmol.js interface is shown in Figure~\ref{fig:3dmol_interface}.
 %%%
 \begin{figure} 
 	\begin{center}
 		\includegraphics[width=.80\textwidth]{3dmol_interface}
-		\caption{3Dmol interface displaying a rendering of fasciculin-2 (1FAS) protein with translucent, solvent accessible surface using a stick model and red-green-blue color scheme. \label{fig:3dmol_interface}}  
+		\caption{3Dmol.js interface displaying a rendering of fasciculin-2 (1FAS) protein with translucent, solvent accessible surface using a stick model and red-green-blue color scheme. \label{fig:3dmol_interface}}  
 	\end{center}  
 \end{figure}
 %%%
-Examples of 3Dmol visualization options are shown in Figure~\ref{fig:features}.
+Examples of 3Dmol.js visualization options are shown in Figure~\ref{fig:features}.
 %%%
 \begin{figure}
 	\begin{center}
