@@ -498,6 +498,11 @@ S~Richter, A~Wenzel, M~Stein, R~R Gabdoulline, and R~C Wade.
   properties.
 \newblock {\em Nucleic Acids Res}, 36(Web Server issue):W276--80, Jul 2008.
 
+\bibitem{BrownDye}
+Gary~A. Huber and J.~Andrew McCammon.
+\newblock Browndye: A software package for brownian dynamics.
+\newblock {\em Computer Physics Communications}, 181(11):1896--1905, 11 2010.
+
 \bibitem{Martinez2015}
 Michael Martinez, Neil~J Bruce, Julia Romanowska, Daria~B Kokh, Musa Ozboyaci,
   Xiaofeng Yu, Mehmet~Ali {\"O}zt{\"u}rk, Stefan Richter, and Rebecca~C Wade.
