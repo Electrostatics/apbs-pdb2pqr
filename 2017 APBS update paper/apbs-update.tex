@@ -236,7 +236,7 @@ An example of this approximation, and the resulting electrostatic potentials fro
 	(B)~\includegraphics[width=0.23\linewidth]{pbam_barstar} 
 	(C)~\includegraphics[width=0.23\linewidth]{pbam_porin}
 	\caption{APBS PB-AM electrostatic potential results for
-		(A) 2D cross section for the electrostatic potential outside of two collections of point charges (each with net charge \(\pm 6 \)),
+		(A) 2D cross section for the electrostatic potential outside of two collections of point charges (each with net charge \(\pm 6 \), charge positions indicated by red and blue circles),
 		(B) potential on the spherical coarse-grain surface of a barstar molecule, 
 		(C) VMD~\cite{Humphrey1996} of the transmembrane trimer Omp32 porin (molecules are given in gray and isosurfaces are drawn at $1.0$ (blue) and $-1.0$ (red).
 		All calculations were performed at 0.0 M ionic strength, pH 7, protein dielectric 2, and solvent dielectric 78.
@@ -731,7 +731,7 @@ Major options include:
 		\item \keyword{x} or \keyword{y} or \keyword{y} or \keyword{z} or \keyword{r} and \param{$>=$} or \param{$<=$}: Represents the approach of two molecules to a certain distance \keyword{r} or certain region of space given by \keyword{x} or \keyword{y} or \keyword{y}.
 		The operators $>=$ and $<=$ represent the corresponding inequalities.
 	\end{itemize}
-	The parameter \param{mol} is the molecular index that this condition applies.  \param{mol} should be 0 for \keyword{time} and 1 for everything else.
+	The parameter \param{mol} is the molecular index that this condition applies.  \param{mol} should be 0 for \keyword{time} and for a termination condition of \keyword{x}, \keyword{y} or \keyword{z}, the molecule index that this termination condition applies to.
 	\item \keyword{xyz} \param{idx} \param{fpath}:  Molecule index \param{idx} and file path \param{fpath} for the molecule starting configurations. 
 	A starting configuration is needed for each molecule and each trajectory.
 	Therefore, jf there are $m$ molecules and \keyword{ntraj} \param{n} trajectories, then the input file must contain $m \times n$ \keyword{xyz} entries.
@@ -740,7 +740,7 @@ Major options include:
 	Increasing values of \param{val} leads to fewer coarse-grained spheres, faster calculation times, but less accurate solutions.
 	Typical values for \param{val} are between 1 and 5 \AA.
 \end{itemize}
-The commands (keywords) not included in this list are used to specify system conditions, such as temperature and salt concentration.
+The commands (keywords) not included in this list are used to specify system conditions, such as temperature and salt concentration. These parameters are similar to those found in the \keyword{ELEC} section of a usual APBS run and are documented on the Contributions portion of the APBS website~\cite{APBSweb}. 
 Additional information about parameter settings is provided via the APBS website~\cite{APBSweb}. Examples of the electrostatic potentials produced from PB-AM and PB-SAM are shown in Figures~\ref{fig:pbam-results} and~\ref{fig:pbsam-results}, respectively.
 
 \bibliography{apbs}
