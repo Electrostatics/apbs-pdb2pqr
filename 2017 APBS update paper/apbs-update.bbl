@@ -358,6 +358,13 @@ Weihua Geng and Robert Krasny.
   for electrostatics of solvated biomolecules.
 \newblock {\em Journal of Computational Physics}, 247:62--78, 2013.
 
+\bibitem{Juffer1991}
+Andr\'{e} Juffer, Eugen Botta, Bert van Keulen, Auke van~der Ploeg, and Herman
+  Berendsen.
+\newblock The electric potential of a macromolecule in a solvent: A fundamental
+  approach.
+\newblock {\em Journal of Computational Physics}, 97(1):144--171, 1991.
+
 \bibitem{Sanner1995}
 Michel Sanner, Arthur Olson, and Jean~Claude Spehner.
 \newblock Fast and robust computation of molecular surfaces.
@@ -373,13 +380,6 @@ Sergio Decherchi and Walter Rocchia.
 Peijun Li, Hans Johnston, and Robert Krasny.
 \newblock A {Cartesian} treecode for screened {Coulomb} interactions.
 \newblock {\em Journal of Computational Physics}, 228:3858--3868, 2009.
-
-\bibitem{Juffer1991}
-Andr\'{e} Juffer, Eugen Botta, Bert van Keulen, Auke van~der Ploeg, and Herman
-  Berendsen.
-\newblock The electric potential of a macromolecule in a solvent: A fundamental
-  approach.
-\newblock {\em Journal of Computational Physics}, 97(1):144--171, 1991.
 
 \bibitem{Bashford2000}
 D.~Bashford and D.~A. Case.
