@@ -99,11 +99,11 @@ JA~Grant, BT~Pickup, and A~Nicholls.
   methods.
 \newblock {\em Journal of Computational Chemistry}, 22:608--640, 2001.
 
-\bibitem{Chen2011}
-Z~Chen, N~A Baker, and G~W Wei.
-\newblock Differential geometry based solvation model {II}: {Lagrangian}
-  formulation.
-\newblock {\em Journal of Mathematical Biology}, 63(6):1139--200, 2011.
+\bibitem{Zhou2008}
+Y.~C. Zhou, M.~Feig, and G.~W. Wei.
+\newblock Highly accurate biomolecular electrostatics in continuum dielectric
+  environments.
+\newblock {\em Journal of Computational Chemistry}, 29(1):87--87, 2008.
 
 \bibitem{Baker2001a}
 N~A Baker, D~Sept, S~Joseph, M~J Holst, and J~A McCammon.
@@ -129,6 +129,11 @@ J~C Phillips, Rosemary Braun, W~Wang, J~Gumbart, E~Tajkhorshid, E~Villa,
   Christophe Chipot, R~D Skeel, Laxmikant Kal{\'e}, and K~Schulten.
 \newblock Scalable molecular dynamics with {NAMD}.
 \newblock {\em Journal of Computational Chemistry}, 26(16):1781--802, 2005.
+
+\bibitem{Rosetta}
+David Baker.
+\newblock {Rosetta} website.
+\newblock \url{https://www.rosettacommons.org/}.
 
 \bibitem{TINKER}
 Jay Ponder.
@@ -333,6 +338,12 @@ Z~Chen, N~A Baker, and G~W Wei.
 \newblock Differential geometry based solvation model {I}: {Eulerian}
   formulation.
 \newblock {\em Journal of Computational Physics}, 229(22):8231--8258, 2010.
+
+\bibitem{Chen2011}
+Z~Chen, N~A Baker, and G~W Wei.
+\newblock Differential geometry based solvation model {II}: {Lagrangian}
+  formulation.
+\newblock {\em Journal of Mathematical Biology}, 63(6):1139--200, 2011.
 
 \bibitem{Chen2012}
 Z~Chen, S~Zhao, J~Chun, D~G Thomas, N~A Baker, P~W Bates, and G~W Wei.

@@ -102,7 +102,7 @@ The PB theory is approximate and, as a result, has several well-known limitation
 Despite these limitations, PB methods are still very important and popular for biomolecular structural analysis, modeling, and simulation. 
 
 Several software packages have been developed that solve the Poisson-Boltzmann equations to evaluate energies, potentials, and other solvation properties.
-The most significant (based on user base and citations) of these include CHARMM~\cite{Brooks2009}, AMBER~\cite{Case2005}, DelPhi~\cite{Sarkar2013}, Jaguar~\cite{Bochevarov2013}, Zap~\cite{Grant2001}, MIBPB~\cite{Chen2011}, and APBS~\cite{Baker2001a}.
+The most significant (based on user base and citations) of these include CHARMM~\cite{Brooks2009}, AMBER~\cite{Case2005}, DelPhi~\cite{Sarkar2013}, Jaguar~\cite{Bochevarov2013}, Zap~\cite{Grant2001}, MIBPB~\cite{Zhou2008}, and APBS~\cite{Baker2001a}.
 However the APBS and associated software package PDB2PQR has served a large community of $\sim$27,000 users by creating web servers linked from the APBS website~\cite{APBSweb} that support preparation of biomolecular structures (see Section~\ref{sec:prep}) and a fast finite-difference solution of the Poisson-Boltzmann equation (see Section~\ref{sec:fd}) that are further augmented with a set of analysis tools.
 Most APBS electrostatics calculations follow the general workflow outlined in Figure~\ref{fig:PDB2PQR-APBS}.
 An even broader range of features and more flexible configuration is available when APBS and PDB2PQR are run from the command line on Linux, Mac, and Windows platforms, and which can be run locally or through web services provided by the NBCR-developed Opal toolkit~\cite{Krishnan2009}.
@@ -592,10 +592,10 @@ This appendix provides additional information about the analytical and semi-anal
 \subsection{Analytical method (PB-AM) background}
 The solution to the PB-AM model is represented as a system of linear equations:
 \begin{equation} \label{eq:pbam_solve}
-	\mathbf{A} = \Gamma \cdot (\Delta \cdot T \cdot \mathbf{A} + \mathbf{E}),
+	{A} = \Gamma \cdot (\Delta \cdot T \cdot {A} + {E}),
 \end{equation}
-where \(\mathbf{A}\) represents a vector of the effective multipole expansion of the charge distributions of each molecule, \(\mathbf{E}\) is a vector of the fixed charge distribution of all molecules, \(\Gamma\) is a dielectric boundary-crossing operator, \(\Delta\) is a cavity polarization operator, and \(T\) is an operator that transforms the multipole expansion from the global (lab) coordinates to a local coordinate frame. 
-The unknown \(\mathbf{A}\) determined using the Gauss-Seidel iterative method and can then be used to compute physical properties such as interaction energies, forces, and torques. 
+where \({A}\) represents a vector of the effective multipole expansion of the charge distributions of each molecule, \({E}\) is a vector of the fixed charge distribution of all molecules, \(\Gamma\) is a dielectric boundary-crossing operator, \(\Delta\) is a cavity polarization operator, and \(T\) is an operator that transforms the multipole expansion from the global (lab) coordinates to a local coordinate frame. 
+The unknown \({A}\) determined using the Gauss-Seidel iterative method and can then be used to compute physical properties such as interaction energies, forces, and torques. 
 The interaction energy for molecule \(i\), ($\Omega^{(i)}$) is given in Eq.~\ref{eq:pbam_energy}.
 %
 \begin{equation}\label{eq:pbam_energy}
@@ -634,7 +634,7 @@ For the case of spherical cavities, we can solve Eq.~\ref{eq:pbsam_lpbe} by divi
 The electrostatic potential outside molecule ($I$) is described by:
 %
 \begin{equation}
-	\phi_{out}^{(i)} (\mathbf{r})  = \sum_{I=1}^{N_{mol}} \left( 4 \pi \int_{d\Omega^{(I)}} \frac{e^{-\kappa | r - r'|}}{|r - r'|} h^{(I)} (r') dr'  \right)
+	\phi_{out}^{(i)} ({r})  = \sum_{I=1}^{N_{mol}} \left( 4 \pi \int_{d\Omega^{(I)}} \frac{e^{-\kappa | r - r'|}}{|r - r'|} h^{(I)} (r') dr'  \right)
 	\label{eq:pbsam_phi_in}
 \end{equation}
 %
@@ -642,7 +642,7 @@ where \(h(r)\) is an effective surface charge that can be transformed into the u
 In a similar manner, the interior potential is given as
 %
 \begin{equation}
-	\phi_{in}^{(i)} (\mathbf{r})  = \sum_{\alpha = 1}^{N_C^{(I)}} \frac{1}{|r-r_{\alpha}^{(I)}|} \cdot \frac{q_\alpha^{(I)}} {\epsilon_{in}} + \frac{1}{4\pi} \int_{d\Omega^{(I)}} \frac{1}{|r - r'|} f^{(I)} (r') dr' 
+	\phi_{in}^{(i)} ({r})  = \sum_{\alpha = 1}^{N_C^{(I)}} \frac{1}{|r-r_{\alpha}^{(I)}|} \cdot \frac{q_\alpha^{(I)}} {\epsilon_{in}} + \frac{1}{4\pi} \int_{d\Omega^{(I)}} \frac{1}{|r - r'|} f^{(I)} (r') dr' 
 	\label{eq:pbsam_phi_out}
 \end{equation}
 %
