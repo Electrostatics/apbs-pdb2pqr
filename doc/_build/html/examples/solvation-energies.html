@@ -1,0 +1,248 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Solvation energies with APBS &#8212; APBS-PDB2PQR 1.6 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.6',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Binding energies with APBS" href="binding-energies.html" />
+    <link rel="prev" title="Parameterizing ligands" href="parameterizing-ligands.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="solvation-energies-with-apbs">
+<h1>Solvation energies with APBS<a class="headerlink" href="#solvation-energies-with-apbs" title="Permalink to this headline">¶</a></h1>
+<p>Solvation energies are usually decomposed into a free energy cycle as shown in the free energy cycle below.
+Note that such solvation energies often performed on fixed conformations; as such, they are more correctly called &#8220;potentials of mean force&#8221;.
+More details on using APBS for the polar and nonpolar portions of such a cycle are given in the following sections.</p>
+<div class="figure" id="id1">
+<img alt="../_images/apbs_sol_eng.png" src="../_images/apbs_sol_eng.png" />
+<p class="caption"><span class="caption-text">Our model solvation free energy cycle illustrating several steps:
+1. The solvation energy to be calculated.
+2. Charging of the solute in solution (e.g., inhomogeneous dielectric, ions present).
+3. Introduction of attractive solute-solvent dispersive interaction interactions (e.g., an integral of Weeks-Chandler-Andersen interactions over the solvent-accessible volume).
+4. Introduction of repulsive solute-solvent interaction (e.g., cavity formation).
+5. Basically a null step although it could be used to offset unwanted energies added in Steps 3 and 4 above.
+6. Charging of the solute in a vacuum or homogeneous dielectric environment in the absence of mobile ions.</span></p>
+</div>
+<div class="section" id="polar-solvation">
+<h2>Polar solvation<a class="headerlink" href="#polar-solvation" title="Permalink to this headline">¶</a></h2>
+<p>The full free energy cycle is usually decomposed into polar and nonpolar parts.
+The polar portion is usually represented by the charging energies in Steps 2 and 6:</p>
+<div class="math">
+\[\Delta_p G = \Delta_2 G - \Delta_6 G\]</div>
+<p>Energies returned from APBS electrostatics calculations are charging free energies.
+Therefore, to calculate the polar contribution to the solvation free energy, we simply need to setup two calculations corresponding to Steps 2 and 6 in the free energy cycle.
+Note that the electrostatic charging free energies returned by APBS include self-interaction terms.
+These are the energies of a charge distribution interacting with itself.
+Such self-interaction energies are typically very large and extremely sensitive to the problem discretization (grid spacing, location, etc.).
+Therefore, it is very important that the two calculations in Steps 2 and 6 are performed with identical grid spacings, lengths, and centers, in order to ensure appropriate matching (or &#8220;cancellation&#8221;) of self-energy terms.</p>
+<div class="section" id="born-ion">
+<h3>Born ion<a class="headerlink" href="#born-ion" title="Permalink to this headline">¶</a></h3>
+<p>One of the canonical examples for polar solvation is the Born ion: a nonpolarizable sphere with a single charge at its center surrounded by an aqueous medium.
+Consider the transfer of a non-polarizable ion between two dielectrics.
+In the initial state, the dielectric coefficient inside and outside the ion is <span class="math">\(\epsilon\_{\mathrm {in}}\)</span>, and in the final state, the dielectric coefficient inside the ion is <span class="math">\(\epsilon\_{\mathrm {in}}\)</span> and the dielectric coefficient outside the ion is <span class="math">\(\epsilon\_{\mathrm {in}}\)</span>.
+In the absence of external ions, the polar solvation energy of this transfer for this system is given by:</p>
+<div class="math">
+\[\Delta\_p G\_{\mathrm{Born}}= \frac{q^2}{8\pi\epsilon\_0 a}\left (\frac{1}{\epsilon\_{\mathrm {out}}}-\frac{1}{\epsilon\_{\mathrm {in}}}\right)\]</div>
+<p>where q is the ion charge, a is the ion radius, and the two ε variables denote the two dielectric coefficients.
+This model assumes zero ionic strength.</p>
+<p>Note that, in the case of transferring an ion from vacuum, where <span class="math">\(\epsilon\_{\mathrm {in}} = 1\)</span>, the expression becomes</p>
+<div class="math">
+\[\Delta\_p G\_{\mathrm{Born}}= \frac{q^2}{8\pi\epsilon\_0 a}\left (\frac{1}{\epsilon\_{\mathrm {out}}}-1\right)\]</div>
+<p>We can setup a PQR file for the Born ion for use with APBS with the contents:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>REMARK  This is an ion with a <span class="m">3</span> A radius and a +1 e charge
+ATOM      <span class="m">1</span>   I  ION     <span class="m">1</span> <span class="m">0</span>.000   <span class="m">0</span>.000   <span class="m">0</span>.000  <span class="m">1</span>.00 <span class="m">3</span>.00
+</pre></div>
+</div>
+<p>We&#8217;re interested in performing two APBS calculations for the charging free energies in homogeneous and heterogeneous dielectric coefficients.
+We&#8217;ll assume the internal dielectric coefficient is 1 (e.g., a vacuum) and the external dielectric coefficient is 78.54 (e.g., water).
+For these settings, the polar Born ion solvation energy expression has the form</p>
+<div class="math">
+\[\Delta_p G_{\mathrm{Born}} = -691.85 \biggl( \frac{z^2}{R} \biggr) \mathrm {kJ \, A/mol}\]</div>
+<p>where z is the ion charge in electrons and R is the ion size in Å.</p>
+<p>This solvation energy calculation can be setup in APBS with the following input file:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span><span class="c1"># READ IN MOLECULES</span>
+<span class="nb">read</span>
+  mol pqr born.pqr
+end
+elec name solv <span class="c1"># Electrostatics calculation on the solvated state</span>
+  mg-manual <span class="c1"># Specify the mode for APBS to run</span>
+  dime <span class="m">97</span> <span class="m">97</span> <span class="m">97</span> <span class="c1"># The grid dimensions</span>
+  nlev <span class="m">4</span> <span class="c1"># Multigrid level parameter</span>
+  grid <span class="m">0</span>.33 <span class="m">0</span>.33 <span class="m">0</span>.33 <span class="c1"># Grid spacing</span>
+  gcent mol <span class="m">1</span> <span class="c1"># Center the grid on molecule 1</span>
+  mol <span class="m">1</span> <span class="c1"># Perform the calculation on molecule 1</span>
+  lpbe <span class="c1"># Solve the linearized Poisson-Boltzmann equation</span>
+  bcfl mdh <span class="c1"># Use all multipole moments when calculating the potential</span>
+  pdie <span class="m">1</span>.0 <span class="c1"># Solute dielectric</span>
+  sdie <span class="m">78</span>.54 <span class="c1"># Solvent dielectric</span>
+  chgm spl2 <span class="c1"># Spline-based discretization of the delta functions</span>
+  srfm mol <span class="c1"># Molecular surface definition</span>
+  srad <span class="m">1</span>.4 <span class="c1"># Solvent probe radius (for molecular surface)</span>
+  swin <span class="m">0</span>.3 <span class="c1"># Solvent surface spline window (not used here)</span>
+  sdens <span class="m">10</span>.0 <span class="c1"># Sphere density for accessibility object</span>
+  temp <span class="m">298</span>.15 <span class="c1"># Temperature</span>
+  calcenergy total <span class="c1"># Calculate energies</span>
+  calcforce no <span class="c1"># Do not calculate forces</span>
+end
+elec name ref <span class="c1"># Calculate potential for reference (vacuum) state</span>
+  mg-manual
+  dime <span class="m">97</span> <span class="m">97</span> <span class="m">97</span>
+  nlev <span class="m">4</span>
+  grid <span class="m">0</span>.33 <span class="m">0</span>.33 <span class="m">0</span>.33
+  gcent mol <span class="m">1</span>
+  mol <span class="m">1</span>
+  lpbe
+  bcfl mdh
+  pdie <span class="m">1</span>.0
+  sdie <span class="m">1</span>.0
+  chgm spl2
+  srfm mol
+  srad <span class="m">1</span>.4
+  swin <span class="m">0</span>.3
+  sdens <span class="m">10</span>.0
+  temp <span class="m">298</span>.15
+  calcenergy total
+  calcforce no
+end
+<span class="c1"># Calculate solvation energy</span>
+print energy solv - ref end
+quit
+</pre></div>
+</div>
+<p>Running this example with a recent version of APBS should give an answer of -229.59 kJ/mol which is in good agreement with the -230.62 kJ/mol predicted by the analytic formula above.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The Born example above can be easily generalized to other polar solvation energy calculations.
+For example, ions could be added to the solv ELEC, dielectric constants could be modified, surface definitions could be changed (in both ELEC sections!), or more complicated molecules could be examined.
+Many of the examples included with APBS also demonstrate solvation energy calculations.</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">As molecules get larger, it is important to examine the sensitivity of the calculated polar solvation energies with respect to grid spacings and dimensions.</p>
+</div>
+</div>
+</div>
+<div class="section" id="apolar-solvation">
+<h2>Apolar solvation<a class="headerlink" href="#apolar-solvation" title="Permalink to this headline">¶</a></h2>
+<p>Referring back to the solvation free energy cycle, the nonpolar solvation free energy is usually represented by the energy changes in Steps 3 through 5:</p>
+<div class="math">
+\[\Delta_n G = (\Delta_3 G - \Delta_5 G) + \Delta_4 G\]</div>
+<p>where Step 4 represents the energy of creating a cavity in solution and Steps 3-5 is the energy associated with dispersive interactions between the solute and solvent.
+There are many possible choices for modeling this nonpolar solvation process.
+APBS implements a relatively general model described by <a class="reference external" href="http://www.pnas.org/content/103/22/8331">Wagoner and Baker (2006)</a> and references therein.
+The implementation and invocation of this model is described in more in the <a class="reference internal" href="../apbs/input/apolar/index.html#apolar"><span class="std std-ref">APOLAR input file section</span></a> documentation.
+Our basic model for the cavity creation term (Step 4) is motivated by scaled particle theory and has the form</p>
+<div class="math">
+\[\Delta_4 G = pV + \gamma A\]</div>
+<p>where <span class="math">\(p\)</span> is the solvent pressure (<a class="reference internal" href="../apbs/input/apolar/press.html#press"><span class="std std-ref">press</span></a> keyword), <span class="math">\(V\)</span> is the solute volume, <span class="math">\(\gamma\)</span> is the solvent surface tension (<a class="reference internal" href="../apbs/input/apolar/gamma.html#gamma"><span class="std std-ref">gamma</span></a> keyword), and <span class="math">\(A\)</span> is the solute surface area.</p>
+<p>Our basic model for the dispersion terms (Steps 3 and 5) follow a Weeks-Chandler-Anderson framework as proposed by <a class="reference external" href="http://onlinelibrary.wiley.com/doi/10.1002/jcc.10045/abstract">Levy et al (2002)</a>:</p>
+<div class="math">
+\[\Delta_3 G - \Delta_5 G = \overset{-} \rho \int_\omega u^{(att)}(y)\theta(y)dy\]</div>
+<p>where <span class="math">\(\overline{\rho}\)</span> is the bulk solvent density (<a class="reference internal" href="../apbs/input/generic/bconc.html#bconc"><span class="std std-ref">bconc</span></a> keyword), <span class="math">\(\Omega\)</span> is the problem domain, <span class="math">\(u^{\mathrm{(att)}}(y)\)</span> is the attractive dispersion interaction between the solute and the solvent at point y with dispersive Lennard-Jones parameters specified in APBS parameter files, and <span class="math">\(\theta(y)\)</span> describes the solvent accessibility of point y.</p>
+<p>The ability to independently adjust <a class="reference internal" href="../apbs/input/apolar/press.html#press"><span class="std std-ref">press</span></a>, <a class="reference internal" href="../apbs/input/apolar/gamma.html#gamma"><span class="std std-ref">gamma</span></a>, and <a class="reference internal" href="../apbs/input/generic/bconc.html#bconc"><span class="std std-ref">bconc</span></a> means that the general nonpolar solvation model presented above can be easily adapted to other popular nonpolar solvation models.
+For example, setting <a class="reference internal" href="../apbs/input/apolar/press.html#press"><span class="std std-ref">press</span></a> and <a class="reference internal" href="../apbs/input/generic/bconc.html#bconc"><span class="std std-ref">bconc</span></a> to zero yields a typical solvent-accessible surface area model.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Solvation energies with APBS</a><ul>
+<li><a class="reference internal" href="#polar-solvation">Polar solvation</a><ul>
+<li><a class="reference internal" href="#born-ion">Born ion</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#apolar-solvation">Apolar solvation</a></li>
+</ul>
+</li>
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="index.html">APBS-PDB2PQR examples and tutorials</a><ul>
+      <li>Previous: <a href="parameterizing-ligands.html" title="previous chapter">Parameterizing ligands</a></li>
+      <li>Next: <a href="binding-energies.html" title="next chapter">Binding energies with APBS</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/examples/solvation-energies.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2017, Nathan Baker.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.5.6</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+      |
+      <a href="../_sources/examples/solvation-energies.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

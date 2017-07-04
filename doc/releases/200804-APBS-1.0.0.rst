@@ -1,0 +1,37 @@
+APBS 1.0.0 (2008-04)
+====================
+
+=====================
+New features
+=====================
+
+
+* Changed license to New BSD style open source license (see http://www.opensource.org/licenses/bsd-license.php) for more information
+* Added in a feature limited version of PMG (Aqua) that reduces the memory footprint of an APBS run by 2-fold
+* Modified several routines to boost the speed of APBS calculations by approximately 10% when combined with the low memory version of APBS
+* Simplified parameter input for ION and SMPBE keywords (key-value pairs) 
+* Examples and documentation for size-modified PBE code (Vincent Chu et al)
+* Added in "fast" compile-time option that uses optimized parameters for multigrid calculations
+* mg-dummy calculations can be run with any number (n>3) of grid points
+* Updated PMG license to LGPL
+* Added per-atom SASA information output from APOLAR calculations
+* Added per-atom verbosity to APOLAR calculation outputs
+* Ability to read-in MCSF-format finite element meshes (e.g., as produced by Holst group GAMER software)
+* Updated installation instructions in user guide
+* Updated inputgen.py to write out the electrostatic potential for APBS input file.
+
+==================
+Bug fixes
+==================
+
+* Updated tools/python/apbslib* for new NOsh functionality
+* Clarified ELEC/DIME and ELEC/PDIME documentation
+* Added more transparent warnings/error messages about path lengths which exceed the 80-character limit
+* Fixed small typo in user guide in installation instructions
+* Fixed memory leaks throughout the APBS code
+* Fixed NOsh_parseREAD errors for input files with \r line feeds.
+* Fixed a variable setting error in the test examples
+* Fixed a bug where memory usage is reported incorrectly for large allocations on 64-bit systems
+* Added DTRSV to APBS-supplied BLAS to satisfy FEtk SuperLU dependency
+* Fixed a small bug in routines.c to print out uncharged molecule id
+* Limited calculation of forces when surface maps are read in 

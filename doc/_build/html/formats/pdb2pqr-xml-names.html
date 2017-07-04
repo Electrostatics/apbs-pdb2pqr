@@ -1,0 +1,236 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>PDB2PQR NAMES files &#8212; APBS-PDB2PQR 1.6 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.6',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="APBS flat-file parameter format" href="flat-parm.html" />
+    <link rel="prev" title="APBS XML parameter format" href="apbs-xml-parm.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="pdb2pqr-names-files">
+<h1>PDB2PQR NAMES files<a class="headerlink" href="#pdb2pqr-names-files" title="Permalink to this headline">¶</a></h1>
+<p>Much of the difficulty in adding a new forcefield to PDB2PQR depends on the naming scheme used in that forcefield.</p>
+<div class="section" id="xml-file-format">
+<h2>XML file format<a class="headerlink" href="#xml-file-format" title="Permalink to this headline">¶</a></h2>
+<p>To start, either a flat file or XML file containing the desired forcefield&#8217;s parameters should be made - see <code class="file docutils literal"><span class="pre">AMBER.DAT</span></code> and <code class="file docutils literal"><span class="pre">AMBER.xml</span></code> for examples.
+If the forcefield&#8217;s naming scheme matches the canonical naming scheme, that&#8217;s all that is necessary.
+If the naming schemes differ, however, conversions must be made. These are made in the <code class="file docutils literal"><span class="pre">*.names</span></code> file (see <code class="file docutils literal"><span class="pre">CHARMM.names</span></code>, for example).
+In this file you will see sections like:&lt;/p&gt;</p>
+<div class="highlight-xml"><div class="highlight"><pre><span></span><span class="nt">&lt;residue&gt;</span>
+  <span class="nt">&lt;name&gt;</span>WAT<span class="nt">&lt;/name&gt;</span>
+  <span class="nt">&lt;useresname&gt;</span>TP3M<span class="nt">&lt;/useresname&gt;</span>
+  <span class="nt">&lt;atom&gt;</span>
+    <span class="nt">&lt;name&gt;</span>O<span class="nt">&lt;/name&gt;</span>
+    <span class="nt">&lt;useatomname&gt;</span>OH2<span class="nt">&lt;/useatomname&gt;</span>
+  <span class="nt">&lt;/atom&gt;</span>
+<span class="nt">&lt;/residue&gt;</span>
+</pre></div>
+</div>
+<p>This section tells PDB2PQR that for the oxygen atom O in WAT, CHARMM uses the names OH2 and TP3M, respectively.
+When the XML file is read in, PDB2PQR ensures that the WAT/O pair points to TP3M/OH2 such that the appropriate parameters are returned.
+But for naming schemes that greatly differ from the PDB2PQR canonical naming scheme, this could get really ugly.
+As a result, PDB2PQR can use regular expressions to simplify the renaming process, i.e.:</p>
+<div class="highlight-xml"><div class="highlight"><pre><span></span><span class="nt">&lt;residue&gt;</span>
+  <span class="nt">&lt;name&gt;</span>[NC]?...$<span class="nt">&lt;/name&gt;</span>
+  <span class="nt">&lt;atom&gt;</span>
+    <span class="nt">&lt;name&gt;</span>H<span class="nt">&lt;/name&gt;</span>
+    <span class="nt">&lt;useatomname&gt;</span>HN<span class="nt">&lt;/useatomname&gt;</span>
+  <span class="nt">&lt;/atom&gt;</span>
+<span class="nt">&lt;/residue&gt;</span>
+</pre></div>
+</div>
+<p>This section of code will ensure that the H atom of all canonical residue names that match the <code class="regexp docutils literal"><span class="pre">[NC]?...$</span></code> regular expression point to HN instead.
+This regular expression matches all three-letter residue names, residue names with an &#8216;N&#8217; prepended (N-Termini), and residue names with a &#8216;C&#8217; prepended (C-Termini).
+For twenty amino acids, sixty residue name changes can all be done by a single section.
+The use of regular expressions is therefore a much more powerful method of handling naming scheme differences than working on a one to one basis.</p>
+<p>There are a few other additional notes when using the <code class="file docutils literal"><span class="pre">.names</span></code> file.
+First, the <code class="docutils literal"><span class="pre">$group</span></code> variable is used to denote the matching group of a regular expression, for instance:</p>
+<div class="highlight-xml"><div class="highlight"><pre><span></span><span class="nt">&lt;residue&gt;</span>
+  <span class="nt">&lt;name&gt;</span>HI([PDE])$<span class="nt">&lt;/name&gt;</span>
+  <span class="nt">&lt;useresname&gt;</span>HS$group<span class="nt">&lt;/useresname&gt;</span>
+<span class="nt">&lt;/residue&gt;</span>
+</pre></div>
+</div>
+<p>This section replaces HIP/HID/HIE with HSP/HSD/HSE by first matching the HI([PDE])$ regular expression and then using the group that is enclosed by parantheses to fill in the name to use.</p>
+<p>Second, sections are cumulative - since CHARMM, for instance, has a patch-based naming scheme, one single canonical residue name can map to multiple forcefield-scheme names. Let&#8217;s look at how to map an SS-bonded Cysteine (canonical name CYX) to the CHARMM naming scheme:</p>
+<div class="highlight-xml"><div class="highlight"><pre><span></span><span class="nt">&lt;residue&gt;</span>
+  <span class="nt">&lt;name&gt;</span>CYX<span class="nt">&lt;/name&gt;</span>
+  <span class="nt">&lt;useresname&gt;</span>CYS<span class="nt">&lt;/useresname&gt;</span>
+<span class="nt">&lt;/residue&gt;</span>
+<span class="nt">&lt;residue&gt;</span>
+  <span class="nt">&lt;name&gt;</span>CYX<span class="nt">&lt;/name&gt;</span>
+  <span class="nt">&lt;useresname&gt;</span>DISU<span class="nt">&lt;/useresname&gt;</span>
+  <span class="nt">&lt;atom&gt;</span>
+    <span class="nt">&lt;name&gt;</span>CB<span class="nt">&lt;/name&gt;</span>
+    <span class="nt">&lt;useatomname&gt;</span>1CB<span class="nt">&lt;/useatomname&gt;</span>
+  <span class="nt">&lt;/atom&gt;</span>
+  <span class="nt">&lt;atom&gt;</span>
+    <span class="nt">&lt;name&gt;</span>SG<span class="nt">&lt;/name&gt;</span>
+    <span class="nt">&lt;useatomname&gt;</span>1SG<span class="nt">&lt;/useatomname&gt;</span>
+  <span class="nt">&lt;/atom&gt;</span>
+<span class="nt">&lt;/residue&gt;</span>
+</pre></div>
+</div>
+<p>The CYX residue is first mapped to CHARMM&#8217;s CYS, and then to CHARMM&#8217;s DISU object.
+All atom names that are found in DISU overwrite those found in CYS - in effect, the DISU patch is applied to CYS, yielding the desired CYX.
+This cumulative can be repeated as necessary.</p>
+</div>
+<div class="section" id="caveats-about-atom-naming">
+<h2>Caveats about atom naming<a class="headerlink" href="#caveats-about-atom-naming" title="Permalink to this headline">¶</a></h2>
+<p>In an ideal world each individual residue and atom would have a standard, distinct name.
+Unfortunately <a class="reference external" href="http://www.bmrb.wisc.edu/ref_info/atom_nom.tbl">several naming schemes for atoms exist</a>, particularly for hydrogens.
+As such, in order to detect the presence/absence of atoms in a protein, an internal canonical naming scheme is used.
+The naming scheme used in PDB2PQR is the one recommended by the PDB itself, and derives from the IUPAC naming recommendations <a class="footnote-reference" href="#naming" id="id1">[1]</a></p>
+<table class="docutils footnote" frame="void" id="naming" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id1">[1]</a></td><td><ol class="first last upperalpha simple" start="10">
+<li><ol class="first upperalpha" start="12">
+<li>Markley, et al., &#8220;Recommendations for the Presentation of NMR Structures of Proteins and Nucleic Acids,&#8221; Pure &amp; Appl. Chem., 70 (1998): 117-142.  DOI:<a class="reference external" href="http://dx.doi.org/10.1046/j.1432-1327.1998.2560001.x">10.1046/j.1432-1327.1998.2560001.x</a></li>
+</ol>
+</li>
+</ol>
+</td></tr>
+</tbody>
+</table>
+<p>This canonical naming scheme is used as the default PDB2PQR output.
+All conversions in PDB2PQR use the internal canonical naming scheme to determine distinct atom names.
+In previous versions of PDB2PQR, these conversions were stored in long lists of if statements, but for transparency and editing this is a bad thing.
+Instead, all conversions can now be found in XML as described above.</p>
+<p>There are a few additions to the canonical naming scheme, mirrored after the AMBER naming scheme (chosen since for the most part it follows the IUPAC recommendations).
+These changes are made in <code class="file docutils literal"><span class="pre">PATCHES.xml</span></code>, and allow any of the following to be patched as necessary as well as detected on input:</p>
+<dl class="docutils">
+<dt><code class="regexp docutils literal"><span class="pre">N*</span></code></dt>
+<dd>N-Terminal Residue (i.e. NALA, NLEU)</dd>
+<dt><code class="regexp docutils literal"><span class="pre">NEUTRAL-N*</span></code></dt>
+<dd>Neutral N-Terminal Residue</dd>
+<dt><code class="regexp docutils literal"><span class="pre">C*</span></code></dt>
+<dd>C-Terminal Residue (i.e. CLYS, CTYR)</dd>
+<dt><code class="regexp docutils literal"><span class="pre">NEUTRAL-C*</span></code></dt>
+<dd>Neutral C-Terminal Residue</dd>
+<dt><code class="regexp docutils literal"><span class="pre">*5</span></code></dt>
+<dd>5-Terminus for Nucleic Acids (i.e. DA5)</dd>
+<dt><code class="regexp docutils literal"><span class="pre">*3</span></code></dt>
+<dd>3-Terminus for Nucleic Acids (i.e. DA3)</dd>
+<dt><code class="docutils literal"><span class="pre">ASH</span></code></dt>
+<dd>Neutral ASP</dd>
+<dt><code class="docutils literal"><span class="pre">CYX</span></code></dt>
+<dd>SS-bonded CYS</dd>
+<dt><code class="docutils literal"><span class="pre">CYM</span></code></dt>
+<dd>Negative CYS</dd>
+<dt><code class="docutils literal"><span class="pre">GLH</span></code></dt>
+<dd>Neutral GLU</dd>
+<dt><code class="docutils literal"><span class="pre">HIP</span></code></dt>
+<dd>Positive HIS</dd>
+<dt><code class="docutils literal"><span class="pre">HID</span></code></dt>
+<dd>Neutral HIS, proton HD1 present</dd>
+<dt><code class="docutils literal"><span class="pre">HIE</span></code></dt>
+<dd>Neutral HIS, proton HE2 present</dd>
+<dt><code class="docutils literal"><span class="pre">LYN</span></code></dt>
+<dd>Neutral LYS</dd>
+<dt><code class="docutils literal"><span class="pre">TYM</span></code></dt>
+<dd>Negative TYR</dd>
+</dl>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">PDB2PQR NAMES files</a><ul>
+<li><a class="reference internal" href="#xml-file-format">XML file format</a></li>
+<li><a class="reference internal" href="#caveats-about-atom-naming">Caveats about atom naming</a></li>
+</ul>
+</li>
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="index.html">File formats</a><ul>
+      <li>Previous: <a href="apbs-xml-parm.html" title="previous chapter">APBS XML parameter format</a></li>
+      <li>Next: <a href="flat-parm.html" title="next chapter">APBS flat-file parameter format</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/formats/pdb2pqr-xml-names.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2017, Nathan Baker.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.5.6</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+      |
+      <a href="../_sources/formats/pdb2pqr-xml-names.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

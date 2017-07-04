@@ -1,0 +1,135 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>APBS 0.3.2 (2004-11) &#8212; APBS-PDB2PQR 1.6 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.6',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="PDB2PQR 1.0.0 (2005-08)" href="200508-PDB2PQR-1.0.0.html" />
+    <link rel="prev" title="APBS 0.3.1 (2004-04)" href="200404-APBS-0.3.1.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="apbs-0-3-2-2004-11">
+<h1>APBS 0.3.2 (2004-11)<a class="headerlink" href="#apbs-0-3-2-2004-11" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="new-features">
+<h2>New features<a class="headerlink" href="#new-features" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>Updated tutorial with more mg-auto examples</li>
+<li>Updated apbs.spec file for generating RPMs on more platforms.</li>
+<li>Added new Python wrapper to tools/python directory showing how to run APBS without PQR and .in inputs.</li>
+<li>Python wrappers are now configured to compile on more architectures/ from more compilers.</li>
+<li>Updated tools/conversion/pdb2pqr to a new version (0.1.0) of PDB2PQR, which now can handle nucleic acids, rebuild missing heavy atoms, add hydrogens, and perform some optimization.</li>
+</ul>
+</div>
+<div class="section" id="bug-fixes">
+<h2>Bug fixes<a class="headerlink" href="#bug-fixes" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>The dimensions of the fine grids in the pka-lig example calculations were increased to give more reliable results (albeit ones which don&#8217;t agree with the reported UHBD values as well).</li>
+<li>hz in mgparse.c causes name clash with AIX environmental variable; fixed.</li>
+<li>Fixed documentation to state that using a kappa map does not ignore ELEC ION statements.</li>
+<li>Added a stability fix for printing charge densities for LPBE-type calculations.</li>
+<li>Fixed a bug in NPBE calculations which led to incorrect charge densities and slightly modified total energies.</li>
+<li>Modified the origin when creating UHBD grids to match standard UHBD format.</li>
+<li>Fixed VASSERT error caused by rounding error when reading in dx grid files.</li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">APBS 0.3.2 (2004-11)</a><ul>
+<li><a class="reference internal" href="#new-features">New features</a></li>
+<li><a class="reference internal" href="#bug-fixes">Bug fixes</a></li>
+</ul>
+</li>
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="../downloads.html">How to get the software</a><ul>
+      <li>Previous: <a href="200404-APBS-0.3.1.html" title="previous chapter">APBS 0.3.1 (2004-04)</a></li>
+      <li>Next: <a href="200508-PDB2PQR-1.0.0.html" title="next chapter">PDB2PQR 1.0.0 (2005-08)</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/releases/200411-APBS-0.3.2.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2017, Nathan Baker.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.5.6</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+      |
+      <a href="../_sources/releases/200411-APBS-0.3.2.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

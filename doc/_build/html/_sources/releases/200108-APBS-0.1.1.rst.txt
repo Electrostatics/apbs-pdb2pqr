@@ -1,0 +1,10 @@
+APBS 0.1.1 (2001-08)
+====================
+
+I am slightly less pleased to announce the first bug-fix for APBS, version 0.1.1.
+This fixes compilation problems that popped up for several folks,
+including:
+
+* Syntax errors with non-GNU compilers
+* Errors in the installation instructions
+* Installation of binary in machine-specific directory

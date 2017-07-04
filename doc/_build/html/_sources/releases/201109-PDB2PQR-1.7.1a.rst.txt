@@ -1,0 +1,19 @@
+PDB2PQR 1.7.1a (2011-09-13)
+===========================
+
+------------
+New features
+------------
+
+* Added force field example.
+
+--------- 
+Bug fixes
+--------- 
+
+* Fixed ligand command line option.
+* Fixed capitalization of force field in PQR header.
+* Fixed error handling for opal errors.
+* Fixed web logging error when using ligand files, user force fields, and name files.
+* Fixed extension template in documentation.
+* Fixed 1a1p example README to reflect command line changes.

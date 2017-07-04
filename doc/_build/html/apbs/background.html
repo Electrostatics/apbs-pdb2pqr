@@ -1,0 +1,222 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Solvation model background &#8212; APBS-PDB2PQR 1.6 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.6',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Caveats and sources of error" href="errors.html" />
+    <link rel="prev" title="PRINT input file section" href="input/print.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="solvation-model-background">
+<h1>Solvation model background<a class="headerlink" href="#solvation-model-background" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="solvation-models">
+<h2>Solvation Models<a class="headerlink" href="#solvation-models" title="Permalink to this headline">¶</a></h2>
+<p>Electrostatic and solvation models can be roughly divided into two classes (<a class="reference internal" href="#warshel2006" id="id1">[Warshel2006]</a>, <a class="reference internal" href="#roux1999" id="id2">[Roux1999]</a>, <a class="reference internal" href="#ren2012" id="id3">[Ren2012]</a>) explicit solvent models that treat the solvent in atomic detail and implicit solvent models that generally replace the explicit solvent with a dielectric continuum.
+Each method has its strengths and weaknesses.
+While explicit solvent models offer some of the highest levels of detail, they generally require extensive sampling to converge properties of interest.
+On the other hand, implicit solvent models trade detail and some accuracy for the “pre-equilibration” of solvent degrees of freedom and elimination of sampling for these degrees of freedom. Implicit solvent methods are popular for a variety of biomedical research problems.</p>
+<p>The polar solvation energy is generally associated with a difference in charging free energies in vacuum and solvent.
+A variety of implicit solvent models are available to biomedical researchers to describe polar solvation; however, the most widely-used methods are currently the Generalized Born (GB) and Poisson-Boltzmann (PB) models.
+GB and related methods are very fast heuristic models for estimating the polar solvation energies of biomolecular structures and therefore are often used in high-throughput applications such as molecular dynamics simulations.
+PB methods can be formally derived from more detailed theories and offer a somewhat slower, but often more accurate, method for evaluating polar solvation properties and often serve as the basis for parameterization and testing of GB methods.
+Finally, unlike most GB methods, PB models provide a global solution for the electrostatic potential and field within and around a biomolecule, therefore making them uniquely suited to visualization and other structural analyses, diffusion simulations, and a number of other methods which require global electrostatic properties.</p>
+<p>The PB equation (<a class="reference internal" href="#fogolari2002" id="id4">[Fogolari2002]</a>, <a class="reference internal" href="#lamm2003" id="id5">[Lamm2003]</a>, <a class="reference internal" href="#grochowski2007" id="id6">[Grochowski2007]</a>, <a class="reference internal" href="#baker2005" id="id7">[Baker2005]</a>) is a nonlinear elliptic partial differential equation of the form shown in the figure below which is solved for the electrostatic potential.
+The coefficients of this equation are directly related to the molecular structure of the system under consideration.
+PB theory is approximate and, as a result, has several well-known limitations which can affect its accuracy (<a class="reference internal" href="#grochowski2007" id="id8">[Grochowski2007]</a>, <a class="reference internal" href="#netz2000" id="id9">[Netz2000]</a>), particularly for strongly charged systems or high salt concentrations.
+However, despite these limitations, PB methods are still very important for biomolecular structural analysis, modeling, and simulation.
+Furthermore, these limitations are currently being addressed through new implicit solvent models and hybrid treatments which extend the applicability of PB theory while preserving some of its computational efficiency.
+There are currently examples of both types of treatments which leverage APBS (<a class="reference internal" href="#azuara2006" id="id10">[Azuara2006]</a>, <a class="reference internal" href="#chu2007" id="id11">[Chu2007]</a>, <a class="reference internal" href="#vitalis2004" id="id12">[Vitalis2004]</a>).</p>
+<img alt="../_images/pb-schematic.png" src="../_images/pb-schematic.png" />
+<p>PB methods provide polar solvation energies and therefore must be complemented by non-polar solvation models to provide a complete view of biomolecular solvent-solute interactions. non-polar solvation is generally associated with the insertion of the uncharged solute into solvent. There are many non-polar solvation models available; however, work by Levy et al. <a class="reference internal" href="#levy2003" id="id13">[Levy2003]</a> as well as our own research <a class="reference internal" href="#wagoner2006" id="id14">[Wagoner2006]</a> has demonstrated the importance of non-polar implicit solvent models which include treatment of attractive solute-solvent dispersion terms.
+This model has been implemented in APBS and can also be easily transformed into simpler popular non-polar models (e.g., solvent-accessible surface area).
+While this model can be used separately from PB to analyze non-polar contributions to solvation energy, its preferred use is coupled to the PB equation through a geometric flow model <a class="reference internal" href="#chen2010" id="id15">[Chen2010]</a> which treats polar and non-polar interactions in the same framework and reduces the number of user-specified empirical parameters.</p>
+</div>
+<div class="section" id="further-reading">
+<h2>Further Reading<a class="headerlink" href="#further-reading" title="Permalink to this headline">¶</a></h2>
+<table class="docutils citation" frame="void" id="azuara2006" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id10">[Azuara2006]</a></td><td>Azuara C, Lindahl E, Koehl P, Orland H, and Delarue M, PDB_Hydro: incorporating dipolar solvents with variable density in the Poisson-Boltzmann treatment of macromolecule electrostatics. Nucleic Acids Research, 2006. 34: p. W38-W42.</td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="baker2005" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id7">[Baker2005]</a></td><td>Baker NA, Biomolecular Applications of Poisson-Boltzmann Methods, in Reviews in Computational Chemistry, Lipkowitz KB, Larter R, and Cundari TR, Editors. 2005, John Wiley and Sons.</td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="chen2010" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id15">[Chen2010]</a></td><td>Chen Z, Baker NA, Wei GW. Differential geometry based solvation model I: Eulerian formulation, J Comput Phys, 229, 8231-58, 2010.</td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="chu2007" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id11">[Chu2007]</a></td><td>Chu VB, Bai Y, Lipfert J, Herschlag D, and Doniach S, Evaluation of Ion Binding to DNA Duplexes Using a Size-Modified Poisson-Boltzmann Theory. Biophysical Journal, 2007. 93(9): p. 3202-9.</td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="fogolari2002" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id4">[Fogolari2002]</a></td><td>Fogolari F, Brigo A, and Molinari H, The Poisson-Boltzmann equation for biomolecular electrostatics: a tool for structural biology. Journal of Molecular Recognition, 2002. 15(6): p. 377-92.</td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="grochowski2007" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label">[Grochowski2007]</td><td><em>(<a class="fn-backref" href="#id6">1</a>, <a class="fn-backref" href="#id8">2</a>)</em> Grochowski P, lstrok A, and Trylska J, Continuum molecular electrostatics, salt effects and counterion binding. A review of the Poisson-Boltzmann theory and its modifications. Biopolymers, 2007. 89(2): p. 93-113.</td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="lamm2003" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id5">[Lamm2003]</a></td><td>Lamm G, The Poisson-Boltzmann Equation, in Reviews in Computational Chemistry, Lipkowitz KB, Larter R, and Cundari TR, Editors. 2003, John Wiley and Sons, Inc. p. 147-366.</td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="levy2003" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id13">[Levy2003]</a></td><td>Levy RM, Zhang LY, Gallicchio E, and Felts AK, On the nonpolar hydration free energy of proteins: surface area and continuum solvent models for the solute-solvent interaction energy. Journal of the American Chemical Society, 2003. 125(31): p. 9523-30.</td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="netz2000" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id9">[Netz2000]</a></td><td>Netz RR and Orland H, Beyond Poisson-Boltzmann: Fluctuation effects and correlation functions. European Physical Journal E, 2000. 1(2-3): p. 203-14.</td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="ren2012" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id3">[Ren2012]</a></td><td>Ren P, Chun J, Thomas DG, Schnieders M, Marucho M, Zhang J, Baker NA, Biomolecular electrostatics and solvation: a computational perspective. Quarterly Reviews of Biophysics, 2012. 45(4): p. 427-491.</td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="roux1999" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id2">[Roux1999]</a></td><td>Roux B and Simonson T, Implicit solvent models. Biophysical Chemistry, 1999. 78(1-2): p. 1-20.</td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="vitalis2004" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id12">[Vitalis2004]</a></td><td>Vitalis A, Baker NA, McCammon JA, ISIM: A program for grand canonical Monte Carlo simulations of the ionic environment of biomolecules, Molecular Simulation, 2004, 30(1), 45-61.</td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="wagoner2006" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id14">[Wagoner2006]</a></td><td>Wagoner JA and Baker NA, Assessing implicit models for nonpolar mean solvation forces: the importance of dispersion and volume terms. Proceedings of the National Academy of Sciences of the United States of America, 2006. 103(22): p. 8331-6.</td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="warshel2006" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id1">[Warshel2006]</a></td><td>Warshel A, Sharma PK, Kato M, and Parson WW, Modeling electrostatic effects in proteins. Biochimica et Biophysica Acta (BBA) - Proteins &amp; Proteomics, 2006. 1764(11): p. 1647-76.</td></tr>
+</tbody>
+</table>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Solvation model background</a><ul>
+<li><a class="reference internal" href="#solvation-models">Solvation Models</a></li>
+<li><a class="reference internal" href="#further-reading">Further Reading</a></li>
+</ul>
+</li>
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="index.html">APBS</a><ul>
+      <li>Previous: <a href="input/print.html" title="previous chapter">PRINT input file section</a></li>
+      <li>Next: <a href="errors.html" title="next chapter">Caveats and sources of error</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/apbs/background.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2017, Nathan Baker.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.5.6</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+      |
+      <a href="../_sources/apbs/background.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

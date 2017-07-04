@@ -1,0 +1,14 @@
+APBS 0.2.0 (2002-03)
+====================
+
+
+This version is a public (beta) release candidate and includes:
+
+
+* Slight modification of the user and programmer's guides
+* Scripts for visualization of potential results in VMD (Contributed by Dave Sept)
+* Corrections to some of the example input files
+* A few additional API features
+   
+
+This release requires a new version of MALOC. 

@@ -1,0 +1,175 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>PDB2PQR 1.9 (2014-03) &#8212; APBS-PDB2PQR 1.6 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.6',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="APBS 1.4.1 (2014-08)" href="201408-APBS-1.4.1.html" />
+    <link rel="prev" title="APBS 1.4.0 (2012-07)" href="201207-APBS-1.4.0.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="pdb2pqr-1-9-2014-03">
+<h1>PDB2PQR 1.9 (2014-03)<a class="headerlink" href="#pdb2pqr-1-9-2014-03" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="new-features">
+<h2>New features<a class="headerlink" href="#new-features" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>Binary builds do not require python or numpy be installed to use. Everything needed to run PDB2PQR is included. Just unpack and use.</li>
+<li>OSX binaries require OSX 10.6 or newer. The OSX binary is 64-bit.</li>
+<li>Linux binaries require CentOS 6 or newer and have been tested on Ubuntu 12.04 LTS and Linux Mint 13. If you are running 64-bit Linux use the 64-bit libraries. In some cases the needed 32-bit system libraries will not be installed on a 64-bit system.</li>
+<li>Windows binaries are 32 bit and were built and tested on Windows 7 64-bit but should work on Windows XP, Vista, and 8 both 32 and 64-bit systems.</li>
+<li>PDB2PQR can now be compiled and run on Windows using MinGW32. See <a class="reference external" href="http://mingw.org/">http://mingw.org/</a> for details.</li>
+<li>PDB2PQR now uses Scons for compilations. With this comes improved automated testing.</li>
+<li>A ligand file with duplicate atoms will cause pdb2pqr to stop instead of issue a warning. Trust us, this is a feature, not a bug!</li>
+<li>Improved error reporting.</li>
+<li>Added support for reference command line option for PROPKA.</li>
+<li>Added newresinter plugin to provide alternate methods for calculating interaction energies between residues.</li>
+<li>Mol2 file handling is now case insensitive with atom names.</li>
+<li>PROPKA with a pH of 7 is now specified by default on the web service.</li>
+<li>Compilation is now done with scons.</li>
+<li>Verbose output now includes information on all patches applied during a run.</li>
+<li>Added stderr and stdout to web error page.</li>
+<li>Added warning to water optimization when other water is ignored.</li>
+<li>Command line used to generate a pqr is now duplicated in the comments of the output.</li>
+<li>Added support for NUMMDL in parser.</li>
+<li>Added complete commandline feature test. Use complete-test target.</li>
+<li>Added propka support for phosphorous sp3. - Thanks to Dr. Stefan Henrich</li>
+<li>Added a PyInstaller spec file. Standalone pdb2pqr builds are now possible.</li>
+</ul>
+</div>
+<div class="section" id="bug-fixes">
+<h2>Bug fixes<a class="headerlink" href="#bug-fixes" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>Rolled back change that prevented plugins from interfering with each other. Large proteins would cause a stack overflow when trying to do a deep copy</li>
+<li>Updated INSTALL file to reflect no more need for Fortran.</li>
+<li>Fixed apbs input file to match what web interface produces.</li>
+<li>Fixed user specified mobile ion species not being passed to apbs input file.</li>
+<li>Removed ambiguous A, ADE, C, CYT, G, GUA, T, THY, U, URA as possible residue names.</li>
+<li>Removed eval from pdb parsing routines.</li>
+<li>Updated web links where appropriate.</li>
+<li>Fixed hbond extension output to include insertion code in residue name.</li>
+<li>Fixed debumping routines not including water in their checks. Fixes bad debump of ASN B 20 in 1gm9 when run with pH 7.0.</li>
+<li>Fixed debumping failing to use best angle for a specific dihedral angle when no tested angles are without conflict.</li>
+<li>Fixed debumping using asymmetrical cutoffs and too large cutoffs in many checks involving hydrogen.</li>
+<li>Fixed debumping accumulating rounding error while checking angles.</li>
+<li>Fixed inconsistencies in pdb parsing. - Thanks to Dr. Stefan Henrich</li>
+<li>Fixed problems with propka handling of aromatic carbon/nitrogen. - Thanks to Dr. Stefan Henrich</li>
+<li>Fixed case where certain apbs compile options would break web visualization.</li>
+<li>Fixed improper handling of paths with a &#8216;.&#8217; or filenames with more than one &#8216;.&#8217; in them.</li>
+</ul>
+</div>
+<div class="section" id="known-bugs">
+<h2>Known bugs<a class="headerlink" href="#known-bugs" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>If more than one extension is run from the command line and one of the extensions modifies the protein data structure it could affect the output of the other extension. The only included extensions that exhibit this problem are resinter and newresinter.</li>
+</ul>
+</div>
+<div class="section" id="other-comments">
+<h2>Other comments<a class="headerlink" href="#other-comments" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>Removed numpy from contrib. The user is expected to have numpy installed and available to python at configuration.</li>
+<li>Support for numeric dropped.</li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">PDB2PQR 1.9 (2014-03)</a><ul>
+<li><a class="reference internal" href="#new-features">New features</a></li>
+<li><a class="reference internal" href="#bug-fixes">Bug fixes</a></li>
+<li><a class="reference internal" href="#known-bugs">Known bugs</a></li>
+<li><a class="reference internal" href="#other-comments">Other comments</a></li>
+</ul>
+</li>
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="../downloads.html">How to get the software</a><ul>
+      <li>Previous: <a href="201207-APBS-1.4.0.html" title="previous chapter">APBS 1.4.0 (2012-07)</a></li>
+      <li>Next: <a href="201408-APBS-1.4.1.html" title="next chapter">APBS 1.4.1 (2014-08)</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/releases/201403-PDB2PQR-1.9.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2017, Nathan Baker.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.5.6</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+      |
+      <a href="../_sources/releases/201403-PDB2PQR-1.9.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

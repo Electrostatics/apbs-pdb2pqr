@@ -57,3 +57,5 @@ pdb2pqr/msvs
 *.blg
 2017 APBS update paper/apbs.bib.bak
 *.sav
+*.bcf
+2017 APBS update paper/apbs-update.run.xml

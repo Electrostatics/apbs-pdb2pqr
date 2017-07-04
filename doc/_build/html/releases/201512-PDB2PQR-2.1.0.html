@@ -1,0 +1,149 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>PDB2PQR 2.1.0 (2015-12) &#8212; APBS-PDB2PQR 1.6 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.6',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="APBS 1.4.2.0 (2016-01)" href="201601-APBS-1.4.2.0.html" />
+    <link rel="prev" title="PDB2PQR 2.0.0 (2014-12)" href="201412-PDB2PQR-2.0.0.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="pdb2pqr-2-1-0-2015-12">
+<h1>PDB2PQR 2.1.0 (2015-12)<a class="headerlink" href="#pdb2pqr-2-1-0-2015-12" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="new-features">
+<h2>New features<a class="headerlink" href="#new-features" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>Added alternate method to do visualization using 3dmol.</li>
+<li>Replaced the Monte Carlo method for generating titration curves with Graph Cut.  See <a class="reference external" href="http://arxiv.org/abs/1507.07021">http://arxiv.org/abs/1507.07021</a>.  If you prefer the Monte Carlo Method, please use <a class="reference external" href="http://nbcr-222.ucsd.edu/pdb2pqr_2.0.0/">http://nbcr-222.ucsd.edu/pdb2pqr_2.0.0/</a></li>
+</ul>
+</div>
+<div class="section" id="bug-fixes">
+<h2>Bug fixes<a class="headerlink" href="#bug-fixes" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>Added compile options to allow for arbitrary flags to be added.  Helps work around some platforms where scons does not detect the needed settings correctly.</li>
+<li>Fixed broken links on APBS submission page.</li>
+<li>Added some missing files to query status page results.</li>
+<li>Fixed some pages to use the proper CSS file.</li>
+<li>Better error message for <code class="docutils literal"><span class="pre">--assign-only</span></code> and HIS residues.</li>
+<li>Fixed PROPKA crash for unrecognized residue.</li>
+<li>Debumping routines are now more consistent across platforms.  This fixes pdb2pka not giving the same results on different platforms.</li>
+</ul>
+</div>
+<div class="section" id="known-bugs">
+<h2>Known bugs<a class="headerlink" href="#known-bugs" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>If more than one extension is run from the command line and one of the extensions modifies the protein data structure it could affect the output of the other extension. The only included extensions that exhibit this problem are resinter and newresinter.</li>
+<li>Running ligands and PDB2PKA at the same time is not currently supported.</li>
+<li>PDB2PKA currently leaks memory slowly. Small jobs will use about twice the normally required RAM (i.e. ~14 titratable residues will use 140MB). Big jobs will use about 5 times the normally required RAM (60 titratable residues will use 480MB). We are working on this.</li>
+</ul>
+</div>
+<div class="section" id="other-comments">
+<h2>Other comments<a class="headerlink" href="#other-comments" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>Added fabric script used to build and test releases.</li>
+<li>The newtworkx library is now required for pdb2pka.</li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">PDB2PQR 2.1.0 (2015-12)</a><ul>
+<li><a class="reference internal" href="#new-features">New features</a></li>
+<li><a class="reference internal" href="#bug-fixes">Bug fixes</a></li>
+<li><a class="reference internal" href="#known-bugs">Known bugs</a></li>
+<li><a class="reference internal" href="#other-comments">Other comments</a></li>
+</ul>
+</li>
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="../downloads.html">How to get the software</a><ul>
+      <li>Previous: <a href="201412-PDB2PQR-2.0.0.html" title="previous chapter">PDB2PQR 2.0.0 (2014-12)</a></li>
+      <li>Next: <a href="201601-APBS-1.4.2.0.html" title="next chapter">APBS 1.4.2.0 (2016-01)</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/releases/201512-PDB2PQR-2.1.0.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2017, Nathan Baker.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.5.6</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+      |
+      <a href="../_sources/releases/201512-PDB2PQR-2.1.0.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

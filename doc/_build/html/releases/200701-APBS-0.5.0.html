@@ -1,0 +1,194 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>APBS 0.5.0 (2007-01) &#8212; APBS-PDB2PQR 1.6 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.6',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="PDB2PQR 1.2.0 (2007-01)" href="200701-PDB2PQR-1.2.0.html" />
+    <link rel="prev" title="PDB2PQR 1.1.2 (2006-06)" href="200606-PDB2PQR-1.1.2.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="apbs-0-5-0-2007-01">
+<h1>APBS 0.5.0 (2007-01)<a class="headerlink" href="#apbs-0-5-0-2007-01" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="new-features">
+<h2>New features<a class="headerlink" href="#new-features" title="Permalink to this headline">¶</a></h2>
+<ul>
+<li><p class="first">Significantly streamlined the configure/build/install procedure:</p>
+<blockquote>
+<div><ul class="simple">
+<li>Most common compiler/library options now detected by default</li>
+<li>MALOC is now included as a &#8220;plugin&#8221; to simplify installation and compatibility issue</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first">Added new APOLAR section to input file and updated documentation &#8211; this function renders tools/manip/acc obsolete.</p>
+</li>
+<li><p class="first">Added support for standard one-character chain IDs in PQR files.</p>
+</li>
+<li><p class="first">Added a new &#8220;spl4&#8221; charge method (chgm) option to support a quintic B-spline discretization (thanks to Michael Schnieders).</p>
+</li>
+<li><p class="first">Updated psize.py</p>
+</li>
+<li><p class="first">Added a new &#8220;spl4&#8221; ion-accessibility coefficient model (srfm) option that uses a 7th order polynomial. This option provides the higher order continuity necessary for stable force calculations with atomic multipole force fields (thanks to Michael Schnieders).</p>
+</li>
+<li><p class="first">Modified the &#8220;sdh&#8221; boundary condition (bcfl) option to include dipoles and quadrupoles.  Well-converged APBS calculations won&#8217;t change with the dipole and quadrupole molecular moments included in the boundary potential estimate, but calculations run with the boundary close to the solute should give an improved result (thanks to Michael Schnieders).</p>
+</li>
+<li><p class="first">Updated documentation to reflect new iAPBS features (NAMD support)</p>
+</li>
+<li><p class="first">Added Gemstone example to the tutorial</p>
+</li>
+<li><p class="first">New example demonstrating salt dependence of protein-RNA interactions.</p>
+</li>
+<li><p class="first">Added code to allow for an interface with TINKER (thanks to Michael Schnieders).</p>
+</li>
+<li><p class="first">The Python wrappers are now disabled by default.  They can be compiled by passing the &#8211;enable-python flag to the configure script.  This will allow users to attempt to compile the wrappers on various systems as desired.</p>
+</li>
+<li><p class="first">Added XML support for reading in parameter files when using PDB files as input.  New XML files can be found in tools/conversion/param/vparam.</p>
+</li>
+<li><p class="first">Added XML support for reading &#8220;PQR&#8221; files in XML format.</p>
+</li>
+<li><p class="first">Added support for command line &#8211;version and &#8211;help flags.</p>
+</li>
+<li><p class="first">Added support for XML output options via the &#8211;output-file and  &#8211;output-format flags.</p>
+</li>
+<li><p class="first">Updated runme script in ion-pmf example to use environmental variable for APBS path</p>
+</li>
+<li><p class="first">Modified the license to allow exceptions for packaging APBS binaries with several visualization programs.  PMG license modifed as well.</p>
+</li>
+<li><p class="first">Added a DONEUMANN macro to vfetk.c to test FEM problems with all Neumann boundary conditions (e.g., membranes).</p>
+</li>
+<li><p class="first">Added Vpmg_splineSelect to select the correct Normalization method with either cubic or quintic (7th order polynomial) spline methods.</p>
+</li>
+<li><p class="first">Modified the selection criteria in Vpmg_qfForce, Vpmg_ibForce and Vpmg_dbnpForce for use with the new spline based (spl4) method.</p>
+</li>
+<li><p class="first">Added ion-pmf to the make test suite.</p>
+</li>
+<li><p class="first">Updated splash screen to include new PMG acknowledgment</p>
+</li>
+<li><p class="first">Added runGB.py and readGB.py to the Python utilities, which calculate solvation energy based on APBS parameterized Generalized Born model.</p>
+</li>
+<li><p class="first">Updated authorship and tool documentation</p>
+</li>
+<li><p class="first">Deprecated ELEC-&gt;gamma keyword in lieu of APOLAR-&gt;gamma</p>
+</li>
+</ul>
+</div>
+<div class="section" id="bug-fixes-and-api-changes">
+<h2>Bug fixes and API changes<a class="headerlink" href="#bug-fixes-and-api-changes" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>Cleanup of documentation, new Gemstone example</li>
+<li>Clarified usage of dime in mg-para ELEC statements</li>
+<li>Massive cleanup of NOsh, standardizing molecule and calculation IDs and making the serial focusing procedure more robust</li>
+<li>Removed MGparm partOlap* data members; the parallel focusing centering is now done entirely within NOsh</li>
+<li>Updated the user manual and tutorial</li>
+<li>Updated psize.py to use centers and radii when calculating grid sizes (thanks to John Mongan)</li>
+<li>Fixed problems with FEM-based NPBE, LPBE, and LRPBE calculations</li>
+<li>Fixed a minor bug in the configure script that prevented MPI libraries from being found when using certain compilers.</li>
+<li>Updated acinclude.m4, aclocal.m4, config/* for new version (1.9) of automake and compatibility with new MALOC</li>
+<li>Fixed a bug where reading in a file in PDB format had atom IDs starting  at 1 rather than 0, leading to a segmentation fault.</li>
+<li>Fixed a bug in mypde.f where double precision values were initialized with single precision number (causing multiplication errors).</li>
+<li>Fixed a bug in the FEM code. Now calls the npbe solver works properly with FEtk 1.40</li>
+<li>Modified the FEMParm struct to contain a new variable pkey, which is  required for selecting the correct path in AM_Refine</li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">APBS 0.5.0 (2007-01)</a><ul>
+<li><a class="reference internal" href="#new-features">New features</a></li>
+<li><a class="reference internal" href="#bug-fixes-and-api-changes">Bug fixes and API changes</a></li>
+</ul>
+</li>
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="../downloads.html">How to get the software</a><ul>
+      <li>Previous: <a href="200606-PDB2PQR-1.1.2.html" title="previous chapter">PDB2PQR 1.1.2 (2006-06)</a></li>
+      <li>Next: <a href="200701-PDB2PQR-1.2.0.html" title="next chapter">PDB2PQR 1.2.0 (2007-01)</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/releases/200701-APBS-0.5.0.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2017, Nathan Baker.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.5.6</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+      |
+      <a href="../_sources/releases/200701-APBS-0.5.0.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

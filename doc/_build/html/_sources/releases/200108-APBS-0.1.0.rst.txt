@@ -1,0 +1,25 @@
+APBS 0.1.0 (2001-08)
+====================
+
+I am pleased to announce the availability of a pre-beta version of the Adaptive Poisson-Boltzmann Solver (APBS) code to selected research groups.
+APBS is new software designed to solve the Poisson-Boltzmann equation for very large biomolecular systems.
+For more information, please visit the APBS web site at http://mccammon.ucsd.edu/apbs.
+
+This release is designed to allow interested users to get familiar with the code. 
+It is not currently fully functional; it only provides for the sequential multigrid (Cartesian mesh) solution of the linearized and nonlinear Poisson-Boltzmann equation.
+User-friendly parallel support will be incorporated into the next release.
+Other limitations that may impact its immediate usefulness are:
+
+* No finite element support.  This is awaiting the public release of the Holst group's FEtk library.
+* Somewhat inefficient coefficient evaluation (i.e., problem setup).  This should be fixed in the next release or two.
+
+Rather than serving as a production code, this release represents a request for help in breaking the software and finding its deficiencies
+before a public beta.
+
+If you are interested in testing this early release, please go to http://wasabi.ucsd.edu/~nbaker/apbs/download/.
+Since this is not a public release of APBS, you will need to enter the user-name "apbs-beta" and the password "q94p$fa!" for access to this site.
+Once there, please follow the instructions to download and install APBS.
+
+If you are not interested in trying out this early release, but would like to stay informed about subsequent versions of APBS, please consider subscribing to the APBS announcements mailing list by sending the message "subscribe apbs-announce" to majordomo@mccammon.ucsd.edu.
+
+Thank you for your time and interest in the APBS software.

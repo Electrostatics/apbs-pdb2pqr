@@ -1,0 +1,227 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>pbsam-auto &#8212; APBS-PDB2PQR 1.6 documentation</title>
+    
+    <link rel="stylesheet" href="../../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '1.6',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="exp" href="exp.html" />
+    <link rel="prev" title="xyz" href="xyz.html" />
+   
+  <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="pbsam-auto">
+<span id="pbsamauto"></span><h1>pbsam-auto<a class="headerlink" href="#pbsam-auto" title="Permalink to this headline">¶</a></h1>
+<p>PB-SAM is a semi-analytical solution to the linearized Poisson-Boltzmann equation for multiple molecules of arbitrary charge distribution in an ionic solution.
+The solution is an extension of the <a class="reference internal" href="pbam-auto.html#pbamauto"><span class="std std-ref">analytical method</span></a>, leveraging fast-multipole methods as well as boundary elements.
+Each molecule is coarse-grained as a system of overlapping spheres, whose surface charges are represented by multipole expansions.
+For details on the method, please see <a class="reference external" href="http://pubs.acs.org/doi/abs/10.1021/ct100145f">Yap, Head-Gordon (2010)</a> and <a class="reference external" href="http://pubs.acs.org/doi/abs/10.1021/ct400048q">Yap, Head-Gordon (2013)</a>.</p>
+<div class="admonition-todo admonition" id="index-0">
+<p class="first admonition-title">Todo</p>
+<p class="last">If there&#8217;s only one mode to PBAM, let&#8217;s call it <code class="docutils literal"><span class="pre">pbsam</span></code> instead of <code class="docutils literal"><span class="pre">pbsam-auto</span></code>.</p>
+</div>
+<p>The current implementation of PB-SAM in APBS includes:</p>
+<ul class="simple">
+<li>Calculation of energies, forces and torques</li>
+<li>Calculation of electrostatic potentials</li>
+<li>Brownian dynamics simulations</li>
+</ul>
+<p>Keywords for this calculation type include:</p>
+<div class="toctree-wrapper compound">
+<p class="caption"><span class="caption-text">ELEC pbsam-auto keywords:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="3dmap.html">3dmap</a></li>
+<li class="toctree-l1"><a class="reference internal" href="diff.html">diff</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dx.html">dx</a></li>
+<li class="toctree-l1"><a class="reference internal" href="exp.html">exp</a></li>
+<li class="toctree-l1"><a class="reference internal" href="grid2d.html">grid2d</a></li>
+<li class="toctree-l1"><a class="reference internal" href="imat.html">imat</a></li>
+<li class="toctree-l1"><a class="reference internal" href="msms.html">msms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ntraj.html">ntraj</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pbc.html">pbc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pdie.html">pdie</a></li>
+<li class="toctree-l1"><a class="reference internal" href="randorient.html">randorient</a></li>
+<li class="toctree-l1"><a class="reference internal" href="runname.html">runname</a></li>
+<li class="toctree-l1"><a class="reference internal" href="runtype.html">runtype</a></li>
+<li class="toctree-l1"><a class="reference internal" href="salt.html">salt</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sdie.html">sdie</a></li>
+<li class="toctree-l1"><a class="reference internal" href="surf.html">surf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../generic/temp.html">temp</a></li>
+<li class="toctree-l1"><a class="reference internal" href="term.html">term</a></li>
+<li class="toctree-l1"><a class="reference internal" href="termcombine.html">termcombine</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tolsp.html">tolsp</a></li>
+<li class="toctree-l1"><a class="reference internal" href="units.html">units</a></li>
+<li class="toctree-l1"><a class="reference internal" href="xyz.html">xyz</a></li>
+</ul>
+</div>
+<div class="section" id="background-information">
+<h2>Background information<a class="headerlink" href="#background-information" title="Permalink to this headline">¶</a></h2>
+<p>PB-SAM is a semi-analytical solution to the linearized Poisson-Boltzmann equation for multiple molecules of arbitrary charge distribution in an ionic solution.
+The solution is an extension of the analytical method, leveraging Fast-Multipole methods as well as boundary elements.
+Each molecule is coarse-grained as a system of overlapping spheres, whose surface charges are represented by the multipole expansions <span class="math">\(H^{(i)}\)</span> and <span class="math">\(F^{(i)}\)</span>.
+To solve for the potential, the following interactions are considered:</p>
+<ul class="simple">
+<li>Intra-molecular interactions between overlapping spheres are treated numerically</li>
+<li>Intra-molecular interactions between non-overlapping spheres are treated analytically</li>
+<li>Inter-molecular interactions between spheres on different molecules</li>
+</ul>
+<p>With these interactions, the multipole expansions are solved with an iterative SCF method, briefly given as</p>
+<div class="math">
+\[\begin{split}H^{(i,k)} &amp;= I_{E}^{(i,k)} \cdot \left ( H^{(i,k)} + F^{(i,k)} + T \cdot H^{(j,l)} \right ) \\
+F^{(i,k)} &amp;= I_{E}^{(i,k)} \cdot \left ( H^{(i,k)} + F^{(i,k)} + T \cdot F^{(j,l)} \right )\end{split}\]</div>
+<p>Where <span class="math">\(H^{(i)}\)</span> and :math`F^{(i)}` are multipole expansions, <span class="math">\(I_{E}^{(i,k)}\)</span> is the exposed surface integral matrix for sphere <span class="math">\(k\)</span> of molecule <span class="math">\(i\)</span>, and <span class="math">\(T\)</span> is an operator that transforms the multipole expansion to a local coordinate frame.</p>
+<p>From the above formulation, computation of the interaction energy <span class="math">\(\Omega^{(i)}\)</span> for molecule <span class="math">\(i\)</span>, is given as a sum of all the interactions of spheres <span class="math">\(k\)</span> within it with all external spheres (in a simplified form) as follows:</p>
+<div class="math">
+\[\Omega^{(i)} = \frac{1}{\epsilon_s} \left \langle \sum_{k \, in\, i} \sum_{j \ne i}^N \sum_{l\, in \, j}  T \cdot H^{(j,l)} ,  H^{(i,k)} \right \rangle\]</div>
+<p>where <span class="math">\(\langle  M, N \rangle\)</span> denotes the inner product.</p>
+<p>When energy is computed, forces follow as:</p>
+<div class="math">
+\[\textbf{F}^{(i)} = \nabla_i \Omega^{(i)}=\frac{1}{\epsilon_s} [ \langle \nabla_i \,T \cdot H^{(j,l)} ,  H^{(i,k)} \rangle +  \langle T \cdot H^{(j,l)},   \nabla_i \, H^{(i,k)} \rangle\]</div>
+<p>The method to calculate the torque is discussed in <a class="reference external" href="http://pubs.acs.org/doi/abs/10.1021/ct400048q">Yap, Head-Gordon (2013)</a>.</p>
+</div>
+<div class="section" id="pb-sam-files">
+<h2>PB-SAM files<a class="headerlink" href="#pb-sam-files" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="vertex-surface-file">
+<h3>Vertex/surface file<a class="headerlink" href="#vertex-surface-file" title="Permalink to this headline">¶</a></h3>
+<p>As part of the coarse-graining process a definition of the molecular surface is necessary.
+For this we have historically used the program <a class="reference external" href="http://mgltools.scripps.edu/packages/MSMS">MSMS</a>  or on the <cite>online MSMS web server</cite> &lt;<a class="reference external" href="http://mgl.scripps.edu/people/sanner/html/msms_server.html">http://mgl.scripps.edu/people/sanner/html/msms_server.html</a>&gt;`_.
+Within APBS, the user can implement the <a class="reference internal" href="msms.html"><span class="doc">msms</span></a> flag and the program will be run through APBS, but the executable must be included in your path.</p>
+<p>If using the command-line MSMS tool, after downloading it for the correct platform, it can be run as follows:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>./msms.system -if <span class="o">{</span>filename<span class="o">}</span>.xyzr -of <span class="o">{</span>outfile<span class="o">}</span>
+</pre></div>
+</div>
+<p>It requires an <code class="file docutils literal"><em><span class="pre">filename</span></em><span class="pre">.xyzr</span></code> file as input, which is the xyz coordinates of each atom of the system followed by the VdW radius.
+This information can all be found in the PQR file.
+MSMS will produce <code class="file docutils literal"><em><span class="pre">outfile</span></em><span class="pre">.face</span></code> and <code class="file docutils literal"><em><span class="pre">outfile</span></em><span class="pre">.vert</span></code> file.
+The vertex file is used to coarse-grain the molecule.
+Once this has been generated, it can be used again as input using the <a class="reference internal" href="surf.html"><span class="doc">surf</span></a> command.</p>
+</div>
+<div class="section" id="coarse-grained-pqr-file">
+<h3>Coarse-grained PQR file<a class="headerlink" href="#coarse-grained-pqr-file" title="Permalink to this headline">¶</a></h3>
+<p>The coarse-graining process will produce a new PQR file <code class="file docutils literal"><span class="pre">mol</span><em><span class="pre">#</span></em><span class="pre">_cg.pqr</span></code> that contains the original PQR concatenated with coarse-graining spherical centers.
+The number <cite>#</cite> refers to the order the file was read during the <a class="reference internal" href="../read.html"><span class="doc">READ input file section</span></a> statements.</p>
+</div>
+<div class="section" id="imat-surface-integral-file">
+<h3>IMAT: surface integral file<a class="headerlink" href="#imat-surface-integral-file" title="Permalink to this headline">¶</a></h3>
+<p>The surface integrals are computed for the boundary element part of PB-SAM.
+Their calculation can be quite time-consuming, so the first time they are computed for a system, they are saved to the working directory with the name <code class="file docutils literal"><span class="pre">mol</span><em><span class="pre">m</span></em><span class="pre">sph</span><em><span class="pre">s</span></em><span class="pre">.bin`</span></code>.
+The <em>m</em> in <code class="file docutils literal"><span class="pre">mol</span><em><span class="pre">m</span></em><span class="pre">sph</span><em><span class="pre">s</span></em><span class="pre">.bin`</span></code> is the ordered ID of the molecule from the PQR section.
+The <em>s</em> in <code class="file docutils literal"><span class="pre">mol</span><em><span class="pre">m</span></em><span class="pre">sph</span><em><span class="pre">s</span></em><span class="pre">.bin`</span></code> refers to coarse-grained sphere <em>s</em> of the molecule.</p>
+</div>
+<div class="section" id="multipole-expansion-files">
+<h3>Multipole expansion files<a class="headerlink" href="#multipole-expansion-files" title="Permalink to this headline">¶</a></h3>
+<p>Much like the IMAT files, the expansion files are files generated from self-polarization that are useful and time-saving methods for running a system of full-mutual polarziation on many molecules.
+If no expansion path is provided, the program will calculate self-polarization for each type of molecule in the system and save files of the form <code class="file docutils literal"><span class="pre">mol</span><em><span class="pre">m</span></em><em><span class="pre">H,F</span></em><span class="pre">.</span><em><span class="pre">s</span></em><span class="pre">.exp</span></code>, where <em>m</em> is the molecule ID, <em>H</em> and <em>F</em> refer to the respective expansion (see above), and <em>s</em> is the coarse-grained sphere number.</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../../../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">pbsam-auto</a><ul>
+<li><a class="reference internal" href="#background-information">Background information</a></li>
+<li><a class="reference internal" href="#pb-sam-files">PB-SAM files</a><ul>
+<li><a class="reference internal" href="#vertex-surface-file">Vertex/surface file</a></li>
+<li><a class="reference internal" href="#coarse-grained-pqr-file">Coarse-grained PQR file</a></li>
+<li><a class="reference internal" href="#imat-surface-integral-file">IMAT: surface integral file</a></li>
+<li><a class="reference internal" href="#multipole-expansion-files">Multipole expansion files</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../index.html">APBS</a><ul>
+  <li><a href="../../invoking.html">Invoking APBS</a><ul>
+  <li><a href="../index.html">APBS input files</a><ul>
+  <li><a href="index.html">ELEC input file section</a><ul>
+      <li>Previous: <a href="xyz.html" title="previous chapter">xyz</a></li>
+      <li>Next: <a href="exp.html" title="next chapter">exp</a></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../../_sources/apbs/input/elec/pbsam-auto.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2017, Nathan Baker.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.5.6</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+      |
+      <a href="../../../_sources/apbs/input/elec/pbsam-auto.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

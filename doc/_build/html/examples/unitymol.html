@@ -1,0 +1,125 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Virtual reality with UnityMol &#8212; APBS-PDB2PQR 1.6 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.6',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Support for APBS-PDB2PQR" href="../support.html" />
+    <link rel="prev" title="Using the PyMOL APBS plugin" href="using-pymol.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="virtual-reality-with-unitymol">
+<h1>Virtual reality with UnityMol<a class="headerlink" href="#virtual-reality-with-unitymol" title="Permalink to this headline">¶</a></h1>
+<p>Molecular visualization software packages provide the ability for users to explore the 3D representations molecular structures and properties.
+Typical user interaction is limited to panning, zooming, and rotating the molecule using a mouse and keyboard while viewing on a standard computing monitor.
+These techniques support a pseudo 3-dimensional view of a molecule to understand its structure but lack the true depth perception people are used to with stereoscopic vision in the real world.</p>
+<p>New advancements in virtual reality (VR) technologies has resulted in lower costs and systems that are easier to use to many consumers.
+Compared to past VR hardware, these new systems have several key advancements including lower latency, higher frame rates, and improved resolution.
+Additionally, these systems are equipped with better optics and motion tracking and a more robust software ecosystem.</p>
+<p>We are extending the visualization capabilities for APBS through the incorporation of a VR device with molecular rendering software.
+We are currently experimenting with the HTC Vive, which allows a person to walk around a 15&#8217; by 15&#8217; physical space while wearing a head mounted display.
+Precise head movements are matched in virtual reality with no noticeable latency.
+Additionally, the HTC Vive controllers are motion tracked with millimeter precision and provide a valuable method for interacting with virtual objects.
+We have enabled VR using the HTC Vive in the <a class="reference external" href="http://www.baaden.ibpc.fr/umol/">UnityMol molecular visualization software</a> (created by Baaden, et al.) and incorporated electrostatic surface data (see figure below and a <a class="reference external" href="https://www.youtube.com/watch?v=Xxb3W8jnnp8&amp;t=21s">YouTube video</a>).
+New viewing capabilities now include walking around, grabbing (using the motion controllers), and scaling (gestures) of molecules.
+We are actively working with Dr. Baaden and his group to determine the best use of interaction techniques for users to interact with molecular models through his software.</p>
+<div class="figure" id="id1">
+<img alt="../_images/1fas_VR.png" src="../_images/1fas_VR.png" />
+<p class="caption"><span class="caption-text">View of UnityMol form the monitor as it is being used in VR with controllers.</span></p>
+</div>
+<p>For future work, we would like to further extend UnityMol in the HTC Vive to include natural user interactions for viewing multiple molecules, vary the electrostatic results from APBS, and change molecular attributes.
+We envision this tool will also enable virtual collaboration for participant in different locations.
+Each participant will be able to view, gesture and interact with the same data in the same VR space.
+Finally, we would like to explore the use of VR for research related to docking of different molecules.</p>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="index.html">APBS-PDB2PQR examples and tutorials</a><ul>
+      <li>Previous: <a href="using-pymol.html" title="previous chapter">Using the PyMOL APBS plugin</a></li>
+      <li>Next: <a href="../support.html" title="next chapter">Support for APBS-PDB2PQR</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/examples/unitymol.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2017, Nathan Baker.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.5.6</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+      |
+      <a href="../_sources/examples/unitymol.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

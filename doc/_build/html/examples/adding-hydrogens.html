@@ -1,0 +1,144 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Adding hydrogens and assigning parameters &#8212; APBS-PDB2PQR 1.6 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.6',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Parameterizing ligands" href="parameterizing-ligands.html" />
+    <link rel="prev" title="APBS-PDB2PQR examples and tutorials" href="index.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="adding-hydrogens-and-assigning-parameters">
+<h1>Adding hydrogens and assigning parameters<a class="headerlink" href="#adding-hydrogens-and-assigning-parameters" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="pick-a-structure">
+<h2>Pick a structure<a class="headerlink" href="#pick-a-structure" title="Permalink to this headline">¶</a></h2>
+<p>Start by choosing a PDB file to process.
+Either enter the 4-character PDB ID into PDB2PQR or accession number (<a class="reference external" href="http://www.rcsb.org/pdb/explore.do?structureId=1FAS">1FAS</a> is a good starting choice) or upload your own PDB file.
+Note that, if you choose to enter a 4-character PDB ID, PDB2PQR will process all recognizable chains of PDB file as it was deposited in the PDB (e.g., not the biological unit, any related transformations, etc.).</p>
+</div>
+<div class="section" id="pick-a-forcefield">
+<h2>Pick a forcefield<a class="headerlink" href="#pick-a-forcefield" title="Permalink to this headline">¶</a></h2>
+<p>For most applications, the choice is easy: PARSE.
+This forcefield has been optimized for implicit solvent calculation and is probably the best choice for visualization of protein electrostatics and many common types of energetic calculations for proteins.
+However, AMBER and CHARMM may be more appropriate if you are attempting to compare directly to simulations performed with those force fields, require nucleic acid support, are simulating ligands parameterized with those force fields, etc.</p>
+<p>It is also possible to upload a user-defined forcefield (e.g., to define radii and charges for ligands or unusual residues).
+Please see <a class="reference internal" href="../pdb2pqr/extending.html"><span class="doc">Extending PDB2PQR</span></a> for more information.</p>
+</div>
+<div class="section" id="pick-a-naming-scheme">
+<h2>Pick a naming scheme<a class="headerlink" href="#pick-a-naming-scheme" title="Permalink to this headline">¶</a></h2>
+<p>This choice is largely irrelevant to electrostatics calculations but may be important for some visualization programs.
+When in doubt, choose the &#8220;Internal naming scheme&#8221; which attempts to conform to IUPAC standards.</p>
+</div>
+<div class="section" id="reconstruct-missing-atoms-hydrogens">
+<h2>Reconstruct missing atoms (hydrogens)<a class="headerlink" href="#reconstruct-missing-atoms-hydrogens" title="Permalink to this headline">¶</a></h2>
+<p>Under options, be sure the &#8220;Ensure that new atoms are not rebuilt too close to existing atoms&#8221; and &#8220;Optimize the hydrogen bonding network&#8221; options are selected.
+You can select other options as well, if interested.</p>
+</div>
+<div class="section" id="download-and-view-the-results">
+<h2>Download and view the results<a class="headerlink" href="#download-and-view-the-results" title="Permalink to this headline">¶</a></h2>
+<p>Download the resulting PQR file and visualize in a molecular graphics program to examine how the hydrogens were added and how hydrogen bonds were optimized.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Adding hydrogens and assigning parameters</a><ul>
+<li><a class="reference internal" href="#pick-a-structure">Pick a structure</a></li>
+<li><a class="reference internal" href="#pick-a-forcefield">Pick a forcefield</a></li>
+<li><a class="reference internal" href="#pick-a-naming-scheme">Pick a naming scheme</a></li>
+<li><a class="reference internal" href="#reconstruct-missing-atoms-hydrogens">Reconstruct missing atoms (hydrogens)</a></li>
+<li><a class="reference internal" href="#download-and-view-the-results">Download and view the results</a></li>
+</ul>
+</li>
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="index.html">APBS-PDB2PQR examples and tutorials</a><ul>
+      <li>Previous: <a href="index.html" title="previous chapter">APBS-PDB2PQR examples and tutorials</a></li>
+      <li>Next: <a href="parameterizing-ligands.html" title="next chapter">Parameterizing ligands</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/examples/adding-hydrogens.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2017, Nathan Baker.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.5.6</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+      |
+      <a href="../_sources/examples/adding-hydrogens.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

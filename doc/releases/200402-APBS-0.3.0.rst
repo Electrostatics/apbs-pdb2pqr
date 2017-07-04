@@ -1,0 +1,88 @@
+APBS 0.3.0 (2004-02)
+====================
+====
+News
+====
+
+APBS is now supported by the NIH via NIGMS grant GM69702-01.
+
+=========================
+Changes that affect users
+=========================
+
+* New version of the documentation
+* New directory structure in tools/
+* Finished fe-manual mode for ELEC calculations -- this is the adaptive finite element solver
+* Added documetnation for fe-manual
+* New apbs/tools/manip/inputgen.py script to automatically generate input APBS files from PQR data
+* Added new asynchronous mode in mg-para parallel calculations to enable running on-demand and/or limited resources
+* Added new script (tools/manip/async.sh) to convert mg-para calculations in mg-async calculations
+* Added following aliases for some of the more obscure parameters in the input files:
+
+* chgm 0 ==> chgm spl0
+* chgm 1 ==> chgm spl2
+* srfm 0 ==> srfm mol
+* srfm 1 ==> srfm smol
+* srfm 2 ==> srfm spl2
+* bcfl 0 ==> bcfl zero
+* bcfl 1 ==> bcfl sdh
+* bcfl 2 ==> bcfl mdh
+* bcfl 4 ==> bcfl focus
+* calcenergy 0 ==> calcenergy no
+* calcenergy 1 ==> calcenergy total
+* calcenergy 2 ==> calcenergy comps
+* calcforce 0 ==> calcforce no
+* calcforce 1 ==> calcforce total
+* calcforce 2 ==> calcforce comps
+
+* Example input files have been updated to reflect this change. NOTE: the code is backward-compliant; i.e., old input files WILL still work.
+* Added new READ options "PARM" and "MOL PDB", see documentation for more information. These options allow users to use unparameterized PDB files together with a parameter database.
+* Updated the documentation
+* Now include support for chain IDs and other optional fields in PQR/PDB files
+* Added support for parsing PDB files
+* Renamed:
+
+* amber2charmm -> amber2charmm.sh
+* pdb2pqr -> pdb2pqr.awk
+* qcd2pqr -> qcd2pqr.awk
+
+* Added a new Python-based pdb2pqr (tools/conversion/pdb2pqr) script that allows users to choose parameters from different forcefields.
+* Updated Python wrappers (tools/python) and added the python directory to autoconf/automake.
+* Reformatted examples/README.html for readability.
+
+=========
+Bug fixes
+=========
+
+* Fixed bug in PQR parsing that can cause PDB/PQR files to be mis-read when they contain residues with numbers in their names (Thanks to Robert Konecny and Joanna Trylska)
+* Fixed bug when writing out number/charge density: unrealistic densities reported inside iVdW surface.
+* Fixed bug in VMD read_dx utility
+* Invalid map IDs now result in an error message instead of a core dump (thanks to Marco Berrera)
+* Modified mechanism for cubic-spline output, fixing a bug associated with zero-radius atoms
+* Fixed omission of srfm in sections of documentation (thanks to Sameer Varma)
+* Made autoconf/automake configure setup more robust on Solaris 8 platforms (thanks to Ben Carrington)
+   
+==============================
+Changes that affect developers
+==============================
+
+* New docuemtnation setup
+* New tools/ directory structure
+* Changed Vgreen interface and improved efficiency
+* Changed Vopot interface to support multiple grids
+* Added several norm and seminorm functions to Vgrid class
+* Altered --with-blas syntax in configure scripts and removed --disable-blas
+* Documented high-level frontend routines
+* Cool new class and header-file dependency graphs courtesy of Doxygen and Graphviz
+* Added substantial mypde.c-based functionality to Vfetk
+* Moved chgm from PBEparm to MGparm
+* Minor changes to Vfetk: removed genIcos and added genCube
+* FEM solution of RPBE working again (see test/reg-fem) and is probably more up-to-date than test/fem
+* Updated API documentation
+* Changed many NOsh, FEMparm, MGparm variables to enums
+* Changes to Valist and Vatom classes
+* Fixed minor bugs in documentation formatting
+* Made Vopot more robust
+* Created Vparam class for parameter file parsing
+* Added vparam* parameter database flat files to tools/conversion/param
+

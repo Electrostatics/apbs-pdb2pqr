@@ -1,0 +1,139 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>PQR molecular structure format &#8212; APBS-PDB2PQR 1.6 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.6',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="PDB molecular structure format" href="pdb.html" />
+    <link rel="prev" title="UHBD scalar data format" href="uhbd.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="pqr-molecular-structure-format">
+<span id="pqr"></span><h1>PQR molecular structure format<a class="headerlink" href="#pqr-molecular-structure-format" title="Permalink to this headline">¶</a></h1>
+<p>This format is a modification of the PDB format which allows users to add charge and radius parameters to existing PDB data while keeping it in a format amenable to visualization with standard molecular graphics programs.
+The origins of the PQR format are somewhat uncertain, but has been used by several computational biology software programs, including MEAD and AutoDock.
+UHBD uses a very similar format called QCD.</p>
+<p>APBS reads very loosely-formatted PQR files: all fields are whitespace-delimited rather than the strict column formatting mandated by the PDB format.
+This more liberal formatting allows coordinates which are larger/smaller than ± 999 Å.
+APBS reads data on a per-line basis from PQR files using the following format::</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">Field_name</span> <span class="n">Atom_number</span> <span class="n">Atom_name</span> <span class="n">Residue_name</span> <span class="n">Chain_ID</span> <span class="n">Residue_number</span> <span class="n">X</span> <span class="n">Y</span> <span class="n">Z</span> <span class="n">Charge</span> <span class="n">Radius</span>
+</pre></div>
+</div>
+<p>where the whitespace is the most important feature of this format.
+The fields are:</p>
+<dl class="docutils">
+<dt><code class="docutils literal"><span class="pre">Field_name</span></code></dt>
+<dd>A string which specifies the type of PQR entry and should either be ATOM or HETATM in order to be parsed by APBS.</dd>
+<dt><code class="docutils literal"><span class="pre">Atom_number</span></code></dt>
+<dd>An integer which provides the atom index.</dd>
+<dt><code class="docutils literal"><span class="pre">Atom_name</span></code></dt>
+<dd>A string which provides the atom name.</dd>
+<dt><code class="docutils literal"><span class="pre">Residue_name</span></code></dt>
+<dd>A string which provides the residue name.</dd>
+<dt><code class="docutils literal"><span class="pre">Chain_ID</span></code></dt>
+<dd>An optional string which provides the chain ID of the atom.
+Note that chain ID support is a new feature of APBS 0.5.0 and later versions.</dd>
+<dt><code class="docutils literal"><span class="pre">Residue_number</span></code></dt>
+<dd>An integer which provides the residue index.</dd>
+<dt><code class="docutils literal"><span class="pre">X</span> <span class="pre">Y</span> <span class="pre">Z</span></code></dt>
+<dd>3 floats which provide the atomic coordinates (in Å)</dd>
+<dt><code class="docutils literal"><span class="pre">Charge</span></code></dt>
+<dd>A float which provides the atomic charge (in electrons).</dd>
+<dt><code class="docutils literal"><span class="pre">Radius</span></code></dt>
+<dd>A float which provides the atomic radius (in Å).</dd>
+</dl>
+<p>Clearly, this format can deviate wildly from PDB due to the use of whitespaces rather than specific column widths and alignments.
+This deviation can be particularly significant when large coordinate values are used.
+However, in order to maintain compatibility with most molecular graphics programs, the PDB2PQR program and the utilities provided with APBS attempt to preserve the PDB format as much as possible.</p>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="index.html">File formats</a><ul>
+      <li>Previous: <a href="uhbd.html" title="previous chapter">UHBD scalar data format</a></li>
+      <li>Next: <a href="pdb.html" title="next chapter">PDB molecular structure format</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/formats/pqr.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2017, Nathan Baker.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.5.6</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+      |
+      <a href="../_sources/formats/pqr.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

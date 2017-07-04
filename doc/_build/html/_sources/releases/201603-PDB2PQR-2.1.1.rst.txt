@@ -1,0 +1,22 @@
+PDB2PQR 2.1.1 (2016-03)
+=======================
+
+------------
+New features
+------------
+
+* Replaced the Monte Carlo method for generating titration curves with Graph Cut. See http://arxiv.org/1507.07021/
+
+---------
+Bug fixes
+---------
+
+* Added a check before calculating pKa's for large interaction energies
+
+----------
+Known bugs
+----------
+
+* If more than one extension is run from the command line and one of the extensions modifies the protein data structure it could affect the output of the other extension. The only included extensions that exhibit this problem are resinter and newresinter.
+* Running ligands and PDB2PKA at the same time is not currently supported.
+* PDB2PKA currently leaks memory slowly. Small jobs will use about twice the normally required RAM (i.e. ~14 titratable residues will use 140MB). Big jobs will use about 5 times the normally required RAM (60 titratable residues will use 480MB). We are working on this.

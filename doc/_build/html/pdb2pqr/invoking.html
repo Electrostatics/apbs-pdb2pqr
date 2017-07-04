@@ -1,0 +1,442 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Invoking PDB2PQR &#8212; APBS-PDB2PQR 1.6 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.6',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Extending PDB2PQR" href="extending.html" />
+    <link rel="prev" title="Installing PDB2PQR" href="installing.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="invoking-pdb2pqr">
+<h1>Invoking PDB2PQR<a class="headerlink" href="#invoking-pdb2pqr" title="Permalink to this headline">¶</a></h1>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Please <a class="reference external" href="http://eepurl.com/by4eQr">register</a> before using PDB2PQR!</p>
+</div>
+<p>Most users will use PDB2PQR through <a class="reference external" href="http://nbcr-222.ucsd.edu/pdb2pqr/">the web server</a>.
+However, it is also possible to install local versions of PDB2PQR and run these through the command line.
+This version of the software offers an expanded range of options and can also be customized with user extensions.</p>
+<div class="admonition-todo admonition" id="index-0">
+<p class="first admonition-title">Todo</p>
+<p class="last">Make sure user extensions are adequately documented.</p>
+</div>
+<p>The command line PDB2PQR is invoked as</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>$ python pdb2pqr.py <span class="o">[</span>options<span class="o">]</span> --ff<span class="o">={</span>forcefield<span class="o">}</span> <span class="o">{</span>path<span class="o">}</span> <span class="o">{</span>output-path<span class="o">}</span>
+</pre></div>
+</div>
+<p>This module takes a PDB file as input and performs optimizations before yielding a new PQR-style file in <code class="docutils literal"><span class="pre">{output-path}</span></code>.
+If <code class="docutils literal"><span class="pre">{path}</span></code> is a <a class="reference external" href="http://www.rcsb.org/pdb/staticHelp.do?p=help/advancedsearch/pdbIDs.html">PDB ID</a> it will automatically be retrieved from the online PDB archive.</p>
+<div class="section" id="options">
+<h2>Options<a class="headerlink" href="#options" title="Permalink to this headline">¶</a></h2>
+<div class="admonition-todo admonition" id="index-1">
+<p class="first admonition-title">Todo</p>
+<p class="last">Replace this section with automagically generated documentation ala <a class="reference external" href="https://sphinx-argparse.readthedocs.io/en/stable/">https://sphinx-argparse.readthedocs.io/en/stable/</a></p>
+</div>
+<div class="section" id="mandatory-options">
+<h3>Mandatory options<a class="headerlink" href="#mandatory-options" title="Permalink to this headline">¶</a></h3>
+<p>One of the options must be used for all PDB2PQR runs:</p>
+<dl class="docutils">
+<dt><code class="docutils literal"><span class="pre">--ff=FIELD_NAME</span></code></dt>
+<dd>The forcefield to use - currently amber, charmm, parse, tyl06, peoepb and swanson are supported.</dd>
+<dt><code class="docutils literal"><span class="pre">--userff=USER_FIELD_FILE</span></code></dt>
+<dd>A user-created forcefield file. Requires <code class="docutils literal"><span class="pre">--usernames</span></code> and overrides <code class="docutils literal"><span class="pre">--ff</span></code>.</dd>
+<dt><code class="docutils literal"><span class="pre">--clean</span></code></dt>
+<dd>Do no optimization, atom addition, or parameter assignment, just return the original PDB file in aligned format.
+Overrides <code class="docutils literal"><span class="pre">--ff</span></code> and <code class="docutils literal"><span class="pre">--userff</span></code> options.</dd>
+</dl>
+</div>
+<div class="section" id="titration-state-calculation-options">
+<h3>Titration state calculation options<a class="headerlink" href="#titration-state-calculation-options" title="Permalink to this headline">¶</a></h3>
+<dl class="docutils">
+<dt><code class="docutils literal"><span class="pre">--ph-calc-method=PH_METHOD</span></code></dt>
+<dd><p class="first">Method used to calculate ph values.
+If a pH calculation method is selected, pKa values will be calculated and titratable residues potentially modified after comparison with the pH value supplied by <code class="docutils literal"><span class="pre">--with_ph</span></code> for each titratable residue</p>
+<dl class="last docutils">
+<dt><code class="docutils literal"><span class="pre">PROPKA</span></code></dt>
+<dd><p class="first">Use PROPKA to calculate pKa values.
+PROPKA options include:</p>
+<dl class="last docutils">
+<dt><code class="docutils literal"><span class="pre">--propka-reference=PROPKA_REFERENCE</span></code></dt>
+<dd>Setting which reference values to use for stability calculations.
+See PROPKA 3.0 documentation for details.</dd>
+<dt><code class="docutils literal"><span class="pre">--propka-verbose</span></code></dt>
+<dd>Print extra-verbose PROPKA information to <code class="file docutils literal"><span class="pre">stdout</span></code>.</dd>
+</dl>
+</dd>
+<dt><code class="docutils literal"><span class="pre">PDB2PKA</span></code></dt>
+<dd><p class="first">Use PDB2PKA to calculate pKa values.
+Requires the use of the PARSE force field.
+Large proteins can take a very long time to run using this method.
+PDB2PKA options include:</p>
+<dl class="last docutils">
+<dt><code class="docutils literal"><span class="pre">--pdb2pka-out=PDB2PKA_OUT</span></code></dt>
+<dd>Output directory for PDB2PKA results. Defaults to <code class="file docutils literal"><span class="pre">pdb2pka_output</span></code>.</dd>
+<dt><code class="docutils literal"><span class="pre">--pdb2pka-resume</span></code></dt>
+<dd>Resume run from state saved in output directory.</dd>
+<dt><code class="docutils literal"><span class="pre">--pdie=PDB2PKA_PDIE</span></code></dt>
+<dd>Protein dielectric constant.
+Defaults to 8.</dd>
+<dt><code class="docutils literal"><span class="pre">--sdie=PDB2PKA_SDIE</span></code></dt>
+<dd>Solvent dielectric constant.
+Defaults to 80.</dd>
+<dt><code class="docutils literal"><span class="pre">--pairene=PDB2PKA_PAIRENE</span></code></dt>
+<dd>Cutoff energy in (kT) for calculating interaction energies.
+Default: 1.0.</dd>
+</dl>
+</dd>
+</dl>
+</dd>
+<dt><code class="docutils literal"><span class="pre">--with-ph=PH</span></code></dt>
+<dd>pH values to use when applying the results of the selected pKa calculation method to assign titration states.
+Defaults to 7.0.</dd>
+</dl>
+<div class="admonition-todo admonition" id="index-2">
+<p class="first admonition-title">Todo</p>
+<p class="last">Make sure that PDB2PQR force fields are referenced and described.</p>
+</div>
+</div>
+<div class="section" id="general-options">
+<h3>General options<a class="headerlink" href="#general-options" title="Permalink to this headline">¶</a></h3>
+<dl class="docutils">
+<dt><code class="docutils literal"><span class="pre">--apbs-input</span></code></dt>
+<dd>Create a template APBS input file based on the generated PQR file.
+Also create a Python pickle for using these parameters in other programs.</dd>
+<dt><code class="docutils literal"><span class="pre">--assign-only</span></code></dt>
+<dd>Only assign charges and radii - do not add atoms, debump, or optimize.</dd>
+<dt><code class="docutils literal"><span class="pre">--chain</span></code></dt>
+<dd>Keep the PDB chain ID in the output PQR file.</dd>
+<dt><code class="docutils literal"><span class="pre">--drop-water</span></code></dt>
+<dd>Drop waters before processing protein.
+Currently recognized and deleted are the following water types: <code class="docutils literal"><span class="pre">HOH</span></code>, <code class="docutils literal"><span class="pre">WAT</span></code></dd>
+<dt><code class="docutils literal"><span class="pre">--ffout=FIELD_NAME</span></code></dt>
+<dd>Instead of using the standard canonical naming scheme for residue and atom names, use the names from the given forcefield.
+Currently amber, charmm, parse, tyl06, peoepb and swanson are supported.</dd>
+<dt><code class="docutils literal"><span class="pre">-h</span></code> or <code class="docutils literal"><span class="pre">--help</span></code></dt>
+<dd>Print help message and exit.</dd>
+<dt><code class="docutils literal"><span class="pre">--ligand=PATH</span></code></dt>
+<dd>Calculate the parameters for the ligand in mol2 format at the given path.
+PDB2PKA must be compiled.</dd>
+<dt><code class="docutils literal"><span class="pre">--neutraln</span></code></dt>
+<dd>Make the N-terminus of this protein neutral (default charge state is determined by pH and pKa).
+Requires PARSE force field.</dd>
+<dt><code class="docutils literal"><span class="pre">--neutralc</span></code></dt>
+<dd>Make the C-terminus of this protein neutral (default is charged).
+Requires PARSE force field.</dd>
+<dt><code class="docutils literal"><span class="pre">--nodebump</span></code></dt>
+<dd>Do not perform the debumping operation to remove steric clashes.
+See <a class="reference internal" href="#debumping">debumping</a> for more information.</dd>
+<dt><code class="docutils literal"><span class="pre">--noopts</span></code></dt>
+<dd>Do not perform hydrogen bond optimization.
+See <a class="reference internal" href="#hbondopt">hbondopt</a> for more information.</dd>
+<dt><code class="docutils literal"><span class="pre">--typemap</span></code></dt>
+<dd>Create a map of atom types in the molecule.</dd>
+<dt><code class="docutils literal"><span class="pre">--usernames=USER_NAME_FILE</span></code></dt>
+<dd>The user created names file to use. Required if using <code class="docutils literal"><span class="pre">--userff</span></code>.</dd>
+<dt><code class="docutils literal"><span class="pre">-v</span></code> or <code class="docutils literal"><span class="pre">--verbose</span></code></dt>
+<dd>Print additional information to stdout.</dd>
+<dt><code class="docutils literal"><span class="pre">--version</span></code></dt>
+<dd>Show program&#8217;s version number and exit</dd>
+<dt><code class="docutils literal"><span class="pre">--whitespace</span></code></dt>
+<dd>Insert whitespaces between atom name and residue name, between x and y, and between y and z.</dd>
+<dt><code class="docutils literal"><span class="pre">--include_header</span></code></dt>
+<dd><p class="first">Include pdb header in pqr file.</p>
+<div class="last admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">The resulting PQR file will not with APBS versions prior to 1.5.</p>
+</div>
+</dd>
+</dl>
+</div>
+<div class="section" id="extension-options">
+<h3>Extension options<a class="headerlink" href="#extension-options" title="Permalink to this headline">¶</a></h3>
+<p>These options refer to extension modules distributed with PDB2PQR.</p>
+<dl class="docutils">
+<dt><code class="docutils literal"><span class="pre">--chi</span></code></dt>
+<dd>Print the per-residue sidechain chi angles to <code class="file docutils literal"><em><span class="pre">output-path</span></em><span class="pre">.chi</span></code></dd>
+<dt><code class="docutils literal"><span class="pre">--contact</span></code></dt>
+<dd>Print a list of contacts to <code class="file docutils literal"><em><span class="pre">output-path</span></em><span class="pre">.con</span></code></dd>
+<dt><code class="docutils literal"><span class="pre">--hbond</span></code></dt>
+<dd><p class="first">Print a list of hydrogen bonds to <code class="file docutils literal"><em><span class="pre">output-path</span></em><span class="pre">.hbond</span></code>.
+Additional options for this extension include:</p>
+<dl class="last docutils">
+<dt><code class="docutils literal"><span class="pre">--whatif</span></code></dt>
+<dd>Change hbond output to WHAT-IF format.</dd>
+<dt><code class="docutils literal"><span class="pre">--angle_cutoff=ANGLE_CUTOFF</span></code></dt>
+<dd>Angle cutoff to use when creating hbond data (default 30.0 deg)</dd>
+<dt><code class="docutils literal"><span class="pre">--distance_cutoff=DISTANCE_CUTOFF</span></code></dt>
+<dd>Distance cutoff to use when creating hbond data (default 0.34 nm)</dd>
+<dt><code class="docutils literal"><span class="pre">--old_distance_method</span></code></dt>
+<dd>Use distance from donor hydrogen to acceptor to calculate distance used with <code class="docutils literal"><span class="pre">--distance_cutoff</span></code>.</dd>
+</dl>
+</dd>
+<dt><code class="docutils literal"><span class="pre">--rama</span></code></dt>
+<dd><p class="first">Print the per-residue phi and psi angles to <code class="file docutils literal"><em><span class="pre">output-path</span></em><span class="pre">.rama</span></code> for Ramachandran plots.
+Options for this extension include:</p>
+<dl class="last docutils">
+<dt><code class="docutils literal"><span class="pre">--phi_only</span></code></dt>
+<dd>Only include phi angles in output. Rename output file <code class="file docutils literal"><em><span class="pre">output-path</span></em><span class="pre">.phi</span></code></dd>
+<dt><code class="docutils literal"><span class="pre">--psi_only</span></code></dt>
+<dd>Only include psi angles in output. Rename output file <code class="file docutils literal"><em><span class="pre">output-path</span></em><span class="pre">.psi</span></code></dd>
+</dl>
+</dd>
+<dt><code class="docutils literal"><span class="pre">--resinter</span></code> or <code class="docutils literal"><span class="pre">--newresinter</span></code></dt>
+<dd><p class="first">Print interaction energy between each residue pair in the protein to <code class="file docutils literal"><em><span class="pre">output-path</span></em><span class="pre">.resinter</span></code> or <code class="file docutils literal"><em><span class="pre">output-path</span></em><span class="pre">.newresinter</span></code>
+Additional options for this extension include:</p>
+<dl class="last docutils">
+<dt><code class="docutils literal"><span class="pre">--residue_combinations</span></code></dt>
+<dd>Remap residues to different titration states and rerun <code class="docutils literal"><span class="pre">--resinter</span></code>, appending the output.
+Consider only the minimum number of whole protein titration combinations needed to test each possible pairing of residue titration states.
+Normally used with <code class="docutils literal"><span class="pre">--noopt</span></code>.
+If a protein titration state combination results in a pair of residue being re-tested in the same individual titration states, a warning will be generated if the re-tested result is different.
+This warning should not be possible if used with <code class="docutils literal"><span class="pre">--noopt</span></code>.</dd>
+<dt><code class="docutils literal"><span class="pre">--all_residue_combinations</span></code></dt>
+<dd>Remap residues to ALL possible titration state combinations and rerun resinter appending output.
+Results with <code class="docutils literal"><span class="pre">--noopt</span></code> should be the same as <code class="docutils literal"><span class="pre">--residue_combinations</span></code>.
+Runs considerably slower than <code class="docutils literal"><span class="pre">--residue_combinations</span></code> and generates the same type of warnings.
+Use without <code class="docutils literal"><span class="pre">--noopt</span></code> to discover how hydrogen optimization affects residue interaction energies via the warnings in the output.</dd>
+</dl>
+</dd>
+<dt><code class="docutils literal"><span class="pre">--salt</span></code></dt>
+<dd>Print a list of salt bridges to <code class="file docutils literal"><em><span class="pre">output-path</span></em><span class="pre">.salt</span></code></dd>
+<dt><code class="docutils literal"><span class="pre">--summary</span></code></dt>
+<dd>Print protein summary information to <code class="file docutils literal"><em><span class="pre">output-path</span></em><span class="pre">.summary</span></code></dd>
+</dl>
+</div>
+</div>
+<div class="section" id="method-descriptions">
+<h2>Method descriptions<a class="headerlink" href="#method-descriptions" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="debumping">
+<span id="id1"></span><h3>Debumping<a class="headerlink" href="#debumping" title="Permalink to this headline">¶</a></h3>
+<p>Unless otherwise instructed with <code class="docutils literal"><span class="pre">--nodebump</span></code>, PDB2PQR will attempt to remove steric clashes (debump) between residues.</p>
+<p>To determine if a residue needs to be debumped, PDB2PQR compares its atoms to all nearby atoms.
+With the exception of donor/acceptor pairs and CYS residue SS bonded pairs, a residue needs to be debumped if any of its atoms are within cutoff distance of any other atoms.
+The cutoff is 1.0 angstrom for hydrogen/hydrogen collisions, 1.5 angstrom for hydrogen/heavy collisions, and 2.0 angstrom otherwise.</p>
+<p>Considering the atoms that are conflicted, PDB2PQR changes selected dihedral angle configurations in increments of 5.0 degrees, looking for positions where the residue does not conflict with other atoms.
+If modifying a dihedral angle does not result in a debumped configuration then the dihedral angle is reset and the next one is tried.
+If 10 angles are tried without success the algorithm reports failure.</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p>It should be noted that this is not an optimal solution.
+This method is not guaranteed to find a solution if it exists and will accept the first completely debumped state found, not the optimal state.</p>
+<p class="last">Additionally, PDB2PQR does not consider water atoms when looking for conflicts.</p>
+</div>
+</div>
+<div class="section" id="hydrogen-bond-optimization">
+<span id="hbondopt"></span><h3>Hydrogen bond optimization<a class="headerlink" href="#hydrogen-bond-optimization" title="Permalink to this headline">¶</a></h3>
+<p>Unless otherwise indicated with <code class="docutils literal"><span class="pre">--noopts</span></code>, PDB2PQR will attempt to add hydrogens in a way that optimizes hydrogen bonding.</p>
+<p>The hydrogen bonding network optimization seeks, as the name suggests, to optimize the hydrogen bonding network of the protein.
+Currently this entails manipulating the following residues:</p>
+<ul class="simple">
+<li>Flipping the side chains of HIS (including user defined HIS states), ASN, and GLN residues;</li>
+<li>Rotating the sidechain hydrogen on SER, THR, TYR, and CYS (if available);</li>
+<li>Determining the best placement for the sidechain hydrogen on neutral HIS, protonated GLU, and protonated ASP;</li>
+<li>Optimizing all water hydrogens.</li>
+</ul>
+</div>
+<div class="section" id="titration-states">
+<h3>Titration states<a class="headerlink" href="#titration-states" title="Permalink to this headline">¶</a></h3>
+<p>PDB2PQR has the ability to recognize certain protonation states and keep them fixed during optimization.
+To use this feature manually rename the residue name in the PDB file as follows:</p>
+<dl class="docutils">
+<dt>Neutral ASP</dt>
+<dd>ASH</dd>
+<dt>Negative CYS:</dt>
+<dd>CYM</dd>
+<dt>Neutral GLU:</dt>
+<dd>GLH</dd>
+<dt>Neutral HIS:</dt>
+<dd>HIE or HSE (epsilon-protonated); HID or HSD (delta-protonated)</dd>
+<dt>Positive HIS:</dt>
+<dd>HIP or HSP</dd>
+<dt>Neutral LYS</dt>
+<dd>LYN</dd>
+<dt>Negative TYR</dt>
+<dd>TYM</dd>
+</dl>
+<p>PDB2PQR is unable to assign charges and radii when they are not available in the forcefield - thus this warning message will occur for most ligands unless a MOL2 file is provided for the ligand with the <code class="docutils literal"><span class="pre">--ligand</span></code> option.
+Occasionally this message will occur in error for a standard amino acid residue where an atom or residue may be misnamed.
+However, some of the protonation states derived from the PROPKA results are not supported in the requested forcefield and thus PDB2PQR is unable to get charges and radii for that state.
+PDB2PQR currently supports the following states as derived from PROPKA:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="31%" />
+<col width="22%" />
+<col width="24%" />
+<col width="22%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Protonation State</th>
+<th class="head">AMBER Support</th>
+<th class="head">CHARMM Support</th>
+<th class="head">PARSE Support</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>Neutral N-Terminus</td>
+<td>No</td>
+<td>No</td>
+<td>Yes</td>
+</tr>
+<tr class="row-odd"><td>Neutral C-Terminus</td>
+<td>No</td>
+<td>No</td>
+<td>Yes</td>
+</tr>
+<tr class="row-even"><td>Neutral ARG</td>
+<td>No</td>
+<td>No</td>
+<td>No</td>
+</tr>
+<tr class="row-odd"><td>Neutral ASP</td>
+<td>Yes <a class="footnote-reference" href="#but" id="id2">[1]</a></td>
+<td>Yes</td>
+<td>Yes</td>
+</tr>
+<tr class="row-even"><td>Negative CYS</td>
+<td>Yes <a class="footnote-reference" href="#but" id="id3">[1]</a></td>
+<td>No</td>
+<td>Yes</td>
+</tr>
+<tr class="row-odd"><td>Neutral GLU</td>
+<td>Yes <a class="footnote-reference" href="#but" id="id4">[1]</a></td>
+<td>Yes</td>
+<td>Yes</td>
+</tr>
+<tr class="row-even"><td>Neutral HIS</td>
+<td>Yes</td>
+<td>Yes</td>
+<td>Yes</td>
+</tr>
+<tr class="row-odd"><td>Neutral LYS</td>
+<td>Yes <a class="footnote-reference" href="#but" id="id5">[1]</a></td>
+<td>No</td>
+<td>Yes</td>
+</tr>
+<tr class="row-even"><td>Negative TYR</td>
+<td>No</td>
+<td>No</td>
+<td>Yes</td>
+</tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="but" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label">[1]</td><td><em>(<a class="fn-backref" href="#id2">1</a>, <a class="fn-backref" href="#id3">2</a>, <a class="fn-backref" href="#id4">3</a>, <a class="fn-backref" href="#id5">4</a>)</em> Only if residue is not a terminal residue; if the residue is terminal it will not be set to this state.</td></tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Invoking PDB2PQR</a><ul>
+<li><a class="reference internal" href="#options">Options</a><ul>
+<li><a class="reference internal" href="#mandatory-options">Mandatory options</a></li>
+<li><a class="reference internal" href="#titration-state-calculation-options">Titration state calculation options</a></li>
+<li><a class="reference internal" href="#general-options">General options</a></li>
+<li><a class="reference internal" href="#extension-options">Extension options</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#method-descriptions">Method descriptions</a><ul>
+<li><a class="reference internal" href="#debumping">Debumping</a></li>
+<li><a class="reference internal" href="#hydrogen-bond-optimization">Hydrogen bond optimization</a></li>
+<li><a class="reference internal" href="#titration-states">Titration states</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="index.html">PDB2PQR</a><ul>
+      <li>Previous: <a href="installing.html" title="previous chapter">Installing PDB2PQR</a></li>
+      <li>Next: <a href="extending.html" title="next chapter">Extending PDB2PQR</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/pdb2pqr/invoking.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2017, Nathan Baker.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.5.6</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+      |
+      <a href="../_sources/pdb2pqr/invoking.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

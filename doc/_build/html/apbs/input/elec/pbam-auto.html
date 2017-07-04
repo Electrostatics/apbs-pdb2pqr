@@ -1,0 +1,175 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>pbam-auto &#8212; APBS-PDB2PQR 1.6 documentation</title>
+    
+    <link rel="stylesheet" href="../../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '1.6',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="3dmap" href="3dmap.html" />
+    <link rel="prev" title="mg-dummy" href="mg-dummy.html" />
+   
+  <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="pbam-auto">
+<span id="pbamauto"></span><h1>pbam-auto<a class="headerlink" href="#pbam-auto" title="Permalink to this headline">¶</a></h1>
+<p>PB-AM is an analytical solution to the linearized Poisson-Boltzmann equation for multiple spherical objects of arbitrary charge distribution in an ionic solution.
+More details on the method are available in <a class="reference external" href="http://pubs.acs.org/doi/full/10.1021/ct050263p">Lotan, Head-Gordon (2006)</a>.
+The physical calculations are uses to perform various actions on a system of molecules such as calculation of energies, forces, torques, electrostatic potentials, and Brownian dynamics schemes.
+This fast method coarse-grains all molecules of the system into single spheres large enough to contain all molecule atoms.</p>
+<div class="admonition-todo admonition" id="index-0">
+<p class="first admonition-title">Todo</p>
+<p class="last">If there&#8217;s only one mode to PBAM, let&#8217;s call it <code class="docutils literal"><span class="pre">pbam</span></code> instead of <code class="docutils literal"><span class="pre">pbam-auto</span></code>.</p>
+</div>
+<p>The current implementation of PB-AM in APBS includes:</p>
+<ul class="simple">
+<li>Calculation of energies, forces and torques</li>
+<li>Calculation of electrostatic potentials</li>
+<li>Brownian dynamics simulations</li>
+</ul>
+<p>Keywords for this calculation type include:</p>
+<div class="toctree-wrapper compound">
+<p class="caption"><span class="caption-text">ELEC pbam-auto keywords:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="3dmap.html">3dmap</a></li>
+<li class="toctree-l1"><a class="reference internal" href="diff.html">diff</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dx.html">dx</a></li>
+<li class="toctree-l1"><a class="reference internal" href="grid2d.html">grid2d</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gridpts.html">gridpts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../generic/mol.html">mol</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ntraj.html">ntraj</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pbc.html">pbc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pdie.html">pdie</a></li>
+<li class="toctree-l1"><a class="reference internal" href="randorient.html">randorient</a></li>
+<li class="toctree-l1"><a class="reference internal" href="runname.html">runname</a></li>
+<li class="toctree-l1"><a class="reference internal" href="runtype.html">runtype</a></li>
+<li class="toctree-l1"><a class="reference internal" href="salt.html">salt</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sdie.html">sdie</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../generic/temp.html">temp</a></li>
+<li class="toctree-l1"><a class="reference internal" href="term.html">term</a></li>
+<li class="toctree-l1"><a class="reference internal" href="termcombine.html">termcombine</a></li>
+<li class="toctree-l1"><a class="reference internal" href="units.html">units</a></li>
+<li class="toctree-l1"><a class="reference internal" href="xyz.html">xyz</a></li>
+</ul>
+</div>
+<div class="section" id="background-information">
+<h2>Background information<a class="headerlink" href="#background-information" title="Permalink to this headline">¶</a></h2>
+<p>PB-AM is an analytical solution to the linearized Poisson-Boltzmann equation for multiple spherical objects of arbitrary charge distribution in an ionic solution.
+The solution can be reduced to a simple system of equations as follows:</p>
+<div class="math">
+\[A = \Gamma \cdot (\Delta \cdot T \cdot A + E)\]</div>
+<p>Where <span class="math">\(A^{(i)}\)</span> represents the effective multipole expansion of the charge distributions of molecule <span class="math">\(i\)</span>.
+<span class="math">\(E^{(i)}\)</span> is the free charge distribution of molecule <span class="math">\(i\)</span>.
+<span class="math">\(\Gamma\)</span> is a dielectric boundary-crossing operator, <span class="math">\(\Delta\)</span> is a cavity polarization operator, <span class="math">\(T\)</span> an operator that transforms the multipole expansion to a local coordinate frame.
+<span class="math">\(A^{(i)}\)</span> is solved for through an iterative SCF method.</p>
+<p>From the above formulation, computation of the interaction energy <span class="math">\(\Omega^{(i)}\)</span> for molecule <span class="math">\(i\)</span>, is given as follows:</p>
+<div class="math">
+\[\Omega^{(i)}=\frac{1}{\epsilon_s} \left \langle \sum_{j \ne i}^N  T \cdot A^{(j)} ,  A^{(i)} \right \rangle\]</div>
+<p>where <span class="math">\(\langle M, N \rangle\)</span> denotes the inner product.
+Forces can be obtained from</p>
+<div class="math">
+\[\textbf{F}^{(i)} = \nabla_i \Omega^{(i)}=\frac{1}{\epsilon_s} \left[ \langle \nabla_i \,T \cdot A^{(i)} ,  A^{(i)} \rangle +  \langle T \cdot A^{(i)} ,   \nabla_i \, A^{(i)} \rangle \right]\]</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../../../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">pbam-auto</a><ul>
+<li><a class="reference internal" href="#background-information">Background information</a></li>
+</ul>
+</li>
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../index.html">APBS</a><ul>
+  <li><a href="../../invoking.html">Invoking APBS</a><ul>
+  <li><a href="../index.html">APBS input files</a><ul>
+  <li><a href="index.html">ELEC input file section</a><ul>
+      <li>Previous: <a href="mg-dummy.html" title="previous chapter">mg-dummy</a></li>
+      <li>Next: <a href="3dmap.html" title="next chapter">3dmap</a></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../../_sources/apbs/input/elec/pbam-auto.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2017, Nathan Baker.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.5.6</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+      |
+      <a href="../../../_sources/apbs/input/elec/pbam-auto.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

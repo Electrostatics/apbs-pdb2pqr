@@ -1,0 +1,166 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>ELEC input file section &#8212; APBS-PDB2PQR 1.6 documentation</title>
+    
+    <link rel="stylesheet" href="../../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '1.6',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="bem-manual" href="bem-manual.html" />
+    <link rel="prev" title="READ input file section" href="../read.html" />
+   
+  <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="elec-input-file-section">
+<span id="elec"></span><h1>ELEC input file section<a class="headerlink" href="#elec-input-file-section" title="Permalink to this headline">¶</a></h1>
+<p>The ELEC block of an APBS input file is used for polar solvation (electrostatics) calculations and has the following syntax:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>ELEC <span class="o">[</span> name <span class="o">{</span>id<span class="o">}</span> <span class="o">]</span>
+     <span class="o">{</span>type<span class="o">}</span>
+     <span class="o">{</span>keywords...<span class="o">}</span>
+END
+</pre></div>
+</div>
+<p>The optional <code class="docutils literal"><span class="pre">id</span></code> variable is a simple string that allows ELEC statements to be named.
+Since numerous ELEC blocks may appear in an APBS input file, it can be difficult to keep track of them all.
+It is possible to assign an optional name (string) to each ELEC block to simplify the organizational process.</p>
+<p>The <code class="docutils literal"><span class="pre">type</span></code> command defines the types of ELEC calculation to be performed and includes:</p>
+<ul class="simple">
+<li>Finite difference multigrid calculations with <a class="reference external" href="http://www.fetk.org">PMG</a>.<ul>
+<li><a class="reference internal" href="mg-auto.html#mgauto"><span class="std std-ref">mg-auto</span></a></li>
+<li><a class="reference internal" href="mg-para.html#mgpara"><span class="std std-ref">mg-para</span></a></li>
+<li><a class="reference internal" href="mg-manual.html#mgmanual"><span class="std std-ref">mg-manual</span></a></li>
+</ul>
+</li>
+<li><a class="reference external" href="https://www.ncbi.nlm.nih.gov/pubmed/23212974">Geometric flow solvation</a> finite difference calculations<ul>
+<li><a class="reference internal" href="geoflow-auto.html#geoflowauto"><span class="std std-ref">geoflow-auto</span></a></li>
+</ul>
+</li>
+<li>Boundary element method calculations with <a class="reference external" href="https://doi.org/10.1016/j.jcp.2013.03.056">TABI-PB</a>.<ul>
+<li><a class="reference internal" href="bem-manual.html#bemmanual"><span class="std std-ref">bem-manual</span></a></li>
+</ul>
+</li>
+<li>Analytic and semi-analytic Poisson-Boltzmann approximations<ul>
+<li><a class="reference internal" href="pbam-auto.html#pbamauto"><span class="std std-ref">pbam-auto</span></a></li>
+<li><a class="reference internal" href="pbsam-auto.html#pbsamauto"><span class="std std-ref">pbsam-auto</span></a></li>
+</ul>
+</li>
+<li>Finite element calculations with <a class="reference external" href="http://www.fetk.org">FEtk</a>.<ul>
+<li><a class="reference internal" href="fe-manual.html#femanual"><span class="std std-ref">fe-manual</span></a></li>
+</ul>
+</li>
+<li>No-op modes for generating coefficient maps<ul>
+<li><a class="reference internal" href="mg-dummy.html#mgdummy"><span class="std std-ref">mg-dummy</span></a></li>
+</ul>
+</li>
+</ul>
+<p>Finally, the <code class="docutils literal"><span class="pre">keywords</span></code> are calculation-specific commands that customize the particular type of calculation.
+This section is the main component for polar solvation calculations in APBS runs.
+There may be several ELEC sections, operating on different molecules or using different parameters for multiple runs on the same molecule.
+The order of the ELEC statement can matter since certain types of boundary conditions (<a class="reference internal" href="bcfl.html#bcfl"><span class="std std-ref">bcfl</span></a>) can require information about previous calculations.</p>
+<div class="toctree-wrapper compound">
+<p class="caption"><span class="caption-text">Calculation type keywords</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="bem-manual.html">bem-manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="fe-manual.html">fe-manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="geoflow-auto.html">geoflow-auto</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mg-auto.html">mg-auto</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mg-manual.html">mg-manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mg-para.html">mg-para</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mg-dummy.html">mg-dummy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pbam-auto.html">pbam-auto</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pbsam-auto.html">pbsam-auto</a></li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../index.html">APBS</a><ul>
+  <li><a href="../../invoking.html">Invoking APBS</a><ul>
+  <li><a href="../index.html">APBS input files</a><ul>
+      <li>Previous: <a href="../read.html" title="previous chapter">READ input file section</a></li>
+      <li>Next: <a href="bem-manual.html" title="next chapter">bem-manual</a></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../../_sources/apbs/input/elec/index.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2017, Nathan Baker.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.5.6</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+      |
+      <a href="../../../_sources/apbs/input/elec/index.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

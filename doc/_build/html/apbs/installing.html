@@ -1,0 +1,179 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Installing APBS &#8212; APBS-PDB2PQR 1.6 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.6',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Invoking APBS" href="invoking.html" />
+    <link rel="prev" title="APBS" href="index.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="installing-apbs">
+<h1>Installing APBS<a class="headerlink" href="#installing-apbs" title="Permalink to this headline">¶</a></h1>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Please <a class="reference external" href="http://eepurl.com/by4eQr">register</a> before installing APBS.</p>
+</div>
+<p>The best way to install APBS is via the binary installation; see <a class="reference internal" href="../downloads.html"><span class="doc">How to get the software</span></a> for more information.
+We currently offer binaries for the Ubuntu platform on a variety of architectures as well as command-line binaries for WinXP and Mac OS X.
+For all other systems, please install from source on your particular platform and feel free to contact the APBS users mailing list for more help and/or to request a binary for that system.</p>
+<div class="section" id="binary-installation">
+<h2>Binary installation<a class="headerlink" href="#binary-installation" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="windows">
+<h3>Windows<a class="headerlink" href="#windows" title="Permalink to this headline">¶</a></h3>
+<p>If you are using APBS on a Windows system, you may not want to install APBS in a directory with spaces in the path name (e.g., <code class="docutils literal"><span class="pre">C:\Program</span> <span class="pre">Files\</span></code>) as this can cause problems with some visualization programs.
+The windows release is for Windows 7 and is 64-bit only.
+It installs to <code class="docutils literal"><span class="pre">C:\APBS</span></code> by default and provides a batch file that creates a shell with the correct path.</p>
+</div>
+<div class="section" id="mac-os-x">
+<h3>Mac OS X<a class="headerlink" href="#mac-os-x" title="Permalink to this headline">¶</a></h3>
+<p>The OS X build is built for Mavericks, available as a <code class="file docutils literal"><span class="pre">.dmg</span></code> (disk image) file with an APBS Application Bundle.
+Just open the <code class="file docutils literal"><span class="pre">.dmg</span></code> file and drag the app to the <code class="file docutils literal"><span class="pre">Applications</span></code> folder.
+Running the App Bundle opens a Terminal window with the appropriate path to the APBS binary.</p>
+</div>
+<div class="section" id="linux">
+<h3>Linux<a class="headerlink" href="#linux" title="Permalink to this headline">¶</a></h3>
+<p>APBS binaries are provided in compressed tar format (<code class="file docutils literal"><span class="pre">*.tgz</span></code>) for Linux.
+This tarball can be opened by</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>gzip -dc apbs-<span class="o">{</span><span class="c1">#}.{#}.{#}-{XYZ}.tgz | tar xvf -</span>
+</pre></div>
+</div>
+<p>where <code class="file docutils literal"><span class="pre">apbs-</span><em><span class="pre">#</span></em><span class="pre">.</span><em><span class="pre">#</span></em><span class="pre">.</span><em><span class="pre">#</span></em><span class="pre">-</span><em><span class="pre">XYZ</span></em><span class="pre">.tgz</span></code> is the downloaded tarball with <code class="docutils literal"><span class="pre">XYZ</span></code> as the particular architecture of the binary you downloaded and <code class="docutils literal"><span class="pre">#.#.#</span></code> as the version number.
+This will expand into a directory called <code class="file docutils literal"><span class="pre">apbs-</span><em><span class="pre">#</span></em><span class="pre">.</span><em><span class="pre">#</span></em><span class="pre">.</span><em><span class="pre">#</span></em><span class="pre">-</span><em><span class="pre">XYZ</span></em></code>.
+The contents of this directory can be placed anywhere on your system that you prefer (and have access to).</p>
+</div>
+</div>
+<div class="section" id="source-installation">
+<h2>Source installation<a class="headerlink" href="#source-installation" title="Permalink to this headline">¶</a></h2>
+<p>We recommend that most users compile APBS from our official releases; see <a class="reference internal" href="../downloads.html"><span class="doc">How to get the software</span></a> for downloading instructions.
+Adventurous users may want to try to compile the developmental versions on <a class="reference external" href="https://github.com/Electrostatics/apbs-pdb2pqr">GitHub</a>.
+In either case, detailed compile/build instructions are provided with the source code.</p>
+</div>
+<div class="section" id="what-s-in-the-box">
+<h2>What&#8217;s in the box?<a class="headerlink" href="#what-s-in-the-box" title="Permalink to this headline">¶</a></h2>
+<dl class="docutils">
+<dt>bin</dt>
+<dd>contains the main APBS executable</dd>
+<dt>share/apbs</dt>
+<dd>contains additional APBS-related files</dd>
+<dt>doc</dt>
+<dd>the APBS programmer guide</dd>
+<dt>examples</dt>
+<dd>APBS examples</dd>
+<dt>tests</dt>
+<dd>the APBS test suite</dd>
+<dt>tools</dt>
+<dd>useful programs to help process APBS input and output</dd>
+<dt>include</dt>
+<dd>header files for building software that calls APBS</dd>
+<dt>lib</dt>
+<dd>libraries for building software that calls APBS</dd>
+</dl>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Installing APBS</a><ul>
+<li><a class="reference internal" href="#binary-installation">Binary installation</a><ul>
+<li><a class="reference internal" href="#windows">Windows</a></li>
+<li><a class="reference internal" href="#mac-os-x">Mac OS X</a></li>
+<li><a class="reference internal" href="#linux">Linux</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#source-installation">Source installation</a></li>
+<li><a class="reference internal" href="#what-s-in-the-box">What&#8217;s in the box?</a></li>
+</ul>
+</li>
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="index.html">APBS</a><ul>
+      <li>Previous: <a href="index.html" title="previous chapter">APBS</a></li>
+      <li>Next: <a href="invoking.html" title="next chapter">Invoking APBS</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/apbs/installing.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2017, Nathan Baker.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.5.6</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+      |
+      <a href="../_sources/apbs/installing.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
