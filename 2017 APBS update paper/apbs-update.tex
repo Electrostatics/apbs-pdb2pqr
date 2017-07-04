@@ -1,7 +1,7 @@
 \documentclass[12pt,titlepage]{article}
+\pdfoutput=1
 
-\usepackage[sort&compress]{natbib}
-\bibliographystyle{unsrt}
+\usepackage[utf8]{inputenc} 
 \usepackage{color}
 \usepackage{graphicx}
 \graphicspath{{figs/}}
@@ -12,8 +12,10 @@
 \usepackage{amsmath}
 \usepackage{authblk}
 \usepackage[margin=1in]{geometry}
+\usepackage[backend=biber, style=numeric-comp,sorting=none]{biblatex}
+\bibliography{apbs}
 \usepackage[hidelinks]{hyperref}
-\usepackage{setspace}
+%\usepackage{setspace}
 
 \newcommand{\todo}[1]{\textbf{$\star \star$ {#1} $\star \star$}}
 \newcommand{\PNNLaffil}{$\star$}
@@ -71,7 +73,7 @@
 
 \maketitle
 
-\doublespacing
+%\doublespacing
 
 \begin{abstract}
 The Adaptive Poisson-Boltzmann Solver (APBS) software was developed to solve the equations of continuum electrostatics for large biomolecular assemblages that has provided impact in the study of a broad range of chemical, biological, and biomedical applications.
@@ -747,6 +749,6 @@ Major options include:
 The commands (keywords) not included in this list are used to specify system conditions, such as temperature and salt concentration. These parameters are similar to those found in the \keyword{ELEC} section of a usual APBS run and are documented on the Contributions portion of the APBS website~\cite{APBSweb}. 
 Additional information about parameter settings is provided via the APBS website~\cite{APBSweb}. Examples of the electrostatic potentials produced from PB-AM and PB-SAM are shown in Figures~\ref{fig:pbam-results} and~\ref{fig:pbsam-results}, respectively.
 
-\bibliography{apbs}
+\printbibliography
 
 \end{document}
