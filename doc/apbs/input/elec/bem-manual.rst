@@ -81,7 +81,7 @@ The sums in the discretized form of the integral equations above have the form o
 
 where :math:`G` is the screened Coulomb potential kernel, :math:`{x}_i, {x}_j` are the centroids of the triangles, and :math:`q_j` is the charge at :math:`{x}_j`.
 The particles (centroids of the triangles) are divided into a hierarchy of clusters having a tree structure.
-The treecode replaces the :math:`\mathcal{O}(N^2) particle-particle interactions by :math:`\mathcal{O}(N \log N) particle-cluster interactions and TABI-PB utilizes this feature efficiently.
+The treecode replaces the :math:`\mathcal{O}(N^2)` particle-particle interactions by :math:`\mathcal{O}(N \log N)` particle-cluster interactions and TABI-PB utilizes this feature efficiently.
 
 ======
 Output
