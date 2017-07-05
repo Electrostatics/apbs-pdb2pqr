@@ -25,8 +25,6 @@ For more information, see the Geng & Krasny `2013 J Comput Phys paper <https://d
    ../generic/sdens
    sdie
    ../generic/srad
-   srfm
-   ../generic/swin
    ../generic/temp
    tree_n0
    tree_order
