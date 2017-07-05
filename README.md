@@ -23,7 +23,7 @@ Finally, the free, open-source APBS license ensures its accessibility to the ent
 
 ### PDB2PQR
 The use of continuum solvation methods such as APBS requires accurate and complete structural data as well as force field parameters such as atomic charges and radii.
-Unfortunately, the limiting step in continuum electrostatics calculations is often the addition of missing atomic coordinates to molecular structures from the Protein Data Bank and the assignment of parameters to these structures.
+Unfortunately, the limiting step in continuum electrostatics calculations is often the addition of missing atomic coordinates to molecular structures from the [Protein Data Bank](http://www.wwpdb.org/) and the assignment of parameters to these structures.
 To address this problem, we have developed PDB2PQR.
 This software automates many of the common tasks of preparing structures for continuum solvation calculations as well as many other types of biomolecular structure modeling, analysis, and simulation.
 These tasks include:
