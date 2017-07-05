@@ -89,11 +89,6 @@ The format is given below:
 
 The TABI-PB code prints the free energy of solvation and Coulombic free energy in kJ/mol, along with some other information such as CPU time and the GMRES residuals at each step.
 
-.. todo::
-   
-   It would be nice if all APBS-related code used kJ/mol.
-   Documented as https://github.com/Electrostatics/apbs-pdb2pqr/issues/485
-
 Additionally, TABI-PB can optionally output a VTK polygonal data file containing color mappable potentials and normal derivatives of potentials on the faces and vertices of the mesh.
 The VTK file can be visualized using `ParaView <https://www.paraview.org/>`_.
 
