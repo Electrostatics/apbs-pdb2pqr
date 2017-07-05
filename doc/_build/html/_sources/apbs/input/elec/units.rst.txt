@@ -25,3 +25,4 @@ Force units will be energy units/Angstrom and potential units will be energy uni
 .. todo::
 
    It would be great to use the same units everywhere in APBS.
+   Documented in https://github.com/Electrostatics/apbs-pdb2pqr/issues/485

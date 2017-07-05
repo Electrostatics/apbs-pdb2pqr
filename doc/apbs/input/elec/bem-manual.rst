@@ -33,15 +33,13 @@ For more information, see the Geng & Krasny `2013 J Comput Phys paper <https://d
 
 .. todo::
 
-   Is this a complete keyword list for ``bem-manual``?
-
-.. todo::
-
    Why are ``srfm``, ``srad``, etc. included in ``bem-manual`` input files when the surface type is determined by the mesh?
+   Documented as issue https://github.com/Electrostatics/apbs-pdb2pqr/issues/483
 
 .. todo::
    
    If there's only one mode, then we can change ``bem-manual`` to just ``bem`` or ``tabi``.
+   Documented as issue https://github.com/Electrostatics/apbs-pdb2pqr/issues/484
 
 ======================
 Background information
@@ -107,6 +105,7 @@ The TABI-PB code prints the free energy of solvation and Coulombic free energy i
 .. todo::
    
    It would be nice if all APBS-related code used kJ/mol.
+   Documented as https://github.com/Electrostatics/apbs-pdb2pqr/issues/485
 
 Additionally, TABI-PB can optionally output a VTK polygonal data file containing color mappable potentials and normal derivatives of potentials on the faces and vertices of the mesh.
 The VTK file can be visualized using `ParaView <https://www.paraview.org/>`_.

@@ -27,5 +27,6 @@ Note that the executables for MSMS_ and NanoShaper_ must be included in your pat
 
 .. todo::
 
-   The integer flag values for ``mesh`` should really be replaced by human-readable strings.
+   The integer flag values for ``mesh`` should be replaced by human-readable strings.
+   Documented in https://github.com/Electrostatics/apbs-pdb2pqr/issues/496
    

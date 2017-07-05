@@ -62,6 +62,7 @@ Parameter set errors
 .. todo::
 
    Under construction; please see https://arxiv.org/abs/1705.10035 for an initial discussion.
+   Saved as issue https://github.com/Electrostatics/apbs-pdb2pqr/issues/481 
 
 ======================
 Structure-based errors

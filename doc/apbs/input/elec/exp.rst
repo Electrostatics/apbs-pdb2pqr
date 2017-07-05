@@ -18,3 +18,4 @@ The *H* or *F* and :file:`{s}.bin` will be appended during the program run.
 
    It would be better to generalize the :ref:`read` section of the input file rather than use the ``exp`` command.
    This command also needs to be cleaned up -- it's too fragile.
+   Documented at https://github.com/Electrostatics/apbs-pdb2pqr/issues/489
