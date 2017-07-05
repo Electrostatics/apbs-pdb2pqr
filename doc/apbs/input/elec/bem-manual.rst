@@ -88,7 +88,7 @@ Output
 The TABI-PB code produces an output file called :file:`surface_potential.dat` containing:
 
 * number of nodes, number of triangles
-* node index, vertices, normal vector, surface potential (kcal mol\ :sup:`-1` e\ :sub:`c`\ :sup:`-1`), surface potential normal derivatives (kcal mol\ :sup:`-1` e\ :sub:`c`\ :sup:`-1` A\ :sup:`-1`)
+* node index, vertices, normal vector, surface potential (kJ mol\ :sup:`-1` e\ :sub:`c`\ :sup:`-1`), surface potential normal derivatives (kJ mol\ :sup:`-1` e\ :sub:`c`\ :sup:`-1` A\ :sup:`-1`)
 * connectivity data for MSMS surface triangulation
 
 The format is given below:
@@ -100,7 +100,7 @@ The format is given below:
    (et cetera)
    node_index1 node_index2 node_index3
 
-The TABI-PB code prints the free energy of solvation and Coulombic free energy in kcal/mol, along with some other information such as CPU time and the GMRES residuals at each step.
+The TABI-PB code prints the free energy of solvation and Coulombic free energy in kJ/mol, along with some other information such as CPU time and the GMRES residuals at each step.
 
 .. todo::
    
