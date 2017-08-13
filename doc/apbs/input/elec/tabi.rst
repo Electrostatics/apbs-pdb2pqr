@@ -1,6 +1,6 @@
-.. _bemmanual:
+.. _tabi:
 
-bem-manual
+tabi
 ==========
 
 This mode uses the TABI-PB integral equation software from Geng and Krasny to solve the linearized Poisson-Boltmzann equation. 
@@ -12,11 +12,9 @@ For more information, see the Geng & Krasny `2013 J Comput Phys paper <https://d
 
 .. toctree::
    :maxdepth: 1
-   :caption: ELEC bem-manual keywords
+   :caption: ELEC tabi keywords
 
-   bcfl
    ion
-   lpbe
    mac
    mesh
    ../generic/mol
@@ -25,21 +23,10 @@ For more information, see the Geng & Krasny `2013 J Comput Phys paper <https://d
    ../generic/sdens
    sdie
    ../generic/srad
-   srfm
-   ../generic/swin
    ../generic/temp
    tree_n0
    tree_order
 
-.. todo::
-
-   Why are ``srfm``, ``srad``, etc. included in ``bem-manual`` input files when the surface type is determined by the mesh?
-   Documented as issue https://github.com/Electrostatics/apbs-pdb2pqr/issues/483
-
-.. todo::
-   
-   If there's only one mode, then we can change ``bem-manual`` to just ``bem`` or ``tabi``.
-   Documented as issue https://github.com/Electrostatics/apbs-pdb2pqr/issues/484
 
 ======================
 Background information
@@ -88,7 +75,7 @@ Output
 The TABI-PB code produces an output file called :file:`surface_potential.dat` containing:
 
 * number of nodes, number of triangles
-* node index, vertices, normal vector, surface potential (kcal mol\ :sup:`-1` e\ :sub:`c`\ :sup:`-1`), surface potential normal derivatives (kcal mol\ :sup:`-1` e\ :sub:`c`\ :sup:`-1` A\ :sup:`-1`)
+* node index, vertices, normal vector, surface potential (kJ mol\ :sup:`-1` e\ :sub:`c`\ :sup:`-1`), surface potential normal derivatives (kJ mol\ :sup:`-1` e\ :sub:`c`\ :sup:`-1` A\ :sup:`-1`)
 * connectivity data for MSMS surface triangulation
 
 The format is given below:
@@ -100,12 +87,7 @@ The format is given below:
    (et cetera)
    node_index1 node_index2 node_index3
 
-The TABI-PB code prints the free energy of solvation and Coulombic free energy in kcal/mol, along with some other information such as CPU time and the GMRES residuals at each step.
-
-.. todo::
-   
-   It would be nice if all APBS-related code used kJ/mol.
-   Documented as https://github.com/Electrostatics/apbs-pdb2pqr/issues/485
+The TABI-PB code prints the free energy of solvation and Coulombic free energy in kJ/mol, along with some other information such as CPU time and the GMRES residuals at each step.
 
 Additionally, TABI-PB can optionally output a VTK polygonal data file containing color mappable potentials and normal derivatives of potentials on the faces and vertices of the mesh.
 The VTK file can be visualized using `ParaView <https://www.paraview.org/>`_.
