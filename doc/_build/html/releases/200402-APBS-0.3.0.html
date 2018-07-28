@@ -1,0 +1,195 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>APBS 0.3.0 (2004-02) &#8212; APBS-PDB2PQR 1.6 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.6',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="APBS 0.3.1 (2004-04)" href="200404-APBS-0.3.1.html" />
+    <link rel="prev" title="APBS 0.2.6 (2003-01)" href="200301-APBS-0.2.6.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="apbs-0-3-0-2004-02">
+<h1>APBS 0.3.0 (2004-02)<a class="headerlink" href="#apbs-0-3-0-2004-02" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="news">
+<h2>News<a class="headerlink" href="#news" title="Permalink to this headline">¶</a></h2>
+<p>APBS is now supported by the NIH via NIGMS grant GM69702-01.</p>
+</div>
+<div class="section" id="changes-that-affect-users">
+<h2>Changes that affect users<a class="headerlink" href="#changes-that-affect-users" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>New version of the documentation</li>
+<li>New directory structure in tools/</li>
+<li>Finished fe-manual mode for ELEC calculations &#8211; this is the adaptive finite element solver</li>
+<li>Added documetnation for fe-manual</li>
+<li>New apbs/tools/manip/inputgen.py script to automatically generate input APBS files from PQR data</li>
+<li>Added new asynchronous mode in mg-para parallel calculations to enable running on-demand and/or limited resources</li>
+<li>Added new script (tools/manip/async.sh) to convert mg-para calculations in mg-async calculations</li>
+<li>Added following aliases for some of the more obscure parameters in the input files:</li>
+<li>chgm 0 ==&gt; chgm spl0</li>
+<li>chgm 1 ==&gt; chgm spl2</li>
+<li>srfm 0 ==&gt; srfm mol</li>
+<li>srfm 1 ==&gt; srfm smol</li>
+<li>srfm 2 ==&gt; srfm spl2</li>
+<li>bcfl 0 ==&gt; bcfl zero</li>
+<li>bcfl 1 ==&gt; bcfl sdh</li>
+<li>bcfl 2 ==&gt; bcfl mdh</li>
+<li>bcfl 4 ==&gt; bcfl focus</li>
+<li>calcenergy 0 ==&gt; calcenergy no</li>
+<li>calcenergy 1 ==&gt; calcenergy total</li>
+<li>calcenergy 2 ==&gt; calcenergy comps</li>
+<li>calcforce 0 ==&gt; calcforce no</li>
+<li>calcforce 1 ==&gt; calcforce total</li>
+<li>calcforce 2 ==&gt; calcforce comps</li>
+<li>Example input files have been updated to reflect this change. NOTE: the code is backward-compliant; i.e., old input files WILL still work.</li>
+<li>Added new READ options &#8220;PARM&#8221; and &#8220;MOL PDB&#8221;, see documentation for more information. These options allow users to use unparameterized PDB files together with a parameter database.</li>
+<li>Updated the documentation</li>
+<li>Now include support for chain IDs and other optional fields in PQR/PDB files</li>
+<li>Added support for parsing PDB files</li>
+<li>Renamed:</li>
+<li>amber2charmm -&gt; amber2charmm.sh</li>
+<li>pdb2pqr -&gt; pdb2pqr.awk</li>
+<li>qcd2pqr -&gt; qcd2pqr.awk</li>
+<li>Added a new Python-based pdb2pqr (tools/conversion/pdb2pqr) script that allows users to choose parameters from different forcefields.</li>
+<li>Updated Python wrappers (tools/python) and added the python directory to autoconf/automake.</li>
+<li>Reformatted examples/README.html for readability.</li>
+</ul>
+</div>
+<div class="section" id="bug-fixes">
+<h2>Bug fixes<a class="headerlink" href="#bug-fixes" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>Fixed bug in PQR parsing that can cause PDB/PQR files to be mis-read when they contain residues with numbers in their names (Thanks to Robert Konecny and Joanna Trylska)</li>
+<li>Fixed bug when writing out number/charge density: unrealistic densities reported inside iVdW surface.</li>
+<li>Fixed bug in VMD read_dx utility</li>
+<li>Invalid map IDs now result in an error message instead of a core dump (thanks to Marco Berrera)</li>
+<li>Modified mechanism for cubic-spline output, fixing a bug associated with zero-radius atoms</li>
+<li>Fixed omission of srfm in sections of documentation (thanks to Sameer Varma)</li>
+<li>Made autoconf/automake configure setup more robust on Solaris 8 platforms (thanks to Ben Carrington)</li>
+</ul>
+</div>
+<div class="section" id="changes-that-affect-developers">
+<h2>Changes that affect developers<a class="headerlink" href="#changes-that-affect-developers" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>New docuemtnation setup</li>
+<li>New tools/ directory structure</li>
+<li>Changed Vgreen interface and improved efficiency</li>
+<li>Changed Vopot interface to support multiple grids</li>
+<li>Added several norm and seminorm functions to Vgrid class</li>
+<li>Altered &#8211;with-blas syntax in configure scripts and removed &#8211;disable-blas</li>
+<li>Documented high-level frontend routines</li>
+<li>Cool new class and header-file dependency graphs courtesy of Doxygen and Graphviz</li>
+<li>Added substantial mypde.c-based functionality to Vfetk</li>
+<li>Moved chgm from PBEparm to MGparm</li>
+<li>Minor changes to Vfetk: removed genIcos and added genCube</li>
+<li>FEM solution of RPBE working again (see test/reg-fem) and is probably more up-to-date than test/fem</li>
+<li>Updated API documentation</li>
+<li>Changed many NOsh, FEMparm, MGparm variables to enums</li>
+<li>Changes to Valist and Vatom classes</li>
+<li>Fixed minor bugs in documentation formatting</li>
+<li>Made Vopot more robust</li>
+<li>Created Vparam class for parameter file parsing</li>
+<li>Added vparam* parameter database flat files to tools/conversion/param</li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">APBS 0.3.0 (2004-02)</a><ul>
+<li><a class="reference internal" href="#news">News</a></li>
+<li><a class="reference internal" href="#changes-that-affect-users">Changes that affect users</a></li>
+<li><a class="reference internal" href="#bug-fixes">Bug fixes</a></li>
+<li><a class="reference internal" href="#changes-that-affect-developers">Changes that affect developers</a></li>
+</ul>
+</li>
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="../downloads.html">How to get the software</a><ul>
+      <li>Previous: <a href="200301-APBS-0.2.6.html" title="previous chapter">APBS 0.2.6 (2003-01)</a></li>
+      <li>Next: <a href="200404-APBS-0.3.1.html" title="next chapter">APBS 0.3.1 (2004-04)</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/releases/200402-APBS-0.3.0.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2017, Nathan Baker.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.5.6</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+      |
+      <a href="../_sources/releases/200402-APBS-0.3.0.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

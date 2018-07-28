@@ -1,0 +1,27 @@
+APBS 0.3.2 (2004-11)
+====================
+
+=====================
+New features
+=====================
+
+
+* Updated tutorial with more mg-auto examples
+* Updated apbs.spec file for generating RPMs on more platforms.
+* Added new Python wrapper to tools/python directory showing how to run APBS without PQR and .in inputs.
+* Python wrappers are now configured to compile on more architectures/ from more compilers.
+* Updated tools/conversion/pdb2pqr to a new version (0.1.0) of PDB2PQR, which now can handle nucleic acids, rebuild missing heavy atoms, add hydrogens, and perform some optimization.
+
+
+===================
+Bug fixes
+===================
+
+* The dimensions of the fine grids in the pka-lig example calculations were increased to give more reliable results (albeit ones which don't agree with the reported UHBD values as well).
+* hz in mgparse.c causes name clash with AIX environmental variable; fixed.
+* Fixed documentation to state that using a kappa map does not ignore ELEC ION statements.
+* Added a stability fix for printing charge densities for LPBE-type calculations.
+* Fixed a bug in NPBE calculations which led to incorrect charge densities and slightly modified total energies.
+* Modified the origin when creating UHBD grids to match standard UHBD format.
+* Fixed VASSERT error caused by rounding error when reading in dx grid files.
+

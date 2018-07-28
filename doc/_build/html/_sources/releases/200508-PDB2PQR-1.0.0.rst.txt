@@ -1,0 +1,8 @@
+PDB2PQR 1.0.0 (2005-08)
+=======================
+    
+This is the initial version of the PDB2PQR conversion utility.
+There are several changes to the various "non-official" versions previously available:
+
+* SourceForge has been chosen as a centralized location for all things related to PDB2PQR, including downloads, mailing lists, and bug reports.
+* Several additions to the code have been made, including pKa support via PropKa, a new hydrogen optimization algorithm which should increase both accuracy and speed, and general bug fixes.

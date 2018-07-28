@@ -1,0 +1,149 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>APBS 0.5.1 (2007-07) &#8212; APBS-PDB2PQR 1.6 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.6',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="PDB2PQR 1.3.0 (2008-01)" href="200801-PDB2PQR-1.3.0.html" />
+    <link rel="prev" title="PDB2PQR 1.2.1 (2007-04)" href="200704-PDB2PQR-1.2.1.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="apbs-0-5-1-2007-07">
+<h1>APBS 0.5.1 (2007-07)<a class="headerlink" href="#apbs-0-5-1-2007-07" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="new-features">
+<h2>New features<a class="headerlink" href="#new-features" title="Permalink to this headline">¶</a></h2>
+<ul>
+<li><p class="first">Replaced APOLAR-&gt;glen and APOLAR-&gt;dime keywords with APOLAR-&gt;grid</p>
+</li>
+<li><p class="first">Deprecated mergedx. Added mergedx2</p>
+<blockquote>
+<div><ul class="simple">
+<li>mergedx2 takes the bounding box that a user wishes to calculate a map for, as well as a resolution of the output map. An output map meeting those specifications is calculated and store.</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first">Added pKa tutorial</p>
+</li>
+<li><p class="first">Added warning about strange grid settings (MGparm)</p>
+</li>
+<li><p class="first">Fixed a bug in vpmg.c that occured when a user supplied a dielectric map with the ionic strength set to zero, causing the map to not be used.</p>
+</li>
+<li><p class="first">Removed deprecated (as of 0.5.0) tools/manip/acc in lieu of new APOLAR APBS features</p>
+</li>
+<li><p class="first">Added enumerations for return codes, new PBE solver (SMPBE) and linear/ nonlinear types</p>
+</li>
+<li><p class="first">Added in code for Size-Modified PBE (SMPBE)</p>
+</li>
+</ul>
+</div>
+<div class="section" id="bug-fixes-and-api-changes">
+<h2>Bug fixes and API changes<a class="headerlink" href="#bug-fixes-and-api-changes" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>Fixed buffer over-run problem</li>
+<li>Fixed case inconsistency with inputgen.py and psize.py scripts which caused problems with some versions of Python</li>
+<li>Fixed bug wherein &#8216;bcfl sdh&#8217; behaved essentially like &#8216;bcfl zero&#8217;.  Now we have the correct behavior:  &#8216;bcfl sdh&#8217; behaves like &#8216;bcfl mdh&#8217; thanks to the multipole code added by Mike Schnieders.  Interestingly, this bug didn&#8217;t have a major on the large-molecule test cases/examples provided by APBS but did affect the small molecule solvation energies.  Thanks to Bradley Scott Perrin for reporting this bug.</li>
+<li>Added support for chain IDs in noinput.py</li>
+<li>Fixed bug in noinput.py where REMARK lines would cause the script to fail.</li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">APBS 0.5.1 (2007-07)</a><ul>
+<li><a class="reference internal" href="#new-features">New features</a></li>
+<li><a class="reference internal" href="#bug-fixes-and-api-changes">Bug fixes and API changes</a></li>
+</ul>
+</li>
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="../downloads.html">How to get the software</a><ul>
+      <li>Previous: <a href="200704-PDB2PQR-1.2.1.html" title="previous chapter">PDB2PQR 1.2.1 (2007-04)</a></li>
+      <li>Next: <a href="200801-PDB2PQR-1.3.0.html" title="next chapter">PDB2PQR 1.3.0 (2008-01)</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/releases/200707-APBS-0.5.1.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2017, Nathan Baker.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.5.6</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+      |
+      <a href="../_sources/releases/200707-APBS-0.5.1.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

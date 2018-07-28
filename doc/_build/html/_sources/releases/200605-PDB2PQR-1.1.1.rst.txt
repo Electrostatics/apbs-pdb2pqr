@@ -1,0 +1,10 @@
+PDB2PQR 1.1.1 (2006-05)
+=======================
+
+---------
+Bug fixes
+---------
+
+* Fixed a bug which prevented PDB2PQR from recognizing atoms from nucleic acids with "*" in their atom names. (thanks to Jaichen Wang)
+* Fixed a bug in the hydrogen bonding routines where a misnamed object led to a crash for very specific cases. (thanks to Josh Swamidass) 
+

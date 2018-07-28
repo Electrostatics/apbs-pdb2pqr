@@ -1,0 +1,6 @@
+PDB2PQR 1.7 (2010-10)
+=====================
+
+* For PDB2PQR web interface users:  the JMol web interface for APBS calculation visualization has been substantially improved, thanks to help from Bob Hanson.  Those performing APBS calculations via the PDB2PQR web interface now have a much wider range of options for visualizing the output online -- as well as downloading for offline analysis.
+* For PDB2PQR command-line and custom web interface users:  the Opal service URLs have changed to new NBCR addresses.  Old services hosted at .wustl.edu addresses have been decommissioned.  Please upgrade ASAP to use the new web service.  Thank you as always to the staff at NBCR for their continuing support of APBS/PDB2PQR web servers and services.
+

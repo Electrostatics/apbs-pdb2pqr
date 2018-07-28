@@ -1,0 +1,138 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Invoking APBS &#8212; APBS-PDB2PQR 1.6 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.6',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="APBS input files" href="input/index.html" />
+    <link rel="prev" title="Installing APBS" href="installing.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="invoking-apbs">
+<h1>Invoking APBS<a class="headerlink" href="#invoking-apbs" title="Permalink to this headline">¶</a></h1>
+<p>Unless invoked by <a class="reference internal" href="../pdb2pqr/index.html"><span class="doc">PDB2PQR</span></a> or another software package (see <a class="reference internal" href="../other-software.html"><span class="doc">Other software</span></a>), most APBS calculations are performed from the command line by running an APBS input file through the APBS program.</p>
+<p>As mentioned in the installation and availability section, the main APBS binary is installed in <code class="docutils literal"><span class="pre">${APBS_PREFIX}/bin</span></code> where <code class="docutils literal"><span class="pre">${APBS_PREFIX}</span></code> is the top-level directory you chose for the installation.
+You can move the binary to any directory you choose.</p>
+<p>APBS is invoked with a very simple syntax:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>apbs <span class="o">[</span>options<span class="o">]</span> input-file
+</pre></div>
+</div>
+<p>where the list of <code class="docutils literal"><span class="pre">[options]</span></code> can be obtained by running APBS with the <code class="docutils literal"><span class="pre">--help</span></code> option.
+The input file format is described in <a class="reference internal" href="input/index.html"><span class="doc">APBS input files</span></a>.</p>
+<p>The <a class="reference external" href="http://nbcr.ucsd.edu/data/docs/opal/">Opal Toolkit</a> is software produced by <a class="reference external" href="http://nbcr.ucsd.edu/wordpress2/">NBCR</a>.
+This toolkit allows for the computing load for processor intensive scientiﬁc applications to be shifted to a 3rd party and/or generic computing grid.
+This can be tremendously advantageous in situations where a large amount of computing power is not locally available, but is required, for the task at hand.
+In particular, many users have discovered that their local computational resources are insufficient for certain types of APBS calculations on large systems or at extremely high accuracy.
+This client removes this resource limitation by allowing users to run on clusters at NBCR.
+Recent developmental versions APBS add optional support for the off-loading of APBS calculations to an Opal service.
+Opal support has been integrated into APBS such that the end user will not be able to tell the difference between local and Opal runs of APBS: the APBS Opal client can be invoked in exactly the same way as the main APBS binary with identical output.
+The APBS Opal support is in the form of a Python script <code class="docutils literal"><span class="pre">ApbsClient.py</span></code> and is installed by default.
+The script has been tested on Python 2.5; newer/older versions of Python may or may be functional.
+As mentioned above, the basic invocation is the same as the main binary.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>ApbsClient.py <span class="o">[</span>options<span class="o">]</span> input-file
+</pre></div>
+</div>
+<div class="toctree-wrapper compound">
+<p class="caption"><span class="caption-text">Contents</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="input/index.html">APBS input files</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="input/read.html">READ input file section</a></li>
+<li class="toctree-l2"><a class="reference internal" href="input/elec/index.html">ELEC input file section</a></li>
+<li class="toctree-l2"><a class="reference internal" href="input/apolar/index.html">APOLAR input file section</a></li>
+<li class="toctree-l2"><a class="reference internal" href="input/print.html">PRINT input file section</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="index.html">APBS</a><ul>
+      <li>Previous: <a href="installing.html" title="previous chapter">Installing APBS</a></li>
+      <li>Next: <a href="input/index.html" title="next chapter">APBS input files</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/apbs/invoking.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2017, Nathan Baker.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.5.6</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+      |
+      <a href="../_sources/apbs/invoking.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

@@ -1,0 +1,164 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>PDB2PQR 1.3.0 (2008-01) &#8212; APBS-PDB2PQR 1.6 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.6',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="APBS 1.0.0 (2008-04)" href="200804-APBS-1.0.0.html" />
+    <link rel="prev" title="APBS 0.5.1 (2007-07)" href="200707-APBS-0.5.1.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="pdb2pqr-1-3-0-2008-01">
+<h1>PDB2PQR 1.3.0 (2008-01)<a class="headerlink" href="#pdb2pqr-1-3-0-2008-01" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="new-features">
+<h2>New features<a class="headerlink" href="#new-features" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>Added &#8220;make test&#8221; and &#8220;make adv-test&#8221;</li>
+<li>Fixed problems with &#8220;make dist&#8221;</li>
+<li>Added integration with Opal for launching jobs as well as querying status</li>
+<li>The user may use NUMPY to specify the location of NUMPY.</li>
+<li>Both PDB2PKA and PROPKA are enabled by default.  PDB2PKA is enabled by default since ligand parameterization would fail without this option.</li>
+<li>For a regular user, &#8220;make install&#8221; tells the user the exact command the system administrator will use to make the URL viewable.</li>
+<li>The default value of 7.00 for the pH on the server form is removed due to a problem with browser refershing.</li>
+<li>Updated warning messages for lines beginning with SITE, TURN, SSBOND and LINK.</li>
+<li>Switched license from GPL to BSD.</li>
+<li>Made a new tar ball pdb2pqr-1.3.0-1.tar.gz for Windows users who cannot create pdb2pqr.py through configure process.</li>
+<li>configure now automatically detects SRCPATH, WEBSITE, and the location of pdb2pqr.cgi.  In version 1.2.1, LOCALPATH(SRCPATH) and WEBSITE were defined in src/server.py and the location of pdb2pqr.cgi was specified in html/server.html (index.html).  Configure now uses variable substitution with new files src/server.py.in and html/server.html.in to create src/server.py and html/server.html (index.html).</li>
+<li>SRCPATH is automatically set to the current working directory. WEBSITE is automatically set to <a class="reference external" href="http://fully_qualified_domain_name/pdb2pqr">http://fully_qualified_domain_name/pdb2pqr</a>. Path to CGI is automcailly set to <a class="reference external" href="http://fully_qualified_domain_name/pdb2pqr/pdb2pqr.cgi">http://fully_qualified_domain_name/pdb2pqr/pdb2pqr.cgi</a>.</li>
+<li>In version 1.2.1, there were 3 variables that needed to be changed to set up a server at a location different from agave.wustl.edu.  LOCALPATH, WEBSITE, and the location of the CGI file.  In this version, LOCALPATH has been used to SRCPATH to avoid confusion, since LOCALPATH could be interpreted as the local path for source files or the localpath for the server.</li>
+<li>Since configure now automatically sets the locations of files/directories based on the machine and configure options, the default  agave.wustl.edu locations are not used anymore.</li>
+<li>A copy of pdb2pqr.css is included.</li>
+<li>configure prints out information about parameters such as python flags, srcpath, localpath, website, etc.</li>
+<li>configure now automatically creates tmp/ with r + w + x permissions.</li>
+<li>configure now automatically copies pdb2pqr.py to pdb2pqr.cgi.</li>
+<li>configure now automatically copies html/server.html to index.html after variable substitution.  In src/server.py.in (src/server.py), WEBNAME is changed to index.html.</li>
+<li>${HOME}/pdb2pqr is the default prefix for a regular user</li>
+<li>/var/www/html is the default prefix for root</li>
+<li><a class="reference external" href="http://FQDN/pdb2pqr">http://FQDN/pdb2pqr</a> as default website.</li>
+<li>&#8220;make install&#8221; runs &#8220;make&#8221; first, and the copies the approprite files to &#8211;prefix.</li>
+<li>If root did not specify &#8211;prefix and /var/www/html/pdb2pqr already</li>
+<li>exists, then a warning is issued, and the user may choose to quit or overwrite that directory.</li>
+<li>Similary, if a regular user did not specify &#8211;prefix and ${HOME}/pdb2pqr already exists, then a warning is issued, and the user may choose to quit or overwrite that directory.</li>
+<li>If root does not specify &#8211;prefix to be a directory to be inside /var/www/html (for example, &#8211;prefix=/share/apps/pdb2pqr), then a symbolic link will be made to /var/www/html/pdb2pqr during &#8220;make install&#8221;.</li>
+<li>configure option &#8211;with-url can be specified either as something like <a class="reference external" href="http://sandstone.ucsd.edu/pdb2pqr-test">http://sandstone.ucsd.edu/pdb2pqr-test</a> or sandstone.ucsd.edu/pdb2pqr-test.  It also doesn&#8217;t matter if there&#8217;s a &#8216;/&#8217; at the end.</li>
+<li>If user is root, and the last part of URL and prefix are different, for example, &#8211;with-url=athena.nbcr.net/test0 &#8211;prefix=/var/www/html/pdb2pqr-test, then a warning will be issued saying the server will be viewable from the URL specified, but not the URL based on pdb2pqr-test.  In other words, the server will be viewable from athena.abcr.net/test0, but not athena.nbcr.net/pdb2pqr-test.  During &#8220;make  install&#8221;, a symbolic link is created to enable users to view the server from &#8211;with-url.</li>
+<li>When making a symbolic link for root, if then link destination already exists as a directory or a symoblic link, then the user may choose to continue with creating the link and overwrite the original directory or quit.</li>
+<li>If the user changes py_path when running configure for PDB2PQR, then the change also applies to PROPKA.</li>
+</ul>
+</div>
+<div class="section" id="bug-fixes">
+<h2>Bug fixes<a class="headerlink" href="#bug-fixes" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>Fixed the line feed bug. Now PDB2PQR handles different input files (.pdb and .mol2) created or saved on different platforms.</li>
+<li>Fixed &#8220;hbondwhatif&#8221; warning at start up.</li>
+</ul>
+</div>
+<div class="section" id="known-issues">
+<h2>Known issues<a class="headerlink" href="#known-issues" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>The install directory name cannot contain dots.</li>
+<li>For python 2.2, if PDB2PQR cannot find module sets, then sets needs to be copied from .../python2.2/site-packages/MYSQLdb/sets.py to .../lib/python2.2</li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">PDB2PQR 1.3.0 (2008-01)</a><ul>
+<li><a class="reference internal" href="#new-features">New features</a></li>
+<li><a class="reference internal" href="#bug-fixes">Bug fixes</a></li>
+<li><a class="reference internal" href="#known-issues">Known issues</a></li>
+</ul>
+</li>
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="../downloads.html">How to get the software</a><ul>
+      <li>Previous: <a href="200707-APBS-0.5.1.html" title="previous chapter">APBS 0.5.1 (2007-07)</a></li>
+      <li>Next: <a href="200804-APBS-1.0.0.html" title="next chapter">APBS 1.0.0 (2008-04)</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/releases/200801-PDB2PQR-1.3.0.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2017, Nathan Baker.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.5.6</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+      |
+      <a href="../_sources/releases/200801-PDB2PQR-1.3.0.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

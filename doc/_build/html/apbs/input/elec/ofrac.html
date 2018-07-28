@@ -1,0 +1,183 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>ofrac &#8212; APBS-PDB2PQR 1.6 documentation</title>
+    
+    <link rel="stylesheet" href="../../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '1.6',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="pdime" href="pdime.html" />
+    <link rel="prev" title="async" href="async.html" />
+   
+  <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="ofrac">
+<span id="id1"></span><h1>ofrac<a class="headerlink" href="#ofrac" title="Permalink to this headline">¶</a></h1>
+<p>Specify the amount of overlap to include between the individual processors meshes in a parallel focusing calculation (<a class="reference internal" href="mg-para.html#mgpara"><span class="std std-ref">mg-para</span></a>).
+The syntax is:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>ofrac <span class="o">{</span>frac<span class="o">}</span>
+</pre></div>
+</div>
+<p>where <code class="docutils literal"><span class="pre">frac</span></code> is a floating point value between 0.0 and 1.0 denoting the amount of overlap between processors.
+Empirical evidence suggests that an value of 0.1 is sufficient to generate stable energies.
+However, this value may not be sufficient to generate stable forces and/or good quality isocontours.
+For example, the following table illustrates the change in energies and visual artifacts in isocontours as a function of ofrac values for a small peptide (2PHK:B).</p>
+<table border="1" class="colwidths-auto docutils" id="id2">
+<caption><span class="caption-text">Sensitivity of 2PHK:B solvation energy calculations to ofrac values.</span><a class="headerlink" href="#id2" title="Permalink to this table">¶</a></caption>
+<colgroup>
+<col width="33%" />
+<col width="33%" />
+<col width="33%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head"><code class="docutils literal"><span class="pre">ofrac</span></code> value</th>
+<th class="head">Energy (kJ/mol)</th>
+<th class="head">Visual artifact in isocontour?</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>0.05</td>
+<td>342.79</td>
+<td>No</td>
+</tr>
+<tr class="row-odd"><td>0.06</td>
+<td>342.00</td>
+<td>No</td>
+</tr>
+<tr class="row-even"><td>0.07</td>
+<td>341.12</td>
+<td>Yes</td>
+</tr>
+<tr class="row-odd"><td>0.08</td>
+<td>341.14</td>
+<td>Yes</td>
+</tr>
+<tr class="row-even"><td>0.09</td>
+<td>342.02</td>
+<td>Yes</td>
+</tr>
+<tr class="row-odd"><td>0.10</td>
+<td>340.84</td>
+<td>Yes</td>
+</tr>
+<tr class="row-even"><td>0.11</td>
+<td>339.67</td>
+<td>No</td>
+</tr>
+<tr class="row-odd"><td>0.12</td>
+<td>341.10</td>
+<td>No</td>
+</tr>
+<tr class="row-even"><td>0.13</td>
+<td>341.10</td>
+<td>No</td>
+</tr>
+<tr class="row-odd"><td>0.14</td>
+<td>341.32</td>
+<td>No</td>
+</tr>
+<tr class="row-even"><td>0.15</td>
+<td>341.54</td>
+<td>No</td>
+</tr>
+</tbody>
+</table>
+<p>In general, larger &lt;code&gt;ofrac&lt;/code&gt; values will reduce the parallel efficiency but will improve the accuracy.</p>
+<p>For broad spatial support of the splines, every charge included in partition needs to be at least 1 grid space (<a class="reference internal" href="chgm.html#chgm"><span class="std std-ref">chgm</span></a> <code class="docutils literal"><span class="pre">spl0</span></code>), 2 grid spaces (<a class="reference internal" href="chgm.html#chgm"><span class="std std-ref">chgm</span></a> <code class="docutils literal"><span class="pre">spl2</span></code>), or 3 grid spaces (<a class="reference internal" href="chgm.html#chgm"><span class="std std-ref">chgm</span></a> <code class="docutils literal"><span class="pre">spl4</span></code>) away from the partition boundary.</p>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../index.html">APBS</a><ul>
+  <li><a href="../../invoking.html">Invoking APBS</a><ul>
+  <li><a href="../index.html">APBS input files</a><ul>
+  <li><a href="index.html">ELEC input file section</a><ul>
+  <li><a href="mg-para.html">mg-para</a><ul>
+      <li>Previous: <a href="async.html" title="previous chapter">async</a></li>
+      <li>Next: <a href="pdime.html" title="next chapter">pdime</a></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../../_sources/apbs/input/elec/ofrac.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2017, Nathan Baker.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.5.6</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+      |
+      <a href="../../../_sources/apbs/input/elec/ofrac.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

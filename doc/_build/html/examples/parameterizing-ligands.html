@@ -1,0 +1,151 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Parameterizing ligands &#8212; APBS-PDB2PQR 1.6 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.6',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Solvation energies with APBS" href="solvation-energies.html" />
+    <link rel="prev" title="Adding hydrogens and assigning parameters" href="adding-hydrogens.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="parameterizing-ligands">
+<h1>Parameterizing ligands<a class="headerlink" href="#parameterizing-ligands" title="Permalink to this headline">¶</a></h1>
+<p>This section outlines the parameterization of ligands using the PEOE_PB methods (see <a class="reference external" href="http://dx.doi.org/10.1002/prot.21110">Czodrowski et al, 2006</a> for more information).</p>
+<p>The PDB structure <a class="reference external" href="http://www.rcsb.org/pdb/explore.do?structureId=1hpx">1HPX</a> includes HIV-1 protease complexed with an inhibitor at 2.0 Å resolution.
+HIV-1 protease has two chains; residue D25 is anionic on one chain and neutral on the other &#8211; these titration states are important in the role of D25 as an acid in the catalytic mechanism.</p>
+<div class="section" id="ignoring-the-ligand">
+<h2>Ignoring the ligand<a class="headerlink" href="#ignoring-the-ligand" title="Permalink to this headline">¶</a></h2>
+<p>If we don&#8217;t want to include the ligand, then the process is straightforward:</p>
+<ol class="arabic simple">
+<li>From the PDB2PQR server web page, enter 1HPX into the PDB ID field.</li>
+<li>Choose whichever forcefield and naming schemes you prefer.</li>
+<li>Under options, be sure the &#8220;Ensure that new atoms are not rebuilt too close to existing atoms&#8221;, &#8220;Optimize the hydrogen bonding network&#8221;, and &#8220;Use PROPKA to assign protonation states at pH&#8221; options are selected. Choose pH 7 for your initial calculations. You can select other options as well, if interested.</li>
+<li>Hit the &#8220;Submit&#8221; button.</li>
+<li>Once the calculations are complete, you should see a web page with a link to the PROPKA output, a new PQR file, and warnings about the ligand KNI (since we didn&#8217;t choose to parameterize it in this calculation). For comparison, you might download the the <a class="reference external" href="http://www.pdb.org/pdb/explore.do?structureId=1HPX">original PDB file</a> and compare the PDB2PQR-generated structure with the original to see where hydrogens were placed.</li>
+</ol>
+</div>
+<div class="section" id="parameterizing-the-ligand">
+<h2>Parameterizing the ligand<a class="headerlink" href="#parameterizing-the-ligand" title="Permalink to this headline">¶</a></h2>
+<p>This section outlines the parameterization of ligands using the PEOE_PB methods (see DOI:<a class="reference external" href="http://dx.doi.org/10.1002/prot.21110">10.1002/prot.21110</a>).</p>
+<p>Ligand parameterization currently requires a <a class="reference internal" href="../formats/mol2.html"><span class="doc">MOL2-format</span></a> representation of the ligand to provide the necessary bonding information.
+MOL2-format files can be obtained through the <a class="reference external" href="http://davapc1.bioch.dundee.ac.uk/cgi-bin/prodrg">PRODRG web server</a> or some molecular modeling software packages.
+PRODRG provides documentation as well as several examples on ligand preparation on its web page.</p>
+<p>We&#8217;re now ready to look at the 1HPV crystal structure from above and parameterize its ligand, KNI-272.</p>
+<ol class="arabic simple">
+<li>From the PDB2PQR server web page, enter <code class="docutils literal"><span class="pre">1HPX</span></code> into the PDB ID field.</li>
+<li>Choose whichever forcefield and naming schemes you prefer.</li>
+<li>Under options, be sure the &#8220;Ensure that new atoms are not rebuilt too close to existing atoms&#8221;, &#8220;Optimize the hydrogen bonding network&#8221;, and &#8220;Assign charges to the ligand specified in a MOL2 file&#8221; options are selected (download the <a class="reference download internal" href="../_downloads/LIG_1HPX.mol2" download=""><code class="xref download docutils literal"><span class="pre">ligand</span> <span class="pre">MOL2</span> <span class="pre">file</span></code></a>). You can select other options as well, if interested.</li>
+<li>Hit the &#8220;Submit&#8221; button.</li>
+<li>Once the calculations are complete, you should see a web page with a link to the new PQR file with a warning about debumping P81 (but no warnings about ligand parameterization!).</li>
+</ol>
+<p>As a second example, we use the PDB structure <a class="reference external" href="http://www.rcsb.org/pdb/explore.do?structureId=1abf">1ABF</a> of L-arabinose binding protein in complex with a sugar ligand at 1.90 Å resolution.
+To parameterize both this protein and its ligand:</p>
+<ol class="arabic simple">
+<li>From the PDB2PQR server web page, enter <cite>1ABF</cite> into the PDB ID field.</li>
+<li>Choose whichever forcefield and naming schemes you prefer.</li>
+<li>Under options, be sure the &#8220;Ensure that new atoms are not rebuilt too close to existing atoms&#8221;, &#8220;Optimize the hydrogen bonding network&#8221;, and &#8220;Assign charges to the ligand specified in a MOL2 file&#8221; options are selected (download the <a class="reference download internal" href="../_downloads/LIG_1ABF.mol2" download=""><code class="xref download docutils literal"><span class="pre">ligand</span> <span class="pre">MOL2</span> <span class="pre">file</span></code></a>). You can select other options as well, if interested.</li>
+<li>Hit the &#8220;Submit&#8221; button.</li>
+<li>Once the calculations are complete, you should see a web page with a link to the new PQR file with a warning about debumping P66, K295, and K306 (but no warnings about ligand parameterization!).</li>
+</ol>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Parameterizing ligands</a><ul>
+<li><a class="reference internal" href="#ignoring-the-ligand">Ignoring the ligand</a></li>
+<li><a class="reference internal" href="#parameterizing-the-ligand">Parameterizing the ligand</a></li>
+</ul>
+</li>
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="index.html">APBS-PDB2PQR examples and tutorials</a><ul>
+      <li>Previous: <a href="adding-hydrogens.html" title="previous chapter">Adding hydrogens and assigning parameters</a></li>
+      <li>Next: <a href="solvation-energies.html" title="next chapter">Solvation energies with APBS</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/examples/parameterizing-ligands.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2017, Nathan Baker.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.5.6</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+      |
+      <a href="../_sources/examples/parameterizing-ligands.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

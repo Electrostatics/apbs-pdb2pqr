@@ -19,6 +19,8 @@ CMakeCache.txt
 *.sln
 *.suo
 pdb2pqr/build/**
+apbs/build/**
+apbs/externals/**
 pdb2pqr/dist/**
 include/maloc
 lib/
@@ -47,3 +49,13 @@ pdb2pqr/apbs_cgi.cgi
 pdb2pqr/site_scons/defaults.py
 pdb2pqr/msvs
 .ipynb_checkpoints
+
+*.bin
+2017 APBS update paper/acs-apbs-update.bib
+*.aux
+2017 APBS update paper/apbs-update.synctex.gz
+*.blg
+2017 APBS update paper/apbs.bib.bak
+*.sav
+*.bcf
+2017 APBS update paper/apbs-update.run.xml

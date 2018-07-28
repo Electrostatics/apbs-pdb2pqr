@@ -1,0 +1,167 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Binding energies with APBS &#8212; APBS-PDB2PQR 1.6 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.6',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Protein-RNA binding linked equilibria" href="salt-linkage.html" />
+    <link rel="prev" title="Solvation energies with APBS" href="solvation-energies.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="binding-energies-with-apbs">
+<h1>Binding energies with APBS<a class="headerlink" href="#binding-energies-with-apbs" title="Permalink to this headline">¶</a></h1>
+<p>In general, implicit solvent models are used to calculation the contribution of solvation to binding free energies.
+Additional binding free energy contributions (molecular mechanics energies, entropic changes, etc.) must be calculated separately and are not discussed in this tutorial.</p>
+<div class="section" id="free-energy-cycle">
+<h2>Free energy cycle<a class="headerlink" href="#free-energy-cycle" title="Permalink to this headline">¶</a></h2>
+<p>Our framework for calculating solvation contributions to binding free energies is shown in the figure below:</p>
+<img alt="../_images/apbs_bind_eng.png" src="../_images/apbs_bind_eng.png" />
+<p>This binding free energy cycle illustrates binding in terms of transfer free energies from a homogeneous dielectric environment (where interactions are described by Coulomb&#8217;s law) to an inhomogeneous dielectric environment with differing internal (green) and external (cyan) dielectric constants.
+The binding (dissociation) free energy is depicted in Step 3.
+The binding free energy is given by</p>
+<div class="math">
+\[\Delta_b G = -\Delta_3 G =\Delta_4 G-\Delta_1 G-\Delta_2 G.\]</div>
+<p>The following sections provide more detail on calculating individual terms of this equation.</p>
+</div>
+<div class="section" id="binding-energy-calculations">
+<h2>Binding energy calculations<a class="headerlink" href="#binding-energy-calculations" title="Permalink to this headline">¶</a></h2>
+<p>The most general method for calculating binding free energies divides the binding process up into solvation <span class="math">\(\Delta\Delta_s G\)</span> and Coulombic <span class="math">\(\Delta\Delta_c G\)</span> components:</p>
+<div class="math">
+\[\Delta\Delta_b G = \Delta\Delta_s G + \Delta\Delta_c G.\]</div>
+<p>As mentioned above, this framework neglects the numerous other mechanical and entropic components actually involved in the binding process.</p>
+<div class="section" id="solvation-contribution-to-binding">
+<h3>Solvation contribution to binding<a class="headerlink" href="#solvation-contribution-to-binding" title="Permalink to this headline">¶</a></h3>
+<p>If we&#8217;re just interested in calculating the solvation contributions to binding (steps 4 and 2 in the binding free energy cycle), then we simply need to follow the instructions from the <a class="reference internal" href="solvation-energies.html"><span class="doc">Solvation energies with APBS</span></a> section for the complex and isolated components.
+The solvation energy contribution to the binding is then given by</p>
+<div class="math">
+\[\Delta\Delta_s G = \Delta_4 G - \Delta_2 G = \Delta_s G_{cmpx} - \Delta_s G_{mol1} - \Delta_s G_{mol2}\]</div>
+</div>
+<div class="section" id="coulombic-contribution-to-binding">
+<h3>Coulombic contribution to binding<a class="headerlink" href="#coulombic-contribution-to-binding" title="Permalink to this headline">¶</a></h3>
+<p>To complete the binding free energy cycle, we need to add intermolecular Coulombic contributions to the solvation energy change upon binding to get the total electrostatic/solvent contribution to the binding free energy.
+In particular, we&#8217;re interested in the change in Coulombic electrostatic energy upon binding, as given by</p>
+<div class="math">
+\[\Delta\Delta_c G = -\Delta_1 G =  \Delta_c G_{cmpx} - \Delta_c G_{mol1} - \Delta_c G_{mol2}\]</div>
+<p>Each of the  quantities in this equation is the sum of pairwise Coulombic interactions between all atoms in the molecule (or complex) for a particular uniform dielectric.
+In order to combine these Coulombic binding energies with the solvation energies described above, we need to make sure consistent dielectric constants are used.
+In particular, Coulombic interactions should be calculated using the same uniform dielectric constant as the reference state of the solvation energy above.
+For example, if solvation energies are calculated for transferring a protein from a homogeneous medium with uniform dielectric of  to an inhomogeneous medium with internal dielectric <span class="math">\(\epsilon_u\)</span> and external dielectric <span class="math">\(\epsilon_v\)</span>, then Coulombic energies should be calculated using a dielectric of <span class="math">\(\epsilon_u\)</span>.
+The APBS accessory program <code class="file docutils literal"><span class="pre">tools/manip/coulomb</span></code> was created to help with the calculation of these analytic individual per-molecule Coulombic energies.
+Given a PQR file as input, the <code class="file docutils literal"><span class="pre">tools/manip/coulomb</span></code> program calculates Coulombic energies for a vacuum dielectric (e.g., a uniform dielectric of 1).
+If the reference dielectric is <span class="math">\(\epsilon_u\)</span>, then all energies returned by <code class="file docutils literal"><span class="pre">tools/manip/coulomb</span></code> need to be divided by <span class="math">\(\epsilon_u\)</span>.</p>
+</div>
+</div>
+<div class="section" id="other-examples">
+<h2>Other examples<a class="headerlink" href="#other-examples" title="Permalink to this headline">¶</a></h2>
+<p>Several binding energy examples are distributed in the <code class="file docutils literal"><span class="pre">examples</span></code> directory with APBS.</p>
+<div class="admonition-todo admonition" id="index-0">
+<p class="first admonition-title">Todo</p>
+<p class="last">Link binding energy examples directly from the source tree.</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Binding energies with APBS</a><ul>
+<li><a class="reference internal" href="#free-energy-cycle">Free energy cycle</a></li>
+<li><a class="reference internal" href="#binding-energy-calculations">Binding energy calculations</a><ul>
+<li><a class="reference internal" href="#solvation-contribution-to-binding">Solvation contribution to binding</a></li>
+<li><a class="reference internal" href="#coulombic-contribution-to-binding">Coulombic contribution to binding</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#other-examples">Other examples</a></li>
+</ul>
+</li>
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="index.html">APBS-PDB2PQR examples and tutorials</a><ul>
+      <li>Previous: <a href="solvation-energies.html" title="previous chapter">Solvation energies with APBS</a></li>
+      <li>Next: <a href="salt-linkage.html" title="next chapter">Protein-RNA binding linked equilibria</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/examples/binding-energies.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2017, Nathan Baker.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.5.6</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+      |
+      <a href="../_sources/examples/binding-energies.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

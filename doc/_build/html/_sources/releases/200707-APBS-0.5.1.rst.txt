@@ -1,0 +1,30 @@
+APBS 0.5.1 (2007-07)
+====================
+
+=====================
+New features
+=====================
+
+* Replaced APOLAR->glen and APOLAR->dime keywords with APOLAR->grid
+* Deprecated mergedx. Added mergedx2
+    
+    * mergedx2 takes the bounding box that a user wishes to calculate a map for, as well as a resolution of the output map. An output map meeting those specifications is calculated and store.
+    
+* Added pKa tutorial
+* Added warning about strange grid settings (MGparm)
+* Fixed a bug in vpmg.c that occured when a user supplied a dielectric map with the ionic strength set to zero, causing the map to not be used.
+* Removed deprecated (as of 0.5.0) tools/manip/acc in lieu of new APOLAR APBS features
+* Added enumerations for return codes, new PBE solver (SMPBE) and linear/ nonlinear types
+* Added in code for Size-Modified PBE (SMPBE)
+
+
+=================================
+Bug fixes and API changes
+=================================
+
+* Fixed buffer over-run problem
+* Fixed case inconsistency with inputgen.py and psize.py scripts which caused problems with some versions of Python
+* Fixed bug wherein 'bcfl sdh' behaved essentially like 'bcfl zero'.  Now we have the correct behavior:  'bcfl sdh' behaves like 'bcfl mdh' thanks to the multipole code added by Mike Schnieders.  Interestingly, this bug didn't have a major on the large-molecule test cases/examples provided by APBS but did affect the small molecule solvation energies.  Thanks to Bradley Scott Perrin for reporting this bug.
+* Added support for chain IDs in noinput.py
+* Fixed bug in noinput.py where REMARK lines would cause the script to fail.
+

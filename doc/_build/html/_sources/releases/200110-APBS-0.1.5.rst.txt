@@ -1,0 +1,13 @@
+APBS 0.1.5 (2001-10)
+====================
+
+This version features minor bug fixes and several new features:
+
+
+* Fixed shift in center of geometry for OpenDX I/O
+* Made energy evaluation more robust when using NPBE
+* Rearrangments of files and modified compilation behavior
+* Input file support for ion species of varying valency and concentration
+* Input file support incorrect nlev/dime combinations; APBS now finds acceptable settings near to the user's requested values
+* "Automatic focusing".  Users now simply specify the physical parameters (temperature, dielectric, etc.), the coarse and fine grid lengths and centers, and APBS calculates the rest
+

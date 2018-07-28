@@ -1,0 +1,28 @@
+APBS 0.2.1 (2002-04)
+====================
+
+This version requires the latest version of MALOC to work properly!
+
+* Syntax changes
+    
+    * The writepot and writeacc keywords have been generalized and new I/O features have been added.  The syntax is now:
+        
+        * write pot dx potential
+        * write smol dx surface
+        * etc.  Please see the User's Manual for more information
+        
+    * The read keywords has been generalized and new I/O features have been added which support the use of pre-calculated coefficient grids, etc.  The correct syntax for reading in a molecule is now "read mol pqr mol.pqr end"; please see the User's Manual for more information.
+    * The "mg" keyword is no longer supported; all input files should use "mg-manual" or one of the other alternatives instead.
+    
+* A change in the behavior of the "calcenergy" keyword; passing an argument of 2 to this keyword now prints out per-atom energies in addition to the energy component information
+* A new option has been added to tools/manip/acc to give per-atom solvent-accessible surface area contributions
+* A new option has been added to tools/manip/coulomb to give per-atom electrostatic energies
+* Added tools/mesh/dxmath for performing arithmetic on grid-based data (i.e., adding potential results from two calculations, etc.)
+* Added tools/mesh/uhbd_asc2bin for converting UHBD-format grid files from ASCII to binary (contributed by Dave Sept)
+* Improvement of VMD visualization scripts (contributed by Dave Sept)
+* The API has changed significantly; please see the Programmer's Manual.
+* Working (but still experimental) Python wrappers for major APBS functions.
+* More flexible installation capabilities (pointed out by Steve Bond)
+* Added ability to use vendor-supplied BLAS
+* Brought up-to-date with new MALOC
+    

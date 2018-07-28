@@ -1,0 +1,297 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>READ input file section &#8212; APBS-PDB2PQR 1.6 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '1.6',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="ELEC input file section" href="elec/index.html" />
+    <link rel="prev" title="APBS input files" href="index.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="read-input-file-section">
+<span id="read"></span><h1>READ input file section<a class="headerlink" href="#read-input-file-section" title="Permalink to this headline">¶</a></h1>
+<p>The READ block of an APBS input file has the following general format:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>READ
+    <span class="o">[</span> keywords... <span class="o">]</span>
+END
+</pre></div>
+</div>
+<p>where <code class="docutils literal"><span class="pre">keywords</span></code> is or more of the keywords described below (the line breaks and indentation are for clarity; only whitespace is necessary).</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">One of these sections must be present for every molecule involved in the APBS calculation.
+Molecule and &#8220;map&#8221; IDs are assigned implicitly assigned for each molecule/map read, based on order and starting at 1 and incremented independently for each input type.
+In other words, each input PQR file is assigned an ID 1, 2, 3, ...; each input dielectric map is assigned an independent ID 1, 2, 3, ...; etc.</p>
+</div>
+<div class="section" id="charge">
+<h2>charge<a class="headerlink" href="#charge" title="Permalink to this headline">¶</a></h2>
+<p>This command allows APBS to read the fixed (molecular) charge density function mapped to a mesh.
+The inputs are maps of charge densities; these values have units of e<sub>c</sub> Å<sup>-3</sup>, where e<sub>c</sub> is the electron charge.
+In general, this command will read charge-maps written by <a class="reference internal" href="elec/index.html#elec"><span class="std std-ref">ELEC input file section</span></a> <a class="reference internal" href="elec/write.html#write"><span class="std std-ref">write</span></a> commands.
+The syntax of this command is:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>READ charge <span class="o">{</span>format<span class="o">}</span> <span class="o">{</span>path<span class="o">}</span> END
+</pre></div>
+</div>
+<dl class="docutils">
+<dt><code class="docutils literal"><span class="pre">format</span></code></dt>
+<dd><p class="first">Specify the format of the charge map.
+Acceptable values include:</p>
+<dl class="last docutils">
+<dt><code class="docutils literal"><span class="pre">dx</span></code></dt>
+<dd><a class="reference internal" href="../../formats/opendx.html#opendx"><span class="std std-ref">OpenDX scalar data format</span></a></dd>
+<dt><code class="docutils literal"><span class="pre">gz</span></code></dt>
+<dd>gzipped (zlib) compressed <a class="reference internal" href="../../formats/opendx.html#opendx"><span class="std std-ref">OpenDX scalar data format</span></a>.
+Files can be read directly in compressed form.</dd>
+</dl>
+</dd>
+<dt><code class="docutils literal"><span class="pre">path</span></code></dt>
+<dd>The location of the charge map file.</dd>
+</dl>
+</div>
+<div class="section" id="diel">
+<h2>diel<a class="headerlink" href="#diel" title="Permalink to this headline">¶</a></h2>
+<p>This command allows APBS to read the dielectric function mapped to 3 meshes shifted by one-half grid spacing in the x, y, and z directions.
+The inputs are maps of dielectric variables between the solvent and biomolecular dielectric constants; these values are unitless.
+In general, this command will read dielectric maps written by by <a class="reference internal" href="elec/index.html#elec"><span class="std std-ref">ELEC input file section</span></a> <a class="reference internal" href="elec/write.html#write"><span class="std std-ref">write</span></a> commands.
+The syntax of this command is:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>READ diel <span class="o">{</span>format<span class="o">}</span> <span class="o">{</span>path-x<span class="o">}</span> <span class="o">{</span>path-y<span class="o">}</span> <span class="o">{</span>path-z<span class="o">}</span> END
+</pre></div>
+</div>
+<dl class="docutils">
+<dt><code class="docutils literal"><span class="pre">format</span></code></dt>
+<dd><p class="first">The format of the dielectric map.</p>
+<dl class="last docutils">
+<dt><code class="docutils literal"><span class="pre">dx</span></code></dt>
+<dd><a class="reference internal" href="../../formats/opendx.html#opendx"><span class="std std-ref">OpenDX scalar data format</span></a></dd>
+<dt><code class="docutils literal"><span class="pre">gz</span></code></dt>
+<dd>gzipped (zlib) compressed <a class="reference internal" href="../../formats/opendx.html#opendx"><span class="std std-ref">OpenDX scalar data format</span></a>.
+Files can be read directly in compressed form.</dd>
+</dl>
+</dd>
+<dt><code class="docutils literal"><span class="pre">path-x</span></code></dt>
+<dd>The location of the x-shifted dielectric map file.</dd>
+<dt><code class="docutils literal"><span class="pre">path-y</span></code></dt>
+<dd>The location of the y-shifted dielectric map file.</dd>
+</dl>
+<p><code class="docutils literal"><span class="pre">path-z</span></code> The location of the z-shifted dielectric map file.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">If you choose this option and have a non-zero ionic strength, you must also include a READ <a class="reference internal" href="#kappa">kappa</a> statement.</p>
+</div>
+</div>
+<div class="section" id="kappa">
+<h2>kappa<a class="headerlink" href="#kappa" title="Permalink to this headline">¶</a></h2>
+<p>This command allows APBS to read the ion-accessibility function mapped to a mesh.
+The inputs are maps of ion accessibility values which range between 0 and the build Debye-Hückel screening parameter; these values have units of Å<sup>-2</sup>.
+In general, this command will read kappa-maps written by by <a class="reference internal" href="elec/index.html#elec"><span class="std std-ref">ELEC input file section</span></a> <a class="reference internal" href="elec/write.html#write"><span class="std std-ref">write</span></a> commands.
+The syntax of this command is:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>READ kappa <span class="o">{</span>format<span class="o">}</span> <span class="o">{</span>path<span class="o">}</span> END
+</pre></div>
+</div>
+<dl class="docutils">
+<dt><code class="docutils literal"><span class="pre">format</span></code></dt>
+<dd><p class="first">Specify the format of the charge map.
+Acceptable values include:</p>
+<dl class="last docutils">
+<dt><code class="docutils literal"><span class="pre">dx</span></code></dt>
+<dd><a class="reference internal" href="../../formats/opendx.html#opendx"><span class="std std-ref">OpenDX scalar data format</span></a></dd>
+<dt><code class="docutils literal"><span class="pre">gz</span></code></dt>
+<dd>gzipped (zlib) compressed <a class="reference internal" href="../../formats/opendx.html#opendx"><span class="std std-ref">OpenDX scalar data format</span></a>.
+Files can be read directly in compressed form.</dd>
+</dl>
+</dd>
+<dt><code class="docutils literal"><span class="pre">path</span></code></dt>
+<dd>The location of the map file.</dd>
+</dl>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">If you choose this option, you must also include a read diel statement.</p>
+</div>
+</div>
+<div class="section" id="mol">
+<h2>mol<a class="headerlink" href="#mol" title="Permalink to this headline">¶</a></h2>
+<p>This command specifies the molecular data to be read into APBS.
+The syntax is</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>READ mol <span class="o">{</span>format<span class="o">}</span> <span class="o">{</span>path<span class="o">}</span> END
+</pre></div>
+</div>
+<dl class="docutils">
+<dt><code class="docutils literal"><span class="pre">format</span></code></dt>
+<dd><p class="first">The format of the input data.</p>
+<dl class="last docutils">
+<dt><code class="docutils literal"><span class="pre">pqr</span></code></dt>
+<dd>Specify that molecular data is in <a class="reference internal" href="../../formats/pqr.html#pqr"><span class="std std-ref">PQR format</span></a>.</dd>
+<dt><code class="docutils literal"><span class="pre">pdb</span></code></dt>
+<dd>Specify that molecular data is in pseudo-PDB format.
+If this type of structure file is used, then a parameter file must also be specified with a READ <a class="reference internal" href="#parm">parm</a> statement to provide charge and radius parameters for the biomolecule&#8217;s atoms.</dd>
+</dl>
+</dd>
+<dt><code class="docutils literal"><span class="pre">path</span></code></dt>
+<dd>The location of the molecular data file.</dd>
+</dl>
+</div>
+<div class="section" id="parm">
+<h2>parm<a class="headerlink" href="#parm" title="Permalink to this headline">¶</a></h2>
+<p>This command specifies the charge and radius data to be used with pseudo-PDB-format molecule files.
+The syntax is:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>READ parm <span class="o">{</span>format<span class="o">}</span> <span class="o">{</span>path<span class="o">}</span> END
+</pre></div>
+</div>
+<dl class="docutils">
+<dt><code class="docutils literal"><span class="pre">format</span></code></dt>
+<dd><p class="first">The format of the parameter file.</p>
+<dl class="last docutils">
+<dt><code class="docutils literal"><span class="pre">flat</span></code></dt>
+<dd>Specify that the parameter file is in <a class="reference internal" href="../../formats/flat-parm.html#apbsflatparm"><span class="std std-ref">APBS flat-file parameter format</span></a>.</dd>
+<dt><code class="docutils literal"><span class="pre">xml</span></code></dt>
+<dd>Specify that the parameter file is in <a class="reference internal" href="../../formats/apbs-xml-parm.html#apbsxmlparm"><span class="std std-ref">APBS XML parameter format</span></a></dd>
+</dl>
+</dd>
+<dt><code class="docutils literal"><span class="pre">path</span></code></dt>
+<dd>The location of the parameter data file.</dd>
+</dl>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">APBS provides a few example files as part of the source code distribution.
+Currently, example files only contain the polar parameters that can also be assigned more easily through the PDB2PQR software.</p>
+</div>
+</div>
+<div class="section" id="pot">
+<h2>pot<a class="headerlink" href="#pot" title="Permalink to this headline">¶</a></h2>
+<p>This command allows APBS to read the electrostatic potential mapped to a mesh.
+The inputs are maps of the electrostatic potential from a previous calculation.
+In general, this command will read potential-maps written by by <a class="reference internal" href="elec/index.html#elec"><span class="std std-ref">ELEC input file section</span></a> <a class="reference internal" href="elec/write.html#write"><span class="std std-ref">write</span></a> commands.
+The syntax of this command is:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>READ pot <span class="o">{</span>format<span class="o">}</span> <span class="o">{</span>path<span class="o">}</span> END
+</pre></div>
+</div>
+<dl class="docutils">
+<dt><code class="docutils literal"><span class="pre">format</span></code></dt>
+<dd><p class="first">Specify the format of the charge map.
+Acceptable values include:</p>
+<dl class="last docutils">
+<dt><code class="docutils literal"><span class="pre">dx</span></code></dt>
+<dd><a class="reference internal" href="../../formats/opendx.html#opendx"><span class="std std-ref">OpenDX scalar data format</span></a></dd>
+<dt><code class="docutils literal"><span class="pre">gz</span></code></dt>
+<dd>gzipped (zlib) compressed <a class="reference internal" href="../../formats/opendx.html#opendx"><span class="std std-ref">OpenDX scalar data format</span></a>.
+Files can be read directly in compressed form.</dd>
+</dl>
+</dd>
+<dt><code class="docutils literal"><span class="pre">path</span></code></dt>
+<dd>The location of the map file.</dd>
+</dl>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">To use this functionality you must set the <a class="reference internal" href="elec/bcfl.html#bcfl"><span class="std std-ref">bcfl</span></a> keyword to <code class="docutils literal"><span class="pre">map</span></code>.
+See also: <a class="reference internal" href="elec/usemap.html#usemap"><span class="std std-ref">usemap</span></a>.</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">READ input file section</a><ul>
+<li><a class="reference internal" href="#charge">charge</a></li>
+<li><a class="reference internal" href="#diel">diel</a></li>
+<li><a class="reference internal" href="#kappa">kappa</a></li>
+<li><a class="reference internal" href="#mol">mol</a></li>
+<li><a class="reference internal" href="#parm">parm</a></li>
+<li><a class="reference internal" href="#pot">pot</a></li>
+</ul>
+</li>
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  <li><a href="../index.html">APBS</a><ul>
+  <li><a href="../invoking.html">Invoking APBS</a><ul>
+  <li><a href="index.html">APBS input files</a><ul>
+      <li>Previous: <a href="index.html" title="previous chapter">APBS input files</a></li>
+      <li>Next: <a href="elec/index.html" title="next chapter">ELEC input file section</a></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/apbs/input/read.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2017, Nathan Baker.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.5.6</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+      |
+      <a href="../../_sources/apbs/input/read.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

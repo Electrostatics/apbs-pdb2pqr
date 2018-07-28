@@ -1,0 +1,17 @@
+APBS 0.2.2 (2002-08)
+====================   
+
+
+* There were several other changes along the way... I lost track.
+* Changed coordinate indexing in some energy calculations
+* Updated documentation to reflect recent changes on Blue Horizon
+* Improved speed of problem setup BUT NOW RESTRICT use of input coefficient maps (see documentation)
+* Updated documentation, placing particular emphasis on use of Intel compilers and vendor BLAS on Intel Linux systems
+* Fixed bug for nonpolar force evaluation in Vpmg_dbnpForce
+* Removed MG test scripts; use :file:`bin/*.c` for templates/testing
+* Made main driver code completely memory-leak free (i.e., if you wanted to wrap it and call it repeatedly -- Thanks to Robert Konecny)
+* Fixed main driver code for compatibility with SGI compilers (Thanks to Fabrice Leclerc)
+* Made focused evaluation of forces more sensible.
+* Added 'print force' statement
+* Fixed bug in OpenDX input/output (OpenDX documentation is lousy!)
+    

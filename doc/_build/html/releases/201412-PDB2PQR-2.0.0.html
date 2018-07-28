@@ -1,0 +1,164 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>PDB2PQR 2.0.0 (2014-12) &#8212; APBS-PDB2PQR 1.6 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.6',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="PDB2PQR 2.1.0 (2015-12)" href="201512-PDB2PQR-2.1.0.html" />
+    <link rel="prev" title="APBS 1.4.1 (2014-08)" href="201408-APBS-1.4.1.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="pdb2pqr-2-0-0-2014-12">
+<h1>PDB2PQR 2.0.0 (2014-12)<a class="headerlink" href="#pdb2pqr-2-0-0-2014-12" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="new-features">
+<h2>New features<a class="headerlink" href="#new-features" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>Improved look of web interface.</li>
+<li>Option to automatically drop water from pdb file before processing.</li>
+<li>Integration of PDB2PKA  into PDB2PQR as an alternative to PROPKA.</li>
+<li>Support for compiling with VS2008 in Windows.</li>
+<li>Option to build with debug headers.</li>
+<li>PDB2PKA now detects and reports non Henderson-Hasselbalch behavior.</li>
+<li>PDB2PKA can be instructed whether or not to start from scratch with <code class="docutils literal"><span class="pre">--pdb2pka-resume</span></code>.</li>
+<li>Can now specify output directory for PDB2PKA.</li>
+<li>Improved error regarding backbone in some cases.</li>
+<li>Changed time format on query status page.</li>
+<li>Improved error catching on web interface.</li>
+</ul>
+</div>
+<div class="section" id="bug-fixes">
+<h2>Bug fixes<a class="headerlink" href="#bug-fixes" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>Fixed executable name when creating binaries for Unix based operating systems.&lt;</li>
+<li>Fixed potential crash when using <code class="docutils literal"><span class="pre">--clean</span></code> with extensions.</li>
+<li>Fixed MAXATOMS display on server home page.</li>
+<li>PDB2PKA now mostly respects the <code class="docutils literal"><span class="pre">--verbose</span></code> setting.</li>
+<li>Fixed how hydrogens are added by PDB2PKA for state changes in some cases.</li>
+<li>Fixed psize error check.</li>
+<li>Will now build properly without ligand support if numpy is not installed.</li>
+<li>Removed old automake build files from all test ported to scons.</li>
+<li>Fixed broken opal backend.</li>
+</ul>
+</div>
+<div class="section" id="known-bugs">
+<h2>Known bugs<a class="headerlink" href="#known-bugs" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>If more than one extension is run from the command line and one of the extensions modifies the protein data structure it could affect the output of the other extension.  The only included extensions that exhibit this problem are resinter and newresinter.</li>
+<li>Running ligands and PDB2PKA at the same time is not currently supported.</li>
+<li>PDB2PKA currently leaks memory slowly.  Small jobs will use about twice the normally required RAM (i.e. ~14 titratable residues will use 140MB).  Big jobs will use about 5 times the normally required RAM (60 titratable residues will use 480MB).  We are working on this.</li>
+</ul>
+</div>
+<div class="section" id="other-comments">
+<h2>Other comments<a class="headerlink" href="#other-comments" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>Command line interface to PROPKA changed to accommodate PDB2PKA. PROPKA is now used with <code class="docutils literal"><span class="pre">--ph-calc-method=propka</span> <span class="pre">--with-ph</span></code> now defaults to 7.0 and is only required if a different pH value is required.</li>
+<li><code class="docutils literal"><span class="pre">--ph-calc-method</span></code> to select optional method to calculate pH values used to protonate titratable residues.  Possible options are &#8220;propka&#8221; and &#8220;pdb2pka&#8221;.</li>
+<li>Dropped support for compilation with mingw.  Building on Windows now requires VS 2008 installed in the default location.</li>
+<li>Updated included Scons to 2.3.3</li>
+<li>PDB2PKA can now be run directly (not integrated in PDB2PQR) with pka.py. Arguments are PDBfile and Output directory.</li>
+<li>No longer providing 32-bit binary build.  PDB2PKA support is too memory intensive to make this practical in many cases.</li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">PDB2PQR 2.0.0 (2014-12)</a><ul>
+<li><a class="reference internal" href="#new-features">New features</a></li>
+<li><a class="reference internal" href="#bug-fixes">Bug fixes</a></li>
+<li><a class="reference internal" href="#known-bugs">Known bugs</a></li>
+<li><a class="reference internal" href="#other-comments">Other comments</a></li>
+</ul>
+</li>
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="../downloads.html">How to get the software</a><ul>
+      <li>Previous: <a href="201408-APBS-1.4.1.html" title="previous chapter">APBS 1.4.1 (2014-08)</a></li>
+      <li>Next: <a href="201512-PDB2PQR-2.1.0.html" title="next chapter">PDB2PQR 2.1.0 (2015-12)</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/releases/201412-PDB2PQR-2.0.0.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2017, Nathan Baker.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.5.6</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+      |
+      <a href="../_sources/releases/201412-PDB2PQR-2.0.0.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
