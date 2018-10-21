@@ -16,7 +16,7 @@ We have developed a survey to better understand our user desires. In the continu
  
 We would truly appreciate your opinion of our software, by completing the survey, which you can access at:
 
-https://www.surveymonkey.com/r/APBS-PDB2PQR
+<https://www.surveymonkey.com/r/APBS-PDB2PQR>
  
 Thank you for your help.
 
