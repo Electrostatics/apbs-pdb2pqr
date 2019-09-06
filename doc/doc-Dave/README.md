@@ -7,25 +7,6 @@
 * Get started with the [web server](http://nbcr-222.ucsd.edu/pdb2pqr_2.1.1/).
 * Download the software [following these instructions](http://apbs-pdb2pqr.readthedocs.io/en/latest/downloads.html).
 
------
-
-## A note from the developers
-Dear APBS and PDB2PQR users,
-
-We have developed a survey to better understand our user desires. In the continued development of these software, we aim to: (1) maintain and update APBS and PDB2PQR to ensure their suitability for both end-users and software developers in the biomedical community, (2) improve performance and incorporate new features based on new algorithms and user feedback, and (3) improve the robustness of the software and underlying models and reduce the likelihood of errors by inexperienced users.
- 
-We would truly appreciate your opinion of our software, by completing the survey, which you can access at:
-
-<https://www.surveymonkey.com/r/APBS-PDB2PQR>
- 
-Thank you for your help.
-
-Sincerely,
-
-The APBS and PDB2PQR Development Team
-
------
-
 ## More information about the software
 
 An understanding of electrostatic interactions is essential for the study of biomolecular processes.
