@@ -35,6 +35,17 @@ These tasks include:
 
 This service is intended to facilitate the setup and execution of electrostatics calculations for both experts and non-experts and broaden the accessibility of biomolecular solvation/electrostatics analyses to the research community. 
 
+### Virtual Reality
+APBS tools have been coupled with a virtual reality platform, UnityMol-APBS, to provide a powerful immersive experience to visualize and compare calculated results. UnityMol-APBS is the second generation of UnityMol (developed by Marc Baaden and his research group at CNRS at the University of Paris) and is a freely available software that provides both a standard desktop and virtual reality interface. Capabilities of UnityMol-APBS include complete customization of the visual representation of molecular systems, an integrated trajectory player compatible with GROMACS trajectories, and calculation of electrostatic properties using APBS. 
+
+For users to achieve this task, both the UnityMol-APBS and APBS executables must be downloaded from the APBS servers . APBS executables must be placed in the users C:/ folder (note: the directory names must not be changed).
+
+### Uncertainty Quantification
+we have developed a general UQ framework called Data-driven Sparsity-enhancing Rotation for Arbitrary Randomness (DSRAR) for surrogate model construction. DSRAR does not rely on independence between components of the random inputs and therefore is well-suited for complex systems such as biomolecules where the input distributions can be non-Gaussian or analytically unknown. The basic idea involves a data-driven approach for multivariate orthonormal (or near-orthonormal) basis construction, coupled with a rotation-based sparsity enhancement approach [20, 21],
+
+### Improved Titration State Prediction Performance
+new biased sampling method to assign titration states to protein residues
+
 ### Support for APBS-PDB2PQR
 
 APBS and PDB2PQR are supported by NIH grant GM69702.
