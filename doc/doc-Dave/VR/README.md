@@ -3,7 +3,7 @@
 ## Download Software
 APBS tools have been coupled with a virtual reality platform, UnityMol-APBS, to provide a powerful immersive experience to visualize and compare calculated results. 
 
-dowloab instuctions goes here
+download instuctions goes here
 APBS executables must be placed in the users C:/ folder (note: the directory names must not be changed).
 
 UI for UnitMol-APBS:
