@@ -1,9 +1,8 @@
 # Virtual Reality capability with APBS and PDB2PQR
+APBS tools have been coupled with a virtual reality platform, UnityMol-APBS, to provide a powerful immersive experience to visualize and compare calculated results. the instructions for downloading the needed software to perform the VR analysis, are discussed in the following section.
 
 ## Download Software
-APBS tools have been coupled with a virtual reality platform, UnityMol-APBS, to provide a powerful immersive experience to visualize and compare calculated results. 
-
-download instuctions goes here
+**download instuctions go here**
 APBS executables must be placed in the users C:/ folder (note: the directory names must not be changed).
 
 UI for UnitMol-APBS:
