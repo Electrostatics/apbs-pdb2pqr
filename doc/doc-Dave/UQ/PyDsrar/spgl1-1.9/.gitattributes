@@ -1,0 +1,5 @@
+# Export with this command:
+# TAG=`git tag`; git archive master -v --worktree-attributes --prefix=spgl1-${TAG}/ -o web/downloads/spgl1-${TAG}.zip
+
+.gitignore export-ignore
+web/ export-ignore

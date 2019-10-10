@@ -1,0 +1,76 @@
+##########################################################################
+### ELECTROSTATIC ENERGY FOR METHANOL -> METHOXIDE IONIZATION
+### $Id$
+###
+### Please see APBS documentation (http://apbs.sourceforge.net/doc/) for
+### syntax help.
+##########################################################################
+
+read
+     mol pqr FOLDERNAME/testmol.pqr
+end
+
+# METHANOL SOLVATION ENERGY -- SOLVATED STATE
+#elec name methanol-solv
+elec name solv
+#    mg-manual
+    mg-auto
+#    dime 65 65 65          # dimension
+#     dime 97 97 97          # dimension
+#    dime 161 161 161          # dimension
+    dime 257 257 257         # dimension
+#    grid 0.25 0.25 0.25    # grid size
+    fgcent mol 1      # fine grid
+    cgcent mol 1      # coarse grid
+    fglen  14 14 14   # grid length
+    cglen  40 40 40   # grid length
+    mol 1
+    lpbe              # linear poission
+    bcfl mdh          # boundary condition
+#    ion charge 1 conc 0.000 radius 2.0
+#    ion charge -1 conc 0.000 radius 2.0
+    pdie 2.0          # dielectric
+    sdie 78.00
+    chgm spl2         # spline
+    srfm mol          # construct the boundary between the inside and the mol
+    srad 0.0          # solvent radius (Van de Waal)
+    swin 0.5          # spline window (not used for this case)
+  sdens 10.0
+    temp 300.00
+    calcenergy total
+    calcforce no
+end
+
+# METHANOL SOLVATION ENERGY -- REFERENCE STATE
+#elec name methanol-solv
+elec name vacu
+#    mg-manual
+    mg-auto
+#    dime 65 65 65          # dimension
+#    dime 97 97 97          # dimension
+#    dime 161 161 161          # dimension
+    dime 257 257 257          # dimension
+#    grid 0.25 0.25 0.25    # grid size
+    fgcent mol 1      # fine grid
+    cgcent mol 1      # coarse grid
+    fglen  14 14 14   # grid length
+    cglen  40 40 40   # grid length
+    mol 1
+    lpbe              # linear poission
+    bcfl mdh          # boundary condition
+#    ion charge 1 conc 0.000 radius 2.0
+#    ion charge -1 conc 0.000 radius 2.0
+    pdie 2.0          # dielectric
+    sdie 1.00
+    chgm spl2         # spline
+    srfm mol          # construct the boundary between the inside and the mol
+    srad 0.0          # solvent radius (Van de Waal)
+    swin 0.5          # spline window (not used for this case)
+  sdens 10.0
+    temp 300.00
+    calcenergy total
+    calcforce no
+end
+
+print elecEnergy 1 - 2 end
+quit

@@ -1,0 +1,122 @@
+------------------------------------------------------------------------
+Version 1.9
+------------------------------------------------------------------------
+
+2015-04-29 Michael P. Friedlander <mpfriedlander@ucdavis.edu>
+	* spgl1.m: Recompute function information at new x when tau decreases.
+                   Fixed bug in subspace minimization.
+                   Thanks to Yang Lei for reporting this bug.
+
+------------------------------------------------------------------------
+Version 1.8
+------------------------------------------------------------------------
+
+2013-05-25  Ewout van den Berg <vandenberge.ewout@gmail.com>
+	* spgl1.m: Fixed linesearch bug.
+	
+------------------------------------------------------------------------
+Version 1.7
+------------------------------------------------------------------------
+
+2009-05-20  Ewout van den Berg <ewout78@cs.ubc.ca>
+	* spg_mmv.m: Fixed bug in handling implicit matrices. Thanks to
+      	Muhammad Usman for reporting this bug.
+
+2008-09-18  Ewout van den Berg <ewout78@cs.ubc.ca>
+	* spgSetParms.m: Replaced isstr by ischar.
+
+------------------------------------------------------------------------
+Version 1.6
+------------------------------------------------------------------------
+
+2008-05-02  Ewout van den Berg  <ewout78@cs.ubc.ca>
+
+	* spgl1.m: The options structure now contains three fields to
+	specify routines for computing the primal norm, dual norm, and
+	for the Euclidean projection onto the associated ball.
+
+	* spg_mmv.m: New interface for multiple measurement vector case
+	of BP and BPDN.
+
+	* spg_group.m: New interface for group sparse BP and BPDN.
+	
+------------------------------------------------------------------------
+Version 1.5
+------------------------------------------------------------------------
+
+2008-06-17  Michael P. Friedlander  <mpf@cs.ubc.ca>
+
+	* spg_lasso.m, spg_bp.m, spg_bpdn.m: New interfaces.  These are
+	specialized to specialized problem classes, and are simply
+	easy-to-use wrappers to spgl1.m.
+
+	* spgexamples.m: Added html documentation.
+
+2008-05-02  Ewout van den Berg  <ewout78@cs.ubc.ca>
+
+	* spgl1.m: Added support for class implementation of A.
+
+------------------------------------------------------------------------
+Version 1.4
+------------------------------------------------------------------------
+
+2008-03-17  Ewout van den Berg  <ewout78@cs.ubc.ca>
+
+	* spgl1.m: Added isreal(x) check in projection code to ensure the
+	proper procedure is used even if realx is set incorrectly.
+	* spgl1.m: Check added to ensure tau is not updated in two
+	successive iterations. Thanks to Gilles Hennenfent for reporting
+	this problem.
+
+2008-03-02  Ewout van den Berg  <ewout78@cs.ubc.ca>
+
+	* spgdemo.m: Added demo for basis pursuit with weighted one-norm
+
+2008-02-23  Ewout van den Berg  <ewout78@cs.ubc.ca>
+
+	* spgl1.m: Fixed bug in handling weighted one-norm ball orthogonal
+	projection. Thanks to Xiangrui Meng for reporting this bug.
+	* private/oneProjector.m: New one-projector wrapper.
+	* private/oneProjectorMex.c: New mex-interface to one-projector.
+	* private/oneProjectorCore.c: New implementation of (weighted)
+	one-norm ball orthogonal projection code.
+
+------------------------------------------------------------------------
+Version 1.3
+------------------------------------------------------------------------
+	
+2007-12-04  Michael P. Friedlander  <mpf@cs.ubc.ca>
+
+	* lsqr.m: Moved to "private" dir so that it won't interfere with
+	default lsqr function.
+
+2007-12-03  Ewout van den Berg  <ewout78@cs.ubc.ca>
+
+	* spgl1.m: Changed single tau stopping criterion 'f < optTol' to
+	'rNorm < optTol*bNorm'.
+	* spgl1.m: Implemented the code of dealing with the maximum number
+	of matrix-vector operations option.
+
+2007-11-21  Ewout van den Berg  <ewout78@cs.ubc.ca>
+
+	* spgl1.m: added the safeguard 'max(0,...)' to update for tau;
+          tau = max(0,tau + (rNorm * aError1) / gNorm);
+	  This is needed to avoid tau from becoming negative, e.g., in
+	  case sigma and the intial tau are large.
+
+2007-11-30  Ewout van den Berg  <ewout78@cs.ubc.ca>
+
+	* spgl1.m: EXIT_MATVEC_LIMIT exit condition added
+	* spgl1.m, spgSetParms.m: added .maxMatvec option
+
+2007-11-26  Ewout van den Berg  <ewout78@cs.ubc.ca>
+
+	* spgl1.m: added .rGap field in info
+	* ensure.m: added, used instead of the assert function
+	* spgl1.m, spgSetParms.m: added .iscomplex flag to options
+
+2007-11-17  Michael P. Friedlander  <mpf@cs.ubc.ca>
+
+	* spgl1.m: Default number of iterations did not match comment
+	string.  Fixed.  (Reported by Ozgur Yilmaz.)
+
