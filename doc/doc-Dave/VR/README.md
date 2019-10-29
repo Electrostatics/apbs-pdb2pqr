@@ -17,6 +17,8 @@ PROPKA is an empirical method provided with the PDB2PQR tools. This method uses 
 ![image](./AChE.png)
 Figure 2: Electrostatic surface potential and field lines of Torpedo californica AChE (PDBID 5EI5) with bound alkylene-linked bis-tacrine. (A) Electrostatic field lines and protein secondary structure shown with alpha helices (yellow), beta sheets (blue), and random coils (white). Residues Tyr70, Trp84, Trp279, and Phe330 are shown interacting with alkylenelinked bis-tacrine via hydrogen bonding and π-π stacking interactions. The red oval highlights the potential gradient. (B) AChE surface model with field lines and mapped electrostatic surface potentials shown with neutral, negative, and positive charges in white, red, and blue, respectively. Field lines are calculated from a gradient (value of 0.2) and depicted with the starting points in red and the ending points in blue. The orientation is the same in Figures A and B, where the alkylene-linked bis-tacrine can be seen occupying the catalytic gorge. The white circle highlights the potential gradient exiting the catalytic gorge.
 
+An example of the electrostatic surface potential and electrostatic field lines of *Torpoedo californica* AChE is shown in the supplementary information video available at https://www.youtube.com/watch?v=mnMDt_Z9pf0.
+
 #### Steps involved in the VR Example
 Example: Step-by-step directions for AChE VR visualization in Figure 2.
 1. Open UnityMol-APBS (VR or desktop)
