@@ -14,7 +14,7 @@ residue names.
 Analysis of the electrostatic surface potentials and electrostatic field lines of *Torpoedo californica* acetylcholinesterase.
 PROPKA is an empirical method provided with the PDB2PQR tools. This method uses a heuristic method to compute pKa perturbations due to desolvation, hydrogen bonding, and charge–charge interactions. Instructions provided for analysis of *Torpoedo californica* acetylcholinesterase can act as a template for other custom uses with APBS tools in UnityMol-APBS:
 
-![image](./AChE-elec.png)
+![image](./AChE.png)
 Electrostatic surface potential and field lines of *Torpedo californica* AChE (PDB ID 5EI5). (A) Electrostatic field lines and protein secondary structure shown with alpha helices (yellow), beta sheets (blue), and random coils (white). (B) AChE surface model with field lines and mapped electrostatic surface potentials shown with neutral, negative, and positive charges in white, red, and blue, respectively. Field lines are calculated from a gradient and depicted with the starting points in red and the ending points in blue.
 
 #### Steps involved in the VR Example
