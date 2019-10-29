@@ -38,6 +38,8 @@ This service is intended to facilitate the setup and execution of electrostatics
 ### Virtual Reality
 APBS tools have been coupled with a virtual reality platform, UnityMol-APBS, to provide a powerful immersive experience to visualize and compare calculated results. UnityMol-APBS is the second generation of UnityMol (developed by Marc Baaden and his research group at CNRS at the University of Paris) and is a freely available software that provides both a standard desktop and virtual reality interface. Capabilities of UnityMol-APBS include complete customization of the visual representation of molecular systems, an integrated trajectory player compatible with GROMACS trajectories, and calculation of electrostatic properties using APBS. 
 
+An example of the electrostatic surface potential and electrostatic field lines of *Torpoedo californica* AChE is shown in the supplementary information video available at https://www.youtube.com/watch?v=mnMDt_Z9pf0.
+
 For users to achieve this task, both the UnityMol-APBS and APBS executables must be downloaded from the APBS server: 
 [APBS-VR](./VR)
 
