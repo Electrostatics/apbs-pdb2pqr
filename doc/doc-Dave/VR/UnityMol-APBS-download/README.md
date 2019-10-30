@@ -1,6 +1,8 @@
 Installation of UnityMol-APBS
+
 •	Download UnityMol-APBS-PS.zip from “XX”
 •	Unzip UnityMol-APBS-PS.zip
+
 o	New folder UnityMol-APBS-PS contains three files
 	UnityMol-APBS.zip
 	APBS-PDB2PQR.zip
