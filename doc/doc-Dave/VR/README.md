@@ -3,7 +3,22 @@ APBS tools have been coupled with a virtual reality platform, UnityMol-APBS, to 
 
 ## Download Software
 **download instuctions go here**
-APBS executables must be placed in the users C:/ folder (note: the directory names must not be changed).
+
+- Download UnityMol-APBS-PS.zip from “XX”
+- Unzip UnityMol-APBS-PS.zip
+  - New folder UnityMol-APBS-PS contains three files
+    - UnityMol-APBS.zip
+    - APBS-PDB2PQR.zip
+- Unzip UnityMol-APBS
+  - New folder contains UnityMol.exe
+  - it is preferable to put this somewhere on the users C:\ drive.
+    - Not completely necessary
+  - Launch UnityMol.exe
+    - Starts in VR mode
+- Unzip APBS-PDB2PQR.zip
+  - New folder contains three directories: apbs, pdb2pqr, OutpuFiles
+  - To use default file locations, place the new folder “APBS-PD2PQR” in the root C:\ directory. i.e. “C:\APBS-PDB2PQR”
+  - APBS and PDB2PQR can be used from the command line using the executables within their respective folders. 
 
 UI for UnitMol-APBS:
 ![image](./UI.png)
