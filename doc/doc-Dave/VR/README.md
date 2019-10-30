@@ -2,7 +2,6 @@
 APBS tools have been coupled with a virtual reality platform, UnityMol-APBS, to provide a powerful immersive experience to visualize and compare calculated results. the instructions for downloading the needed software to perform the VR analysis, are discussed in the following section.
 
 ## Download Software
-**download instuctions go here**
 
 - Download UnityMol-APBS-PS.zip from “XX”
 - Unzip UnityMol-APBS-PS.zip
@@ -20,7 +19,7 @@ APBS tools have been coupled with a virtual reality platform, UnityMol-APBS, to 
   - To use default file locations, place the new folder “APBS-PD2PQR” in the root C:\ directory. i.e. “C:\APBS-PDB2PQR”
   - APBS and PDB2PQR can be used from the command line using the executables within their respective folders. 
 
-UI for UnitMol-APBS:
+# UI for UnitMol-APBS:
 ![image](./UI.png)
 Figure 1: UnityMol-APBS user interface for PDB2PQR and APBS. (A) The main UnityMolAPBS menu; orange box highlights the two buttons used to open the APBS and PDB2PQR tools. (B) The main menu for interactions with APBS and PDB2PQR. Blue boxes show the
 buttons to launch PDB2PQR and APBS executables, green boxes show the location of the options used for producing the image in Figures 2, and the purple boxes highlight the two input fields required to use custom force fields and custom residue names.
@@ -40,12 +39,14 @@ Example: Step-by-step directions for AChE VR visualization in Figure 2.
 2. Load 5ei5.pdb file
 3. Open PDB2PQR panel
 4. Choose options (examples below) or run the default (default force field is AMBER)
-     apbs-input generates input file necessary for APBS
-     drop-water removes explicit water molecules from structure
-     summary writes atom names and sequence to a new file
-     salt writes salt bridge donor and acceptor atoms to a new file
-     hbond writes hydrogen bonding donors and acceptors to a new file
-     The resulting .hbond and .salt files can be loaded as a new selection in UnityMol-APBS
+   - apbs-input generates input file necessary for APBS
+   - drop-water removes explicit water molecules from structure
+   - summary writes atom names and sequence to a new file
+   - salt writes salt bridge donor and acceptor atoms to a new file
+   - hbond writes hydrogen bonding donors and acceptors to a new file
+
+    The resulting .hbond and .salt files can be loaded as a new selection in UnityMol-APBS
+    
 5. Select “all(5EI5)” and run PDB2PQR
 6. 5ei5X.pqr is written to a file and is immediately loaded for the user.
 7. Select “all(5EI5)” and run APBS
@@ -57,16 +58,28 @@ Example: Step-by-step directions for AChE VR visualization in Figure 2.
 
 #### Output Python code from UnityMol-APBS for the VR Example
 Example: Output Python code from UnityMol-APBS for AChE VR visualization in Figure 2.
+
      load("D:/5EI5_May/5ei5.pdb", True, False)
+     
      load("D:/5EI5_May/5ei5X.pqr", True, False)
+     
      loadDXmap("5ei5X", "D:/5EI5_May/5ei5X.dx")
+     
      showSelection("all(5ei5X)", "fl")
+     
      showSelection("all(5ei5X)", "s")
+     
      colorByCharge("all(5ei5X)", "s")
+     
      #UnityMol Specific functions ------------
+     
      #Save parent position
+     
      setMolParentTransform(Vector3(169.7430, -26.8734, -168.5344),
+     
           Vector3(0.0178, 0.0178, 0.0178),
+          
           Vector3(0.0000, 0.0000, 0.0000),
+          
           Vector3(0.5442, 1.4145, 1.0517))
 
