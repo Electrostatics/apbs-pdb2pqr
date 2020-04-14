@@ -46,3 +46,4 @@ script:
 
 notifications:
   slack: electrostatics:U4cSeRAFGXl9vUqdg4WOubnc
+  
