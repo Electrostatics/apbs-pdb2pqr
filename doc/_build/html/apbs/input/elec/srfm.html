@@ -1,16 +1,13 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
     <title>srfm (elec) &#8212; APBS-PDB2PQR 1.6 documentation</title>
-    
     <link rel="stylesheet" href="../../../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../../',
@@ -24,19 +21,18 @@
     <script type="text/javascript" src="../../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../_static/doctools.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
     <link rel="next" title="swin" href="../generic/swin.html" />
-    <link rel="prev" title="srad" href="../generic/srad.html" />
+    <link rel="prev" title="nrpbe" href="nrpbe.html" />
    
   <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
-  
   
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
 
   </head>
-  <body role="document">
+  <body>
   
 
     <div class="document">
@@ -56,18 +52,18 @@ The syntax for this command is:</p>
 <dt><code class="docutils literal"><span class="pre">mol</span></code></dt>
 <dd>The dielectric coefficient is defined based on a molecular surface definition.
 The problem domain is divided into two spaces.
-The &#8220;free volume&#8221; space is defined by the union of solvent-sized spheres (see <a class="reference internal" href="../generic/srad.html#srad"><span class="std std-ref">srad</span></a>) which do not overlap with biomolecular atoms.
+The “free volume” space is defined by the union of solvent-sized spheres (see <a class="reference internal" href="../generic/srad.html#srad"><span class="std std-ref">srad</span></a>) which do not overlap with biomolecular atoms.
 This free volume is assigned bulk solvent dielectric values.
 The complement of this space is assigned biomolecular dielectric values.
 With a non-zero solvent radius (srad), this choice of coefficient corresponds to the traditional definition used for PB calculations.
 When the solvent radius is set to zero, this corresponds to a van der Waals surface definition.
-The ion-accessibility coefficient is defined by an &#8220;inflated&#8221; van der Waals model.
+The ion-accessibility coefficient is defined by an “inflated” van der Waals model.
 Specifically, the radius of each biomolecular atom is increased by the radius of the ion species (as specified with the <a class="reference internal" href="ion.html#ion"><span class="std std-ref">ion</span></a> keyword).
 The problem domain is then divided into two spaces.
 The space inside the union of these inflated atomic spheres is assigned an ion-accessibility value of 0; the complement space is assigned bulk ion accessibility values.</dd>
 <dt><code class="docutils literal"><span class="pre">smol</span></code></dt>
 <dd>The dielectric and ion-accessibility coefficients are defined as for mol (see above).
-However, they are then &#8220;smoothed&#8221; by a 9-point harmonic averaging to somewhat reduce sensitivity to the grid setup as described by Bruccoleri et al. J Comput Chem 18 268-276, 1997 (<a class="reference external" href="http://dx.doi.org/10.1007/s00214-007-0397-0">10.1007/s00214-007-0397-0</a>).</dd>
+However, they are then “smoothed” by a 9-point harmonic averaging to somewhat reduce sensitivity to the grid setup as described by Bruccoleri et al. J Comput Chem 18 268-276, 1997 (<a class="reference external" href="http://dx.doi.org/10.1007/s00214-007-0397-0">10.1007/s00214-007-0397-0</a>).</dd>
 <dt><code class="docutils literal"><span class="pre">spl2</span></code></dt>
 <dd>The dielectric and ion-accessibility coefficients are defined by a cubic-spline surface as described by Im et al, Comp Phys Commun 111 (1-3) 59-75, 1998 (<a class="reference external" href="https://doi.org/10.1016/S0010-4655(98)00016-2">10.1016/S0010-4655(98)00016-2</a>).
 The width of the dielectric interface is controlled by the <a class="reference internal" href="../generic/swin.html#swin"><span class="std std-ref">swin</span></a> parameter.
@@ -93,8 +89,8 @@ This surface definition has characteristics similar to spl2, but provides higher
   <li><a href="../../invoking.html">Invoking APBS</a><ul>
   <li><a href="../index.html">APBS input files</a><ul>
   <li><a href="index.html">ELEC input file section</a><ul>
-  <li><a href="bem-manual.html">bem-manual</a><ul>
-      <li>Previous: <a href="../generic/srad.html" title="previous chapter">srad</a></li>
+  <li><a href="fe-manual.html">fe-manual</a><ul>
+      <li>Previous: <a href="nrpbe.html" title="previous chapter">nrpbe</a></li>
       <li>Next: <a href="../generic/swin.html" title="next chapter">swin</a></li>
   </ul></li>
   </ul></li>
@@ -129,8 +125,8 @@ This surface definition has characteristics similar to spl2, but provides higher
       &copy;2017, Nathan Baker.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.5.6</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.7</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.8</a>
       
       |
       <a href="../../../_sources/apbs/input/elec/srfm.rst.txt"

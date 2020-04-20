@@ -13,7 +13,7 @@ Although PDB2PQR can fix some missing heavy atoms in sidechains, it does not cur
 Be patient and make certain that the job you submitted to the PDB2PQR website has finished and you have downloaded the resulting PQR file correctly.
 It usually takes less than 10 minutes for the job to finish.
 
-This tutorial assumes that you have `registered <http://eepurl.com/by4eQr>`_ and have access to `the PDB2PQR web server <http://nbcr-222.ucsd.edu/pdb2pqr/>`_.
+This tutorial assumes that you have `registered <http://eepurl.com/by4eQr>`_ and have access to `the PDB2PQR web server <http://apbs.poissonboltzmann.org>`_.
 
 .. toctree::
    :caption: PDB2PQR examples
