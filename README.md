@@ -1,3 +1,7 @@
+<a href='http://www.poissonboltzmann.org/'><img src='https://img.shields.io/badge/homepage-poissonboltzmann-blue.svg'></a>
+
+[![Build Status](https://travis-ci.org/Electrostatics/apbs-pdb2pqr.svg?branch=master)](https://travis-ci.org/Electrostatics/apbs-pdb2pqr)
+
 # APBS and PDB2PQR: electrostatic and solvation properties for complex molecules
 
 ## Getting started
