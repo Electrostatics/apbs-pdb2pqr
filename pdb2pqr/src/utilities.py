@@ -53,7 +53,7 @@ import math
 import os
 from os.path import splitext 
 import sys
-from aconf import INSTALLDIR, TMPDIR
+from .aconf import INSTALLDIR, TMPDIR
 
 def startLogFile(jobName, fileName, logInput):
     with open('%s%s%s/%s' % (INSTALLDIR, TMPDIR, jobName, fileName), 'w') as f:
@@ -203,7 +203,7 @@ def shortestPath(graph, start, end, path=[]):
     path = path + [start]
     if start == end:
         return path
-    if not graph.has_key(start):
+    if start not in graph:
         return None
     shortest = None
     for node in graph[start]:
@@ -368,7 +368,11 @@ def getPDBFile(path):
             file:  File object containing PDB file (file object)
     """
 
-    import os, urllib
+    import os
+    if sys.version_info[0] == 2:
+        import urllib
+    else:
+        import urllib.request as urllib
 
     file = None
     if not os.path.isfile(path):

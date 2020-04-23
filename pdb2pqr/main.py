@@ -70,7 +70,7 @@ from src.protein import *
 from src.server import *
 from src.hydrogens import *
 from src.aconf import *
-from StringIO import *
+from io import StringIO
 from src.errors import PDB2PQRError
 
 __version__ = PDB2PQR_VERSION
@@ -357,11 +357,11 @@ def runPDB2PQR(pdblist, ff,
     start = time.time()
 
     if verbose:
-        print "Beginning PDB2PQR...\n"
+        print("Beginning PDB2PQR...\n")
 
     myDefinition = Definition()
     if verbose:
-        print "Parsed Amino Acid definition file."
+        print("Parsed Amino Acid definition file.")
 
     if drop_water:
         # Remove the waters
@@ -386,9 +386,9 @@ def runPDB2PQR(pdblist, ff,
         myProtein = Protein(pdblist, myDefinition)
 
     if verbose:
-        print "Created protein object -"
-        print "\tNumber of residues in protein: %s" % myProtein.numResidues()
-        print "\tNumber of atoms in protein   : %s" % myProtein.numAtoms()
+        print("Created protein object -")
+        print("\tNumber of residues in protein: %s" % myProtein.numResidues())
+        print("\tNumber of atoms in protein   : %s" % myProtein.numAtoms())
 
     myRoutines = Routines(myProtein, verbose)
 
@@ -418,7 +418,7 @@ def runPDB2PQR(pdblist, ff,
             module.run_extension(myRoutines, outroot, extensionOptions)
 
         if verbose:
-            print "Total time taken: %.2f seconds\n" % (time.time() - start)
+            print("Total time taken: %.2f seconds\n" % (time.time() - start))
 
         #Be sure to include None for missed ligand residues
         return header, lines, None
@@ -561,7 +561,7 @@ def runPDB2PQR(pdblist, ff,
 
 
     if verbose:
-        print "Total time taken: %.2f seconds\n" % (time.time() - start)
+        print("Total time taken: %.2f seconds\n" % (time.time() - start))
 
     return header, lines, missedligandresidues
 
@@ -868,7 +868,7 @@ Please cite your use of PDB2PQR as:
                                                   include_old_header = options.include_header,
                                                   isCIF=isCIF)
     except PDB2PQRError as er:
-        print er
+        print(er)
         sys.exit(2)
 
     # Print the PQR file
@@ -901,8 +901,8 @@ Please cite your use of PDB2PQR as:
         size = psize.Psize()
         size.parseInput(outpath)
         size.runPsize(outpath)
-        async = 0 # No async files here!
-        input = inputgen.Input(outpath, size, method, async, potdx=True)
+        async_ = 0 # No async files here!
+        input = inputgen.Input(outpath, size, method, async_, potdx=True)
         input.printInputFiles()
         input.dumpPickle()
 

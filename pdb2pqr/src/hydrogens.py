@@ -47,11 +47,11 @@ import os
 import string
 import math
 
-from definitions import *
-from utilities import *
-from quatfit import *
-from routines import *
-import topology
+from .definitions import *
+from .utilities import *
+from .quatfit import *
+from .routines import *
+from . import topology
 
 __date__ = "22 April 2009"
 __author__ = "Todd Dolinsky, Jens Erik Nielsen, Yong Huang"
@@ -219,7 +219,7 @@ class Optimize:
         """
             Easy way to turn on/off debugging
         """
-        if HDEBUG: print txt
+        if HDEBUG: print(txt)
 
     @staticmethod
     def getHbondangle(atom1, atom2, atom3):
@@ -1035,7 +1035,7 @@ class Alcoholic(Optimize):
         self.atomlist = []
         self.hbonds = []
 
-        name = optinstance.map.keys()[0]
+        name = list(optinstance.map.keys())[0]
         self.hname = name
         
         bondname = residue.reference.getAtom(name).bonds[0]
@@ -2034,7 +2034,7 @@ class hydrogenRoutines:
             Parameters
                 text:  The text to output (string)
         """
-        if HDEBUG: print text  
+        if HDEBUG: print(text)  
 
     def switchstate(self, states, amb, stateID):
         """
@@ -2069,7 +2069,7 @@ class hydrogenRoutines:
             hname = conf.hname
             boundname = conf.boundatom
             if residue.getAtom(hname) != None:
-                print 'Removing',residue.name,residue.resSeq,hname
+                print('Removing',residue.name,residue.resSeq,hname)
                 residue.removeAtom(hname)
             residue.getAtom(boundname).hacceptor = 1
             residue.getAtom(boundname).hdonor = 0
@@ -2088,7 +2088,7 @@ class hydrogenRoutines:
         # Now build appropriate atoms
         state = states[stateID]
         for conf in state:
-            print conf
+            print(conf)
             refcoords = []
             defcoords = []
             defatomcoords = []
@@ -2274,7 +2274,7 @@ class hydrogenRoutines:
 
         if optinstance != None:
             if optinstance.opttype == "Alcoholic":
-                atomname = optinstance.map.keys()[0]
+                atomname = list(optinstance.map.keys())[0]
                 if not residue.reference.hasAtom(atomname):
                     optinstance = None
                    
@@ -2736,7 +2736,7 @@ class hydrogenRoutines:
             refatoms = ['OE1', 'CD', 'OE2']
         else:
             patchmap = self.routines.protein.patchmap[name]
-            atoms = patchmap.map.keys()
+            atoms = list(patchmap.map.keys())
             atoms.sort()
 
         if name in ['NTR']:

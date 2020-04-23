@@ -49,8 +49,8 @@ __date__ = "28 December 2006"
 __author__ = "Todd Dolinsky"
 
 import string
-from structures import *
-from src.errors import PDBInputError
+from .structures import *
+from .errors import PDBInputError
 
 class Amino(Residue):
     """

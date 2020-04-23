@@ -76,7 +76,7 @@ class Psize:
 
     def parseString(self, structure):
         """ Parse the input structure as a string in PDB or PQR format """
-        lines = string.split(structure, "\n")
+        lines = structure.split("\n")
         self.parseLines(lines)
 
     def parseInput(self, filename):
@@ -87,9 +87,9 @@ class Psize:
     def parseLines(self, lines):
         """ Parse the lines """
         for line in lines:
-            if string.find(line,"ATOM") == 0:
-                subline = string.replace(line[30:], "-", " -")
-                words = string.split(subline)
+            if line.startswith("ATOM"):
+                subline = line[30:].replace("-", " -")
+                words = subline.split()
                 if len(words) < 5:    
                     continue
                 self.gotatom += 1
@@ -103,12 +103,12 @@ class Psize:
                         self.minlen[i] = center[i]-rad
                     if self.maxlen[i] == None or center[i]+rad > self.maxlen[i]:
                         self.maxlen[i] = center[i]+rad
-            elif string.find(line, "HETATM") == 0:
+            elif line.startswith("HETATM"):
                 self.gothet = self.gothet + 1
                 # Special handling for no ATOM entries in the pqr file, only HETATM entries
                 if self.gotatom == 0:
-                    subline = string.replace(line[30:], "-", " -")
-                    words = string.split(subline)
+                    subline = line[30:].replace("-", " -")
+                    words = subline.split()
                     if len(words) < 5:    
                         continue
                     self.q = self.q + float(words[3])
@@ -191,7 +191,7 @@ class Psize:
             else:
                 i = nsmall.index(max(nsmall))
                 nsmall[i] = 32 * ((nsmall[i] - 1)/32 - 1) + 1
-                if nsmall <= 0:
+                if nsmall[i] <= 0:
                     stdout.write("You picked a memory ceiling that is too small\n")
                     sys.exit(0)        
 
@@ -380,7 +380,7 @@ def main():
     longOptList = ["help", "cfac=", "fadd=", "space=", "gmemfac=", "gmemceil=", "ofrac=", "redfac="]
     try:
         opts, args = getopt.getopt(sys.argv[1:], shortOptList, longOptList)
-    except getopt.GetoptError, details:
+    except getopt.GetoptError as details:
         stderr.write("Option error (%s)!\n" % details)
         usage(2)
     if len(args) != 1: 
