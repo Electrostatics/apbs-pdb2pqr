@@ -1,16 +1,13 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
     <title>Installing PDB2PQR &#8212; APBS-PDB2PQR 1.6 documentation</title>
-    
     <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
@@ -24,7 +21,7 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Invoking PDB2PQR" href="invoking.html" />
@@ -32,11 +29,10 @@
    
   <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
   
-  
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
 
   </head>
-  <body role="document">
+  <body>
   
 
     <div class="document">
@@ -50,7 +46,7 @@
 <p class="first admonition-title">Note</p>
 <p class="last">Please <a class="reference external" href="http://eepurl.com/by4eQr">register</a> before using PDB2PQR!</p>
 </div>
-<p>Most users will use PDB2PQR through <a class="reference external" href="http://nbcr-222.ucsd.edu/pdb2pqr/">the web server</a>.
+<p>Most users will use PDB2PQR through <a class="reference external" href="http://apbs.poissonboltzmann.org">the web server</a> (after <a class="reference external" href="http://eepurl.com/by4eQr">registering</a>, of course).
 However, it is also possible to install local versions of PDB2PQR.
 These local installations give a command line version of the PDB2PQR software that can be customized through a variety of extensions and used as a local web server (if compiled from source).</p>
 <div class="section" id="binary-installation">
@@ -124,7 +120,7 @@ $ python scons/scons.py install
 <p>By default, the server is installed in <code class="file docutils literal"><span class="pre">~/pdb2pqr</span></code> and the default URL is <code class="docutils literal"><span class="pre">http://computer_name/pdb2pqr</span></code>.</p>
 <p>It is highly recommended that PREFIX and URL point to the same directory.
 Specifying <code class="docutils literal"><span class="pre">PREFIX=/var/www/html/pdb2pqr-test</span> <span class="pre">URL=http://somedomain/pdb2pqr-test</span></code> is recommened.</p>
-<p>If the server interface loads correctly but you cannot execute pdb2pqr by clicking the &#8220;Submit&#8221; button, make sure you have the permission to execute the <code class="file docutils literal"><span class="pre">pdb2pqr.cgi</span></code> file.
+<p>If the server interface loads correctly but you cannot execute pdb2pqr by clicking the “Submit” button, make sure you have the permission to execute the <code class="file docutils literal"><span class="pre">pdb2pqr.cgi</span></code> file.
 In particular, ensure that the access mode of <code class="file docutils literal"><span class="pre">pdb2pqr.cgi</span></code> allows execution by the webserver (e.g., <code class="docutils literal"><span class="pre">chmod</span> <span class="pre">+x</span> <span class="pre">/var/www/html/pdb2pqr/pdb2pqr.cgi</span></code>).
 Additionally, you may need to change the configuration of your webserver to enable CGI execution.</p>
 </div>
@@ -185,8 +181,8 @@ Additionally, you may need to change the configuration of your webserver to enab
       &copy;2017, Nathan Baker.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.5.6</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.7</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.8</a>
       
       |
       <a href="../_sources/pdb2pqr/installing.rst.txt"

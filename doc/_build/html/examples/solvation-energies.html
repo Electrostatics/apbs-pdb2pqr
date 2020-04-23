@@ -1,16 +1,13 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
     <title>Solvation energies with APBS &#8212; APBS-PDB2PQR 1.6 documentation</title>
-    
     <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
@@ -24,7 +21,7 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Binding energies with APBS" href="binding-energies.html" />
@@ -32,11 +29,10 @@
    
   <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
   
-  
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
 
   </head>
-  <body role="document">
+  <body>
   
 
     <div class="document">
@@ -47,7 +43,7 @@
   <div class="section" id="solvation-energies-with-apbs">
 <h1>Solvation energies with APBS<a class="headerlink" href="#solvation-energies-with-apbs" title="Permalink to this headline">¶</a></h1>
 <p>Solvation energies are usually decomposed into a free energy cycle as shown in the free energy cycle below.
-Note that such solvation energies often performed on fixed conformations; as such, they are more correctly called &#8220;potentials of mean force&#8221;.
+Note that such solvation energies often performed on fixed conformations; as such, they are more correctly called “potentials of mean force”.
 More details on using APBS for the polar and nonpolar portions of such a cycle are given in the following sections.</p>
 <div class="figure" id="id1">
 <img alt="../_images/apbs_sol_eng.png" src="../_images/apbs_sol_eng.png" />
@@ -70,7 +66,7 @@ Therefore, to calculate the polar contribution to the solvation free energy, we 
 Note that the electrostatic charging free energies returned by APBS include self-interaction terms.
 These are the energies of a charge distribution interacting with itself.
 Such self-interaction energies are typically very large and extremely sensitive to the problem discretization (grid spacing, location, etc.).
-Therefore, it is very important that the two calculations in Steps 2 and 6 are performed with identical grid spacings, lengths, and centers, in order to ensure appropriate matching (or &#8220;cancellation&#8221;) of self-energy terms.</p>
+Therefore, it is very important that the two calculations in Steps 2 and 6 are performed with identical grid spacings, lengths, and centers, in order to ensure appropriate matching (or “cancellation”) of self-energy terms.</p>
 <div class="section" id="born-ion">
 <h3>Born ion<a class="headerlink" href="#born-ion" title="Permalink to this headline">¶</a></h3>
 <p>One of the canonical examples for polar solvation is the Born ion: a nonpolarizable sphere with a single charge at its center surrounded by an aqueous medium.
@@ -89,8 +85,8 @@ This model assumes zero ionic strength.</p>
 ATOM      <span class="m">1</span>   I  ION     <span class="m">1</span> <span class="m">0</span>.000   <span class="m">0</span>.000   <span class="m">0</span>.000  <span class="m">1</span>.00 <span class="m">3</span>.00
 </pre></div>
 </div>
-<p>We&#8217;re interested in performing two APBS calculations for the charging free energies in homogeneous and heterogeneous dielectric coefficients.
-We&#8217;ll assume the internal dielectric coefficient is 1 (e.g., a vacuum) and the external dielectric coefficient is 78.54 (e.g., water).
+<p>We’re interested in performing two APBS calculations for the charging free energies in homogeneous and heterogeneous dielectric coefficients.
+We’ll assume the internal dielectric coefficient is 1 (e.g., a vacuum) and the external dielectric coefficient is 78.54 (e.g., water).
 For these settings, the polar Born ion solvation energy expression has the form</p>
 <div class="math">
 \[\Delta_p G_{\mathrm{Born}} = -691.85 \biggl( \frac{z^2}{R} \biggr) \mathrm {kJ \, A/mol}\]</div>
@@ -233,8 +229,8 @@ For example, setting <a class="reference internal" href="../apbs/input/apolar/pr
       &copy;2017, Nathan Baker.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.5.6</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.7</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.8</a>
       
       |
       <a href="../_sources/examples/solvation-energies.rst.txt"

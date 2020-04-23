@@ -19,8 +19,7 @@ However, if you prefer to download the software, :ref:`skip to the downloads sec
 
 The PDB2PQR web server offers a simple way to use both APBS and PDB2PQR without the need to download and install additional programs.
 
-The PDB2PQR web server is hosted by the `National Biomedical Computation Resource <http://nbcr.ucsd.edu>`_.
-Please visit http://nbcr-222.ucsd.edu/pdb2pqr to access the web server.
+After `registering <http://eepurl.com/by4eQr>`_, please visit http://apbs.poissonboltzmann.org/ to access the web server.
 
 .. _downloads-label:
 

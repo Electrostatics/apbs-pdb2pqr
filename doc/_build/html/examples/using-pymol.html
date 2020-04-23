@@ -1,16 +1,13 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
     <title>Using the PyMOL APBS plugin &#8212; APBS-PDB2PQR 1.6 documentation</title>
-    
     <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
@@ -24,7 +21,7 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Virtual reality with UnityMol" href="unitymol.html" />
@@ -32,11 +29,10 @@
    
   <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
   
-  
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
 
   </head>
-  <body role="document">
+  <body>
   
 
     <div class="document">
@@ -51,9 +47,9 @@ Below are instructions for performing a basic demonstration of how to go from a 
 <div class="section" id="run-the-apbs-calculation">
 <h2>Run the APBS calculation<a class="headerlink" href="#run-the-apbs-calculation" title="Permalink to this headline">¶</a></h2>
 <ul>
-<li><p class="first">Load your PQR file you created into PyMOL (<span class="guilabel">File → Open...</span>) and choose your favorite graphical representation of the molecular structure.</p>
+<li><p class="first">Load your PQR file you created into PyMOL (<span class="guilabel">File → Open…</span>) and choose your favorite graphical representation of the molecular structure.</p>
 </li>
-<li><p class="first">Go to <span class="guilabel">Plugin → APBS Tools...</span> to open the APBS calculation plugin.</p>
+<li><p class="first">Go to <span class="guilabel">Plugin → APBS Tools…</span> to open the APBS calculation plugin.</p>
 </li>
 <li><p class="first">Under the <span class="guilabel">Main</span> tab of the PyMOL APBS Tools window, select <span class="guilabel">Use another PQR</span> and either browse to (via the <span class="guilabel">Choose Externally Generated PQR</span> button) or input the path to your PQR file. This step is necessary to ensure you use the radii and charges assigned by PDB2PQR.</p>
 </li>
@@ -78,7 +74,7 @@ Below are instructions for performing a basic demonstration of how to go from a 
 <p>Before proceeding, you must load the electrostatic potential data into PyMOL. Under the <span class="guilabel">Visualization</span> tab of the PyMOL APBS Tools window, press the <span class="guilabel">Update</span> button.</p>
 <div class="section" id="electrostatic-isocontours">
 <h3>Electrostatic isocontours<a class="headerlink" href="#electrostatic-isocontours" title="Permalink to this headline">¶</a></h3>
-<p>PyMOL makes this step very easy: adjust the positive and negative &#8220;Contour&#8221; fields to the desired values (usually ±1, ±5, or ±10 kT/e)
+<p>PyMOL makes this step very easy: adjust the positive and negative “Contour” fields to the desired values (usually ±1, ±5, or ±10 kT/e)
 and press the <span class="guilabel">Positive Isosurface</span>, <span class="guilabel">Negative Isosurface</span>, and <span class="guilabel">Show buttons</span>.</p>
 <p>At this point, you probably have a figure that looks something like the image below.</p>
 <div class="figure" id="id1">
@@ -90,10 +86,10 @@ By convention (for electrostatics in chemistry), red is negative (think oxygen a
 </div>
 <div class="section" id="surface-potentials">
 <h3>Surface potentials<a class="headerlink" href="#surface-potentials" title="Permalink to this headline">¶</a></h3>
-<p>If you haven&#8217;t already, hide the isocontours by pressing the <span class="guilabel">Positive Isosurface</span>, <span class="guilabel">Negative Isosurface</span>, and <span class="guilabel">Hide</span> buttons.
+<p>If you haven’t already, hide the isocontours by pressing the <span class="guilabel">Positive Isosurface</span>, <span class="guilabel">Negative Isosurface</span>, and <span class="guilabel">Hide</span> buttons.
 The surface potential is also straightforward to visualize.
-Set the &#8220;Low&#8221; and &#8220;High&#8221;values to the desired values (usually ±1, ±5, or ±10 kT/e) at which the surface colors are clamped at red (-) or blue (+).
-Check the &#8220;Solvent accessible surface&#8221; and &#8220;Color by potential on sol. acc. surf.&#8221; buttons to plot the potential on the solvent-accessible (probe-inflated or Lee-Richards) surface.
+Set the “Low” and “High”values to the desired values (usually ±1, ±5, or ±10 kT/e) at which the surface colors are clamped at red (-) or blue (+).
+Check the “Solvent accessible surface” and “Color by potential on sol. acc. surf.” buttons to plot the potential on the solvent-accessible (probe-inflated or Lee-Richards) surface.
 Press the <span class="guilabel">Molecular Surface</span> <span class="guilabel">Show</span> button to load the surface potential.</p>
 <div class="figure" id="id2">
 <img alt="../_images/fas2-surf-pymol.png" src="../_images/fas2-surf-pymol.png" />
@@ -102,7 +98,7 @@ Press the <span class="guilabel">Molecular Surface</span> <span class="guilabel"
 <p>The solvent-accessible surface tends to reveal more global features of the surface potential.
 Tighter surfaces (e.g., van der Waals and molecular or Connolly surfaces) provide more information about the shape of the biomolecule but otherwise tend to simply map atomic surface charges onto the biomolecular surface.
 PyMOL can simultaneously provide geometric information (from the molecular surface) and useful electrostatic potential information (from the solvent-accessible surface).
-To visualize the molecule in this way, simply uncheck the &#8220;Solvent accessible surface&#8221;box and check the &#8220;Color by potential on sol. acc. surf.&#8221; box on the <span class="guilabel">Visualization</span> tab.</p>
+To visualize the molecule in this way, simply uncheck the “Solvent accessible surface”box and check the “Color by potential on sol. acc. surf.” box on the <span class="guilabel">Visualization</span> tab.</p>
 </div>
 </div>
 </div>
@@ -161,8 +157,8 @@ To visualize the molecule in this way, simply uncheck the &#8220;Solvent accessi
       &copy;2017, Nathan Baker.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.5.6</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.7</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.8</a>
       
       |
       <a href="../_sources/examples/using-pymol.rst.txt"

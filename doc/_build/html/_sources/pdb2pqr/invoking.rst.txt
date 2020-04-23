@@ -5,7 +5,7 @@ Invoking PDB2PQR
 
    Please `register <http://eepurl.com/by4eQr>`_ before using PDB2PQR!
 
-Most users will use PDB2PQR through `the web server <http://nbcr-222.ucsd.edu/pdb2pqr/>`_.
+Most users will use PDB2PQR through `the web server <http://apbs.poissonboltzmann.org/>`_ (after `registering <http://eepurl.com/by4eQr>`_, of course).
 However, it is also possible to install local versions of PDB2PQR and run these through the command line.
 This version of the software offers an expanded range of options and can also be customized with user extensions.
 

@@ -1,16 +1,13 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
     <title>APBS 1.3 (2010-10) &#8212; APBS-PDB2PQR 1.6 documentation</title>
-    
     <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
@@ -24,7 +21,7 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="PDB2PQR 1.7 (2010-10)" href="201010-PDB2PQR-1.7.html" />
@@ -32,11 +29,10 @@
    
   <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
   
-  
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
 
   </head>
-  <body role="document">
+  <body>
   
 
     <div class="document">
@@ -60,9 +56,9 @@
 <li>Added etol keyword, which allows user-defined error tolerance in LPBE and NPBE calculations (default errtol value is 1.0e-6).</li>
 <li>Added more explanatory error messages for the case in which parm keyword is missing from APBS input file for apolar calculations.</li>
 <li>Added a polar and apolor forces calculation example to examples/born/ .</li>
-<li>Added warning messages for users who try to compile APBS with &#8211;enable-tinker flag and run APBS stand-alone execution.</li>
+<li>Added warning messages for users who try to compile APBS with –enable-tinker flag and run APBS stand-alone execution.</li>
 <li>Switched default Opal service urls from sccne.wustl.edu to NBCR.</li>
-<li>Added a sanity check in routines.c: &#8216;bcfl map&#8217; in the input file requires &#8216;usemap pot&#8217; statement in the input file as well.</li>
+<li>Added a sanity check in routines.c: ‘bcfl map’ in the input file requires ‘usemap pot’ statement in the input file as well.</li>
 <li>Introduced Vpmgp_size() routine to replace F77MGSZ call in vpmg.c</li>
 <li>Updated test results for APBS-1.3 release.</li>
 </ul>
@@ -71,13 +67,13 @@
 <h2>Bug fixes<a class="headerlink" href="#bug-fixes" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
 <li>Modified Vpmg_dbForce with some grid checking code provided by Matteo Rotter.</li>
-<li>Fixed a bug in psize.py per Michael Lerner&#8217;s suggestion. The old version of psize.py gives wrong cglen and fglen results in special cases (e.g., all y coordinates are negative values).</li>
-<li>Fixed a bug in examples/scripts/checkforces.sh: the condition for &#8220;Passed with rounding error&#8221; is abs(difference) &lt; errortol, not the other way around.</li>
+<li>Fixed a bug in psize.py per Michael Lerner’s suggestion. The old version of psize.py gives wrong cglen and fglen results in special cases (e.g., all y coordinates are negative values).</li>
+<li>Fixed a bug in examples/scripts/checkforces.sh: the condition for “Passed with rounding error” is abs(difference) &lt; errortol, not the other way around.</li>
 <li>Fixed the help string in ApbsClient.py .</li>
 <li>Fixed a bug in Vacc_atomdSASA(): the atom SASA needs to be reset to zero displacement after finite melement methods.</li>
 <li>Fixed a bug in Vpmg_dbForce(): the initialization of rtot should appear before it is used.</li>
 <li>Fixed a bug in initAPOL(): center should be initialized before used.</li>
-<li>Fixed a bug in routines.c: eliminated spurious &#8220;Invalid data type for writing!&#8221; and &#8220;Invalid format for writing!&#8221; from outputs with &#8220;write atompot&#8221; statement in the input file.</li>
+<li>Fixed a bug in routines.c: eliminated spurious “Invalid data type for writing!” and “Invalid format for writing!” from outputs with “write atompot” statement in the input file.</li>
 <li>Fixed a bug in vpmg.c: fixed zero potential value problem on eges and corners in non-focusing calculations.</li>
 </ul>
 </div>
@@ -133,8 +129,8 @@
       &copy;2017, Nathan Baker.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.5.6</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.7</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.8</a>
       
       |
       <a href="../_sources/releases/201010-APBS-1.3.0.rst.txt"

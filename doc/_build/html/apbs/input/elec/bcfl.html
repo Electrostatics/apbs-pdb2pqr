@@ -1,16 +1,13 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
     <title>bcfl &#8212; APBS-PDB2PQR 1.6 documentation</title>
-    
     <link rel="stylesheet" href="../../../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../../',
@@ -24,19 +21,18 @@
     <script type="text/javascript" src="../../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../_static/doctools.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
-    <link rel="next" title="ion" href="ion.html" />
-    <link rel="prev" title="bem-manual" href="bem-manual.html" />
+    <link rel="next" title="calcenergy" href="../generic/calcenergy.html" />
+    <link rel="prev" title="akeySOLVE" href="akeySOLVE.html" />
    
   <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
-  
   
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
 
   </head>
-  <body role="document">
+  <body>
   
 
     <div class="document">
@@ -54,20 +50,20 @@ The syntax is:</p>
 <p>where <code class="docutils literal"><span class="pre">flag</span></code> is a text string that identifies the type of conditions to be used.</p>
 <dl class="docutils">
 <dt><code class="docutils literal"><span class="pre">zero</span></code></dt>
-<dd>&#8220;Zero&#8221; boundary condition. Dirichlet conditions where the potential at the boundary is set to zero.
+<dd>“Zero” boundary condition. Dirichlet conditions where the potential at the boundary is set to zero.
 This condition is not commonly used and can result in large errors if used inappropriately.</dd>
 <dt><code class="docutils literal"><span class="pre">sdh</span></code></dt>
-<dd>&#8220;Single Debye-Hückel&#8221; boundary condition.
+<dd>“Single Debye-Hückel” boundary condition.
 Dirichlet condition where the potential at the boundary is set to the values prescribed by a Debye-Hückel model for a single sphere with a point charge, dipole, and quadrupole.
 The sphere radius in this model is set to the radius of the biomolecule and the sphere charge, dipole, and quadrupole are set to the total moments of the protein.
 This condition works best when the boundary is sufficiently far from the biomolecule.</dd>
 <dt><code class="docutils literal"><span class="pre">mdh</span></code></dt>
-<dd>&#8220;Multiple Debye-Hückel&#8221; boundary condition.
+<dd>“Multiple Debye-Hückel” boundary condition.
 Dirichlet condition where the potential at the boundary is set to the values prescribed by a Debye-Hückel model for a multiple, non-interacting spheres with a point charges.
 The radii of the non-interacting spheres are set to the atomic radii of and the sphere charges are set to the atomic charges.
 This condition works better than sdh for closer boundaries but can be very slow for large biomolecules.&lt;br /&gt;</dd>
 <dt><code class="docutils literal"><span class="pre">focus</span></code></dt>
-<dd>&#8220;Focusing&#8221; boundary condition.
+<dd>“Focusing” boundary condition.
 Dirichlet condition where the potential at the boundary is set to the values computed by the previous (usually lower-resolution) PB calculation.
 This is <strong>only</strong> used in sequential focusing performed manually in <a class="reference internal" href="mg-manual.html#mgmanual"><span class="std std-ref">mg-manual</span></a> calculations.
 All of the boundary points should lie within the domain of the previous calculation for best accuracy; if any boundary points lie outside, their values are computed using single Debye-Hückel boundary conditions (see above).</dd>
@@ -92,9 +88,9 @@ See the READ keyword pot (see <a class="reference internal" href="../read.html#r
   <li><a href="../../invoking.html">Invoking APBS</a><ul>
   <li><a href="../index.html">APBS input files</a><ul>
   <li><a href="index.html">ELEC input file section</a><ul>
-  <li><a href="bem-manual.html">bem-manual</a><ul>
-      <li>Previous: <a href="bem-manual.html" title="previous chapter">bem-manual</a></li>
-      <li>Next: <a href="ion.html" title="next chapter">ion</a></li>
+  <li><a href="fe-manual.html">fe-manual</a><ul>
+      <li>Previous: <a href="akeySOLVE.html" title="previous chapter">akeySOLVE</a></li>
+      <li>Next: <a href="../generic/calcenergy.html" title="next chapter">calcenergy</a></li>
   </ul></li>
   </ul></li>
   </ul></li>
@@ -128,8 +124,8 @@ See the READ keyword pot (see <a class="reference internal" href="../read.html#r
       &copy;2017, Nathan Baker.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.5.6</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.7</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.8</a>
       
       |
       <a href="../../../_sources/apbs/input/elec/bcfl.rst.txt"

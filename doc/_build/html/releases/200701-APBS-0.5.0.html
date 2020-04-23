@@ -1,16 +1,13 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
     <title>APBS 0.5.0 (2007-01) &#8212; APBS-PDB2PQR 1.6 documentation</title>
-    
     <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
@@ -24,7 +21,7 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="PDB2PQR 1.2.0 (2007-01)" href="200701-PDB2PQR-1.2.0.html" />
@@ -32,11 +29,10 @@
    
   <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
   
-  
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
 
   </head>
-  <body role="document">
+  <body>
   
 
     <div class="document">
@@ -53,21 +49,21 @@
 <blockquote>
 <div><ul class="simple">
 <li>Most common compiler/library options now detected by default</li>
-<li>MALOC is now included as a &#8220;plugin&#8221; to simplify installation and compatibility issue</li>
+<li>MALOC is now included as a “plugin” to simplify installation and compatibility issue</li>
 </ul>
 </div></blockquote>
 </li>
-<li><p class="first">Added new APOLAR section to input file and updated documentation &#8211; this function renders tools/manip/acc obsolete.</p>
+<li><p class="first">Added new APOLAR section to input file and updated documentation – this function renders tools/manip/acc obsolete.</p>
 </li>
 <li><p class="first">Added support for standard one-character chain IDs in PQR files.</p>
 </li>
-<li><p class="first">Added a new &#8220;spl4&#8221; charge method (chgm) option to support a quintic B-spline discretization (thanks to Michael Schnieders).</p>
+<li><p class="first">Added a new “spl4” charge method (chgm) option to support a quintic B-spline discretization (thanks to Michael Schnieders).</p>
 </li>
 <li><p class="first">Updated psize.py</p>
 </li>
-<li><p class="first">Added a new &#8220;spl4&#8221; ion-accessibility coefficient model (srfm) option that uses a 7th order polynomial. This option provides the higher order continuity necessary for stable force calculations with atomic multipole force fields (thanks to Michael Schnieders).</p>
+<li><p class="first">Added a new “spl4” ion-accessibility coefficient model (srfm) option that uses a 7th order polynomial. This option provides the higher order continuity necessary for stable force calculations with atomic multipole force fields (thanks to Michael Schnieders).</p>
 </li>
-<li><p class="first">Modified the &#8220;sdh&#8221; boundary condition (bcfl) option to include dipoles and quadrupoles.  Well-converged APBS calculations won&#8217;t change with the dipole and quadrupole molecular moments included in the boundary potential estimate, but calculations run with the boundary close to the solute should give an improved result (thanks to Michael Schnieders).</p>
+<li><p class="first">Modified the “sdh” boundary condition (bcfl) option to include dipoles and quadrupoles.  Well-converged APBS calculations won’t change with the dipole and quadrupole molecular moments included in the boundary potential estimate, but calculations run with the boundary close to the solute should give an improved result (thanks to Michael Schnieders).</p>
 </li>
 <li><p class="first">Updated documentation to reflect new iAPBS features (NAMD support)</p>
 </li>
@@ -77,15 +73,15 @@
 </li>
 <li><p class="first">Added code to allow for an interface with TINKER (thanks to Michael Schnieders).</p>
 </li>
-<li><p class="first">The Python wrappers are now disabled by default.  They can be compiled by passing the &#8211;enable-python flag to the configure script.  This will allow users to attempt to compile the wrappers on various systems as desired.</p>
+<li><p class="first">The Python wrappers are now disabled by default.  They can be compiled by passing the –enable-python flag to the configure script.  This will allow users to attempt to compile the wrappers on various systems as desired.</p>
 </li>
 <li><p class="first">Added XML support for reading in parameter files when using PDB files as input.  New XML files can be found in tools/conversion/param/vparam.</p>
 </li>
-<li><p class="first">Added XML support for reading &#8220;PQR&#8221; files in XML format.</p>
+<li><p class="first">Added XML support for reading “PQR” files in XML format.</p>
 </li>
-<li><p class="first">Added support for command line &#8211;version and &#8211;help flags.</p>
+<li><p class="first">Added support for command line –version and –help flags.</p>
 </li>
-<li><p class="first">Added support for XML output options via the &#8211;output-file and  &#8211;output-format flags.</p>
+<li><p class="first">Added support for XML output options via the –output-file and  –output-format flags.</p>
 </li>
 <li><p class="first">Updated runme script in ion-pmf example to use environmental variable for APBS path</p>
 </li>
@@ -179,8 +175,8 @@
       &copy;2017, Nathan Baker.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.5.6</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.7</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.8</a>
       
       |
       <a href="../_sources/releases/200701-APBS-0.5.0.rst.txt"

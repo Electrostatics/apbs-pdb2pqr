@@ -10,7 +10,7 @@ A special thanks supporting organizations behind the APBS and PDB2PQR software:
 `National Institutes of Health <http://www.nih.gov>`_
   Primary source of funding for APBS via grant GM069702
 `National Biomedical Computation Resource <http://nbcr.ucsd.edu/>`_
-  Deployment and computational resources support
+  Deployment and computational resources support from 2002 to 2020
 `National Partnership for Advanced Computational Infrastructure <http://www.hipersoft.rice.edu/npaci/>`_
   Funding and computational resources
 `Washington University in St. Louis <http://biochem.wustl.edu>`_

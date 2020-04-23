@@ -30,7 +30,7 @@ The ``type`` command defines the types of ELEC calculation to be performed and i
 
 * Boundary element method calculations with `TABI-PB <https://doi.org/10.1016/j.jcp.2013.03.056>`_.
 
-  * :ref:`bemmanual`
+  * :ref:`tabi`
 
 * Analytic and semi-analytic Poisson-Boltzmann approximations
 
@@ -55,7 +55,7 @@ The order of the ELEC statement can matter since certain types of boundary condi
    :maxdepth: 1
    :caption: Calculation type keywords
 
-   bem-manual
+   tabi
    fe-manual
    geoflow-auto
    mg-auto

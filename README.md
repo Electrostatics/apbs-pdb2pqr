@@ -1,11 +1,18 @@
+<a href='http://www.poissonboltzmann.org/'><img src='https://img.shields.io/badge/homepage-poissonboltzmann-blue.svg'></a>
+
+[![Build Status](https://travis-ci.org/Electrostatics/apbs-pdb2pqr.svg?branch=master)](https://travis-ci.org/Electrostatics/apbs-pdb2pqr)
+
 # APBS and PDB2PQR: electrostatic and solvation properties for complex molecules
 
 ## Getting started
 
 * Please [register your use](http://eepurl.com/by4eQr) to ensure continued support for the APBS-PDB2PQR software.
 * Read our [online documentation](http://apbs-pdb2pqr.readthedocs.io/).
-* Get started with the [web server](http://nbcr-222.ucsd.edu/pdb2pqr_2.1.1/).
+* Get started with the [web server](http://http://apbs.poissonboltzmann.org/).
 * Download the software [following these instructions](http://apbs-pdb2pqr.readthedocs.io/en/latest/downloads.html).
+
+-----
+
 
 ## More information about the software
 

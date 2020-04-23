@@ -1,16 +1,13 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
     <title>PDB2PQR NAMES files &#8212; APBS-PDB2PQR 1.6 documentation</title>
-    
     <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
@@ -24,7 +21,7 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="APBS flat-file parameter format" href="flat-parm.html" />
@@ -32,11 +29,10 @@
    
   <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
   
-  
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
 
   </head>
-  <body role="document">
+  <body>
   
 
     <div class="document">
@@ -49,8 +45,8 @@
 <p>Much of the difficulty in adding a new forcefield to PDB2PQR depends on the naming scheme used in that forcefield.</p>
 <div class="section" id="xml-file-format">
 <h2>XML file format<a class="headerlink" href="#xml-file-format" title="Permalink to this headline">¶</a></h2>
-<p>To start, either a flat file or XML file containing the desired forcefield&#8217;s parameters should be made - see <code class="file docutils literal"><span class="pre">AMBER.DAT</span></code> and <code class="file docutils literal"><span class="pre">AMBER.xml</span></code> for examples.
-If the forcefield&#8217;s naming scheme matches the canonical naming scheme, that&#8217;s all that is necessary.
+<p>To start, either a flat file or XML file containing the desired forcefield’s parameters should be made - see <code class="file docutils literal"><span class="pre">AMBER.DAT</span></code> and <code class="file docutils literal"><span class="pre">AMBER.xml</span></code> for examples.
+If the forcefield’s naming scheme matches the canonical naming scheme, that’s all that is necessary.
 If the naming schemes differ, however, conversions must be made. These are made in the <code class="file docutils literal"><span class="pre">*.names</span></code> file (see <code class="file docutils literal"><span class="pre">CHARMM.names</span></code>, for example).
 In this file you will see sections like:&lt;/p&gt;</p>
 <div class="highlight-xml"><div class="highlight"><pre><span></span><span class="nt">&lt;residue&gt;</span>
@@ -77,7 +73,7 @@ As a result, PDB2PQR can use regular expressions to simplify the renaming proces
 </pre></div>
 </div>
 <p>This section of code will ensure that the H atom of all canonical residue names that match the <code class="regexp docutils literal"><span class="pre">[NC]?...$</span></code> regular expression point to HN instead.
-This regular expression matches all three-letter residue names, residue names with an &#8216;N&#8217; prepended (N-Termini), and residue names with a &#8216;C&#8217; prepended (C-Termini).
+This regular expression matches all three-letter residue names, residue names with an ‘N’ prepended (N-Termini), and residue names with a ‘C’ prepended (C-Termini).
 For twenty amino acids, sixty residue name changes can all be done by a single section.
 The use of regular expressions is therefore a much more powerful method of handling naming scheme differences than working on a one to one basis.</p>
 <p>There are a few other additional notes when using the <code class="file docutils literal"><span class="pre">.names</span></code> file.
@@ -89,7 +85,7 @@ First, the <code class="docutils literal"><span class="pre">$group</span></code>
 </pre></div>
 </div>
 <p>This section replaces HIP/HID/HIE with HSP/HSD/HSE by first matching the HI([PDE])$ regular expression and then using the group that is enclosed by parantheses to fill in the name to use.</p>
-<p>Second, sections are cumulative - since CHARMM, for instance, has a patch-based naming scheme, one single canonical residue name can map to multiple forcefield-scheme names. Let&#8217;s look at how to map an SS-bonded Cysteine (canonical name CYX) to the CHARMM naming scheme:</p>
+<p>Second, sections are cumulative - since CHARMM, for instance, has a patch-based naming scheme, one single canonical residue name can map to multiple forcefield-scheme names. Let’s look at how to map an SS-bonded Cysteine (canonical name CYX) to the CHARMM naming scheme:</p>
 <div class="highlight-xml"><div class="highlight"><pre><span></span><span class="nt">&lt;residue&gt;</span>
   <span class="nt">&lt;name&gt;</span>CYX<span class="nt">&lt;/name&gt;</span>
   <span class="nt">&lt;useresname&gt;</span>CYS<span class="nt">&lt;/useresname&gt;</span>
@@ -108,7 +104,7 @@ First, the <code class="docutils literal"><span class="pre">$group</span></code>
 <span class="nt">&lt;/residue&gt;</span>
 </pre></div>
 </div>
-<p>The CYX residue is first mapped to CHARMM&#8217;s CYS, and then to CHARMM&#8217;s DISU object.
+<p>The CYX residue is first mapped to CHARMM’s CYS, and then to CHARMM’s DISU object.
 All atom names that are found in DISU overwrite those found in CYS - in effect, the DISU patch is applied to CYS, yielding the desired CYX.
 This cumulative can be repeated as necessary.</p>
 </div>
@@ -123,7 +119,7 @@ The naming scheme used in PDB2PQR is the one recommended by the PDB itself, and 
 <tbody valign="top">
 <tr><td class="label"><a class="fn-backref" href="#id1">[1]</a></td><td><ol class="first last upperalpha simple" start="10">
 <li><ol class="first upperalpha" start="12">
-<li>Markley, et al., &#8220;Recommendations for the Presentation of NMR Structures of Proteins and Nucleic Acids,&#8221; Pure &amp; Appl. Chem., 70 (1998): 117-142.  DOI:<a class="reference external" href="http://dx.doi.org/10.1046/j.1432-1327.1998.2560001.x">10.1046/j.1432-1327.1998.2560001.x</a></li>
+<li>Markley, et al., “Recommendations for the Presentation of NMR Structures of Proteins and Nucleic Acids,” Pure &amp; Appl. Chem., 70 (1998): 117-142.  DOI:<a class="reference external" href="http://dx.doi.org/10.1046/j.1432-1327.1998.2560001.x">10.1046/j.1432-1327.1998.2560001.x</a></li>
 </ol>
 </li>
 </ol>
@@ -221,8 +217,8 @@ These changes are made in <code class="file docutils literal"><span class="pre">
       &copy;2017, Nathan Baker.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.5.6</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.7</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.8</a>
       
       |
       <a href="../_sources/formats/pdb2pqr-xml-names.rst.txt"

@@ -1,16 +1,13 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
     <title>mg-auto &#8212; APBS-PDB2PQR 1.6 documentation</title>
-    
     <link rel="stylesheet" href="../../../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../../',
@@ -24,7 +21,7 @@
     <script type="text/javascript" src="../../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../_static/doctools.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
     <link rel="next" title="cgcent" href="cgcent.html" />
@@ -32,11 +29,10 @@
    
   <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
   
-  
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
 
   </head>
-  <body role="document">
+  <body>
   
 
     <div class="document">
@@ -47,18 +43,18 @@
   <div class="section" id="mg-auto">
 <span id="mgauto"></span><h1>mg-auto<a class="headerlink" href="#mg-auto" title="Permalink to this headline">¶</a></h1>
 <p>Automatically configured finite difference Poisson-Boltzmann calculations.</p>
-<p>This multigrid calculation automatically sets up and performs a string of single-point PBE calculations to &#8220;focus&#8221; on a region of interest (binding site, etc.) in a system.
+<p>This multigrid calculation automatically sets up and performs a string of single-point PBE calculations to “focus” on a region of interest (binding site, etc.) in a system.
 It is basically an automated version of <a class="reference internal" href="mg-manual.html#mgmanual"><span class="std std-ref">mg-manual</span></a> designed for easier use.
 Most users should use this version of ELEC.</p>
 <p>Focusing is a method for solving the Poisson-Boltzmann equation in a finite difference setting.
 Some of the earliest references to this method are from Gilson and Honig <a class="footnote-reference" href="#gilson" id="id1">[1]</a>.
 The method starts by solving the equation on a coarse grid (i.e., few grid points) with large dimensions (i.e., grid lengths).
-The solution on this coarse grid is then used to set the Dirichlet boundary condition values for a smaller problem domain &#8211; and therefore a finer grid &#8211; surrounding the region of interest.
+The solution on this coarse grid is then used to set the Dirichlet boundary condition values for a smaller problem domain – and therefore a finer grid – surrounding the region of interest.
 The finer grid spacing in the smaller problem domain often provides greater accuracy in the solution.</p>
 <p>The following keywords are present in mg-auto ELEC blocks; all keywords are required unless otherwise noted.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">During focusing calculations, you may encounter the message &#8220;WARNING! Unusually large potential values detected on the focusing boundary!&#8221; for some highly charged systems based on location of the focusing boundary.
+<p class="last">During focusing calculations, you may encounter the message “WARNING! Unusually large potential values detected on the focusing boundary!” for some highly charged systems based on location of the focusing boundary.
 First, you should determine if you received any other warning or error messages as part of this calculation, particularly those referring to exceeded number of iterations or error tolerance (<a class="reference internal" href="etol.html#etol"><span class="std std-ref">etol</span></a>).
 Next, you should check if the calculation converged to a reasonable answer.
 In particular, you should check sensitivity to the grid spacing by making small changes to the grid lengths (via the <a class="reference internal" href="fglen.html#fglen"><span class="std std-ref">fglen</span></a> parameter) and see if the changes in energies are correspondingly small.
@@ -149,8 +145,8 @@ If so, then this warning can be safely ignored.</p>
       &copy;2017, Nathan Baker.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.5.6</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.7</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.8</a>
       
       |
       <a href="../../../_sources/apbs/input/elec/mg-auto.rst.txt"

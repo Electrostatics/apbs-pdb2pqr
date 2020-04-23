@@ -1,16 +1,13 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
     <title>Caveats and sources of error &#8212; APBS-PDB2PQR 1.6 documentation</title>
-    
     <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
@@ -24,7 +21,7 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="APBS utilities" href="utilities/index.html" />
@@ -32,11 +29,10 @@
    
   <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
   
-  
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
 
   </head>
-  <body role="document">
+  <body>
   
 
     <div class="document">
@@ -62,8 +58,8 @@ Therefore, the continuum model assumption of linear dielectric response can brea
 <h3>Local dielectric response<a class="headerlink" href="#local-dielectric-response" title="Permalink to this headline">¶</a></h3>
 <p>The Poisson-Boltzmann equation models the solvent as a dielectric continuum that also responds locally to all applied fields.
 n other words, under this model, the local polarization at a point x is only dependent on the field at point x.
-However, molecular solvents and solutes clearly don&#8217;t obey this assumption: the variety of covalent, steric, and other non-bonded intra- and inter-molecular interactions ensures that the polarization at point x is dependent on solute-field interactions in a non-vanishing neighborhood around x.
-One way to limit the impact of this flawed assumption, is to model solute response as &#8220;explicitly&#8221; as possible in your continuum electrostatics problems.
+However, molecular solvents and solutes clearly don’t obey this assumption: the variety of covalent, steric, and other non-bonded intra- and inter-molecular interactions ensures that the polarization at point x is dependent on solute-field interactions in a non-vanishing neighborhood around x.
+One way to limit the impact of this flawed assumption, is to model solute response as “explicitly” as possible in your continuum electrostatics problems.
 In other words, rather than relying upon the continuum model to reproduce conformational relaxation or response in your solute, model such response in detail through molecular simulations or other conformational sampling.</p>
 </div>
 <div class="section" id="ambiguity-of-dielectric-interfaces-and-coefficient-values">
@@ -77,13 +73,13 @@ In general, errors arising from this assumption can be minimized by using intern
 <div class="section" id="no-specific-ion-solvent-or-ion-solute-interactions">
 <h3>No specific ion-solvent or ion-solute interactions<a class="headerlink" href="#no-specific-ion-solvent-or-ion-solute-interactions" title="Permalink to this headline">¶</a></h3>
 <p>Most Poisson-Boltzmann models assume that ions do not interact directly with the solvent: they are charges embedded in the same dielectric material as the bulk solvent.
-This assumption implies that ions experience no &#8220;desolvation&#8221; penalty as they interact with the solute surface.
+This assumption implies that ions experience no “desolvation” penalty as they interact with the solute surface.
 Additionally, most Poisson-Boltzmann models assume that ions interaction with the solute only through electrostatic and hard-sphere steric potentials.
 However, this assumption neglects some of the subtlety of ion-protein interactions; in particular, dispersive interactions that can possibly lead to some degree of ion specificity.</p>
 </div>
 <div class="section" id="mean-field-ion-behavior">
 <h3>Mean field ion behavior<a class="headerlink" href="#mean-field-ion-behavior" title="Permalink to this headline">¶</a></h3>
-<p>Finally, the Poisson-Boltzmann model is a &#8220;mean field&#8221; description of ionic solutions.
+<p>Finally, the Poisson-Boltzmann model is a “mean field” description of ionic solutions.
 This means that ions only experience the average influence of other ions in the system; the model neglects fluctuations in the ionic atmosphere and correlations between the ions in solution.
 Such correlations and fluctuations can be very important at high ionic charge densities; e.g., for multivalent ions, high ion concentrations, or the high-density ionic regions near highly-charged biomolecules.</p>
 </div>
@@ -105,7 +101,7 @@ Saved as issue <a class="reference external" href="https://github.com/Electrosta
 <li>Incorrect titration state assignments</li>
 </ul>
 <p>Of these errors, incorrect titration states are the most common and, often, the most problematic.
-The software package PDB2PQR was created to minimize all of the above problems and we recommend its use to &#8220;pre-process&#8221; structures before electrostatics calculations.</p>
+The software package PDB2PQR was created to minimize all of the above problems and we recommend its use to “pre-process” structures before electrostatics calculations.</p>
 </div>
 <div class="section" id="discretization-error">
 <h2>Discretization error<a class="headerlink" href="#discretization-error" title="Permalink to this headline">¶</a></h2>
@@ -114,7 +110,7 @@ APBS discretizes the equation in spacing by evaluating the problem coefficients 
 However, this discretization is an approximation to the actual, continuously-specified problem coefficients.
 Coarser discretization of coefficients and the solution reduce the overall accuracy and introduce errors into the final potential and calculated energies.</p>
 <p>It is very important to evaluate the sensitivity of your calculated energies to the grid spacings and lengths.
-In general, it is a good idea to scan a range of grid spacings and lengths before starting a problem and choose the largest problem domain with the smallest grid spacing that gives consistent results (e.g., results that don&#8217;t change as you further reduce the grid spacing).</p>
+In general, it is a good idea to scan a range of grid spacings and lengths before starting a problem and choose the largest problem domain with the smallest grid spacing that gives consistent results (e.g., results that don’t change as you further reduce the grid spacing).</p>
 </div>
 <div class="section" id="solver-and-round-off-error">
 <h2>Solver and round-off error<a class="headerlink" href="#solver-and-round-off-error" title="Permalink to this headline">¶</a></h2>
@@ -248,8 +244,8 @@ This example demonstrates that, while the errors for each calculation remain sma
       &copy;2017, Nathan Baker.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.5.6</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.7</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.8</a>
       
       |
       <a href="../_sources/apbs/errors.rst.txt"
