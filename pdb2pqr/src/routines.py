@@ -45,6 +45,8 @@
 
 """
 
+from __future__ import division
+
 __date__ = "1 August 2008"
 __author__ = "Jens Erik Nielsen, Todd Dolinsky, Yong Huang"
 
@@ -106,6 +108,12 @@ class Routines:
                 message: The message to write (string)
                 indent : The indent level (int, default=0)
         """
+
+        # When I grow up I'll be a logger
+        # import logging
+        # logger = logging.getLogger(__name__)
+        # logger.info(message.strip())
+
         out = ""
         if self.verbose:
             for i in range(indent):
@@ -1502,10 +1510,11 @@ class Routines:
 
         import pka
         from pdb2pka import pka_routines
+        
         init_params = pdb2pka_params.copy()
         init_params.pop('pairene')
         init_params.pop('clean_output')
-
+        
         results = pka.pre_init(original_pdb_list=pdblist,
                                ff=ff,
                                verbose=verbose,
@@ -1542,17 +1551,7 @@ class Routines:
         self.write('Finished running PDB2PKA.\n')
 
 
-    def runPROPKA(self, ph, ff, rootname, outname, options):
-        """
-            Run PROPKA on the current protein, setting protonation states to
-            the correct values
-
-            Parameters
-               ph:  The desired pH of the system
-               ff:  The forcefield name to be used
-               outname: The name of the PQR outfile
-        """
-        self.write("Running PROPKA and applying at pH %.2f... \n" % ph)
+    def _runPROPKA30(self, rootname, outname, options):
 
         from propka30.Source.protein import Protein as pkaProtein
         from propka30.Source.pdb import readPDB as pkaReadPDB
@@ -1611,6 +1610,99 @@ class Routines:
                                              residue.resNumb, residue.chainID)).strip()
                         pkadic[key] = residue.pKa_pro
 
+        self.protein.pka_protein = myPkaProtein
+
+        return pkadic
+
+
+    def _runPROPKA31(self, pka_options):
+        """
+            Run PROPKA 3.1 on the current protein, setting protonation states to
+            the correct values. pH is set in pka_options
+
+            Parameters
+               pka_options: Options for propKa 3.1, including pH
+
+            Returns
+               pka_molecule: pKa's internal molecule object (including pKa's, etc)
+               not_found:    dict of residues found in pka_molecule but not in PDB2PQR (with pKa)
+        """
+
+        # See https://github.com/jensengroup/propka-3.1/blob/master/scripts/propka31.py
+        import propka.molecular_container
+        import tempfile
+
+        def delete_propka_input(fn):
+            import os
+            p, f = os.path.split(fn)
+            f = f.replace('.pdb', '.propka_input')
+            os.remove(f)
+
+        ph = pka_options.pH
+        self.write("Running propka 3.1 at pH %.2f... " % ph)
+
+        # Initialize some variables
+        pkadic = {}
+
+        # Reorder the atoms in each residue to start with N - TONI is this necessary?
+        for residue in self.protein.getResidues():
+            residue.reorder()
+
+        # TONI Make a string with all non-hydrogen atoms. Previously it was removing the "element"
+        # column and hydrogens. This does not seem to be necessary in propKa 3.1 .
+        HFreeProteinFile = tempfile.NamedTemporaryFile(mode="w+", suffix=".pdb", dir=os.getcwd(), delete=False)
+        for atom in self.protein.getAtoms():
+            if not atom.isHydrogen():
+                atomtxt = atom.getPDBString()
+                HFreeProteinFile.write(atomtxt + '\n')
+        #HFreeProteinFile.seek(0)
+        HFreeProteinFile.close();
+
+        # Run PropKa 3.1 -------------
+
+        # Creating protein object. Annoyingly, at this stage propka generates a
+        # *.propka_input file in PWD and does not delete it (irregardless of the original .pdb location)
+        pka_molecule = propka.molecular_container.Molecular_container(HFreeProteinFile.name, pka_options)
+        #HFreeProteinFile.open()
+        delete_propka_input(HFreeProteinFile.name)
+        HFreeProteinFile.close()
+
+        # calculating pKa values for ionizable residues -
+        pka_molecule.calculate_pka()
+
+        ##  pka_molecule.write_pka()
+
+        for grp in pka_molecule.conformations['AVR'].groups:
+            key = str.strip('%s %s %s' % (grp.residue_type, grp.atom.resNumb, grp.atom.chainID))
+            pkadic[key] = grp.pka_value
+
+        self.protein.pka_protein = pka_molecule
+
+        return pkadic
+
+
+
+    def runPROPKA(self, ph, ff, rootname, outname, options, version=30):
+        """
+            Run PROPKA on the current protein, setting protonation states to
+            the correct values
+
+            Parameters
+               ph:  The desired pH of the system
+               ff:  The forcefield name to be used
+               outname: The name of the PQR outfile
+               options: Options to propka
+               version: may be 30 or 31 (uses external propka 3.1)
+        """
+        self.write("Running PROPKA v%d and applying at pH %.2f... \n" % (version,ph))
+
+        if version == 30:
+            pkadic = self._runPROPKA30(rootname, outname, options)
+        elif version == 31:
+            pkadic = self._runPROPKA31(options)
+        else:
+            raise Exception("Wrong version passed to runPROPKA")
+
         if len(pkadic) == 0:
             return
 
@@ -1618,6 +1710,7 @@ class Routines:
         self.apply_pka_values(ff, ph, pkadic)
 
         self.write("Done.\n")
+
 
     def apply_pka_values(self, ff, ph, pkadic):
         self.write('Applying pKa values at a pH of %.2f:\n' % ph)
@@ -1757,6 +1850,28 @@ class Routines:
                 self.write(text)
             self.warnings.append("\n")
             self.write('\n')
+
+
+    def holdResidues(self, hlist):
+        """Set the stateboolean dictionary to residues in hlist."""
+
+        if not hlist:
+            return
+
+        hlist_copy = hlist.copy()
+        for residue in self.protein.getResidues():
+            reskey = (residue.resSeq, residue.chainID, residue.iCode)
+            if reskey in hlist:
+                hlist.remove(reskey)
+                if isinstance(residue, Amino):
+                    residue.stateboolean = {'FIXEDSTATE': False}
+                    self.write("Setting residue {:s} as fixed.\n".format(str(residue)))
+                else:
+                    self.write("Matched residue {:s} but not subclass of Amino.\n".format(str(residue)))
+
+        if len(hlist) > 0:
+            self.write("The following fixed residues were not matched (possible internal error): {:s}.\n"
+                       .format(str(hlist)))
 
 
 class Cells:

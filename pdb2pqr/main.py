@@ -10,7 +10,7 @@
     Parsing utilities provided by Nathan A. Baker (Nathan.Baker@pnl.gov)
     Pacific Northwest National Laboratory
 
-    Copyright (c) 2002-2011, Jens Erik Nielsen, University College Dublin;
+    Copyright (c) 2002-2020, Jens Erik Nielsen, University College Dublin;
     Nathan A. Baker, Battelle Memorial Institute, Developed at the Pacific
     Northwest National Laboratory, operated by Battelle Memorial Institute,
     Pacific Northwest Division for the U.S. Department Energy.;
@@ -67,7 +67,7 @@ from src.definitions import *
 from src.forcefield import *
 from src.routines import *
 from src.protein import *
-from src.server import *
+#from src.server import *
 from src.hydrogens import *
 from src.aconf import *
 from io import StringIO
@@ -184,10 +184,10 @@ def printPQRHeaderCIF(pdblist,
                       ffout,
                       cl_args,
                       include_old_header):
-    
+
     """
         Print the header for the PQR file in cif format.
-        
+
         Paramaters:
             atomlist: A list of atoms that were unable to have
                       charges assigned (list)
@@ -202,12 +202,12 @@ def printPQRHeaderCIF(pdblist,
         Returns
             header:   The header for the PQR file (string)
     """
-    
+
     if(ff is None):
         ff = "User force field";
     else:
         ff = ff.upper();
-        
+
     header = "#\n";
     header += "loop_\n"
     header += "_pdbx_database_remark.id\n"
@@ -255,10 +255,10 @@ def printPQRHeaderCIF(pdblist,
     header += ";\n";
     header += "Total charge on this protein: %.4f e\n" % charge;
     header += ";\n";
-    if(include_old_header):   
+    if(include_old_header):
         header += "4\n";
         header += ";\n";
-        header += "Including original cif header is not implemented yet.\n";    
+        header += "Including original cif header is not implemented yet.\n";
         header += ";\n";
     header += "#\n"
     header += "loop_\n";
@@ -296,6 +296,7 @@ def runPDB2PQR(pdblist, ff,
                userff = None,
                usernames = None,
                ffout = None,
+               holdList = None,
                commandLine=None,
                include_old_header=False,
                isCIF=False):
@@ -314,7 +315,8 @@ def runPDB2PQR(pdblist, ff,
                              When False, no detailed information will be printed (float)
             extensions:      List of extensions to run
             extensionOptions:optionParser like option object that is passed to each object.
-            propkaOptions:optionParser like option object for propka30.
+            ph_calc_method: pKa calculation method ("propka","propka31","pdb2pka")
+            ph_calc_options: optionParser like option object for propka30.
             clean:         only return original PDB file in aligned format.
             neutraln:      Make the N-terminus of this protein neutral
             neutralc:      Make the C-terminus of this protein neutral
@@ -331,6 +333,7 @@ def runPDB2PQR(pdblist, ff,
                            use the names from the given forcefield
             commandLine:   command line used (if any) to launch the program. Included in output header.
             include_old_header: Include most of the PDB header in output.
+            holdlist:      A list of residues not to be optimized, as [(resid, chain, icode)]
             pdb2pka_params: parameters for running pdb2pka.
             isCIF:         Whether the file is in pdb or cif(pdbx) format.
 
@@ -339,6 +342,7 @@ def runPDB2PQR(pdblist, ff,
             lines:   The PQR file atoms (list)
             missedligandresidues:  A list of ligand residue names whose charges could
                      not be assigned (ligand)
+            protein: The protein object
     """
 
     pkaname = ""
@@ -441,7 +445,9 @@ def runPDB2PQR(pdblist, ff,
             myRoutines.debumpProtein()
 
         if ph_calc_method == 'propka':
-            myRoutines.runPROPKA(ph, ff, outroot, pkaname, ph_calc_options)
+            myRoutines.runPROPKA(ph, ff, outroot, pkaname, ph_calc_options, version=30)
+        elif ph_calc_method == 'propka31':
+            myRoutines.runPROPKA(ph, ff, outroot, pkaname, ph_calc_options, version=31)
         elif ph_calc_method == 'pdb2pka':
             myRoutines.runPDB2PKA(ph, ff, pdblist, ligand, verbose, ph_calc_options)
 
@@ -454,6 +460,8 @@ def runPDB2PQR(pdblist, ff,
 
         if opt:
             myhydRoutines.setOptimizeableHydrogens()
+            # TONI fixing residues - myhydRoutines has a reference to myProtein, so i'm altering it in place
+            myRoutines.holdResidues(holdList)
             myhydRoutines.initializeFullOptimization()
             myhydRoutines.optimizeHydrogens()
         else:
@@ -541,7 +549,7 @@ def runPDB2PQR(pdblist, ff,
         header = printPQRHeader(pdblist, misslist, reslist, charge, ff,
                             myRoutines.getWarnings(), ph_calc_method, ph, ffout, commandLine,
                             include_old_header=include_old_header)
-    
+
     lines = myProtein.printAtoms(hitlist, chain)
 
     # Determine if any of the atoms in misslist were ligands
@@ -563,7 +571,9 @@ def runPDB2PQR(pdblist, ff,
     if verbose:
         print("Total time taken: %.2f seconds\n" % (time.time() - start))
 
+    #return header, lines, missedligandresidues, myProtein
     return header, lines, missedligandresidues
+
 
 def mainCommand(argv):
     """
@@ -657,11 +667,12 @@ def mainCommand(argv):
 
     pka_group = OptionGroup(parser,"pH options")
 
-    pka_group.add_option('--ph-calc-method', dest='ph_calc_method', metavar='PH_METHOD', choices=('propka', 'pdb2pka'),
+    pka_group.add_option('--ph-calc-method', dest='ph_calc_method', metavar='PH_METHOD', choices=('propka', 'propka31', 'pdb2pka'),
                       help='Method used to calculate ph values. If a pH calculation method is selected, for each'
                       ' titratable residue pH values will be calculated and the residue potentially modified'
                       ' after comparison with the pH value supplied by --with_ph\n'
                       'propka - Use PROPKA to calculate pH values. Actual PROPKA results will be output to <output-path>.propka.\n'
+                      'propka31 - Use PROPKA 3.1 to calculate pH values. Actual PROPKA results will be output to <output-path>.propka.\n'
                       'pdb2pka - Use PDB2PKA to calculate pH values. Requires the use of the PARSE force field.'
                       ' Warning: Larger residues can take a very long time to run using this method. EXPERIMENTAL!')
 
@@ -762,9 +773,11 @@ def mainCommand(argv):
         ph_calc_options = utilities.createPropkaOptions(options.ph,
                                                    verbose=options.propka_verbose,
                                                    reference=options.propka_reference)
+    elif options.ph_calc_method == 'propka31':
+        import propka.lib
+        ph_calc_options, _ = propka.lib.loadOptions('--quiet')
 
-
-    if options.ph_calc_method == 'pdb2pka':
+    elif options.ph_calc_method == 'pdb2pka':
         if options.ff.lower() != 'parse':
             parser.error('PDB2PKA requires the PARSE force field.')
         ph_calc_options = {'output_dir': options.pdb2pka_out,
@@ -805,13 +818,13 @@ Please cite your use of PDB2PQR as:
         pdblist, errlist = readPDB(pdbFile)
         isCIF = False;
     elif(path[-3:] == "cif"):
+        print("get into cif....!!!!");
         pdblist, errlist = cif.readCIF(pdbFile);
         isCIF = True;
     else:
         sys.stderr.write("Unrecognized file extension.\n");
         quit();
-        
-        
+
     # @TODO: delete this
     #print(pdblist);
     #quit();
@@ -823,8 +836,8 @@ Please cite your use of PDB2PQR as:
         if(isCIF):
             print("Warning: %s is a non-standard CIF file.\n" % path);
         else:
-            print "Warning: %s is a non-standard PDB file.\n" % path
-        print errlist
+            print("Warning: %s is a non-standard PDB file.\n" % path)
+        print(errlist)
 
     outpath = args[1]
     options.outname = outpath
@@ -842,6 +855,7 @@ Please cite your use of PDB2PQR as:
     # This would also do away with the redundent checks and such in
     # the Forcefield constructor.
     try:
+        #header, lines, missedligands, _ = runPDB2PQR(pdblist,
         header, lines, missedligands = runPDB2PQR(pdblist,
                                                   options.ff,
                                                   outname = options.outname,
@@ -901,8 +915,8 @@ Please cite your use of PDB2PQR as:
         size = psize.Psize()
         size.parseInput(outpath)
         size.runPsize(outpath)
-        async_ = 0 # No async files here!
-        input = inputgen.Input(outpath, size, method, async_, potdx=True)
+        #async = 0 # No async files here!
+        input = inputgen.Input(outpath, size, method, 0, potdx=True)
         input.printInputFiles()
         input.dumpPickle()
 

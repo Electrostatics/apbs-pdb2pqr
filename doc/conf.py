@@ -48,7 +48,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = 'APBS-PDB2PQR'
-copyright = '2017, Nathan Baker'
+copyright = '2020, Nathan Baker'
 author = 'Nathan Baker'
 
 # The version info for the project you're documenting, acts as replacement for
@@ -153,6 +153,3 @@ texinfo_documents = [
      author, 'APBS-PDB2PQR', 'One line description of project.',
      'Miscellaneous'),
 ]
-
-
-
