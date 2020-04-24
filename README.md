@@ -8,7 +8,7 @@
 
 * Please [register your use](http://eepurl.com/by4eQr) to ensure continued support for the APBS-PDB2PQR software.
 * Read our [online documentation](http://apbs-pdb2pqr.readthedocs.io/).
-* Get started with the [web server](http://http://server.poissonboltzmann.org/).
+* Get started with the [web server](http://server.poissonboltzmann.org/).
 * Download the software [following these instructions](http://apbs-pdb2pqr.readthedocs.io/en/latest/downloads.html).
 
 -----
