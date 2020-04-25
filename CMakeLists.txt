@@ -31,4 +31,17 @@ if(GIT_FOUND AND EXISTS "${PROJECT_SOURCE_DIR}/.git")
     endif()
 endif()
 
+string(TIMESTAMP COMPILE_TIME)
+
+###############################################################################
+####  NOTE: For Debugging
+###############################################################################
+message(STATUS "#############################################################")
+message(STATUS "** VERSION_DATA:            ${_VERSION_DATA}")
+message(STATUS "** CURRENT_TIME:            ${COMPILE_TIME}")
+message(STATUS "** MAJOR_VERSION Include:   ${MAJOR_VERSION}")
+message(STATUS "** MINOR_VERSION Include:   ${MINOR_VERSION}")
+message(STATUS "** MICRO_VERSION Include:   ${MICRO_VERSION}")
+message(STATUS "#############################################################")
+
 add_subdirectory(apbs)
