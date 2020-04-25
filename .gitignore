@@ -35,8 +35,6 @@ pdb2pqr/changes.tgz
 pdb2pqr/dist/**
 pdb2pqr/html/server.html
 pdb2pqr/msvs
-pdb2pqr/pdb2pqr.py
-pdb2pqr/pdb2pqr.cgi
 pdb2pqr/querystatus.cgi
 pdb2pqr/site_scons/defaults.py
 pdb2pqr/src/aconf.py
