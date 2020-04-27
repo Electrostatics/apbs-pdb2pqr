@@ -1,5 +1,9 @@
 language: cpp
 
+python:
+    - "3.6"
+    - "3.7"
+
 os:
     - osx
     - linux
@@ -25,7 +29,6 @@ dist: xenial
 
 env:
     - FETK=ON   TEST_SUITE=born
-    - FETK=OFF  TEST_SUITE=actin-dimer-auto
 
 #    - FETK=OFF  TEST_SUITE=actin-dimer-auto
 #    - FETK=OFF  TEST_SUITE=actin-dimer-parallel
