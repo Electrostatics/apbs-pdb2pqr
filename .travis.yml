@@ -1,4 +1,4 @@
-language: cpp
+language: python
 
 python:
     - "3.7"
@@ -15,6 +15,7 @@ addons:
     apt:
         packages:
             - swig
+            - g++-6
 #    homebrew:
 #        packages:
 #            - swig
