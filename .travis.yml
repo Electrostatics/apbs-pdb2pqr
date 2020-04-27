@@ -17,20 +17,20 @@ dist: xenial
 env:
     - FETK=ON   TEST_SUITE=born
 
-    - FETK=OFF  TEST_SUITE=actin-dimer-auto
-    - FETK=OFF  TEST_SUITE=actin-dimer-parallel
-    - FETK=OFF  TEST_SUITE=alkanes
-    - FETK=OFF  TEST_SUITE=born
-    - FETK=OFF  TEST_SUITE=FKBP
-    - FETK=OFF  TEST_SUITE=geoflow
-    - FETK=OFF  TEST_SUITE=hca-bind
-    - FETK=OFF  TEST_SUITE=ion-pmf
-    - FETK=OFF  TEST_SUITE=ion-protein
-    - FETK=OFF  TEST_SUITE=ionize
-    - FETK=OFF  TEST_SUITE=pka-lig
-    - FETK=OFF  TEST_SUITE=point-pmf
-    - FETK=OFF  TEST_SUITE=solv
-    - FETK=OFF  TEST_SUITE=protein-rna
+#    - FETK=OFF  TEST_SUITE=actin-dimer-auto
+#    - FETK=OFF  TEST_SUITE=actin-dimer-parallel
+#    - FETK=OFF  TEST_SUITE=alkanes
+#    - FETK=OFF  TEST_SUITE=born
+#    - FETK=OFF  TEST_SUITE=FKBP
+#    - FETK=OFF  TEST_SUITE=geoflow
+#    - FETK=OFF  TEST_SUITE=hca-bind
+#    - FETK=OFF  TEST_SUITE=ion-pmf
+#    - FETK=OFF  TEST_SUITE=ion-protein
+#    - FETK=OFF  TEST_SUITE=ionize
+#    - FETK=OFF  TEST_SUITE=pka-lig
+#    - FETK=OFF  TEST_SUITE=point-pmf
+#    - FETK=OFF  TEST_SUITE=solv
+#    - FETK=OFF  TEST_SUITE=protein-rna
 
 branches:
     only:
@@ -39,7 +39,7 @@ branches:
 before_script:
     - mkdir travis
     - cd travis
-    - cmake -DENABLE_PYTHON -DENABLE_GEOFLOW=ON -DBUILD_DOC=OFF -DENABLE_FETK=$FETK ..
+    - cmake -DENABLE_PYTHON=ON -DENABLE_GEOFLOW=ON -DBUILD_DOC=OFF -DENABLE_FETK=$FETK ..
 
 script:
     - make VERBOSE=1
@@ -49,4 +49,3 @@ script:
 
 notifications:
   slack: electrostatics:U4cSeRAFGXl9vUqdg4WOubnc
-  
