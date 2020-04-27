@@ -2,6 +2,8 @@ cmake_minimum_required (VERSION 3.13)
 
 project(abps_pdb2pqr)
 
+option(ENABLE_TESTS "Enable tests" ON)
+
 ###############################################################################
 #  Get the Current Version Number so that it can be embedded in files later
 ###############################################################################
@@ -44,4 +46,16 @@ message(STATUS "** MINOR_VERSION Include:   ${MINOR_VERSION}")
 message(STATUS "** MICRO_VERSION Include:   ${MICRO_VERSION}")
 message(STATUS "#############################################################")
 
+
+###############################################################################
+####  NOTE: For Testing
+###############################################################################
+if (${ENABLE_TESTS})
+    message(STATUS "** Tests will be built")
+    enable_testing()
+endif()
+
+#  Build pdb2pqr first so that Python is setup correctly in case you enable
+#  Python in apbs
+add_subdirectory(pdb2pqr)
 add_subdirectory(apbs)
