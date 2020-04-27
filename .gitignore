@@ -37,3 +37,4 @@ pdb2pqr/site_scons/defaults.py
 pdb2pqr/visualize.cgi
 test-output*
 settings.json
+apbs/externals/fetk
