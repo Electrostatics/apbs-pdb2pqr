@@ -1,5 +1,3 @@
-cmake_minimum_required (VERSION 3.13)
-
 ################################################################################
 # TODO:  Add licensing and authorship information
 # TODO:  Test with FEtk build
@@ -7,7 +5,7 @@ cmake_minimum_required (VERSION 3.13)
 #        (configure.ac:1306)
 ################################################################################
 
-set(CMAKE_VERBOSE_MAKEFILE true)
+#set(CMAKE_VERBOSE_MAKEFILE true)
 cmake_policy(SET CMP0054 OLD)
 
 ################################################################################
