@@ -1,28 +1,28 @@
 language: cpp
 
 python:
-    - "3.6"
     - "3.7"
+#    - "3.6"
 
 os:
-    - osx
     - linux
+#    - osx
 
-osx_image:
-    - xcode10.2
+#osx_image:
+#    - xcode10.2
 
 addons:
     apt:
         packages:
             - swig
-    homebrew:
-        packages:
-            - swig
-        update: true
+#    homebrew:
+#        packages:
+#            - swig
+#        update: true
 
 compiler:
     - gcc
-    - clang
+#    - clang
 
 sudo: required
 dist: xenial
@@ -52,6 +52,7 @@ branches:
 before_script:
     - mkdir travis
     - cd travis
+    - python3 --version
     - cmake -DENABLE_PYTHON=ON -DENABLE_GEOFLOW=ON -DBUILD_DOC=OFF -DENABLE_FETK=$FETK ..
 
 script:
