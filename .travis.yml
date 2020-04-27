@@ -4,12 +4,15 @@ os:
     - osx
     - linux
 
+osx_image:
+    - xcode10.2
+
 compiler:
     - gcc
     - clang
 
 sudo: required
-dist: trusty
+dist: xenial
 
 env:
     - FETK=ON   TEST_SUITE=born
@@ -37,11 +40,12 @@ before_script:
     - cd apbs
     - mkdir travis
     - cd travis
-    - cmake -DENABLE_GEOFLOW=ON -DBUILD_DOC=OFF -DENABLE_FETK=$FETK ..
+    - cmake -DENABLE_PYTHON -DENABLE_GEOFLOW=ON -DBUILD_DOC=OFF -DENABLE_FETK=$FETK ..
 
 script:
     - make VERBOSE=1
-    - cd ../tests
+    - ctest .
+    - cd ../apbs/tests
     - bash run_travis_test.sh $TRAVIS_BUILD_DIR/apbs/travis/bin $TEST_SUITE
 
 notifications:
