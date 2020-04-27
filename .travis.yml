@@ -7,6 +7,15 @@ os:
 osx_image:
     - xcode10.2
 
+addons:
+    apt:
+        packages:
+            - swig
+    homebrew:
+        packages:
+            - swig
+        update: true
+
 compiler:
     - gcc
     - clang
