@@ -31,9 +31,8 @@ jobs:
           g++ --version
 
           #  To make SWIG available to our environment
-          conda init bash
-          . ${HOME}/.bashrc
-          conda activate /github/home/myenv
+          git clone https://github.com/swig/swig.git
+          cd swig && ./autogen.sh && ./configure && make && make install
           swig -version
 
           pip3 install -U pip
