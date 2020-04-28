@@ -29,8 +29,10 @@ jobs:
           python -c "import sys; print(sys.version)"
           cmake --version
           g++ --version
-          swig -version
 
+          #  To make SWIG available to our environment
+          conda activate /github/home/myenv
+          swig -version
 
           pip3 install -U pip
           pip3 install -U pytest 
