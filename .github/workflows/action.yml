@@ -19,12 +19,18 @@ jobs:
         uses: actions/setup-python@v1
         with:
           python-version: ${{ matrix.python-version }}
+      - name: Install SWIG using conda
+        uses: matthewrmshin/conda-action@v1
+        with:
+          args: conda install -c anaconda swig
       - name: Build and Test
         run: |
           echo "VERSIONS:"
           python -c "import sys; print(sys.version)"
           cmake --version
           g++ --version
+          swig -version
+
 
           pip3 install -U pip
           pip3 install -U pytest 
