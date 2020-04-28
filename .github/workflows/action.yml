@@ -25,6 +25,11 @@ jobs:
           python -c "import sys; print(sys.version)"
           cmake --version
           g++ --version
+
+          pip3 install -U pip
+          pip3 install -U pytest 
+          pip3 install -U virtualenv
+
           mkdir build
           cd build
           cmake -DENABLE_PYTHON=ON -DENABLE_GEOFLOW=ON -DBUILD_DOC=OFF -DENABLE_FETK=$FETK ..
