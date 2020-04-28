@@ -1,8 +1,8 @@
 language: python
 
 python:
-    - "3.7"
-#    - "3.6"
+    - "3.6"
+#    - "3.7"
 
 os:
     - linux
@@ -53,7 +53,6 @@ branches:
 before_script:
     - mkdir travis
     - cd travis
-    - python3 --version
     - cmake -DENABLE_PYTHON=ON -DENABLE_GEOFLOW=ON -DBUILD_DOC=OFF -DENABLE_FETK=$FETK ..
 
 script:
