@@ -50,6 +50,11 @@ branches:
     only:
         - master
 
+before_install:
+    - python3 --version
+    - pip3 install -U pip
+    - pip3 install -U pytest
+
 before_script:
     - mkdir travis
     - cd travis
