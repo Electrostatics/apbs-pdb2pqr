@@ -32,6 +32,7 @@ jobs:
 
           #  To make SWIG available to our environment
           conda init bash
+          . ${HOME}/.bashrc
           conda activate /github/home/myenv
           swig -version
 
