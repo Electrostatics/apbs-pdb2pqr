@@ -22,7 +22,7 @@ jobs:
       - name: Prereqs
         uses: mstksg/get-package@v1
         with:
-          apt-get: bison, flex
+          apt-get: bison flex  
       - name: Final Build 
         run: |
           echo "VERSIONS:"
