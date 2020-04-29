@@ -19,11 +19,10 @@ jobs:
         uses: actions/setup-python@v1
         with:
           python-version: ${{ matrix.python-version }}
-      - name: Install SWIG using conda
-        uses: matthewrmshin/conda-action@v1
-        with:
-          args: conda install -c anaconda swig
       - name: Build and Test
+        uses: mstksg/get-package@v1
+          brew: bison flex
+          apt-get: bison flex
         run: |
           echo "VERSIONS:"
           python -c "import sys; print(sys.version)"
