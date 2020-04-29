@@ -22,7 +22,7 @@ jobs:
       - name: Prereqs
         uses: mstksg/get-package@v1
         with:
-          apt-get: bison flex  
+          apt-get: bison flex swig
       - name: Final Build 
         run: |
           echo "VERSIONS:"
@@ -31,8 +31,8 @@ jobs:
           g++ --version
 
           #  To make SWIG available to our environment
-          git clone https://github.com/swig/swig.git
-          cd swig && ./autogen.sh && ./configure && make && make install
+          #git clone https://github.com/swig/swig.git
+          #cd swig && ./autogen.sh && ./configure && make && make install
           swig -version
 
           pip3 install -U pip
