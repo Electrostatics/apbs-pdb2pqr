@@ -1,8 +1,8 @@
-language: cpp
+language: python
 
 python:
-    - "3.7"
-#    - "3.6"
+    - "3.6"
+#    - "3.7"
 
 os:
     - linux
@@ -15,6 +15,7 @@ addons:
     apt:
         packages:
             - swig
+            - g++-6
 #    homebrew:
 #        packages:
 #            - swig
@@ -49,10 +50,14 @@ branches:
     only:
         - master
 
+before_install:
+    - python3 --version
+    - pip3 install -U pip
+    - pip3 install -U pytest
+
 before_script:
     - mkdir travis
     - cd travis
-    - python3 --version
     - cmake -DENABLE_PYTHON=ON -DENABLE_GEOFLOW=ON -DBUILD_DOC=OFF -DENABLE_FETK=$FETK ..
 
 script:

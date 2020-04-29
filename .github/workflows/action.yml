@@ -1,0 +1,50 @@
+name: Build
+
+on:
+  push:
+    branches: [ master ]
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ ubuntu-latest ]
+        #os: [ ubuntu-latest, macos-latest, windows-latest ]
+        #python-version: [ 3.6, 3.7 ]
+        python-version: [ 3.6 ]
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python
+        uses: actions/setup-python@v1
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install SWIG using conda
+        uses: matthewrmshin/conda-action@v1
+        with:
+          args: conda install -c anaconda swig
+      - name: Build and Test
+        run: |
+          echo "VERSIONS:"
+          python -c "import sys; print(sys.version)"
+          cmake --version
+          g++ --version
+
+          #  To make SWIG available to our environment
+          git clone https://github.com/swig/swig.git
+          cd swig && ./autogen.sh && ./configure && make && make install
+          swig -version
+
+          pip3 install -U pip
+          pip3 install -U pytest 
+          pip3 install -U virtualenv
+
+          mkdir build
+          cd build
+          cmake -DENABLE_PYTHON=ON -DENABLE_GEOFLOW=ON -DBUILD_DOC=OFF -DENABLE_FETK=$FETK ..
+          make VERBOSE=1
+          ctest .
+          cd ../apbs/tests
+          bash run_travis_test.sh $TRAVIS_BUILD_DIR/apbs/travis/bin $TEST_SUITE
+        env:
+          CI: true
