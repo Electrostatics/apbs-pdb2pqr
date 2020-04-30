@@ -32,7 +32,7 @@ jobs:
 #protein-rn
 #]
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v1
       - name: Set up Python
         uses: actions/setup-python@v1
         with:
@@ -40,7 +40,7 @@ jobs:
       - name: Prereqs
         uses: mstksg/get-package@v1
         with:
-          apt-get: bison flex swig latex
+          apt-get: bison flex swig texlive-full
       - name: Final Build 
         run: |
           echo "VERSIONS:"
