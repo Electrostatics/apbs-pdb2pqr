@@ -40,7 +40,7 @@ jobs:
       - name: Prereqs
         uses: mstksg/get-package@v1
         with:
-          apt-get: bison flex swig
+          apt-get: bison flex swig latex
       - name: Final Build 
         run: |
           echo "VERSIONS:"
@@ -56,7 +56,10 @@ jobs:
           pip3 install -U pip
           pip3 install -U pytest 
           pip3 install -U virtualenv
+          pip3 install -U numpy
 
+          #  Just build APBS for now
+          cd apbs
           mkdir build
           cd build
           #  TODO Figure out how to make matrix of FETK and TEST_SUITE
