@@ -67,6 +67,13 @@ jobs:
           echo "PWD FOR TOP DIR"
           pwd
 
+          echo "Get External SubModules"
+          mkdir build
+          cd build
+          cmake ..
+          make VERBOSE=1
+          cd ..
+
           cd apbs
           echo "PWD FOR APBS SRC"
           pwd
