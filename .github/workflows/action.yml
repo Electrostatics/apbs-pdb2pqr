@@ -40,11 +40,14 @@ jobs:
       - name: Prereqs
         uses: mstksg/get-package@v1
         with:
-          apt-get: bison flex swig
+          apt-get: bison flex swig libreadline-dev
       - name: Final Build 
         run: |
           echo "WHERE AM I"
           pwd 
+
+          # Make the install directory
+          mkdir -p $HOME/apbs
 
           echo "VERSIONS:"
           echo "PYTHON VERSION"
@@ -86,19 +89,19 @@ jobs:
 
           echo "RUN CMAKE"
           pwd
-          echo "cmake -DENABLE_PYTHON=ON -DENABLE_GEOFLOW=ON -DBUILD_DOC=OFF -DBUILD_SHARED_LIBS=ON -DENABLE_FETK=$FETK .."
-          cmake -DENABLE_PYTHON=ON -DENABLE_GEOFLOW=ON -DBUILD_DOC=OFF -DBUILD_SHARED_LIBS=ON -DENABLE_FETK=$FETK ..
+          echo "cmake -DCMAKE_INSTALL_PREFIX=$HOME/apbs -DENABLE_PYTHON=ON -DENABLE_GEOFLOW=ON -DBUILD_DOC=OFF -DBUILD_SHARED_LIBS=ON -DENABLE_FETK=$FETK .."
+          cmake -DCMAKE_INSTALL_PREFIX=$HOME/apbs -DENABLE_PYTHON=ON -DENABLE_GEOFLOW=ON -DBUILD_DOC=OFF -DBUILD_SHARED_LIBS=ON -DENABLE_FETK=$FETK ..
 
           echo "NOW RUN MAKE"
           pwd
-          make VERBOSE=1 install
+          #make VERBOSE=1 install
+          make install
           
           echo "LOOK for APBS binary"
-          ls $HOME
           find $HOME -type f -name apbs
           echo ""
-          ctest .
-          cd ../apbs/tests
+          #ctest .
+          cd ../tests
           bash run_travis_test.sh $HOME/apbs/bin $TEST_SUITE
         env:
           FETK: ON

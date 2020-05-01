@@ -57,5 +57,5 @@ endif()
 
 #  Build pdb2pqr first so that Python is setup correctly in case you enable
 #  Python in apbs
-add_subdirectory(pdb2pqr)
-add_subdirectory(apbs)
+#add_subdirectory(pdb2pqr)
+#add_subdirectory(apbs)
