@@ -32,7 +32,7 @@ jobs:
 #protein-rn
 #]
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v1
       - name: Set up Python
         uses: actions/setup-python@v1
         with:
@@ -43,26 +43,56 @@ jobs:
           apt-get: bison flex swig
       - name: Final Build 
         run: |
-          echo "VERSIONS:"
-          python -c "import sys; print(sys.version)"
-          cmake --version
-          g++ --version
+          echo "WHERE AM I"
+          pwd 
 
-          #  To make SWIG available to our environment
-          #git clone https://github.com/swig/swig.git
-          #cd swig && ./autogen.sh && ./configure && make && make install
+          echo "VERSIONS:"
+          echo "PYTHON VERSION"
+          python -c "import sys; print(sys.version)"
+          echo "CMAKE VERSION"
+          cmake --version
+          echo "Gcc VERSION"
+          gcc --version
+          echo "G++ VERSION"
+          g++ --version
+          echo "SWIG VERSION"
           swig -version
 
           pip3 install -U pip
           pip3 install -U pytest 
           pip3 install -U virtualenv
+          pip3 install -U numpy
+
+          #  Just build APBS for now
+          echo "PWD FOR TOP DIR"
+          pwd
+
+          echo "Get External SubModules"
+          mkdir build
+          cd build
+          cmake ..
+          make VERBOSE=1
+          cd ..
+
+          cd apbs
+          echo "PWD FOR APBS SRC"
+          pwd
 
           mkdir build
           cd build
-          #  TODO Figure out how to make matrix of FETK and TEST_SUITE
+
+          echo "BUILD DIR"
+          pwd
+
+          echo "RUN CMAKE"
+          pwd
+          echo "cmake -DENABLE_PYTHON=ON -DENABLE_GEOFLOW=ON -DBUILD_DOC=OFF -DBUILD_SHARED_LIBS=ON -DENABLE_FETK=$FETK .."
           cmake -DENABLE_PYTHON=ON -DENABLE_GEOFLOW=ON -DBUILD_DOC=OFF -DBUILD_SHARED_LIBS=ON -DENABLE_FETK=$FETK ..
+
+          echo "NOW RUN MAKE"
+          pwd
           make VERBOSE=1 install
-          #
+          
           echo "LOOK for APBS binary"
           ls $HOME
           find $HOME -type f -name apbs
