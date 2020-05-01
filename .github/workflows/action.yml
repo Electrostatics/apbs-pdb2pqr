@@ -94,14 +94,14 @@ jobs:
 
           echo "NOW RUN MAKE"
           pwd
-          make VERBOSE=1 install
+          #make VERBOSE=1 install
+          make install
           
           echo "LOOK for APBS binary"
-          ls $HOME
           find $HOME -type f -name apbs
           echo ""
-          ctest .
-          cd ../apbs/tests
+          #ctest .
+          cd ../tests
           bash run_travis_test.sh $HOME/apbs/bin $TEST_SUITE
         env:
           FETK: ON
