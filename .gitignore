@@ -9,7 +9,6 @@
 *.exp
 *.lib
 *.log
-*.mol2
 *.o
 *.obj
 *.os
