@@ -6,16 +6,13 @@ yielding a new PDB-style file as output.
 For more information, see http://www.poissonboltzmann.org/
 """
 __version__ = "3.0"
-
-
+from sys import version_info
+assert version_info >= (3, 5)
 import logging
 from pathlib import Path
 from . import run
 from . import pdb, cif, utilities, structures
-from .errors import PDB2PQRError
 from .propka import lib as propka_lib
-from . import extensions
-from .pdb2pka.ligandclean import ligff
 from . import inputgen, psize
 
 
@@ -32,6 +29,7 @@ CITE_TEXTS = [
 
 _LOGGER = logging.getLogger(__name__)
 logging.captureWarnings(True)
+
 
 
 def main(args):
@@ -53,18 +51,28 @@ def main(args):
 
     if not args.clean:
         if args.usernames is not None:
-            # TODO - it makes me sad to open a file without a close() statement
-            _ = open(args.usernames, 'rt', encoding="utf-8")
+            usernames = Path(args.usernames)
+            if not usernames.is_file():
+                error = "User-provided names file does not exist: %s" % usernames
+                raise FileNotFoundError(error)
         if args.userff is not None:
-            # TODO - it makes me sad to open a file without a close() statement
-            _ = open(args.userff, "rt", encoding="utf-8")
+            userff = Path(args.userff)
+            if not userff.is_file():
+                error = "User-provided forcefield file does not exist: %s" % userff
+                raise FileNotFoundError(error)
             if args.usernames is None:
                 raise RuntimeError('--usernames must be specified if using --userff')
-        elif utilities.getFFfile(args.ff) == "":
+        elif utilities.test_dat_file(args.ff) == "":
             raise RuntimeError("Unable to load parameter file for forcefield %s" % args.ff)
         if (args.ph < 0) or (args.ph > 14):
             raise RuntimeError(("Specified pH (%s) is outside the range [1, 14] "
                                 "of this program") % args.ph)
+
+    if args.ligand is not None:
+        ligand = Path(args.ligand)
+        if not ligand.is_file():
+            error = "Unable to find ligand file: %s" % ligand
+            raise FileNotFoundError(error)
 
     # TODO - it appears none of the following code is actually used
     # if args.pka_method == 'propka':
@@ -80,13 +88,6 @@ def main(args):
     # else:
     #     ph_calc_options = None
 
-    if args.ligand is not None:
-        try:
-            # TODO - it makes me sad to open a file without a close() statement
-            _ = open(args.ligand, 'rt', encoding="utf-8")
-        except IOError:
-            raise RuntimeError('Unable to find ligand file %s!' % args.ligand)
-
     if args.neutraln and (args.ff is None or args.ff.lower() != 'parse'):
         raise RuntimeError('--neutraln option only works with PARSE forcefield!')
 
@@ -95,12 +96,12 @@ def main(args):
 
 
     path = Path(args.input_pdb)
-    pdb_file = utilities.getPDBFile(args.input_pdb)
+    pdb_file = utilities.get_pdb_file(args.input_pdb)
 
-    args.isCIF = False
+    args.is_cif = False
     if path.suffix.lower() == "cif":
         pdblist, errlist = cif.read_cif(pdb_file)
-        args.isCIF = True
+        args.is_cif = True
     else:
         pdblist, errlist = pdb.read_pdb(pdb_file)
 
@@ -108,33 +109,21 @@ def main(args):
         raise RuntimeError("Unable to find file %s!" % path)
 
     if len(errlist) != 0:
-        if args.isCIF:
-            _LOGGER.warn("Warning: %s is a non-standard CIF file.\n", path)
+        if args.is_cif:
+            _LOGGER.warning("Warning: %s is a non-standard CIF file.\n", path)
         else:
-            _LOGGER.warn("Warning: %s is a non-standard PDB file.\n", path)
+            _LOGGER.warning("Warning: %s is a non-standard PDB file.\n", path)
         _LOGGER.error(errlist)
 
     args.outname = args.output_pqr
 
-    # In case no extensions were specified or no extensions exist.
-    # TODO - there are no command line options for extensions so I'm not sure what this does
-    if not hasattr(args, 'active_extensions'):
-        args.active_extensions = []
-    elif args.active_extensions is None:
-        args.active_extensions = []
-    _ = args
-
-    try:
-        results_dict = run.runPDB2PQR(pdblist, args)
-        _ = results_dict["header"]
-        lines = results_dict["lines"]
-        _ = results_dict["missed_ligands"]
-    except PDB2PQRError as error:
-        _LOGGER.error(error)
-        raise PDB2PQRError(error)
+    results_dict = run.run_pdb2pqr(pdblist, args)
+    _ = results_dict["header"]
+    lines = results_dict["lines"]
+    _ = results_dict["missed_ligands"]
 
     # Print the PQR file
-    # TODO - move this to another function... this function is already way too long.
+    # TODO - move this to another module.
     with open(args.output_pqr, "wt") as outfile:
         # Adding whitespaces if --whitespace is in the options
         for line in lines:
@@ -147,14 +136,14 @@ def main(args):
                     newline = line[0:6] + ' ' + line[6:16] + ' ' + \
                         line[16:38] + ' ' + line[38:46] + ' ' + line[46:]
                     outfile.write(newline)
-                elif line[0:3] == "TER" and args.isCIF:
+                elif line[0:3] == "TER" and args.is_cif:
                     pass
             else:
-                if line[0:3] == "TER" and args.isCIF:
+                if line[0:3] == "TER" and args.is_cif:
                     pass
                 else:
                     outfile.write(line)
-        if args.isCIF:
+        if args.is_cif:
             outfile.write("#\n")
 
     if args.apbs_input:

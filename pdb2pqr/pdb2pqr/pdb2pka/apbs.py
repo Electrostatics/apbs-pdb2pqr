@@ -131,7 +131,7 @@ class runAPBS:
             # Load the molecules using Valist_load routine
 
             self.alist = new_valist(NOSH_MAXMOL)
-            self.atoms = protein.get_atoms()
+            self.atoms = protein.atoms
             self.protsize = len(self.atoms)
 
             # SETUP CALCULATIONS
@@ -303,7 +303,7 @@ class runAPBS:
 
         delete_valist(self.alist)
         self.alist = new_valist(NOSH_MAXMOL)
-        self.atoms = protein.get_atoms()
+        self.atoms = protein.atoms
         self.protsize = len(self.atoms)
         proteincopy = copy.copy(protein)
 
@@ -333,7 +333,7 @@ class runAPBS:
             Valist_load(self.myAlist, self.protsize, xlist, ylist, zlist, chglist, radlist)
         except:
             frameinfo = getframeinfo(currentframe())
-            _LOGGER.warn("%s[%d]: Valist_load Warning." % (frameinfo.filename, frameinfo.lineno))
+            _LOGGER.warning("%s[%d]: Valist_load Warning." % (frameinfo.filename, frameinfo.lineno))
         potentials = getPotentials(self.nosh,self.pbeparm,self.thispmg,self.myAlist)
 
         protein = copy.copy(proteincopy)

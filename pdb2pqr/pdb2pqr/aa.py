@@ -5,9 +5,7 @@ This module contains the base amino acid structures for pdb2pqr.
 Author:  Todd Dolinsky
 """
 import logging
-# TODO - remove import * statement
-# from .structures import Residue
-from .structures import *
+from .structures import Residue, Atom
 
 
 _LOGGER = logging.getLogger(__name__)
@@ -67,12 +65,12 @@ class Amino(Residue):
         # TODO - OK to add a default type=ATOM argument like superclass?
         oldatom = self.atoms[0]
         newatom = Atom(oldatom, "ATOM", self)
-        newatom.set("x", newcoords[0])
-        newatom.set("y", newcoords[1])
-        newatom.set("z", newcoords[2])
-        newatom.set("name", atomname)
-        newatom.set("occupancy", 1.00)
-        newatom.set("temp_factor", 0.00)
+        newatom.x = newcoords[0]
+        newatom.y = newcoords[1]
+        newatom.z = newcoords[2]
+        newatom.name = atomname
+        newatom.occupancy = 1.00
+        newatom.temp_factor = 0.00
         newatom.added = 1
         self.add_atom(newatom)
 
@@ -81,7 +79,7 @@ class Amino(Residue):
         object
         """
         self.atoms.append(atom)
-        atomname = atom.get("name")
+        atomname = atom.name
         self.map[atomname] = atom
         try:
             atom.reference = self.reference.map[atomname]
@@ -124,7 +122,7 @@ class ALA(Amino):
         Amino.__init__(self, atoms, ref)
         self.reference = ref
 
-    def letterCode(self):
+    def letter_code(self):
         return 'A'
 
 
@@ -142,7 +140,7 @@ class ARG(Amino):
         Amino.__init__(self, atoms, ref)
         self.reference = ref
 
-    def letterCode(self):
+    def letter_code(self):
         return 'R'
 
     def set_state(self):
@@ -162,7 +160,7 @@ class ASN(Amino):
         Amino.__init__(self, atoms, ref)
         self.reference = ref
 
-    def letterCode(self):
+    def letter_code(self):
         return 'N'
 
 
@@ -173,7 +171,7 @@ class ASP(Amino):
         Amino.__init__(self, atoms, ref)
         self.reference = ref
 
-    def letterCode(self):
+    def letter_code(self):
         return 'D'
 
     def set_state(self):
@@ -192,7 +190,7 @@ class CYS(Amino):
         self.ss_bonded = 0
         self.ss_bonded_partner = None
 
-    def letterCode(self):
+    def letter_code(self):
         return 'C'
 
     def set_state(self):
@@ -218,7 +216,7 @@ class GLN(Amino):
         Amino.__init__(self, atoms, ref)
         self.reference = ref
 
-    def letterCode(self):
+    def letter_code(self):
         return 'Q'
 
 
@@ -229,7 +227,7 @@ class GLU(Amino):
         Amino.__init__(self, atoms, ref)
         self.reference = ref
 
-    def letterCode(self):
+    def letter_code(self):
         return 'E'
 
     def set_state(self):
@@ -246,7 +244,7 @@ class GLY(Amino):
         Amino.__init__(self, atoms, ref)
         self.reference = ref
 
-    def letterCode(self):
+    def letter_code(self):
         return 'G'
 
 
@@ -257,7 +255,7 @@ class HIS(Amino):
         Amino.__init__(self, atoms, ref)
         self.reference = ref
 
-    def letterCode(self):
+    def letter_code(self):
         return 'H'
 
     def set_state(self):
@@ -269,16 +267,16 @@ class HIS(Amino):
         if "HIP" not in self.patches and self.name not in ["HIP", "HSP"]:
             if self.get_atom("ND1").hdonor and not self.get_atom("ND1").hacceptor:
                 if self.has_atom("HE2"):
-                    self.removeAtom("HE2")
+                    self.remove_atom("HE2")
             elif self.get_atom("NE2").hdonor and not self.get_atom("NE2").hacceptor:
                 if self.has_atom("HD1"):
-                    self.removeAtom("HD1")
+                    self.remove_atom("HD1")
             elif self.get_atom("ND1").hacceptor and not self.get_atom("ND1").hdonor:
                 if self.has_atom("HD1"):
-                    self.removeAtom("HD1")
+                    self.remove_atom("HD1")
             else: # Default to HID
                 if self.has_atom("HE2"):
-                    self.removeAtom("HE2")
+                    self.remove_atom("HE2")
 
         if self.has_atom("HD1") and self.has_atom("HE2"):
             self.ffname = "HIP"
@@ -302,7 +300,7 @@ class ILE(Amino):
         Amino.__init__(self, atoms, ref)
         self.reference = ref
 
-    def letterCode(self):
+    def letter_code(self):
         return 'I'
 
 
@@ -313,7 +311,7 @@ class LEU(Amino):
         Amino.__init__(self, atoms, ref)
         self.reference = ref
 
-    def letterCode(self):
+    def letter_code(self):
         return 'L'
 
 
@@ -324,7 +322,7 @@ class LYS(Amino):
         Amino.__init__(self, atoms, ref)
         self.reference = ref
 
-    def letterCode(self):
+    def letter_code(self):
         return 'K'
 
     def set_state(self):
@@ -341,7 +339,7 @@ class MET(Amino):
         Amino.__init__(self, atoms, ref)
         self.reference = ref
 
-    def letterCode(self):
+    def letter_code(self):
         return 'M'
 
 
@@ -352,7 +350,7 @@ class PHE(Amino):
         Amino.__init__(self, atoms, ref)
         self.reference = ref
 
-    def letterCode(self):
+    def letter_code(self):
         return 'F'
 
 
@@ -363,7 +361,7 @@ class PRO(Amino):
         Amino.__init__(self, atoms, ref)
         self.reference = ref
 
-    def letterCode(self):
+    def letter_code(self):
         return 'P'
 
     def set_state(self):
@@ -386,7 +384,7 @@ class SER(Amino):
         Amino.__init__(self, atoms, ref)
         self.reference = ref
 
-    def letterCode(self):
+    def letter_code(self):
         return 'S'
 
 
@@ -397,7 +395,7 @@ class THR(Amino):
         Amino.__init__(self, atoms, ref)
         self.reference = ref
 
-    def letterCode(self):
+    def letter_code(self):
         return 'T'
 
 
@@ -408,7 +406,7 @@ class TRP(Amino):
         Amino.__init__(self, atoms, ref)
         self.reference = ref
 
-    def letterCode(self):
+    def letter_code(self):
         return 'W'
 
 
@@ -419,7 +417,7 @@ class TYR(Amino):
         Amino.__init__(self, atoms, ref)
         self.reference = ref
 
-    def letterCode(self):
+    def letter_code(self):
         return 'Y'
 
     def set_state(self):
@@ -436,7 +434,7 @@ class VAL(Amino):
         Amino.__init__(self, atoms, ref)
         self.reference = ref
 
-    def letterCode(self):
+    def letter_code(self):
         return 'V'
 
 
@@ -464,23 +462,24 @@ class WAT(Residue):
                 atom_.name = ref.altnames[atom_.name]
 
             atom = Atom(atom_, "HETATM", self)
-            atomname = atom.get("name")
+            atomname = atom.name
             if atomname not in self.map:
                 self.add_atom(atom)
             else: # Don't add duplicate atom with alt_loc field
                 oldatom = self.get_atom(atomname)
-                oldatom.set("alt_loc", "")
+                oldatom.alt_loc = ""
 
     def create_atom(self, atomname, newcoords):
         """Create a water atom.  Note the HETATM field."""
+        # TODO - there is a huge amount of duplicated code in this module.
         oldatom = self.atoms[0]
         newatom = Atom(oldatom, "HETATM", self)
-        newatom.set("x", newcoords[0])
-        newatom.set("y", newcoords[1])
-        newatom.set("z", newcoords[2])
-        newatom.set("name", atomname)
-        newatom.set("occupancy", 1.00)
-        newatom.set("temp_factor", 0.00)
+        newatom.x = newcoords[0]
+        newatom.y = newcoords[1]
+        newatom.z = newcoords[2]
+        newatom.name = atomname
+        newatom.occupancy = 1.00
+        newatom.temp_factor = 0.00
         newatom.added = 1
         self.add_atom(newatom)
 
@@ -489,7 +488,7 @@ class WAT(Residue):
         object.
         """
         self.atoms.append(atom)
-        atomname = atom.get("name")
+        atomname = atom.name
         self.map[atomname] = atom
         try:
             atom.reference = self.reference.map[atomname]
@@ -532,28 +531,28 @@ class LIG(Residue):
                 atom_.name = ref.altnames[atom_.name]
 
             atom = Atom(atom_, "HETATM", self)
-            atomname = atom.get("name")
+            atomname = atom.name
             if atomname not in self.map:
                 self.add_atom(atom)
             else: # Don't add duplicate atom with alt_loc field
                 oldatom = self.get_atom(atomname)
-                oldatom.set("alt_loc", "")
+                oldatom.alt_loc = ""
 
     def create_atom(self, atomname, newcoords):
         oldatom = self.atoms[0]
         newatom = Atom(oldatom, "HETATM", self)
-        newatom.set("x", newcoords[0])
-        newatom.set("y", newcoords[1])
-        newatom.set("z", newcoords[2])
-        newatom.set("name", atomname)
-        newatom.set("occupancy", 1.00)
-        newatom.set("temp_factor", 0.00)
+        newatom.x = newcoords[0]
+        newatom.y = newcoords[1]
+        newatom.z = newcoords[2]
+        newatom.name = atomname
+        newatom.occupancy = 1.00
+        newatom.temp_factor = 0.00
         newatom.added = 1
         self.add_atom(newatom)
 
     def add_atom(self, atom):
         self.atoms.append(atom)
-        atomname = atom.get("name")
+        atomname = atom.name
         self.map[atomname] = atom
         try:
             atom.reference = self.reference.map[atomname]

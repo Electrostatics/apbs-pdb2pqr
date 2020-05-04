@@ -9,7 +9,6 @@ Authors:  Todd Dolinsky, Yong Huang
 """
 import copy
 import logging
-from .errors import PDBInputError
 
 
 _LOGGER = logging.getLogger(__name__)
@@ -417,7 +416,7 @@ class HETATM(BaseRecord):
             self.chain_id = str.strip(line[21])
             self.res_seq = int(str.strip(line[22:26]))
             self.ins_code = str.strip(line[26])
-        except:
+        except IndexError:
             raise ValueError('Residue name must be less than 4 characters!')
         self.x = float(str.strip(line[30:38]))
         self.y = float(str.strip(line[38:46]))
@@ -484,9 +483,9 @@ class Mol2Molecule(object):
 
         # Do some error checking
         if start == -1:
-            raise PDBInputError("Unable to find '@<TRIPOS>ATOM' in MOL2 file!")
+            raise ValueError("Unable to find '@<TRIPOS>ATOM' in MOL2 file!")
         elif stop == -1:
-            raise PDBInputError("Unable to find '@<TRIPOS>BOND' in MOL2 file!")
+            raise ValueError("Unable to find '@<TRIPOS>BOND' in MOL2 file!")
 
         atoms = data[start+14:stop-2].split("\n")
         # BOND section
@@ -495,7 +494,7 @@ class Mol2Molecule(object):
 
         # More error checking
         if stop == -1:
-            raise PDBInputError("Unable to find '@<TRIPOS>SUBSTRUCTURE' in MOL2 file!")
+            raise ValueError("Unable to find '@<TRIPOS>SUBSTRUCTURE' in MOL2 file!")
 
         bonds = data[start+14:stop-1].split("\n")
         self.parse_atoms(atoms)
@@ -514,7 +513,7 @@ class Mol2Molecule(object):
 
             # Error checking
             if len(separated_atom_line) < 8:
-                raise PDBInputError("Bad atom entry in MOL2 file: %s" % atom_line)
+                raise ValueError("Bad atom entry in MOL2 file: %s" % atom_line)
 
             fake_record = "HETATM"
             fake_chain = " L"
@@ -528,7 +527,7 @@ class Mol2Molecule(object):
                      float(separated_atom_line[4]))
 
             except ValueError:
-                raise PDBInputError("Bad atom entry in MOL2 file: %s" % atom_line)
+                raise ValueError("Bad atom entry in MOL2 file: %s" % atom_line)
 
             this_atom = HETATM(mol2pdb, separated_atom_line[5], [], [])
             if len(separated_atom_line) > 8:
@@ -536,7 +535,7 @@ class Mol2Molecule(object):
                 try:
                     this_atom.mol2charge = float(charge)
                 except TypeError:
-                    _LOGGER.warn('Warning. Non-float charge (%s) in mol2 file.', charge)
+                    _LOGGER.warning('Warning. Non-float charge (%s) in mol2 file.', charge)
                     this_atom.mol2charge = None
             self.l_pdb_atoms.append(mol2pdb)
             self.l_atoms.append(this_atom)
@@ -549,7 +548,7 @@ class Mol2Molecule(object):
             if len(separated_bond_line) == 0:
                 continue
             if len(separated_bond_line) < 4:
-                raise PDBInputError("Bad bond entry in MOL2 file: %s" % bond_line)
+                raise ValueError("Bad bond entry in MOL2 file: %s" % bond_line)
             try:
                 this_bond = MOL2BOND(
                     int(separated_bond_line[1]), # bond frm
@@ -558,7 +557,7 @@ class Mol2Molecule(object):
                     int(separated_bond_line[0])  # bond id
                     )
             except ValueError:
-                raise PDBInputError("Bad bond entry in MOL2 file: %s" % bond_line)
+                raise ValueError("Bad bond entry in MOL2 file: %s" % bond_line)
             self.l_bonds.append(this_bond)
 
     def createl_bonded_atoms(self):
@@ -567,9 +566,11 @@ class Mol2Molecule(object):
         This becomes one attribute of MOL2ATOM!
         """
         for bond in self.l_bonds:
-            self.l_atoms[bond.bond_from_self-1].l_bonded_atoms.append(self.l_atoms[bond.bond_to_self-1])
+            self.l_atoms[bond.bond_from_self-1].l_bonded_atoms\
+                .append(self.l_atoms[bond.bond_to_self-1])
 
-            self.l_atoms[bond.bond_to_self-1].l_bonded_atoms.append(self.l_atoms[bond.bond_from_self-1])
+            self.l_atoms[bond.bond_to_self-1].l_bonded_atoms\
+                .append(self.l_atoms[bond.bond_from_self-1])
 
             atbond = copy.deepcopy(bond)
             atbond.other_atom = self.l_atoms[bond.bond_to_self-1]
@@ -582,9 +583,10 @@ class Mol2Molecule(object):
     def create_pdb_line_from_mol2(self):
         """Generate PDB line from MOL2."""
         fake_type = "HETATM"
-        return ('%s%5i%5s%4s%2s%5s   %8.3f%8.3f%8.3f\n' %
-                (fake_type, self.serial, self.name, self.res_name, ' L',
-                 self.res_seq, self.x, self.y, self.z))
+        rstr = "%s%5i%5s%4s%2s%5s   %8.3f%8.3f%8.3f\n" % (fake_type, self.serial,
+                                                          self.name, self.res_name, ' L',
+                                                          self.res_seq, self.x, self.y, self.z)
+        return rstr
 
 
 @register_line_parser
@@ -2051,13 +2053,11 @@ def read_pdb(file_):
             _LOGGER.error("Error parsing line: %s", details)
             _LOGGER.error("<%s>", line.strip())
             _LOGGER.error("Truncating remaining errors for record type:%s", record)
-        # TODO - need more specific exception handling here
-        except Exception as details:
+        except IndexError as details:
             if record == "ATOM" or record == "HETATM":
                 try:
                     obj = read_atom(line)
                     pdblist.append(obj)
-                # TODO - need more specific exception handling here
                 except Exception as details:
                     _LOGGER.error("Error parsing line: %s,", details)
                     _LOGGER.error("<%s>", line.strip())

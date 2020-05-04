@@ -4,14 +4,17 @@ This module contains the protein object used in PDB2PQR and associated methods
 
 Authors:  Todd Dolinsky, Yong Huang
 """
-# TODO - Remove import * from this module.  Some of the * is needed to deal with
-# the globals()[] statements below.  However, there are other strange items that 
-# get included in the import * that shouldn't matter for functionality... but do.
-from .aa import *
+import string
+import logging
+from .aa import ALA, ARG, ASN, ASP, ASP, CYS, GLN, GLU, GLY, HIS, ILE, LEU
+from .aa import LIG, LYS, MET, PHE, PRO, SER, THR, TRP, TYR, VAL, WAT, Amino
 from .na import Nucleic
 from .structures import Chain, Residue
 from .pdb import TER, ATOM, HETATM, END, MODEL
 from .forcefield import Forcefield
+
+
+_LOGGER = logging.getLogger(__name__)
 
 
 class Protein(object):
@@ -69,7 +72,7 @@ class Protein(object):
                       ins_code != previous_atom.ins_code or \
                       chain_id != previous_atom.chain_id:
                     my_residue = self.create_residue(residue, previous_atom.res_name)
-                    chain_dict[previous_atom.chain_id].addResidue(my_residue)
+                    chain_dict[previous_atom.chain_id].add_residue(my_residue)
                     residue = []
 
                 residue.append(record)
@@ -77,7 +80,7 @@ class Protein(object):
 
             elif isinstance(record, END):
                 my_residue = self.create_residue(residue, previous_atom.res_name)
-                chain_dict[previous_atom.chain_id].addResidue(my_residue)
+                chain_dict[previous_atom.chain_id].add_residue(my_residue)
                 residue = []
 
             elif isinstance(record, MODEL):
@@ -86,7 +89,7 @@ class Protein(object):
                 if num_models > 1:
                     my_residue = self.create_residue(residue,
                                                      previous_atom.res_name)
-                    chain_dict[previous_atom.chain_id].addResidue(my_residue)
+                    chain_dict[previous_atom.chain_id].add_residue(my_residue)
                     break
 
             elif isinstance(record, TER):
@@ -94,7 +97,7 @@ class Protein(object):
 
         if residue != [] and num_models <= 1:
             my_residue = self.create_residue(residue, previous_atom.res_name)
-            chain_dict[previous_atom.chain_id].addResidue(my_residue)
+            chain_dict[previous_atom.chain_id].add_residue(my_residue)
 
         # Keep a map for accessing chains via chain_id
         self.chainmap = chain_dict.copy()
@@ -111,7 +114,7 @@ class Protein(object):
             self.chains.append(chain_dict[key])
 
         for chain in self.chains:
-            for residue in chain.get_residues():
+            for residue in chain.residues:
                 self.residues.append(residue)
 
     def create_residue(self, residue, resname):
@@ -136,6 +139,7 @@ class Protein(object):
                 klass = globals()[resname]
                 residue = klass(residue, refobj)
         except (KeyError, NameError):
+            _LOGGER.debug("Parsing %s as new residue", resname)
             residue = Residue(residue)
         return residue
 
@@ -160,9 +164,9 @@ class Protein(object):
                 text.append("TER\n")
 
             if pdbfile is True:
-                text.append("%s\n" % atom.getPDBString())
+                text.append("%s\n" % atom.get_pdb_string())
             else:
-                text.append("%s\n" % atom.getPQRString(chainflag=chainflag))
+                text.append("%s\n" % atom.get_pqr_string(chainflag=chainflag))
         text.append("TER\nEND")
         return text
 
@@ -177,7 +181,7 @@ class Protein(object):
         """
         # Cache the initial atom numbers
         numcache = {}
-        for atom in self.get_atoms():
+        for atom in self.atoms:
             numcache[atom] = atom.serial
         self.reserialize()
 
@@ -197,7 +201,7 @@ class Protein(object):
                          "Name</th><th>Chain ID</th><th>AMBER Atom Type</th><th>"
                          "CHARMM Atom Type</th></tr>\n"))
 
-            for atom in self.get_atoms():
+            for atom in self.atoms:
                 if isinstance(atom.residue, (Amino, WAT, Nucleic)):
                     resname = atom.residue.ffname
                 else:
@@ -213,36 +217,18 @@ class Protein(object):
             file_.write("</BODY></HTML>\n")
 
         # Return the original numbers back
-        for atom in self.get_atoms():
+        for atom in self.atoms:
             atom.serial = numcache[atom]
 
     def reserialize(self):
         """Generate new serial numbers for atoms in the protein"""
         count = 1
-        for atom in self.get_atoms():
-            atom.set("serial", count)
+        for atom in self.atoms:
+            atom.serial = count
             count += 1
 
-    def get_residues(self):
-        """Return the list of residues in the entire protein"""
-        return self.residues
-
-    def num_residues(self):
-        """Get the number of residues for the entire protein (including
-        multiple chains)
-
-        Returns:
-            count:  Number of residues in the protein (int)
-        """
-        return len(self.get_residues())
-
-    def num_atoms(self):
-        """Get the number of atoms for the entire protein (including multiple
-        chains)
-        """
-        return len(self.get_atoms())
-
-    def get_atoms(self):
+    @property
+    def atoms(self):
         """Return all Atom objects in list format
 
         Returns:
@@ -250,11 +236,12 @@ class Protein(object):
         """
         atomlist = []
         for chain in self.chains:
-            for atom in chain.get_atoms():
+            for atom in chain.atoms:
                 atomlist.append(atom)
         return atomlist
 
-    def get_charge(self):
+    @property
+    def charge(self):
         """Get the total charge on the protein
 
         NOTE:  Since the misslist is used to identify incorrect charge
@@ -269,8 +256,8 @@ class Protein(object):
         charge = 0.0
         misslist = []
         for chain in self.chains:
-            for residue in chain.get("residues"):
-                rescharge = residue.get_charge()
+            for residue in chain.residues:
+                rescharge = residue.charge
                 charge += rescharge
                 if isinstance(residue, Nucleic):
                     if residue.is3term or residue.is5term:
@@ -279,16 +266,7 @@ class Protein(object):
                     misslist.append(residue)
         return misslist, charge
 
-    def get_chains(self):
-        """Get the chains object
-
-        Returns
-            chains:  The list of chains in the protein (chain)
-        """
-        return self.chains
-
-    def get_summary(self):
-        """Some sort of undefined text output."""
+    def __str__(self):
         output = []
         for chain in self.chains:
             output.append(chain.get_summary())

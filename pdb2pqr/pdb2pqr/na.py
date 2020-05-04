@@ -40,6 +40,7 @@ class Nucleic(Residue):
                 atom_ = Atom(atom, "ATOM", self)
                 self.add_atom(atom_)
 
+    # TODO - here's some more code that's duplicated all over the place.
     def create_atom(self, atomname, newcoords):
         """Create an atom.  Overrides the generic residue's create_atom().
 
@@ -49,12 +50,12 @@ class Nucleic(Residue):
         """
         oldatom = self.atoms[0]
         newatom = Atom(oldatom, "ATOM", self)
-        newatom.set("x", newcoords[0])
-        newatom.set("y", newcoords[1])
-        newatom.set("z", newcoords[2])
-        newatom.set("name", atomname)
-        newatom.set("occupancy", 1.0)
-        newatom.set("temp_factor", 0.0)
+        newatom.x = newcoords[0]
+        newatom.y = newcoords[1]
+        newatom.z = newcoords[2]
+        newatom.name = atomname
+        newatom.occupancy = 1.0
+        newatom.temp_factor = 0.0
         newatom.added = 1
         self.add_atom(newatom)
 
@@ -63,7 +64,7 @@ class Nucleic(Residue):
         object.
         """
         self.atoms.append(atom)
-        atomname = atom.get("name")
+        atomname = atom.name
         self.map[atomname] = atom
         try:
             atom.reference = self.reference.map[atomname]
@@ -96,7 +97,7 @@ class ADE(Nucleic):
         Nucleic.__init__(self, atoms, ref)
         self.reference = ref
 
-    def letterCode(self):
+    def letter_code(self):
         return 'A'
 
     def set_state(self):
@@ -114,7 +115,7 @@ class CYT(Nucleic):
         Nucleic.__init__(self, atoms, ref)
         self.reference = ref
 
-    def letterCode(self):
+    def letter_code(self):
         return 'C'
 
     def set_state(self):
@@ -132,7 +133,7 @@ class GUA(Nucleic):
         Nucleic.__init__(self, atoms, ref)
         self.reference = ref
 
-    def letterCode(self):
+    def letter_code(self):
         return 'G'
 
     def set_state(self):
@@ -150,7 +151,7 @@ class THY(Nucleic):
         Nucleic.__init__(self, atoms, ref)
         self.reference = ref
 
-    def letterCode(self):
+    def letter_code(self):
         return 'T'
 
     def set_state(self):
@@ -165,7 +166,7 @@ class URA(Nucleic):
         Nucleic.__init__(self, atoms, ref)
         self.reference = ref
 
-    def letterCode(self):
+    def letter_code(self):
         return 'U'
 
     def set_state(self):

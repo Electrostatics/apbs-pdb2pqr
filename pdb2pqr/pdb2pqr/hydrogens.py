@@ -8,8 +8,8 @@ import logging
 import math
 from xml import sax
 from . import topology
-from .utilities import getDatFile, distance, subtract, normalize, dot, add
-from .utilities import analyzeConnectivity, sortDictByValue
+from .utilities import test_dat_file, distance, subtract, normalize, dot, add
+from .utilities import analyze_connectivity, sort_dict_by_value, DuplicateFilter
 from .quatfit import find_coordinates
 from .definitions import DefinitionAtom
 from .aa import Amino, WAT, HIS
@@ -17,7 +17,11 @@ from .routines import Cells, Routines
 
 # TODO - This module is insane... so many lines!
 
+
 _LOGGER = logging.getLogger(__name__)
+_LOGGER.addFilter(DuplicateFilter())
+
+
 HDEBUG = 0
 HYDPATH = "dat/HYDROGENS.xml"
 TOPOLOGYPATH = "dat/TOPOLOGY.xml"
@@ -173,9 +177,9 @@ class Optimize(object):
         Returns:
             angle:  The angle between the atoms (float)
         """
-        atom_coords = atom2.getCoords()
-        coords1 = subtract(atom3.getCoords(), atom_coords)
-        coords2 = subtract(atom1.getCoords(), atom_coords)
+        atom_coords = atom2.coords
+        coords1 = subtract(atom3.coords, atom_coords)
+        coords2 = subtract(atom1.coords, atom_coords)
         norm1 = normalize(coords1)
         norm2 = normalize(coords2)
         dotted = dot(norm1, norm2)
@@ -192,23 +196,23 @@ class Optimize(object):
     def is_hbond(self, donor, acc):
         """Determine whether this donor acceptor pair is a hydrogen bond"""
         for donorhatom in donor.bonds:
-            if not donorhatom.isHydrogen():
+            if not donorhatom.is_hydrogen:
                 continue
 
             # Check the H(D)-A distance
-            dist = distance(donorhatom.getCoords(), acc.getCoords())
+            dist = distance(donorhatom.coords, acc.coords)
             if dist > DIST_CUTOFF:
                 continue
 
             # Ensure no conflicts if H(A)s if present
             flag = 1
             for acchatom in acc.bonds:
-                if not acchatom.isHydrogen():
+                if not acchatom.is_hydrogen:
                     continue
                 flag = 0
 
                 # Check the H(D)-H(A) distance
-                hdist = distance(donorhatom.getCoords(), acchatom.getCoords())
+                hdist = distance(donorhatom.coords, acchatom.coords)
                 if hdist < 1.5:
                     continue
 
@@ -256,10 +260,10 @@ class Optimize(object):
             return energy
 
         # See if hydrogens are presently bonded to the acceptor and donor
-        donorhs = (bond for bond in donor.bonds if bond.isHydrogen())
-        acceptorhs = [bond for bond in acceptor.bonds if bond.isHydrogen()]
+        donorhs = (bond for bond in donor.bonds if bond.is_hydrogen)
+        acceptorhs = [bond for bond in acceptor.bonds if bond.is_hydrogen]
         for donorhatom in donorhs:
-            dist = distance(donorhatom.getCoords(), acceptor.getCoords())
+            dist = distance(donorhatom.coords, acceptor.coords)
             if dist > max_dha_dist and dist < max_ele_dist:
                 energy += max_ele_energy/(dist*dist)
                 continue
@@ -267,7 +271,7 @@ class Optimize(object):
             # Case 1: Both donor and acceptor hydrogens are present
             for acceptorhatom in acceptorhs:
                 # Penalize if H(D) is too close to H(A)
-                hdist = distance(donorhatom.getCoords(), acceptorhatom.getCoords())
+                hdist = distance(donorhatom.coords, acceptorhatom.coords)
                 if hdist < bump_distance:
                     energy += bump_energy
                     continue
@@ -309,15 +313,15 @@ class Optimize(object):
         residue = atom.residue
 
         # Place along line, 1 A away
-        vec = subtract(closeatom.getCoords(), atom.getCoords())
-        dist = distance(atom.getCoords(), closeatom.getCoords())
+        vec = subtract(closeatom.coords, atom.coords)
+        dist = distance(atom.coords, closeatom.coords)
 
         for i in range(3):
-            newcoords.append(vec[i]/dist + atom.getCoords()[i])
+            newcoords.append(vec[i]/dist + atom.coords[i])
 
         residue.create_atom(addname, newcoords)
         newatom = residue.get_atom(addname)
-        self.routines.cells.addCell(newatom)
+        self.routines.cells.add_cell(newatom)
 
         # Set the bonds (since not in reference structure)
         if newatom not in atom.bonds:
@@ -333,10 +337,10 @@ class Optimize(object):
         """
         residue = atom.residue
         nextatom = atom.bonds[0]
-        coords = [atom.getCoords(), nextatom.getCoords()]
-        refcoords = [residue.reference.map[atom.name].getCoords(), \
-                     residue.reference.map["H1"].getCoords()]
-        refatomcoords = residue.reference.map["H2"].getCoords()
+        coords = [atom.coords, nextatom.coords]
+        refcoords = [residue.reference.map[atom.name].coords, \
+                     residue.reference.map["H1"].coords]
+        refatomcoords = residue.reference.map["H2"].coords
 
         # Make the atom
         newcoords = find_coordinates(2, coords, refcoords, refatomcoords)
@@ -355,10 +359,10 @@ class Optimize(object):
 
         residue = atom.residue
         nextatom = atom.bonds[0]
-        coords = [atom.getCoords(), nextatom.getCoords()]
-        refcoords = [residue.reference.map[atom.name].getCoords(), \
-                     residue.reference.map[nextatom.name].getCoords()]
-        refatomcoords = residue.reference.map[addname].getCoords()
+        coords = [atom.coords, nextatom.coords]
+        refcoords = [residue.reference.map[atom.name].coords, \
+                     residue.reference.map[nextatom.name].coords]
+        refatomcoords = residue.reference.map[addname].coords
 
         # Make the atom
         newcoords = find_coordinates(2, coords, refcoords, refatomcoords)
@@ -376,10 +380,10 @@ class Optimize(object):
                 break
 
         nextatom = atom.bonds[0]
-        coords = [atom.getCoords(), nextatom.getCoords()]
-        refcoords = [residue.reference.map[atom.name].getCoords(),
-                     residue.reference.map[nextatom.name].getCoords()]
-        refatomcoords = residue.reference.map[the_refname].getCoords()
+        coords = [atom.coords, nextatom.coords]
+        refcoords = [residue.reference.map[atom.name].coords,
+                     residue.reference.map[nextatom.name].coords]
+        refatomcoords = residue.reference.map[the_refname].coords
 
         # Make the atom
         newcoords = find_coordinates(2, coords, refcoords, refatomcoords)
@@ -405,11 +409,11 @@ class Optimize(object):
         pivot = donor.bonds[0]
 
         for _ in range(72):
-            residue.rotateTetrahedral(pivot, donor, 5.0)
+            residue.rotate_tetrahedral(pivot, donor, 5.0)
             if self.is_hbond(donor, acc):
                 energy = self.get_pair_energy(donor, acc)
                 if energy < besten:
-                    bestcoords = newatom.getCoords()
+                    bestcoords = newatom.coords
                     besten = energy
 
         # If a hydrogen bond was made, set at best coordinates
@@ -417,9 +421,9 @@ class Optimize(object):
             newatom.x = bestcoords[0]
             newatom.y = bestcoords[1]
             newatom.z = bestcoords[2]
-            self.routines.cells.addCell(newatom)
+            self.routines.cells.add_cell(newatom)
             return 1
-        residue.removeAtom(newatom.name)
+        residue.remove_atom(newatom.name)
         return 0
 
     def try_single_alcoholic_lp(self, acc, donor, newatom):
@@ -437,36 +441,36 @@ class Optimize(object):
 
         # If a hydrogen bond was made, set at best distance
         if not self.is_hbond(donor, acc):
-            residue.removeAtom(newatom.name)
+            residue.remove_atom(newatom.name)
             return 0
 
         # Grab the H(D) that caused the bond
 
         for donorhatom in donor.bonds:
-            if donorhatom.isHydrogen():
+            if donorhatom.is_hydrogen:
                 if self.get_hbond_angle(acc, donor, donorhatom) < ANGLE_CUTOFF:
                     the_donorhatom = donorhatom
                     break
 
         # TODO - where did 72 come from (= 360/5)
         for _ in range(72):
-            residue.rotateTetrahedral(pivot, acc, 5.0)
+            residue.rotate_tetrahedral(pivot, acc, 5.0)
             angle = abs(self.get_hbond_angle(the_donorhatom, acc, newatom))
             if angle < bestangle:
                 bestangle = angle
-                bestcoords = newatom.getCoords()
+                bestcoords = newatom.coords
 
         # Remove if geometry does not work
         if bestangle > (ANGLE_CUTOFF * 2.0):
             _LOGGER.debug("Removing due to geometry %.2f > %.2f", bestangle, ANGLE_CUTOFF*2.0)
-            residue.removeAtom(newatom.name)
+            residue.remove_atom(newatom.name)
             return 0
 
         # Otherwise set to best coordinates
         newatom.x = bestcoords[0]
         newatom.y = bestcoords[1]
         newatom.z = bestcoords[2]
-        self.routines.cells.addCell(newatom)
+        self.routines.cells.add_cell(newatom)
 
         return 1
 
@@ -481,13 +485,13 @@ class Optimize(object):
         rotate = atom.bonds[1]
 
         # Rotate by 120 degrees twice
-        residue.rotateTetrahedral(fixed, atom, 120)
-        loc1 = rotate.getCoords()
-        residue.rotateTetrahedral(fixed, atom, 120)
-        loc2 = rotate.getCoords()
+        residue.rotate_tetrahedral(fixed, atom, 120)
+        loc1 = rotate.coords
+        residue.rotate_tetrahedral(fixed, atom, 120)
+        loc2 = rotate.coords
 
         # Set rotate back to original by one more rotation
-        residue.rotateTetrahedral(fixed, atom, 120)
+        residue.rotate_tetrahedral(fixed, atom, 120)
 
         return loc1, loc2
 
@@ -523,9 +527,9 @@ class Optimize(object):
             newatom.x = bestcoords[0]
             newatom.y = bestcoords[1]
             newatom.z = bestcoords[2]
-            self.routines.cells.addCell(newatom)
+            self.routines.cells.add_cell(newatom)
             return 1
-        residue.removeAtom(newname)
+        residue.remove_atom(newname)
         return 0
 
     def try_positions_with_two_bonds_lp(self, acc, donor, newname, loc1, loc2):
@@ -545,7 +549,7 @@ class Optimize(object):
 
         # Grab the H(D) that caused the bond
         for donorhatom in donor.bonds:
-            if donorhatom.isHydrogen():
+            if donorhatom.is_hydrogen:
                 if self.get_hbond_angle(acc, donor, donorhatom) < ANGLE_CUTOFF:
                     the_donorhatom = donorhatom
                     break
@@ -568,14 +572,14 @@ class Optimize(object):
 
         # Remove if geometry does not work
         if bestangle > (ANGLE_CUTOFF * 2.0):
-            residue.removeAtom(newname)
+            residue.remove_atom(newname)
             return 0
 
         # Otherwise set at best coords
         newatom.x = bestcoords[0]
         newatom.y = bestcoords[1]
         newatom.z = bestcoords[2]
-        self.routines.cells.addCell(newatom)
+        self.routines.cells.add_cell(newatom)
 
         # Set the bonds (since not in reference structure)
         if newatom not in acc.bonds:
@@ -599,14 +603,14 @@ class Optimize(object):
         rot2 = atom.bonds[2]
 
         # Find the two new positions
-        residue.rotateTetrahedral(pivot, atom, 120)
-        newcoords1 = rot1.getCoords()
-        residue.rotateTetrahedral(pivot, atom, 120)
-        newcoords2 = rot1.getCoords()
-        residue.rotateTetrahedral(pivot, atom, 120)
+        residue.rotate_tetrahedral(pivot, atom, 120)
+        newcoords1 = rot1.coords
+        residue.rotate_tetrahedral(pivot, atom, 120)
+        newcoords2 = rot1.coords
+        residue.rotate_tetrahedral(pivot, atom, 120)
 
         # Determine which is unoccupied
-        if distance(rot2.getCoords(), newcoords1) > 0.1:
+        if distance(rot2.coords, newcoords1) > 0.1:
             return newcoords1
         return newcoords2
 
@@ -616,9 +620,9 @@ class Optimize(object):
         residue.create_atom(newname, loc)
         if self.is_hbond(donor, acc):
             newatom = residue.get_atom(newname)
-            self.routines.cells.addCell(newatom)
+            self.routines.cells.add_cell(newatom)
             return 1
-        residue.removeAtom(newname)
+        residue.remove_atom(newname)
         return 0
 
     def try_positions_three_bonds_lp(self, acc, donor, newname, loc):
@@ -630,7 +634,7 @@ class Optimize(object):
 
         # Grab the H(D) that caused the bond
         for donorhatom in donor.bonds:
-            if donorhatom.isHydrogen():
+            if donorhatom.is_hydrogen:
                 if self.get_hbond_angle(acc, donor, donorhatom) < ANGLE_CUTOFF:
                     the_donorhatom = donorhatom
                     break
@@ -641,12 +645,12 @@ class Optimize(object):
         # Remove if geometry does not work
         angle = abs(self.get_hbond_angle(the_donorhatom, acc, newatom))
         if angle > (ANGLE_CUTOFF * 2.0):
-            residue.removeAtom(newname)
+            residue.remove_atom(newname)
             return 0
 
         # Otherwise keep it
         newatom = residue.get_atom(newname)
-        self.routines.cells.addCell(newatom)
+        self.routines.cells.add_cell(newatom)
 
         # Set the bonds (since not in reference structure)
         if newatom not in acc.bonds:
@@ -682,7 +686,7 @@ class Flip(Optimize):
         # Get all moveable names for this angle/residue pair
         dihedral = optinstance.optangle
         pivot = dihedral.split()[2]
-        moveablenames = self.routines.getMoveableNames(residue, pivot)
+        moveablenames = self.routines.get_moveable_names(residue, pivot)
         # HO in CTERM shouldn't be in the list of flip atoms
         if residue.is_c_term:
             newmoveablenames = []
@@ -696,21 +700,21 @@ class Flip(Optimize):
         # Cache current coordinates
         for name in moveablenames:
             atom = residue.get_atom(name)
-            map_[name] = atom.getCoords()
+            map_[name] = atom.coords
 
         # Flip the residue about the angle
         anglenum = residue.reference.dihedrals.index(dihedral)
         if anglenum == -1:
             raise ValueError("Unable to find Flip dihedral angle!")
         newangle = 180.0 + residue.dihedrals[anglenum]
-        self.routines.setDihedralAngle(residue, anglenum, newangle)
+        self.routines.set_dihedral_angle(residue, anglenum, newangle)
 
         # Create new atoms at cached positions
         for name in map_:
             newname = "%sFLIP" % name
             residue.create_atom(newname, map_[name])
             newatom = residue.get_atom(newname)
-            self.routines.cells.addCell(newatom)
+            self.routines.cells.add_cell(newatom)
 
             # Set the bonds
             newatom.reference = residue.reference.map[name]
@@ -732,20 +736,20 @@ class Flip(Optimize):
                     if newatom not in bondatom.bonds:
                         bondatom.bonds.append(newatom)
 
-        residue.setDonorsAndAcceptors()
+        residue.set_donors_acceptors()
 
         # Add to the optimization list
         for name in moveablenames:
 
             # Get the atom
             atom = residue.get_atom(name)
-            if not atom.isHydrogen():
+            if not atom.is_hydrogen:
                 if atom.hdonor or atom.hacceptor:
                     self.atomlist.append(atom)
 
             # And the FLIP
             atom = residue.get_atom("%sFLIP" % name)
-            if not atom.isHydrogen():
+            if not atom.is_hydrogen:
                 if atom.hdonor or atom.hacceptor:
                     self.atomlist.append(atom)
 
@@ -828,7 +832,7 @@ class Flip(Optimize):
         # Initialize some variables
         atomlist = []
         residue = bondatom.residue
-        for atom in residue.get_atoms():
+        for atom in residue.atoms:
             atomlist.append(atom)
 
         # Set a flag to see whether to delete the FLIPs or not
@@ -845,11 +849,11 @@ class Flip(Optimize):
             atomname = atom.name
             if atomname.endswith("FLIP") and flag: # Delete the other list
                 if residue.has_atom(atomname[:-4]):
-                    self.routines.cells.removeCell(residue.get_atom(atomname[:-4]))
-                    residue.removeAtom(atomname[:-4])
+                    self.routines.cells.remove_cell(residue.get_atom(atomname[:-4]))
+                    residue.remove_atom(atomname[:-4])
             elif atomname.endswith("FLIP"):  # Delete the flip
-                self.routines.cells.removeCell(atom)
-                residue.removeAtom(atomname)
+                self.routines.cells.remove_cell(atom)
+                residue.remove_atom(atomname)
             else: continue
 
         residue.fixed = 1
@@ -862,13 +866,13 @@ class Flip(Optimize):
         if residue.fixed:
             return
         atomlist = []
-        for atom in residue.get_atoms():
+        for atom in residue.atoms:
             atomlist.append(atom)
         for atom in atomlist:
             if atom.name.endswith("FLIP"):
-                self.routines.cells.removeCell(atom)
-                residue.removeAtom(atom.name[:-4])
-                residue.renameAtom(atom.name, atom.name[:-4])
+                self.routines.cells.remove_cell(atom)
+                residue.remove_atom(atom.name[:-4])
+                residue.rename_atom(atom.name, atom.name[:-4])
         residue.fixed = 1
 
     def complete(self):
@@ -880,10 +884,10 @@ class Flip(Optimize):
         residue = self.residue
         self.finalize()
         # Rename all *FLIP atoms
-        for atom in residue.get_atoms():
+        for atom in residue.atoms:
             atomname = atom.name
             if atomname.endswith("FLIP"):
-                residue.renameAtom(atomname, atomname[:-4])
+                residue.rename_atom(atomname, atomname[:-4])
 
 
 class Alcoholic(Optimize):
@@ -907,8 +911,8 @@ class Alcoholic(Optimize):
         self.atomlist.append(residue.get_atom(bondname))
         if residue.has_atom(name):
             atom = residue.get_atom(name)
-            self.routines.cells.removeCell(atom)
-            residue.removeAtom(name)
+            self.routines.cells.remove_cell(atom)
+            residue.remove_atom(name)
 
     def try_both(self, donor, acc, accobj):
         """Called when both the donor and acceptor are optimizeable.
@@ -934,7 +938,7 @@ class Alcoholic(Optimize):
             if accobj.try_acceptor(acc, donor):
                 _LOGGER.debug("NET BOND SUCCESSFUL!")
                 return 1
-            residue.removeAtom(self.hname)
+            residue.remove_atom(self.hname)
             _LOGGER.debug("REMOVED NET HBOND")
             return 0
         return 0
@@ -1029,18 +1033,18 @@ class Alcoholic(Optimize):
             # Add atom and debump
             self.make_atom_with_one_bond_h(atom, addname)
             newatom = residue.get_atom(addname)
-            self.routines.cells.addCell(newatom)
+            self.routines.cells.add_cell(newatom)
 
             for _ in range(18):
-                residue.rotateTetrahedral(pivot, atom, 20.0)
+                residue.rotate_tetrahedral(pivot, atom, 20.0)
 
-                closeatoms = self.routines.cells.getNearCells(atom)
+                closeatoms = self.routines.cells.get_near_cells(atom)
                 energy = 0.0
                 for catom in closeatoms:
                     energy += self.get_pair_energy(atom, catom) + self.get_pair_energy(catom, atom)
                 if energy < bestenergy:
                     bestenergy = energy
-                    bestcoords = newatom.getCoords()
+                    bestcoords = newatom.coords
 
             if bestcoords != []:
                 newatom.x = bestcoords[0]
@@ -1051,20 +1055,20 @@ class Alcoholic(Optimize):
             loc1, loc2 = self.get_positions_with_two_bonds(atom)
             residue.create_atom(addname, loc1)
             newatom = residue.get_atom(addname)
-            self.routines.cells.addCell(newatom)
+            self.routines.cells.add_cell(newatom)
 
             # Debump residue if necessary by trying the other location
-            closeatoms = self.routines.cells.getNearCells(atom)
+            closeatoms = self.routines.cells.get_near_cells(atom)
             energy1 = 0.0
             for catom in closeatoms:
                 energy1 += self.get_pair_energy(atom, catom) + self.get_pair_energy(catom, atom)
 
             # Place at other location
-            self.routines.cells.removeCell(newatom)
+            self.routines.cells.remove_cell(newatom)
             newatom.x = loc2[0]
             newatom.y = loc2[1]
             newatom.z = loc2[2]
-            self.routines.cells.addCell(newatom)
+            self.routines.cells.add_cell(newatom)
 
             energy2 = 0.0
             for catom in closeatoms:
@@ -1072,16 +1076,16 @@ class Alcoholic(Optimize):
 
             # If this is worse, switch back
             if energy2 > energy1:
-                self.routines.cells.removeCell(newatom)
+                self.routines.cells.remove_cell(newatom)
                 newatom.x = loc1[0]
                 newatom.y = loc1[1]
                 newatom.z = loc1[2]
-                self.routines.cells.addCell(newatom)
+                self.routines.cells.add_cell(newatom)
 
         elif len(atom.bonds) == 3:
             loc = self.get_position_with_three_bonds(atom)
             residue.create_atom(addname, loc)
-            self.routines.cells.addCell(residue.get_atom(addname))
+            self.routines.cells.add_cell(residue.get_atom(addname))
 
     def complete(self):
         """Complete an alcoholic optimization.
@@ -1094,11 +1098,11 @@ class Alcoholic(Optimize):
 
         # Remove all LP atoms
         atomlist = []
-        for atom in residue.get_atoms():
+        for atom in residue.atoms:
             atomlist.append(atom)
         for atom in atomlist:
             if atom.name.startswith("LP"):
-                residue.removeAtom(atom.name)
+                residue.remove_atom(atom.name)
 
 # TODO - stopped de-linting here
 class Water(Optimize):
@@ -1145,9 +1149,9 @@ class Water(Optimize):
             # We need to undo what we did to the donor
             _LOGGER.debug("REMOVED NET HBOND")
             if residue.has_atom("H2"):
-                residue.removeAtom("H2")
+                residue.remove_atom("H2")
             elif residue.has_atom("H1"):
-                residue.removeAtom("H1")
+                residue.remove_atom("H1")
             return 0
         return 0
 
@@ -1176,16 +1180,16 @@ class Water(Optimize):
             if self.is_hbond(donor, acc):
 
                 # Find the best donor hydrogen and use that
-                bestdist = distance(acc.getCoords(), donor.getCoords())
+                bestdist = distance(acc.coords, donor.coords)
                 for donorh in donor.bonds:
-                    dist = distance(acc.getCoords(), donorh.getCoords())
+                    dist = distance(acc.coords, donorh.coords)
                     if dist < bestdist:
                         bestdist = dist
 
                 # Point the LP to the best H
                 # TODO - this looks like a bug...
                 # donorh ends up being the last item in donor.bonds
-                # This may be fixed by setting a best_donorh to go with bestdist 
+                # This may be fixed by setting a best_donorh to go with bestdist
                 # and using best_donorh in the function below
                 self.make_atom_with_no_bonds(acc, donorh, newname)
                 _LOGGER.warning("The best donorH was not picked (BUG?).")
@@ -1232,8 +1236,8 @@ class Water(Optimize):
             self.make_atom_with_no_bonds(donor, acc, newname)
             if self.is_hbond(donor, acc):
                 return 1
-            self.routines.cells.removeCell(residue.get_atom(newname))
-            residue.removeAtom(newname)
+            self.routines.cells.remove_cell(residue.get_atom(newname))
+            residue.remove_atom(newname)
             return 0
         if len(donor.bonds) == 1:
             self.make_water_with_one_bond(donor, newname)
@@ -1276,19 +1280,19 @@ class Water(Optimize):
             newcoords = []
 
             # Build hydrogen away from closest atom
-            closeatom = self.routines.getClosestAtom(atom)
+            closeatom = self.routines.get_closest_atom(atom)
             if closeatom != None:
-                vec = subtract(atom.getCoords(), closeatom.getCoords())
-                dist = distance(atom.getCoords(), closeatom.getCoords())
+                vec = subtract(atom.coords, closeatom.coords)
+                dist = distance(atom.coords, closeatom.coords)
 
                 for i in range(3):
-                    newcoords.append(vec[i]/dist + atom.getCoords()[i])
+                    newcoords.append(vec[i]/dist + atom.coords[i])
 
             else:
-                newcoords = add(atom.getCoords(), [1.0, 0.0, 0.0])
+                newcoords = add(atom.coords, [1.0, 0.0, 0.0])
 
             residue.create_atom(addname, newcoords)
-            self.routines.cells.addCell(residue.get_atom(addname))
+            self.routines.cells.add_cell(residue.get_atom(addname))
 
             self.finalize()
 
@@ -1302,21 +1306,21 @@ class Water(Optimize):
             # Add atom and debump
             self.make_water_with_one_bond(atom, addname)
             newatom = residue.get_atom(addname)
-            self.routines.cells.addCell(newatom)
+            self.routines.cells.add_cell(newatom)
 
             for i in range(18):
-                residue.rotateTetrahedral(pivot, atom, 20.0)
-                nearatom = self.routines.getClosestAtom(newatom)
+                residue.rotate_tetrahedral(pivot, atom, 20.0)
+                nearatom = self.routines.get_closest_atom(newatom)
 
                 # If there is no closest conflict, continue
                 if nearatom is None:
                     continue
 
-                dist = distance(nearatom.getCoords(), newatom.getCoords())
+                dist = distance(nearatom.coords, newatom.coords)
 
                 if dist > bestdist:
                     bestdist = dist
-                    bestcoords = newatom.getCoords()
+                    bestcoords = newatom.coords
 
             if bestcoords != []:
                 newatom.x = bestcoords[0]
@@ -1333,30 +1337,30 @@ class Water(Optimize):
             loc1, loc2 = self.get_positions_with_two_bonds(atom)
             residue.create_atom(addname, loc1)
             newatom = residue.get_atom(addname)
-            self.routines.cells.addCell(newatom)
+            self.routines.cells.add_cell(newatom)
 
             # Debump residue if necessary by trying the other location
-            nearatom = self.routines.getClosestAtom(newatom)
+            nearatom = self.routines.get_closest_atom(newatom)
             if nearatom != None:
-                dist1 = distance(newatom.getCoords(), nearatom.getCoords())
+                dist1 = distance(newatom.coords, nearatom.coords)
 
                 # Place at other location
-                self.routines.cells.removeCell(atom)
+                self.routines.cells.remove_cell(atom)
                 newatom.x = loc2[0]
                 newatom.y = loc2[1]
                 newatom.z = loc2[2]
-                self.routines.cells.addCell(atom)
+                self.routines.cells.add_cell(atom)
 
-                nearatom = self.routines.getClosestAtom(newatom)
+                nearatom = self.routines.get_closest_atom(newatom)
                 if nearatom != None:
 
                     # If this is worse, switch back
-                    if distance(newatom.getCoords(), nearatom.getCoords()) < dist1:
-                        self.routines.cells.removeCell(atom)
+                    if distance(newatom.coords, nearatom.coords) < dist1:
+                        self.routines.cells.remove_cell(atom)
                         newatom.x = loc1[0]
                         newatom.y = loc1[1]
                         newatom.z = loc1[2]
-                        self.routines.cells.addCell(atom)
+                        self.routines.cells.add_cell(atom)
 
             if addname == "H1":
                 self.finalize()
@@ -1365,23 +1369,19 @@ class Water(Optimize):
 
             loc = self.get_position_with_three_bonds(atom)
             residue.create_atom(addname, loc)
-            self.routines.cells.addCell(residue.get_atom(addname))
+            self.routines.cells.add_cell(residue.get_atom(addname))
 
     def complete(self):
-        """
-            Complete the water optimization class
-        """
+        """Complete the water optimization class"""
         self.finalize()
-
         residue = self.residue
 
-        # Remove all LP atoms
         atomlist = []
-        for atom in residue.get_atoms():
+        for atom in residue.atoms:
             atomlist.append(atom)
         for atom in atomlist:
             if atom.name.startswith("LP"):
-                residue.removeAtom(atom.name)
+                residue.remove_atom(atom.name)
 
 
 class Carboxylic(Optimize):
@@ -1430,12 +1430,12 @@ class Carboxylic(Optimize):
         # If one bond in the group is significantly (0.05 A)
         # longer than the other, use that group only
         for pivotatom in bondatom1.bonds:
-            if not pivotatom.isHydrogen():
+            if not pivotatom.is_hydrogen:
                 the_pivatom = pivotatom
                 break
 
-        dist1 = distance(the_pivatom.getCoords(), bondatom1.getCoords())
-        dist2 = distance(the_pivatom.getCoords(), bondatom2.getCoords())
+        dist1 = distance(the_pivatom.coords, bondatom1.coords)
+        dist2 = distance(the_pivatom.coords, bondatom2.coords)
 
         order = [hname1, hname2]
 
@@ -1465,21 +1465,21 @@ class Carboxylic(Optimize):
                 continue
 
             newangle = 180.0 + residue.dihedrals[anglenum]
-            self.routines.setDihedralAngle(residue, anglenum, newangle)
+            self.routines.set_dihedral_angle(residue, anglenum, newangle)
 
             hatom = residue.get_atom(hname)
-            newcoords = hatom.getCoords()
+            newcoords = hatom.coords
 
             # Flip back to return original atom
             newangle = 180.0 + residue.dihedrals[anglenum]
-            self.routines.setDihedralAngle(residue, anglenum, newangle)
+            self.routines.set_dihedral_angle(residue, anglenum, newangle)
 
             # Rename the original atom and rebuild the new atom
-            residue.renameAtom(hname, "%s1" % hname)
+            residue.rename_atom(hname, "%s1" % hname)
             newname = "%s2" % hname
             residue.create_atom(newname, newcoords)
             newatom = residue.get_atom(newname)
-            self.routines.cells.addCell(newatom)
+            self.routines.cells.add_cell(newatom)
             newatom.refdistance = hatom.refdistance
 
             # Set the bonds for the new atom
@@ -1496,7 +1496,7 @@ class Carboxylic(Optimize):
             if longflag:
                 break
 
-        residue.setDonorsAndAcceptors()
+        residue.set_donors_acceptors()
 
     def try_both(self, donor, acc, accobj):
         """Called when both the donor and acceptor are optimizeable.
@@ -1529,11 +1529,11 @@ class Carboxylic(Optimize):
     def is_carboxylic_hbond(self, donor, acc):
         """Determine whether this donor acceptor pair is a hydrogen bond"""
         for donorhatom in donor.bonds:
-            if not donorhatom.isHydrogen():
+            if not donorhatom.is_hydrogen:
                 continue
 
             # Check the H(D)-A distance
-            dist = distance(donorhatom.getCoords(), acc.getCoords())
+            dist = distance(donorhatom.coords, acc.coords)
             if dist > DIST_CUTOFF:
                 continue
 
@@ -1565,24 +1565,24 @@ class Carboxylic(Optimize):
             dist = None
             donorhatom = None
             for hatom in self.hlist:
-                if hatom.isHydrogen():
+                if hatom.is_hydrogen:
                     hyds.append(hatom)
 
             if len(hyds) < 2:
                 return 1
 
-            dist = distance(hyds[0].getCoords(), donor.getCoords())
-            dist2 = distance(hyds[1].getCoords(), donor.getCoords())
+            dist = distance(hyds[0].coords, donor.coords)
+            dist2 = distance(hyds[1].coords, donor.coords)
             # Eliminate hyds[0]
             if dist < dist2:
                 self.hlist.remove(hyds[0])
-                self.routines.cells.removeCell(hyds[0])
-                residue.removeAtom(hyds[0].name)
+                self.routines.cells.remove_cell(hyds[0])
+                residue.remove_atom(hyds[0].name)
                 donorhatom = residue.get_atom(hyds[1].name)
             elif hyds[1] in self.hlist:
                 self.hlist.remove(hyds[1])
-                self.routines.cells.removeCell(hyds[1])
-                residue.removeAtom(hyds[1].name)
+                self.routines.cells.remove_cell(hyds[1])
+                residue.remove_atom(hyds[1].name)
                 if residue.has_atom(hyds[0].name):
                     donorhatom = residue.get_atom(hyds[0].name)
                 elif len(self.hlist) != 0 and residue.has_atom(self.hlist[0].name):
@@ -1616,7 +1616,7 @@ class Carboxylic(Optimize):
 
         # Grab the H(D) that caused the bond
         for donorhatom in donor.bonds:
-            if donorhatom.isHydrogen():
+            if donorhatom.is_hydrogen:
                 if self.get_hbond_angle(acc, donor, donorhatom) <= ANGLE_CUTOFF:
                     the_donorhatom = donorhatom
                     break
@@ -1625,9 +1625,9 @@ class Carboxylic(Optimize):
         hydrogens = self.hlist[:]
         for atom in hydrogens:
             if atom != the_donorhatom:
-                self.routines.cells.removeCell(atom)
+                self.routines.cells.remove_cell(atom)
                 self.hlist.remove(atom)
-                residue.removeAtom(atom.name)
+                residue.remove_atom(atom.name)
 
         # Rename the atoms
         self.rename(the_donorhatom)
@@ -1651,7 +1651,7 @@ class Carboxylic(Optimize):
         for hydatom in self.hlist:
             energy = 0
             bondedatom = hydatom.bonds[0]
-            closeatoms = self.routines.cells.getNearCells(bondedatom)
+            closeatoms = self.routines.cells.get_near_cells(bondedatom)
             for catom in closeatoms:
                 energy += self.get_pair_energy(bondedatom, catom) + \
                     self.get_pair_energy(catom, bondedatom)
@@ -1665,7 +1665,7 @@ class Carboxylic(Optimize):
         for hydatom in hydrogens:
             if bestatom != hydatom:
                 self.hlist.remove(hydatom)
-                residue.removeAtom(hydatom.name)
+                residue.remove_atom(hydatom.name)
 
         # Rename the atoms
         if bestatom != None and len(bestatom.name) == 4:
@@ -1694,26 +1694,26 @@ class Carboxylic(Optimize):
         # Take off the extension
         if len(hydatom.name) == 4:
             hname = hydatom.name[:-1]
-            residue.renameAtom(hydatom.name, hname)
+            residue.rename_atom(hydatom.name, hname)
 
         # PATCHES.xml expects *2 - if it's *1 that left, flip names
         if len(self.atomlist) == 2:
             if hydatom.name.endswith("1"):
-                residue.renameAtom(hydatom.name, "%s2" %  hydatom.name[:-1])
+                residue.rename_atom(hydatom.name, "%s2" %  hydatom.name[:-1])
                 bondname0 = self.atomlist[0].name
                 bondname1 = self.atomlist[1].name
                 tempname = "FLIP"
-                residue.renameAtom(self.atomlist[0].name, tempname)
-                residue.renameAtom(self.atomlist[1].name, bondname0)
-                residue.renameAtom(tempname, bondname1)
+                residue.rename_atom(self.atomlist[0].name, tempname)
+                residue.rename_atom(self.atomlist[1].name, bondname0)
+                residue.rename_atom(tempname, bondname1)
             elif hydatom.name.endswith("OXT"):
-                residue.renameAtom(hydatom.name, "HO")
+                residue.rename_atom(hydatom.name, "HO")
                 bondname0 = self.atomlist[0].name
                 bondname1 = self.atomlist[1].name
                 tempname = "FLIP"
-                residue.renameAtom(self.atomlist[0].name, tempname)
-                residue.renameAtom(self.atomlist[1].name, bondname0)
-                residue.renameAtom(tempname, bondname1)
+                residue.rename_atom(self.atomlist[0].name, tempname)
+                residue.rename_atom(self.atomlist[1].name, bondname0)
+                residue.rename_atom(tempname, bondname1)
 
         elif len(self.atomlist) == 1:
             # Appending the other bondatom to self.atomlist
@@ -1727,22 +1727,22 @@ class Carboxylic(Optimize):
 
             if hydatom.name.endswith("1"):
                 if hydatom.name[:-1] + "2" in residue.map.keys():
-                    residue.removeAtom("%s2" % hydatom.name[:-1])
-                residue.renameAtom(hydatom.name, "%s2" % hydatom.name[:-1])
+                    residue.remove_atom("%s2" % hydatom.name[:-1])
+                residue.rename_atom(hydatom.name, "%s2" % hydatom.name[:-1])
                 bondname0 = self.atomlist[0].name
                 bondname1 = self.atomlist[1].name
                 tempname = "FLIP"
-                residue.renameAtom(self.atomlist[0].name, tempname)
-                residue.renameAtom(self.atomlist[1].name, bondname0)
-                residue.renameAtom(tempname, bondname1)
+                residue.rename_atom(self.atomlist[0].name, tempname)
+                residue.rename_atom(self.atomlist[1].name, bondname0)
+                residue.rename_atom(tempname, bondname1)
             elif hydatom.name.endswith("OXT"):
-                residue.renameAtom(hydatom.name, "HO")
+                residue.rename_atom(hydatom.name, "HO")
                 bondname0 = self.atomlist[0].name
                 bondname1 = self.atomlist[1].name
                 tempname = "FLIP"
-                residue.renameAtom(self.atomlist[0].name, tempname)
-                residue.renameAtom(self.atomlist[1].name, bondname0)
-                residue.renameAtom(tempname, bondname1)
+                residue.rename_atom(self.atomlist[0].name, tempname)
+                residue.rename_atom(self.atomlist[1].name, bondname0)
+                residue.rename_atom(tempname, bondname1)
 
     def complete(self):
         """If not already fixed, finalize"""
@@ -1788,7 +1788,7 @@ class HydrogenRoutines(object):
         sax.make_parser()
 
         # TODO - I don't think files should be loaded so deep in this module
-        defpath = getDatFile(HYDPATH)
+        defpath = test_dat_file(HYDPATH)
         if defpath == "":
             raise KeyError("Could not find %s!" % HYDPATH)
 
@@ -1820,12 +1820,12 @@ class HydrogenRoutines(object):
             boundname = conf.boundatom
             if residue.get_atom(hname) != None:
                 _LOGGER.debug('Removing %s %s %s', residue.name, residue.res_seq, hname)
-                residue.removeAtom(hname)
+                residue.remove_atom(hname)
             residue.get_atom(boundname).hacceptor = 1
             residue.get_atom(boundname).hdonor = 0
 
         # Update the IntraBonds
-        name = residue.get("name")
+        name = residue.name
         defresidue = self.routines.aadef.get_residue(name)
         residue.updateIntraBonds(defresidue)
 
@@ -1841,13 +1841,13 @@ class HydrogenRoutines(object):
             hname = conf.hname
             for atom in conf.atoms:
                 #print confatoms
-                atomname = atom.get("name")
+                atomname = atom.name
                 resatom = residue.get_atom(atomname)
                 if atomname == hname:
-                    defatomcoords = atom.getCoords()
+                    defatomcoords = atom.coords
                 elif resatom != None:
-                    refcoords.append(resatom.getCoords())
-                    defcoords.append(atom.getCoords())
+                    refcoords.append(resatom.coords)
+                    defcoords.append(atom.coords)
                 else:
                     raise KeyError("Could not find necessary atom!")
 
@@ -1896,7 +1896,7 @@ class HydrogenRoutines(object):
             hname = conf.hname
             boundname = conf.boundatom
             if residue.get_atom(hname) != None:
-                residue.removeAtom(hname)
+                residue.remove_atom(hname)
             residue.get_atom(boundname).hacceptor = 1
             residue.get_atom(boundname).hdonor = 0
 
@@ -1919,15 +1919,15 @@ class HydrogenRoutines(object):
                         atom.y = 0.862
                         atom.z = 1.306
 
-            if not Routines.rebuildTetrahedral(residue, hname):
+            if not Routines.rebuild_tetrahedral(residue, hname):
                 for atom in conf.atoms:
-                    atomname = atom.get("name")
+                    atomname = atom.name
                     resatom = residue.get_atom(atomname)
                     if atomname == hname:
-                        defatomcoords = atom.getCoords()
+                        defatomcoords = atom.coords
                     elif resatom != None:
-                        refcoords.append(resatom.getCoords())
-                        defcoords.append(atom.getCoords())
+                        refcoords.append(resatom.coords)
+                        defcoords.append(atom.coords)
                     else:
                         raise KeyError("Could not find necessary atom!")
 
@@ -1949,9 +1949,9 @@ class HydrogenRoutines(object):
 
         # Update intrabonds again
         if residue.is_n_term and residue.name == "PRO":
-            for atom in residue.get_atoms():
+            for atom in residue.atoms:
                 if atom.name == "H":
-                    residue.removeAtom("H")
+                    residue.remove_atom("H")
         residue.update_terminus_status()
         return
 
@@ -1959,15 +1959,15 @@ class HydrogenRoutines(object):
         """If there are any extra carboxlyic *1 atoms, delete them.
         This may occur when no optimization is chosen
         """
-        for residue in self.routines.protein.get_residues():
+        for residue in self.routines.protein.residues:
             if not isinstance(residue, Amino):
                 continue
             if residue.name == "GLH" or "GLH" in residue.patches:
                 if residue.has_atom("HE1") and residue.has_atom("HE2"):
-                    residue.removeAtom("HE1")
+                    residue.remove_atom("HE1")
             elif residue.name == "ASH" or "ASH" in residue.patches:
                 if residue.has_atom("HD1") and residue.has_atom("HD2"):
-                    residue.removeAtom("HD1")
+                    residue.remove_atom("HD1")
 
     def is_optimizeable(self, residue):
         """Check to see if the given residue is optimizeable
@@ -2015,11 +2015,11 @@ class HydrogenRoutines(object):
         but wait for optimization.  This function should not be used if full
         optimization is not taking place.
         """
-        for residue in self.protein.get_residues():
+        for residue in self.protein.residues:
             optinstance = self.is_optimizeable(residue)
             if optinstance is None:
                 continue
-            for atom in residue.get_atoms():
+            for atom in residue.atoms:
                 if atom.name in optinstance.map:
                     atom.optimizeable = 1
 
@@ -2032,16 +2032,16 @@ class HydrogenRoutines(object):
 
         # Do some setup
         self.routines.cells = Cells(5)
-        self.routines.cells.assignCells(self.protein)
-        self.routines.calculateDihedralAngles()
-        self.routines.setDonorsAndAcceptors()
-        self.routines.updateInternal_bonds()
-        self.routines.setReferenceDistance()
+        self.routines.cells.assign_cells(self.protein)
+        self.routines.calculate_dihedral_angles()
+        self.routines.set_donors_acceptors()
+        self.routines.update_internal_bonds()
+        self.routines.set_reference_distance()
         self.optlist = []
         self.atomlist = []
 
         # First initialize the various types
-        for residue in self.protein.get_residues():
+        for residue in self.protein.residues:
             optinstance = self.is_optimizeable(residue)
             if isinstance(residue, Amino):
                 if False in residue.stateboolean.values():
@@ -2073,15 +2073,15 @@ class HydrogenRoutines(object):
 
         # Do some setup
         self.routines.cells = Cells(5)
-        self.routines.cells.assignCells(self.protein)
-        self.routines.calculateDihedralAngles()
-        self.routines.setDonorsAndAcceptors()
-        self.routines.updateInternal_bonds()
-        self.routines.setReferenceDistance()
+        self.routines.cells.assign_cells(self.protein)
+        self.routines.calculate_dihedral_angles()
+        self.routines.set_donors_acceptors()
+        self.routines.update_internal_bonds()
+        self.routines.set_reference_distance()
         self.optlist = []
 
         # First initialize the various types
-        for residue in self.protein.get_residues():
+        for residue in self.protein.residues:
             optinstance = self.is_optimizeable(residue)
             if optinstance is None:
                 continue
@@ -2116,7 +2116,7 @@ class HydrogenRoutines(object):
         for obj in optlist:
             connectivity[obj] = []
             for atom in obj.atomlist:
-                closeatoms = self.routines.cells.getNearCells(atom)
+                closeatoms = self.routines.cells.get_near_cells(atom)
                 for closeatom in closeatoms:
 
                     # Conditions for continuing
@@ -2131,7 +2131,7 @@ class HydrogenRoutines(object):
                         if not atom.hdonor and not closeatom.hdonor:
                             continue
 
-                    dist = distance(atom.getCoords(), closeatom.getCoords())
+                    dist = distance(atom.coords, closeatom.coords)
                     if dist < 4.3:
                         residue = atom.residue
                         hbond = PotentialBond(atom, closeatom, dist)
@@ -2166,7 +2166,7 @@ class HydrogenRoutines(object):
                 continue
             if obj1 in seen:
                 continue
-            network = analyzeConnectivity(connectivity, obj1)
+            network = analyze_connectivity(connectivity, obj1)
             for obj2 in network:
                 if obj2 not in seen:
                     seen.append(obj2)
@@ -2192,7 +2192,7 @@ class HydrogenRoutines(object):
                 for hbond in obj.hbonds:
                     if hbond.atom2 not in self.atomlist:
                         hbondmap[hbond] = hbond.dist
-            hbondlist = sortDictByValue(hbondmap)
+            hbondlist = sort_dict_by_value(hbondmap)
             hbondlist.reverse()
 
             for hbond in hbondlist:
@@ -2221,7 +2221,7 @@ class HydrogenRoutines(object):
                                     hbondmap[hbond] = hbond.dist
                                     seenlist.append((hbond.atom1, hbond.atom2))
 
-            hbondlist = sortDictByValue(hbondmap)
+            hbondlist = sort_dict_by_value(hbondmap)
             hbondlist.reverse()
 
             for hbond in hbondlist:
@@ -2256,7 +2256,7 @@ class HydrogenRoutines(object):
                                 hbondmap[hbond] = hbond.dist
                                 seenlist.append((hbond.atom1, hbond.atom2))
 
-            hbondlist = sortDictByValue(hbondmap)
+            hbondlist = sort_dict_by_value(hbondmap)
             hbondlist.reverse()
 
             for hbond in hbondlist:
@@ -2292,7 +2292,7 @@ class HydrogenRoutines(object):
         This is the current definition:  Name Ttyp  A R # Stdconf   HT Chi OPTm
         """
         # TODO - I don't think files should be loaded so deep in this module
-        toppath = getDatFile(TOPOLOGYPATH)
+        toppath = test_dat_file(TOPOLOGYPATH)
         if toppath == "":
             raise KeyError("Could not find %s!" % TOPOLOGYPATH)
 
@@ -2317,7 +2317,7 @@ class HydrogenRoutines(object):
             refmap[res_.name] = res_.reference
             for atom in refmap[res_.name].atoms:
                 atommap[res_.name, atom.name] = atom
-            for titrationstate in res_.titrationStates:
+            for titrationstate in res_.titration_states:
                 titrationstatemap[titrationstate.name] = titrationstate
                 for tautomer in titrationstate.tautomers:
                     tautomermap[tautomer.name] = tautomer
@@ -2357,7 +2357,7 @@ class HydrogenRoutines(object):
             ntrmap = {}    # map for N-TERM
             for tautomer in titrationstatemap["NTER"].tautomers:
                 for conformer in tautomermap[tautomer.name].conformers:
-                    for conformeradds in conformermap[conformer.name].conformerAdds:
+                    for conformeradds in conformermap[conformer.name].conformer_adds:
                         for atom in conformeradds.atoms:
                             ntrmap[atom.name] = atom
             atoms = ['H3', 'H2']
@@ -2369,13 +2369,13 @@ class HydrogenRoutines(object):
             conformernames = []
             for tautomer in titrationstatemap["CTER"].tautomers:
                 for conformer in tautomermap[tautomer.name].conformers:
-                    for conformeradds in conformermap[conformer.name].conformerAdds:
+                    for conformeradds in conformermap[conformer.name].conformer_adds:
                         for atom in conformeradds.atoms:
                             nonhmap[atom.name] = atom
             for tautomer in titrationstatemap["CTER0"].tautomers:
                 for conformer in tautomermap[tautomer.name].conformers:
                     conformernames.append(conformer.name)
-                    for conformeradds in conformermap[conformer.name].conformerAdds:
+                    for conformeradds in conformermap[conformer.name].conformer_adds:
                         for atom in conformeradds.atoms:
                             hmap[conformer.name, atom.name] = atom
 
@@ -2408,7 +2408,7 @@ class HydrogenRoutines(object):
             _ = refmap['ASP']
             for tautomer in titrationstatemap["ASH"].tautomers:
                 for conformer in tautomermap[tautomer.name].conformers:
-                    for conformeradds in conformermap[conformer.name].conformerAdds:
+                    for conformeradds in conformermap[conformer.name].conformer_adds:
                         for atom in conformeradds.atoms:
                             hmap[conformer.name, atom.name] = atom
                             conformernames.append(conformer.name)
@@ -2422,7 +2422,7 @@ class HydrogenRoutines(object):
             _ = refmap['GLU']
             for tautomer in titrationstatemap["GLH"].tautomers:
                 for conformer in tautomermap[tautomer.name].conformers:
-                    for conformeradds in conformermap[conformer.name].conformerAdds:
+                    for conformeradds in conformermap[conformer.name].conformer_adds:
                         for atom in conformeradds.atoms:
                             hmap[conformer.name, atom.name] = atom
                             conformernames.append(conformer.name)
