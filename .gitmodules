@@ -13,3 +13,6 @@
 [submodule "apbs/externals/bem"]
 	path = apbs/externals/bem
 	url = https://github.com/lwwilson1/TABIPB.git
+[submodule "pdb2pqr/propka"]
+	path = pdb2pqr/propka31
+	url = https://github.com/Electrostatics/propka-3.1.git
