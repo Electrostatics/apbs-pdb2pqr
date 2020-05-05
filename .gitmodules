@@ -15,4 +15,4 @@
 	url = https://github.com/lwwilson1/TABIPB.git
 [submodule "pdb2pqr/propka"]
 	path = pdb2pqr/propka31
-	url = https://github.com/jensengroup/propka-3.1.git
+	url = https://github.com/Electrostatics/propka-3.1.git
