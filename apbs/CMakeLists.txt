@@ -18,12 +18,28 @@ set(CMAKE_MACOSX_RPATH 1)
 include(CheckIncludeFiles)
 include(CheckFunctionExists)
 include(ExternalProject)
+include(FeatureSummary)
 
 set(APBS_VERSION "3.0")
 set(PACKAGE_STRING ${APBS_VERSION})
 set(CMAKE_BUILD_TYPE "RELWITHDEBINFO")
 
 project(apbs)
+
+set_package_properties(APBS PROPERTIES
+    URL "http://www.poissonboltzmann.org/"
+    DESCRIPTION "Adaptive Poisson-Boltzmann Solver"
+    PURPOSE "APBS solves the equations of continuum electrostatics for large \
+             biomolecular assemblages. This software was designed 'from the \
+             ground up' using modern design principles to ensure its ability \
+             to interface with other computational packages and evolve as \
+             methods and applications change over time. The APBS code is \
+             accompanied by extensive documentation for both users and \
+             programmers and is supported by a variety of utilities for \
+             preparing calculations and analyzing results. Finally, the free, \
+             open-source APBS license ensures its accessibility to the entire \
+             biomedical community.")
+
 
 OPTION (BUILD_SHARED_LIBS "Build shared libraries." OFF)
 
@@ -34,6 +50,9 @@ OPTION (BUILD_SHARED_LIBS "Build shared libraries." OFF)
 message(STATUS "Setting project paths")
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Werror -fpermissive -fPIC")
+if(APPLE AND BUILD_SHARED_LIBS)
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -undefined dynamic_lookup")
+endif()
 
 set(APBS_ROOT ${PROJECT_SOURCE_DIR})
 set(APBS_BUILD ${PROJECT_BINARY_DIR})
