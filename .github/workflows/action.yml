@@ -101,6 +101,15 @@ jobs:
           #  Assume we are in the User's home directory where the top of the repository
           echo "==================================== LOOK for APBS binary ==================================== "
           pwd
+          echo find $HOME -type f -name apbs
           find $HOME -type f -name apbs
+          echo find $HOME -type f -name libmaloc.so
+          find $HOME -type f -name libmaloc.so
+          echo cd apbs/tests
           cd apbs/tests
+          echo pwd 
+          pwd 
+          echo ls
+          ls
+          echo bash run_travis_test.sh $HOME/local/bin ${{ matrix.test-name }}
           bash run_travis_test.sh $HOME/local/bin ${{ matrix.test-name }}
