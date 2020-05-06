@@ -17,6 +17,21 @@ jobs:
         python-version: [ 3.6 ]
         cflag-options:
           -  ' -DENABLE_GEOFLOW=ON  -DENABLE_BEM=ON -DGET_MSMS=ON  -DENABLE_FETK=ON  -DENABLE_PBSAM=OFF -DENABLE_PBAM=OFF -DENABLE_PYTHON=OFF -DBUILD_SHARED_LIBS=OFF -DCMAKE_C_FLAGS="-fPIC"'
+        test-name :
+          - born
+#          - geoflow
+#          - actin-dimer-auto
+#          - actin-dimer-parallel
+#          - alkanes
+#          - FKBP
+#          - hca-bind
+#          - ion-pmf
+#          - ion-protein
+#          - ionize
+#          - pka-lig
+#          - point-pmf
+#          - solv
+#          - protein-rn
     steps:
       - uses: actions/checkout@v1
       - name: Set up Python
@@ -82,25 +97,9 @@ jobs:
           pwd
           VERBOSE=1 make -j 1 install
   tests:
-    name: Compile Code
+    name: Test Code
     needs: build
-    strategy:
-      matrix:
-        test-name :
-          - born
-          - geoflow
-#          - actin-dimer-auto
-#          - actin-dimer-parallel
-#          - alkanes
-#          - FKBP
-#          - hca-bind
-#          - ion-pmf
-#          - ion-protein
-#          - ionize
-#          - pka-lig
-#          - point-pmf
-#          - solv
-#          - protein-rn
+    runs-on: ${{ job.build.runs-on }}
     steps:
       - name: Run the tests
         run: |              
