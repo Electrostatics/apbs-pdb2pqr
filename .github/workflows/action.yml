@@ -96,17 +96,6 @@ jobs:
           echo "==================================== RUN MAKE ==================================== "
           pwd
           VERBOSE=1 make -j 1 install
-  tests:
-    name: Test Code
-    needs: build
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        os: [ ubuntu-latest ]
-        test-name :
-          - born
-#          - geoflow
-    steps:
       - name: Run the tests
         run: |              
           #  Assume we are in the User's home directory where the top of the repository
@@ -122,5 +111,10 @@ jobs:
           pwd 
           echo ls
           ls
-          echo bash run_travis_test.sh $HOME/local/bin ${{ matrix.test-name }}
-          bash run_travis_test.sh $HOME/local/bin ${{ matrix.test-name }}
+          for name in `echo $TEST_LIST`
+          do
+            echo bash run_travis_test.sh $HOME/local/bin $name
+            bash run_travis_test.sh $HOME/local/bin $name
+          done
+        env:
+          TEST_LIST: 'born geoflow'
