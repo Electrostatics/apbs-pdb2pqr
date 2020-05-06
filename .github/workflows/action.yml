@@ -17,7 +17,7 @@ jobs:
         #python-version: [ 3.6 ]
         test-name :
           - born
-          - geoflow
+#          - geoflow
 #          - actin-dimer-auto
 #          - actin-dimer-parallel
 #          - alkanes
