@@ -25,6 +25,8 @@
 **/apbslib.py
 **/build
 **/c_cpp_properties.json
+apbs**.in
+apbs/externals/fetk
 include/maloc
 io.mc
 pdb2pqr/changes.tgz
@@ -34,5 +36,4 @@ pdb2pqr/site_scons/defaults.py
 pdb2pqr/visualize.cgi
 test-output*
 settings.json
-apbs/externals/fetk
 BUILD.sh
