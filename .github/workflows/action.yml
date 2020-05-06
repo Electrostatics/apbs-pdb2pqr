@@ -13,12 +13,12 @@ jobs:
         os: [ ubuntu-latest ]
         #os: [ ubuntu-latest, macOS-latest ]
         #os: [ ubuntu-latest, macOS-latest, windows-latest ]
-        python-version: [ 3.6, 3.7 ]
-        #python-version: [ 3.6 ]
+        #python-version: [ 3.6, 3.7 ]
+        python-version: [ 3.6 ]
         test-name :
           - born
-#          - geoflow
-#          - actin-dimer-auto
+          - geoflow
+          - actin-dimer-auto
 #          - actin-dimer-parallel
 #          - alkanes
 #          - FKBP
