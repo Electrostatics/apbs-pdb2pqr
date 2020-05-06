@@ -99,7 +99,7 @@ jobs:
   tests:
     name: Test Code
     needs: build
-    runs-on: ${{ job.build.runs-on }}
+    runs-on: ${{ matrix.os }}
     steps:
       - name: Run the tests
         run: |              
