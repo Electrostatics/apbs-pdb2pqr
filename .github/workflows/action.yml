@@ -89,13 +89,20 @@ jobs:
 
           echo "RUN CMAKE"
           pwd
-          echo "cmake -DCMAKE_INSTALL_PREFIX=$HOME/apbs -DENABLE_PYTHON=ON -DENABLE_GEOFLOW=ON -DBUILD_DOC=OFF -DBUILD_SHARED_LIBS=ON -DENABLE_FETK=$FETK .."
-          cmake -DCMAKE_INSTALL_PREFIX=$HOME/apbs -DENABLE_PYTHON=ON -DENABLE_GEOFLOW=ON -DBUILD_DOC=OFF -DBUILD_SHARED_LIBS=ON -DENABLE_FETK=$FETK ..
+          cmake                                     \
+                -DENABLE_GEOFLOW=ON                 \
+                -DENABLE_BEM=ON -DGET_MSMS=ON       \
+                -DENABLE_FETK=ON                    \
+                -DENABLE_PBSAM=OFF                  \
+                -DENABLE_PBAM=OFF                   \
+                -DENABLE_PYTHON=OFF                 \
+                -DBUILD_SHARED_LIBS=OFF             \
+                -DCMAKE_C_FLAGS="-fPIC"             \
+                ..                                        || exit 1
 
-          echo "NOW RUN MAKE"
+          echo "RUN MAKE"
           pwd
-          #make VERBOSE=1 install
-          make install
+          VERBOSE=1 make -j 1 install                     || exit 
           
           echo "LOOK for APBS binary"
           find $HOME -type f -name apbs
