@@ -10,19 +10,18 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        #os: [ ubuntu-latest ]
-        os: [ ubuntu-latest, macOS-latest ]
+        os: [ ubuntu-latest ]
+        #os: [ ubuntu-latest, macOS-latest ]
         #os: [ ubuntu-latest, macOS-latest, windows-latest ]
         python-version: [ 3.6, 3.7 ]
         #python-version: [ 3.6 ]
         test-name :
           - born
+          - geoflow
 #          - actin-dimer-auto
 #          - actin-dimer-parallel
 #          - alkanes
-#          - born
 #          - FKBP
-#          - geoflow
 #          - hca-bind
 #          - ion-pmf
 #          - ion-protein
