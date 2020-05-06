@@ -95,14 +95,14 @@ jobs:
                 -DENABLE_FETK=ON                    \
                 -DENABLE_PBSAM=OFF                  \
                 -DENABLE_PBAM=OFF                   \
-                -DENABLE_PYTHON=ON                  \
-                -DBUILD_SHARED_LIBS=ON              \
+                -DENABLE_PYTHON=OFF                 \
+                -DBUILD_SHARED_LIBS=OFF             \
                 -DCMAKE_C_FLAGS="-fPIC"             \
                 ..                                        || exit 1
 
           echo "RUN MAKE"
           pwd
-          VERBOSE=1 make -j install
+          VERBOSE=1 make -j 1 install                     || exit 
           
           echo "LOOK for APBS binary"
           find $HOME -type f -name apbs
