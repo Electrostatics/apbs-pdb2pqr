@@ -6,31 +6,33 @@ on:
 
 jobs:
   build:
+    name: Compile Code
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ ubuntu-latest ]
-        #os: [ ubuntu-latest, macos-latest ]
-        #os: [ ubuntu-latest, macos-latest, windows-latest ]
-        #python-version: [ 3.6, 3.7 ]
-        python-version: [ 3.6 ]
-        test-name : [ born,
-                      actin-dimer-auto
-                    ]
-#actin-dimer-parallel
-#alkanes
-#born
-#FKBP
-#geoflow
-#hca-bind
-#ion-pmf
-#ion-protein
-#ionize
-#pka-lig
-#point-pmf
-#solv
-#protein-rn
-#]
+        #os: [ ubuntu-latest ]
+        os: [ ubuntu-latest, macOS-latest ]
+        #os: [ ubuntu-latest, macOS-latest, windows-latest ]
+        python-version: [ 3.6, 3.7 ]
+        #python-version: [ 3.6 ]
+        test-name :
+          - born
+#          - actin-dimer-auto
+#          - actin-dimer-parallel
+#          - alkanes
+#          - born
+#          - FKBP
+#          - geoflow
+#          - hca-bind
+#          - ion-pmf
+#          - ion-protein
+#          - ionize
+#          - pka-lig
+#          - point-pmf
+#          - solv
+#          - protein-rn
+        cflag-options:
+          -  ' -DENABLE_GEOFLOW=ON  -DENABLE_BEM=ON -DGET_MSMS=ON  -DENABLE_FETK=ON  -DENABLE_PBSAM=OFF -DENABLE_PBAM=OFF -DENABLE_PYTHON=OFF -DBUILD_SHARED_LIBS=OFF -DCMAKE_C_FLAGS="-fPIC"'
     steps:
       - uses: actions/checkout@v1
       - name: Set up Python
@@ -41,36 +43,39 @@ jobs:
         uses: mstksg/get-package@v1
         with:
           apt-get: bison flex swig libreadline-dev
-      - name: Final Build 
+      - name: Build and Install 
         run: |
-          echo "WHERE AM I"
+          echo "==================================== WHERE AM I ==================================== "
           pwd 
-
           # Make the install directory
-          mkdir -p $HOME/apbs
+          mkdir -p $HOME/local
 
-          echo "VERSIONS:"
-          echo "PYTHON VERSION"
+          echo "==================================== VERSIONS: ==================================== "
+          echo "==================================== PYTHON VERSION"
           python -c "import sys; print(sys.version)"
-          echo "CMAKE VERSION"
+          echo "==================================== CMAKE VERSION"
           cmake --version
-          echo "Gcc VERSION"
+          echo "==================================== Gcc VERSION"
           gcc --version
-          echo "G++ VERSION"
+          echo "==================================== G++ VERSION"
           g++ --version
-          echo "SWIG VERSION"
+          echo "==================================== SWIG VERSION"
           swig -version
 
+          echo "==================================== Install Python requirements ==================================== "
           pip3 install -U pip
           pip3 install -U pytest 
           pip3 install -U virtualenv
           pip3 install -U numpy
+          pip3 install -r pdb2pqr/requirements.txt
 
           #  Just build APBS for now
-          echo "PWD FOR TOP DIR"
+          echo "==================================== PWD FOR TOP DIR ==================================== "
           pwd
 
-          echo "Get External SubModules"
+          echo "==================================== Get External SubModules ==================================== "
+          git submodule init
+          git submodule update
           mkdir build
           cd build
           cmake ..
@@ -78,54 +83,25 @@ jobs:
           cd ..
 
           cd apbs
-          echo "PWD FOR APBS SRC"
+          echo "==================================== PWD FOR APBS SRC ==================================== "
           pwd
-
           mkdir build
           cd build
-
-          echo "BUILD DIR"
+          echo "==================================== BUILD DIR ==================================== "
           pwd
 
-          echo "RUN CMAKE"
+          echo "==================================== RUN CMAKE ==================================== "
           pwd
-          cmake                                     \
-                -DENABLE_GEOFLOW=ON                 \
-                -DENABLE_BEM=ON -DGET_MSMS=ON       \
-                -DENABLE_FETK=ON                    \
-                -DENABLE_PBSAM=OFF                  \
-                -DENABLE_PBAM=OFF                   \
-                -DENABLE_PYTHON=OFF                 \
-                -DBUILD_SHARED_LIBS=OFF             \
-                -DCMAKE_C_FLAGS="-fPIC"             \
-                ..                                        || exit 1
+          cmake ${{ matrix.cflag-options }} -DCMAKE_INSTALL_PREFIX:PATH=$HOME/local .. || exit 1
 
-          echo "RUN MAKE"
+          echo "==================================== RUN MAKE ==================================== "
           pwd
-          VERBOSE=1 make -j 1                             || exit 1
-          sudo make -j 1 install                          || exit 1
-          
-          echo "LOOK for APBS binary"
+          VERBOSE=1 make -j 1 install
+      - name: Run the tests
+        run: |              
+          #  Assume we are in the User's home directory where the top of the repository
+          echo "==================================== LOOK for APBS binary ==================================== "
+          pwd
           find $HOME -type f -name apbs
-          echo ""
-          #ctest .
-          cd ../tests
-          bash run_travis_test.sh $HOME/apbs/bin $TEST_SUITE
-        env:
-          FETK: ON
-          TEST_SUITE: born
-
-#    - FETK=OFF  TEST_SUITE=actin-dimer-auto
-#    - FETK=OFF  TEST_SUITE=actin-dimer-parallel
-#    - FETK=OFF  TEST_SUITE=alkanes
-#    - FETK=OFF  TEST_SUITE=born
-#    - FETK=OFF  TEST_SUITE=FKBP
-#    - FETK=OFF  TEST_SUITE=geoflow
-#    - FETK=OFF  TEST_SUITE=hca-bind
-#    - FETK=OFF  TEST_SUITE=ion-pmf
-#    - FETK=OFF  TEST_SUITE=ion-protein
-#    - FETK=OFF  TEST_SUITE=ionize
-#    - FETK=OFF  TEST_SUITE=pka-lig
-#    - FETK=OFF  TEST_SUITE=point-pmf
-#    - FETK=OFF  TEST_SUITE=solv
-#    - FETK=OFF  TEST_SUITE=protein-rna
+          cd apbs/tests
+          bash run_travis_test.sh $HOME/local/bin ${{ matrix.test-name }}
