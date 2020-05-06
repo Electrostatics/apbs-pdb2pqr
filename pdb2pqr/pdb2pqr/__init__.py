@@ -5,28 +5,16 @@ yielding a new PDB-style file as output.
 
 For more information, see http://www.poissonboltzmann.org/
 """
-__version__ = "3.0"
 from sys import version_info
 assert version_info >= (3, 5)
 import logging
 from pathlib import Path
 from . import run
 from . import utilities
-from . import inputgen, psize
+from .config import VERSION, TITLE_FORMAT_STRING, CITATIONS
 
 
-TITLE_TEXT = "PDB2PQR v{version} - biomolecular structure conversion software"
-TITLE_TEXT = TITLE_TEXT.format(version=__version__)
-CITE_TEXTS = [
-    ("Please cite:  Jurrus E, et al.  Improvements to the APBS biomolecular "
-     "solvation software suite.  Protein Sci 27 112-128 (2018)."),
-    ("Please cite:  Dolinsky TJ, et al.  PDB2PQR: expanding and upgrading "
-     "automated preparation of biomolecular structures for molecular "
-     "simulations.  Nucleic Acids Res 35 W522-W525 (2007).")
-]
-
-
-_LOGGER = logging.getLogger(__name__)
+_LOGGER = logging.getLogger("PDB2PQR" + VERSION)
 logging.captureWarnings(True)
 
 
@@ -37,8 +25,8 @@ def print_splash_screen(args):
         args:  argparse namespace
     """
     _LOGGER.debug("Args:  %s", args)
-    _LOGGER.info(TITLE_TEXT)
-    for citation in CITE_TEXTS:
+    _LOGGER.info("%s", TITLE_FORMAT_STRING.format(version=VERSION))
+    for citation in CITATIONS:
         _LOGGER.info(citation)
 
 
@@ -97,6 +85,8 @@ def check_options(args):
 def print_pqr(args, pqr_lines, header_lines, missing_lines, is_cif):
     """Print output to specified file
 
+    TODO - move this to another module (utilities)
+
     Args:
         args:  argparse namespace
         pqr_lines:  output lines (records)
@@ -104,8 +94,6 @@ def print_pqr(args, pqr_lines, header_lines, missing_lines, is_cif):
         missing_lines:  lines describing missing atoms (should go in header)
         is_cif:  flag indicating CIF-format
     """
-    # Print the PQR file
-    # TODO - move this to another module.
     with open(args.output_pqr, "wt") as outfile:
         # Adding whitespaces if --whitespace is in the options
         if header_lines:
