@@ -102,7 +102,8 @@ jobs:
 
           echo "RUN MAKE"
           pwd
-          VERBOSE=1 make -j 1 install                     || exit 
+          VERBOSE=1 make -j 1                             || exit 1
+          sudo make -j 1 install                          || exit 1
           
           echo "LOOK for APBS binary"
           find $HOME -type f -name apbs
