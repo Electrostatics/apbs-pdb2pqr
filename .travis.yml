@@ -112,20 +112,20 @@ script:
     - |
       #  Assume we are in the User's home directory where the top of the repository
       echo "==================================== LOOK for APBS binary ==================================== "
-      #pwd
-      #echo find $HOME -type f -name apbs
-      #find $HOME -type f -name apbs
+      pwd
+      echo find $HOME -type f -name apbs
+      find $HOME -type f -name apbs
       echo find $HOME -type f -name libmaloc
       find $HOME -type f -name libmaloc\*
-      echo cd apbs/tests
-      cd apbs/tests
+      echo cd ../tests
+      cd ../tests
       echo pwd 
       pwd 
       echo ls
       ls
       ldd $HOME/local/bin/apbs
       #  TODO: Total HACK since it should be using STATIC libraries
-      export LD_LIBRARY_PATH="/home/runner/work/apbs-pdb2pqr/apbs-pdb2pqr/apbs/build/fetk/lib"
+      export LD_LIBRARY_PATH="/home/travis/build/Electrostatics/apbs-pdb2pqr/apbs/build/fetk/lib"
       for name in `echo $TEST_LIST`
       do
         echo bash run_travis_test.sh $HOME/local/bin $name
