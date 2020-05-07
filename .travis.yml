@@ -1,15 +1,16 @@
 language: python
 
-python:
-    - "3.6"
-#    - "3.7"
-
-os:
-    - linux
-    - osx
-
-osx_image:
-    - xcode10.2
+matrix:
+  include:
+    - name: "Generic Python 3.6 on macOS"
+      os: osx
+      osx_image: xcode10.2
+      language: shell
+      python: [ 3.6, 3.7 ]
+    - name: "Generic Python 3.X on Linux"
+      os: linux
+      sudo: required
+      dist: xenial
 
 addons:
     apt:
@@ -32,16 +33,12 @@ compiler:
     - gcc
     - clang
 
-sudo: required
-dist: xenial
-
 env:
   global:
     - TEST_LIST='born geoflow actin-dimer-auto actin-dimer-parallel alkanes FKBP hca-bind ion-pmf ion-protein ionize pka-lig point-pmf solv protein-rna'
   matrix:
     - CMAKE_OPTS=' -DENABLE_GEOFLOW=ON  -DENABLE_BEM=ON  -DGET_MSMS=ON  -DENABLE_FETK=ON  -DENABLE_PBSAM=OFF -DENABLE_PBAM=OFF -DENABLE_PYTHON=OFF -DBUILD_SHARED_LIBS=OFF -DCMAKE_C_FLAGS="-fPIC"'
 #    - CMAKE_OPTS=' -DENABLE_GEOFLOW=ON  -DENABLE_BEM=OFF -DGET_MSMS=OFF -DENABLE_FETK=ON  -DENABLE_PBSAM=OFF -DENABLE_PBAM=OFF -DENABLE_PYTHON=ON  -DBUILD_SHARED_LIBS=ON  -DCMAKE_C_FLAGS="-fPIC"'
-
 
 branches:
     only:
