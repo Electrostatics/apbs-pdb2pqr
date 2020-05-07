@@ -107,4 +107,4 @@ jobs:
             bash run_travis_test.sh $HOME/local/bin $name
           done
         env:
-          TEST_LIST: 'born geoflow actin-dimer-auto actin-dimer-parallel alkanes FKBP hca-bind ion-pmf ion-protein ionize pka-lig point-pmf solv protein-r'
+          TEST_LIST: 'born geoflow actin-dimer-auto actin-dimer-parallel alkanes FKBP hca-bind ion-pmf ion-protein ionize pka-lig point-pmf solv protein-rna'
