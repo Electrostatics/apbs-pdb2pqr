@@ -1,37 +1,45 @@
 language: python
 
+python:
+  - 3.6
+  - 3.7
+
 matrix:
   include:
-    - name: "Generic Python 3.6 on macOS"
-      os: osx
-      osx_image: xcode10.2
-      language: shell
-      python: [ 3.6, 3.7 ]
+#    - name: "Generic Python 3.6 on macOS"
+#      os: osx
+#      osx_image: xcode10.2
+#      language: shell
+#      before_install:
+#        - python3 --version
+#        - pip3 install -U pip
+#        - pip3 install -U pytest
+#        - pip3 install -U numpy
+#        - pip3 install -U virtualenv
+#      addons:
+#        homebrew:
+#          packages:
+#            - gcc@7
+#            - bison
+#            - flex
+#            - swig
+#            - readline
+#          update: true
     - name: "Generic Python 3.X on Linux"
       os: linux
-      sudo: required
       dist: xenial
-
-addons:
-    apt:
-        packages:
+      addons:
+        apt:
+          packages:
             - g++-6
             - bison
             - flex
             - swig
             - libreadline-dev
-    homebrew:
-        packages:
-            - gcc@7
-            - bison
-            - flex
-            - swig
-            - readline
-        update: true
 
-compiler:
-    - gcc
-    - clang
+#compiler:
+#    - gcc
+#    - clang
 
 env:
   global:
