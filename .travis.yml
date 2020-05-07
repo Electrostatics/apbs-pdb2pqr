@@ -5,7 +5,7 @@ python:
 #    - "3.7"
 
 os:
-#    - linux
+    - linux
     - osx
 
 osx_image:
@@ -30,7 +30,7 @@ addons:
 
 compiler:
     - gcc
-#    - clang
+    - clang
 
 sudo: required
 dist: xenial
@@ -125,7 +125,9 @@ script:
       pwd 
       echo ls
       ls
-      ldd $HOME/local/bin/apbs
+      if [ -f /etc/os-release ]; then
+        ldd $HOME/local/bin/apbs
+      fi
       #  TODO: Total HACK since it should be using STATIC libraries
       export LD_LIBRARY_PATH="/home/travis/build/Electrostatics/apbs-pdb2pqr/apbs/build/fetk/lib"
       for name in `echo $TEST_LIST`

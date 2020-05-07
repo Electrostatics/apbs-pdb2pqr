@@ -99,7 +99,9 @@ jobs:
           pwd 
           echo ls
           ls
-          ldd $HOME/local/bin/apbs
+          if [ -f /etc/os-release ]; then
+            ldd $HOME/local/bin/apbs
+          fi
           #  TODO: Total HACK since it should be using STATIC libraries
           export LD_LIBRARY_PATH="/home/runner/work/apbs-pdb2pqr/apbs-pdb2pqr/apbs/build/fetk/lib"
           for name in `echo $TEST_LIST`
