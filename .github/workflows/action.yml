@@ -103,7 +103,7 @@ jobs:
           #pwd
           #echo find $HOME -type f -name apbs
           #find $HOME -type f -name apbs
-          echo find $HOME -type f -name libmaloc.so
+          echo find $HOME -type f -name libmaloc
           find $HOME -type f -name libmaloc\*
           echo cd apbs/tests
           cd apbs/tests
@@ -111,6 +111,9 @@ jobs:
           pwd 
           echo ls
           ls
+          ldd $HOME/local/bin/apbs
+          #  TODO: Total HACK since it should be using STATIC libraries
+          export LD_LIBRARY_PATH="/home/runner/work/apbs-pdb2pqr/apbs-pdb2pqr/apbs/build/fetk/lib"
           for name in `echo $TEST_LIST`
           do
             echo bash run_travis_test.sh $HOME/local/bin $name
