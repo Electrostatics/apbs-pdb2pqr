@@ -22,10 +22,13 @@
 **/.ipynb_checkpoints
 **/.pytest_cache
 **/.vscode
+**/apbs*.in
 **/apbslib.py
 **/build
 **/c_cpp_properties.json
-apbs**.in
+**/dxmath*.in
+**/ndens*.dx
+**/qdens*.dx
 apbs/externals/fetk
 include/maloc
 io.mc

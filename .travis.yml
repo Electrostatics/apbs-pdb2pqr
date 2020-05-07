@@ -14,12 +14,19 @@ os:
 addons:
     apt:
         packages:
-            - swig
             - g++-6
-#    homebrew:
-#        packages:
-#            - swig
-#        update: true
+            - bison
+            - flex
+            - swig
+            - libreadline-dev
+    homebrew:
+        packages:
+            - gcc@7
+            - bison
+            - flex
+            - swig
+            - readline
+        update: true
 
 compiler:
     - gcc
@@ -29,22 +36,12 @@ sudo: required
 dist: xenial
 
 env:
-    - FETK=ON   TEST_SUITE=born
+  global:
+    - TEST_LIST='born geoflow actin-dimer-auto actin-dimer-parallel alkanes FKBP hca-bind ion-pmf ion-protein ionize pka-lig point-pmf solv protein-rna'
+  matrix:
+    - CMAKE_OPTS=' -DENABLE_GEOFLOW=ON  -DENABLE_BEM=ON  -DGET_MSMS=ON  -DENABLE_FETK=ON  -DENABLE_PBSAM=OFF -DENABLE_PBAM=OFF -DENABLE_PYTHON=OFF -DBUILD_SHARED_LIBS=OFF -DCMAKE_C_FLAGS="-fPIC"'
+#    - CMAKE_OPTS=' -DENABLE_GEOFLOW=ON  -DENABLE_BEM=OFF -DGET_MSMS=OFF -DENABLE_FETK=ON  -DENABLE_PBSAM=OFF -DENABLE_PBAM=OFF -DENABLE_PYTHON=ON  -DBUILD_SHARED_LIBS=ON  -DCMAKE_C_FLAGS="-fPIC"'
 
-#    - FETK=OFF  TEST_SUITE=actin-dimer-auto
-#    - FETK=OFF  TEST_SUITE=actin-dimer-parallel
-#    - FETK=OFF  TEST_SUITE=alkanes
-#    - FETK=OFF  TEST_SUITE=born
-#    - FETK=OFF  TEST_SUITE=FKBP
-#    - FETK=OFF  TEST_SUITE=geoflow
-#    - FETK=OFF  TEST_SUITE=hca-bind
-#    - FETK=OFF  TEST_SUITE=ion-pmf
-#    - FETK=OFF  TEST_SUITE=ion-protein
-#    - FETK=OFF  TEST_SUITE=ionize
-#    - FETK=OFF  TEST_SUITE=pka-lig
-#    - FETK=OFF  TEST_SUITE=point-pmf
-#    - FETK=OFF  TEST_SUITE=solv
-#    - FETK=OFF  TEST_SUITE=protein-rna
 
 branches:
     only:
@@ -54,17 +51,86 @@ before_install:
     - python3 --version
     - pip3 install -U pip
     - pip3 install -U pytest
+    - pip3 install -r pdb2pqr/requirements.txt
 
 before_script:
-    - mkdir travis
-    - cd travis
-    - cmake -DENABLE_PYTHON=ON -DENABLE_GEOFLOW=ON -DBUILD_DOC=OFF -DENABLE_FETK=$FETK ..
+    - |
+      echo "==================================== WHERE AM I ==================================== "
+      pwd 
+      # Make the install directory
+      mkdir -p $HOME/local
+
+      echo "==================================== VERSIONS: ==================================== "
+      echo "==================================== PYTHON VERSION"
+      python -c "import sys; print(sys.version)"
+      echo "==================================== CMAKE VERSION"
+      cmake --version
+      echo "==================================== Gcc VERSION"
+      gcc --version
+      echo "==================================== G++ VERSION"
+      g++ --version
+      echo "==================================== SWIG VERSION"
+      swig -version
+
+      echo "==================================== Install Python requirements ==================================== "
+      pip3 install -U pip
+      pip3 install -U pytest 
+      pip3 install -U virtualenv
+      pip3 install -U numpy
+      pip3 install -r pdb2pqr/requirements.txt
+
+      #  Just build APBS for now
+      echo "==================================== PWD FOR TOP DIR ==================================== "
+      pwd
+
+      echo "==================================== Get External SubModules ==================================== "
+      git submodule init
+      git submodule update
+      mkdir build
+      cd build
+      cmake ..
+      make VERBOSE=1
+      cd ..
+
+      cd apbs
+      echo "==================================== PWD FOR APBS SRC ==================================== "
+      pwd
+      mkdir build
+      cd build
+      echo "==================================== BUILD DIR ==================================== "
+      pwd
+
+      echo "==================================== RUN CMAKE ==================================== "
+      pwd
+      cmake $CMAKE_OPTS -DCMAKE_INSTALL_PREFIX:PATH=$HOME/local .. || exit 1
+
+      echo "==================================== RUN MAKE ==================================== "
+      pwd
+      VERBOSE=1 make -j 1 install
 
 script:
-    - make VERBOSE=1
-    - ctest .
-    - cd ../apbs/tests
-    - bash run_travis_test.sh $TRAVIS_BUILD_DIR/apbs/travis/bin $TEST_SUITE
+    - |
+      #  Assume we are in the User's home directory where the top of the repository
+      echo "==================================== LOOK for APBS binary ==================================== "
+      pwd
+      echo find $HOME -type f -name apbs
+      find $HOME -type f -name apbs
+      echo find $HOME -type f -name libmaloc
+      find $HOME -type f -name libmaloc\*
+      echo cd ../tests
+      cd ../tests
+      echo pwd 
+      pwd 
+      echo ls
+      ls
+      ldd $HOME/local/bin/apbs
+      #  TODO: Total HACK since it should be using STATIC libraries
+      export LD_LIBRARY_PATH="/home/travis/build/Electrostatics/apbs-pdb2pqr/apbs/build/fetk/lib"
+      for name in `echo $TEST_LIST`
+      do
+        echo bash run_travis_test.sh $HOME/local/bin $name
+        bash run_travis_test.sh $HOME/local/bin $name
+      done
 
 notifications:
   slack: electrostatics:U4cSeRAFGXl9vUqdg4WOubnc
