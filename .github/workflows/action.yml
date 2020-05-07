@@ -10,28 +10,14 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ ubuntu-latest ]
-        #os: [ ubuntu-latest, macOS-latest ]
+        #os: [ ubuntu-latest ]
+        os: [ ubuntu-latest, macOS-latest ]
         #os: [ ubuntu-latest, macOS-latest, windows-latest ]
         #python-version: [ 3.6, 3.7 ]
         python-version: [ 3.6 ]
         cflag-options:
-          -  ' -DENABLE_GEOFLOW=ON  -DENABLE_BEM=ON -DGET_MSMS=ON  -DENABLE_FETK=ON  -DENABLE_PBSAM=OFF -DENABLE_PBAM=OFF -DENABLE_PYTHON=OFF -DBUILD_SHARED_LIBS=OFF -DCMAKE_C_FLAGS="-fPIC"'
-        test-name :
-          - born
-#          - geoflow
-#          - actin-dimer-auto
-#          - actin-dimer-parallel
-#          - alkanes
-#          - FKBP
-#          - hca-bind
-#          - ion-pmf
-#          - ion-protein
-#          - ionize
-#          - pka-lig
-#          - point-pmf
-#          - solv
-#          - protein-rn
+          -  ' -DENABLE_GEOFLOW=ON  -DENABLE_BEM=ON  -DGET_MSMS=ON  -DENABLE_FETK=ON  -DENABLE_PBSAM=OFF -DENABLE_PBAM=OFF -DENABLE_PYTHON=OFF -DBUILD_SHARED_LIBS=OFF -DCMAKE_C_FLAGS="-fPIC"'
+#          -  ' -DENABLE_GEOFLOW=ON  -DENABLE_BEM=OFF -DGET_MSMS=OFF -DENABLE_FETK=ON  -DENABLE_PBSAM=OFF -DENABLE_PBAM=OFF -DENABLE_PYTHON=ON  -DBUILD_SHARED_LIBS=ON  -DCMAKE_C_FLAGS="-fPIC"'
     steps:
       - uses: actions/checkout@v1
       - name: Set up Python
@@ -41,6 +27,7 @@ jobs:
       - name: Prereqs
         uses: mstksg/get-package@v1
         with:
+          brew: gcc@7 bison flex swig readline
           apt-get: bison flex swig libreadline-dev
       - name: Build and Install 
         run: |
@@ -120,4 +107,4 @@ jobs:
             bash run_travis_test.sh $HOME/local/bin $name
           done
         env:
-          TEST_LIST: 'born geoflow'
+          TEST_LIST: 'born geoflow actin-dimer-auto actin-dimer-parallel alkanes FKBP hca-bind ion-pmf ion-protein ionize pka-lig point-pmf solv protein-r'
