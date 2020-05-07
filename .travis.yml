@@ -5,11 +5,11 @@ python:
 #    - "3.7"
 
 os:
-    - linux
-#    - osx
+#    - linux
+    - osx
 
-#osx_image:
-#    - xcode10.2
+osx_image:
+    - xcode10.2
 
 addons:
     apt:
@@ -51,6 +51,8 @@ before_install:
     - python3 --version
     - pip3 install -U pip
     - pip3 install -U pytest
+    - pip3 install -U numpy
+    - pip3 install -U virtualenv
     - pip3 install -r pdb2pqr/requirements.txt
 
 before_script:
@@ -86,11 +88,11 @@ before_script:
       echo "==================================== Get External SubModules ==================================== "
       git submodule init
       git submodule update
-      mkdir build
-      cd build
-      cmake ..
-      make VERBOSE=1
-      cd ..
+      #mkdir build
+      #cd build
+      #cmake ..
+      #make VERBOSE=1
+      #cd ..
 
       cd apbs
       echo "==================================== PWD FOR APBS SRC ==================================== "

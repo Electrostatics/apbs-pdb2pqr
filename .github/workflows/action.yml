@@ -63,11 +63,11 @@ jobs:
           echo "==================================== Get External SubModules ==================================== "
           git submodule init
           git submodule update
-          mkdir build
-          cd build
-          cmake ..
-          make VERBOSE=1
-          cd ..
+          #mkdir build
+          #cd build
+          #cmake ..
+          #make VERBOSE=1
+          #cd ..
 
           cd apbs
           echo "==================================== PWD FOR APBS SRC ==================================== "
