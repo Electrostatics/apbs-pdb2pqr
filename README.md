@@ -51,5 +51,5 @@ Additional support and contributors are listed in the [online documentation](htt
 
 OS | PYTHON VERSION | GEOFLOW | BEM,MSMS | FETK | PBSAM | PBAM | PYTHON | SHARED_LIBS | TESTS PASS
 ------------- | ------------ | ------------- | ------------- | ------------- | ------------- | ------------- | ------------- | ------------- | ------------- 
-Ubuntu latest | 3.6, 3.7 | :grinning: | :grinning: | :grinning: | :nauseated_face: | :nauseated_face: | :grinning: | :grinning: | :partying_face:
-MacOSX latest | 3.6, 3.7 | :grinning: | :grinning: | :grinning: | :nauseated_face: | :nauseated_face: | :grinning: | :grinning: | :partying_face:
+Ubuntu latest | 3.6, 3.7 | :grinning: | :grinning: | :grinning: | :nauseated_face: | :nauseated_face: | :nauseated_face: | :nauseated_face: | :partying_face:
+MacOSX latest | 3.6, 3.7 | :grinning: | :grinning: | :grinning: | :nauseated_face: | :nauseated_face: | :nauseated_face: | :nauseated_face: | :partying_face:
