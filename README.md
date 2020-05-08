@@ -46,3 +46,10 @@ This service is intended to facilitate the setup and execution of electrostatics
 
 APBS and PDB2PQR are supported by NIH grant GM69702.
 Additional support and contributors are listed in the [online documentation](http://apbs-pdb2pqr.readthedocs.io/).
+
+### APBS Datasheet
+
+OS | PYTHON VERSION | GEOFLOW | BEM,MSMS | FETK | PBSAM | PBAM | PYTHON | SHARED_LIBS | TESTS PASS
+------------- | ------------ | ------------- | ------------- | ------------- | ------------- | ------------- | ------------- | ------------- | ------------- 
+Ubuntu latest | 3.6, 3.7 | :grinning: | :grinning: | :grinning: | :nauseated_face: | :nauseated_face: | :nauseated_face: | :nauseated_face: | :partying_face:
+MacOSX latest | 3.6, 3.7 | :grinning: | :grinning: | :grinning: | :nauseated_face: | :nauseated_face: | :nauseated_face: | :nauseated_face: | :partying_face:

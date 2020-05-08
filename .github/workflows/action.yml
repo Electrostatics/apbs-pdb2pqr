@@ -11,13 +11,14 @@ jobs:
     strategy:
       matrix:
         #os: [ ubuntu-latest ]
-        os: [ macOS-latest ]
-        #os: [ ubuntu-latest, macOS-latest ]
+        #os: [ macOS-latest ]
+        os: [ ubuntu-latest, macOS-latest ]
         #os: [ ubuntu-latest, macOS-latest, windows-latest ]
         #python-version: [ 3.6, 3.7 ]
-        python-version: [ 3.6 ]
+        python-version: [ 3.6, 3.7 ]
         cflag-options:
           -  ' -DENABLE_GEOFLOW=ON  -DENABLE_BEM=ON  -DGET_MSMS=ON  -DENABLE_FETK=ON  -DENABLE_PBSAM=OFF -DENABLE_PBAM=OFF -DENABLE_PYTHON=OFF -DBUILD_SHARED_LIBS=OFF -DCMAKE_C_FLAGS="-fPIC"'
+#          -  ' -DENABLE_GEOFLOW=ON  -DENABLE_BEM=ON  -DGET_MSMS=ON  -DENABLE_FETK=ON  -DENABLE_PBSAM=OFF -DENABLE_PBAM=OFF -DENABLE_PYTHON=ON  -DBUILD_SHARED_LIBS=ON  -DCMAKE_C_FLAGS="-fPIC"'
 #          -  ' -DENABLE_GEOFLOW=ON  -DENABLE_BEM=OFF -DGET_MSMS=OFF -DENABLE_FETK=ON  -DENABLE_PBSAM=OFF -DENABLE_PBAM=OFF -DENABLE_PYTHON=ON  -DBUILD_SHARED_LIBS=ON  -DCMAKE_C_FLAGS="-fPIC"'
     steps:
       - uses: actions/checkout@v1
@@ -63,11 +64,11 @@ jobs:
           echo "==================================== Get External SubModules ==================================== "
           git submodule init
           git submodule update
-          mkdir build
-          cd build
-          cmake ..
-          make VERBOSE=1
-          cd ..
+          #mkdir build
+          #cd build
+          #cmake ..
+          #make VERBOSE=1
+          #cd ..
 
           cd apbs
           echo "==================================== PWD FOR APBS SRC ==================================== "
@@ -99,7 +100,9 @@ jobs:
           pwd 
           echo ls
           ls
-          ldd $HOME/local/bin/apbs
+          if [ -f /etc/os-release ]; then
+            ldd $HOME/local/bin/apbs
+          fi
           #  TODO: Total HACK since it should be using STATIC libraries
           export LD_LIBRARY_PATH="/home/runner/work/apbs-pdb2pqr/apbs-pdb2pqr/apbs/build/fetk/lib"
           for name in `echo $TEST_LIST`
