@@ -78,6 +78,9 @@ jobs:
           FileType: '.py, .c, .h'
           Path: 'apbs/, pdb2pqr'
           IgnorePath: 'apbs/build/, apbs/externals/, build/, contrib/iapbs/, pdb2pqr/build/, pdb2pqr/propka31, apbs/src/.config'
+        runs:
+          using: "docker"
+          image: "Dockerfile"
       # Creates pull request with all changes in file
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v2
