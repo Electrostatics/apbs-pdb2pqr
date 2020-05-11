@@ -2,6 +2,10 @@ name: "Copyright Action"
 description: "Inserts copyright notice to configured files in repository and creates a pull request"
 # From https://github.com/VinnyBabuManjaly/copyright-action
 
+on:
+  push:
+    branches: [ master ]
+
 steps:
   # Checking out the repository which is to be actioned
   - uses: actions/checkout@v2
