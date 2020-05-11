@@ -141,6 +141,9 @@ script:
         echo bash run_travis_test.sh $HOME/local/bin $name
         bash run_travis_test.sh $HOME/local/bin $name
       done
+  env:
+    # https://codecov.io/gh/Electrostatics/apbs-pdb2pqr
+    CODECOV_TOKEN="e3a1e24c-5598-4f47-9353-7fa0ac57f98e"
 
 notifications:
   slack: electrostatics:U4cSeRAFGXl9vUqdg4WOubnc

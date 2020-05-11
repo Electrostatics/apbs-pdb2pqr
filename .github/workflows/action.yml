@@ -1,9 +1,7 @@
 name: Build
-
 on:
   push:
     branches: [ master ]
-
 jobs:
   build:
     name: Compile Code
@@ -112,3 +110,5 @@ jobs:
           done
         env:
           TEST_LIST: 'born geoflow actin-dimer-auto actin-dimer-parallel alkanes FKBP hca-bind ion-pmf ion-protein ionize pka-lig point-pmf solv protein-rna'
+          # https://codecov.io/gh/Electrostatics/apbs-pdb2pqr
+          CODECOV_TOKEN : "e3a1e24c-5598-4f47-9353-7fa0ac57f98e"
