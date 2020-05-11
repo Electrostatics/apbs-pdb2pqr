@@ -1,28 +1,14 @@
 """Regression tests for PDB2PQR behavior."""
 import logging
-from pathlib import Path
 import pytest
 import common
-from pdb2pqr.main import build_parser, main
 
 
 _LOGGER = logging.getLogger(__name__)
-PARSER = build_parser()
-
-
-def run_pdb2pqr(args, input_path, output_pqr, expected_pqr, tmp_path_):
-    """Basic code for invoking PDB2PQR."""
-    arg_str = args + " {inp} {out}"
-    output_pqr = tmp_path_ / output_pqr
-    _LOGGER.debug("Writing output to %s", output_pqr)
-    arg_str = arg_str.format(inp=input_path, out=output_pqr)
-    args = PARSER.parse_args(arg_str.split())
-    main(args)
-    common.compare_pqr(output_pqr, expected_pqr)
 
 
 @pytest.mark.parametrize(
-    "args, input_path, output_pqr, expected_pqr",
+    "args, input_pdb, output_pqr, expected_pqr",
     [
         pytest.param(
             "--log-level=INFO --ff=AMBER",
@@ -40,13 +26,14 @@ def run_pdb2pqr(args, input_path, output_pqr, expected_pqr, tmp_path_):
         )
     ]
 )
-def test_basic(args, input_path, output_pqr, expected_pqr, tmp_path):
+def test_basic(args, input_pdb, output_pqr, expected_pqr, tmp_path):
     """Basic code to run 1AFS."""
-    run_pdb2pqr(args, input_path, output_pqr, expected_pqr, tmp_path)
+    common.run_pdb2pqr(args=args, input_pdb=input_pdb, output_pqr=output_pqr,
+                       expected_pqr=expected_pqr, tmp_path=tmp_path)
 
 
 @pytest.mark.parametrize(
-    "args, input_path, output_pqr, expected_pqr",
+    "args, input_pdb, output_pqr, expected_pqr",
     [
         pytest.param(
             "--log-level=INFO --whitespace --ff=AMBER",
@@ -92,13 +79,14 @@ def test_basic(args, input_path, output_pqr, expected_pqr, tmp_path):
         )
     ]
 )
-def test_forcefields(args, input_path, output_pqr, expected_pqr, tmp_path):
+def test_forcefields(args, input_pdb, output_pqr, expected_pqr, tmp_path):
     """Basic code to run 1AFS with --whitespace for different forcefields."""
-    run_pdb2pqr(args, input_path, output_pqr, expected_pqr, tmp_path)
+    common.run_pdb2pqr(args=args, input_pdb=input_pdb, output_pqr=output_pqr,
+                       expected_pqr=expected_pqr, tmp_path=tmp_path)
 
 
 @pytest.mark.parametrize(
-    "args, input_path, output_pqr, expected_pqr",
+    "args, input_pdb, output_pqr, expected_pqr",
     [
         pytest.param(
             "--log-level=INFO --whitespace --clean",
@@ -143,13 +131,6 @@ def test_forcefields(args, input_path, output_pqr, expected_pqr, tmp_path):
             id="1AFS drop-water AMBER"
         ),
         pytest.param(
-            "--ff=AMBER --apbs-input --whitespace --include-header",
-            common.DATA_DIR / "1AFS.pdb",
-            "output.pqr",
-            common.DATA_DIR / '1AFS_apbs-input_include-header_whitespace_ff=AMBER.pqr',
-            id="1AFS apbs-input include-header whitespace AMBER"
-        ),
-        pytest.param(
             "--userff={ff} --usernames={names} --whitespace".format(
                 ff=common.DATA_DIR / "CUSTOM-FF.DAT",
                 names=common.DATA_DIR / "CUSTOM.names"),
@@ -160,9 +141,22 @@ def test_forcefields(args, input_path, output_pqr, expected_pqr, tmp_path):
         )
     ]
 )
-def test_other_options(args, input_path, output_pqr, expected_pqr, tmp_path):
+def test_other_options(args, input_pdb, output_pqr, expected_pqr, tmp_path):
     """Basic code to run 1AFS with --whitespace."""
-    run_pdb2pqr(args, input_path, output_pqr, expected_pqr, tmp_path)
+    common.run_pdb2pqr(args=args, input_pdb=input_pdb, output_pqr=output_pqr,
+                       expected_pqr=expected_pqr, tmp_path=tmp_path)
+
+# @pytest.mark.parametrize(
+#     "args, input_pdb, output_pqr, expected_pqr",
+
+#         pytest.param(
+#             "--ff=AMBER --apbs-input --whitespace --include-header",
+#             common.DATA_DIR / "1AFS.pdb",
+#             "output.pqr",
+#             common.DATA_DIR / '1AFS_apbs-input_include-header_whitespace_ff=AMBER.pqr',
+#             id="1AFS apbs-input include-header whitespace AMBER"
+#         ),
+_LOGGER.error("Need to reinstate the --apbs-input test with a temporary directory as path")
 
 
 @pytest.mark.slow
