@@ -1,4 +1,4 @@
-name: "Copyright Action"
+name: CopyrightAction
 description: "Inserts copyright notice to configured files in repository and creates a pull request"
 # From https://github.com/VinnyBabuManjaly/copyright-action
 
@@ -9,6 +9,7 @@ on:
 jobs:
   build:
     name: UpdateCopyright
+    runs-on: ubuntu-latest
     steps:
       - name: UpdatingCopyright
       # Checking out the repository which is to be actioned
