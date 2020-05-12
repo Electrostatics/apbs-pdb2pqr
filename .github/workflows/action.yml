@@ -16,9 +16,9 @@ jobs:
         #python-version: [ 3.6, 3.7 ]
         python-version: [ 3.7 ]
         cflag-options:
-          -  ' -DENABLE_GEOFLOW=ON  -DENABLE_BEM=ON  -DGET_MSMS=ON  -DENABLE_FETK=ON  -DENABLE_PBSAM=OFF -DENABLE_PBAM=OFF -DENABLE_PYTHON=OFF -DBUILD_SHARED_LIBS=OFF -DCMAKE_C_FLAGS="-fPIC"'
-#          -  ' -DENABLE_GEOFLOW=ON  -DENABLE_BEM=ON  -DGET_MSMS=ON  -DENABLE_FETK=ON  -DENABLE_PBSAM=OFF -DENABLE_PBAM=OFF -DENABLE_PYTHON=ON  -DBUILD_SHARED_LIBS=ON  -DCMAKE_C_FLAGS="-fPIC"'
-#          -  ' -DENABLE_GEOFLOW=ON  -DENABLE_BEM=OFF -DGET_MSMS=OFF -DENABLE_FETK=ON  -DENABLE_PBSAM=OFF -DENABLE_PBAM=OFF -DENABLE_PYTHON=ON  -DBUILD_SHARED_LIBS=ON  -DCMAKE_C_FLAGS="-fPIC"'
+          -  ' -DENABLE_GEOFLOW=ON  -DENABLE_BEM=ON  -DGET_MSMS=ON  -DENABLE_FETK=ON  -DENABLE_PBSAM=OFF -DENABLE_PBAM=OFF -DENABLE_PYTHON=OFF -DBUILD_SHARED_LIBS=OFF -DCMAKE_C_FLAGS="-fPIC" -DBUILD_DOC=ON'
+#          -  ' -DENABLE_GEOFLOW=ON  -DENABLE_BEM=ON  -DGET_MSMS=ON  -DENABLE_FETK=ON  -DENABLE_PBSAM=OFF -DENABLE_PBAM=OFF -DENABLE_PYTHON=ON  -DBUILD_SHARED_LIBS=ON  -DCMAKE_C_FLAGS="-fPIC" -DBUILD_DOC=ON'
+#          -  ' -DENABLE_GEOFLOW=ON  -DENABLE_BEM=OFF -DGET_MSMS=OFF -DENABLE_FETK=ON  -DENABLE_PBSAM=OFF -DENABLE_PBAM=OFF -DENABLE_PYTHON=ON  -DBUILD_SHARED_LIBS=ON  -DCMAKE_C_FLAGS="-fPIC" -DBUILD_DOC=ON'
     steps:
       - uses: actions/checkout@v1
       - name: Set up Python
@@ -29,7 +29,7 @@ jobs:
         uses: mstksg/get-package@v1
         with:
           brew: gcc@7 bison flex swig readline
-          apt-get: bison flex swig libreadline-dev
+          apt-get: bison flex swig libreadline-dev texlive-science texlive-extra-utils
       - name: Build and Install 
         run: |
           echo "==================================== WHERE AM I ==================================== "
