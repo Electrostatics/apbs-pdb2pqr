@@ -7,6 +7,7 @@ file.
 import logging
 import argparse
 from pathlib import Path
+import propka.lib
 from . import aa
 from . import debump
 from . import hydrogens
@@ -38,7 +39,7 @@ def build_parser():
                       choices=["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"])
     grp1 = pars.add_argument_group(title="Mandatory options",
                                    description="One of the following options must be used")
-    grp1.add_argument("--ff", choices=[x.upper() for x in FORCE_FIELDS],
+    grp1.add_argument("--ff", choices=[ff.upper() for ff in FORCE_FIELDS],
                       default="PARSE",
                       help="The forcefield to use.")
     grp1.add_argument("--userff",
@@ -53,12 +54,12 @@ def build_parser():
                       default=True, help='Do not perform the debumping operation')
     grp2.add_argument('--noopt', dest='opt', action='store_false', default=True,
                       help='Do not perform hydrogen optimization')
-    grp2.add_argument('--chain', action='store_true', default=False,
+    grp2.add_argument('--keep-chain', action='store_true', default=False,
                       help='Keep the chain ID in the output PQR file')
     grp2.add_argument('--assign-only', action='store_true', default=False,
                       help=("Only assign charges and radii - do not add atoms, "
                             "debump, or optimize."))
-    grp2.add_argument('--ffout', choices=[x.upper() for x in FORCE_FIELDS],
+    grp2.add_argument('--ffout', choices=[ff.upper() for ff in FORCE_FIELDS],
                       help=('Instead of using the standard canonical naming '
                             'scheme for residue and atom names, use the names '
                             'from the given forcefield'))
@@ -112,11 +113,7 @@ def build_parser():
                       help='Solvent dielectric constant.')
     grp4.add_argument('--pairene', default=1.0,
                       help='Cutoff energy in kT for pairwise pKa interaction energies.')
-    grp5 = pars.add_argument_group(title="PROPKA method options")
-    grp5.add_argument("--propka-reference", default="neutral",
-                      choices=('neutral', 'low-pH'),
-                      help=("Setting which reference to use for stability "
-                            "calculations. See PROPKA 3.0 documentation."))
+    pars = propka.lib.build_parser(pars)
     return pars
 
 
@@ -369,7 +366,7 @@ def non_trivial(args, protein, definition, is_cif):
     else:
         if is_repairable(protein, args.ligand is not None):
             _LOGGER.info("Attempting to repair %d missing atoms in biomolecule.",
-                            protein.num_missing_heavy)
+                         protein.num_missing_heavy)
             protein.repair_heavy()
 
         _LOGGER.info("Updating disulfide bridges.")
@@ -433,7 +430,7 @@ def non_trivial(args, protein, definition, is_cif):
                                      include_old_header=args.include_header)
 
     _LOGGER.info("Regenerating PDB lines.")
-    lines = io.print_protein_atoms(hitlist, args.chain)
+    lines = io.print_protein_atoms(hitlist, args.keep_chain)
 
     return {"lines": lines, "header": header, "missed_residues": misslist}
 
@@ -474,7 +471,7 @@ def main(args):
     if args.clean:
         _LOGGER.info("Arguments specified cleaning only; skipping remaining steps.")
         results = {"header": "", "missed_residues": None, "protein": protein,
-                   "lines": io.print_protein_atoms(protein.atoms, args.chain)}
+                   "lines": io.print_protein_atoms(protein.atoms, args.keep_chain)}
     else:
         results = non_trivial(args=args, protein=protein, definition=definition,
                               is_cif=is_cif)
@@ -483,4 +480,5 @@ def main(args):
               missing_lines=results["missed_residues"], is_cif=is_cif)
 
     if args.apbs_input:
+        raise NotImplementedError("Missing argument for APBS input file.")
         io.dump_apbs(args.output_pqr)
