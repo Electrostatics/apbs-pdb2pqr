@@ -33,7 +33,8 @@ jobs:
       addons:
         apt:
           packages:
-            - g++-7
+            - gcc-6
+            - g++-6
             - bison
             - flex
             - swig

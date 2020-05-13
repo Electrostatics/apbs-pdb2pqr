@@ -30,7 +30,7 @@ jobs:
         uses: mstksg/get-package@v1
         with:
           brew: gcc@7 bison flex swig readline
-          apt-get: bison flex swig libreadline-dev texlive-science texlive-extra-utils
+          apt-get: bison flex swig libreadline-dev
       - name: Build and Install
         run: |
           echo "==================================== WHERE AM I ==================================== "
