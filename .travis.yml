@@ -7,32 +7,36 @@ python:
 
 jobs:
   include:
-    - name: "Generic Python 3.6 on macOS"
-      os: osx
-      osx_image: xcode11.4
-      language: shell
-      before_install:
-        - python3 --version
-        - pip3 install -U pip
-        - pip3 install -U pytest
-        - pip3 install -U numpy
-        - pip3 install -U virtualenv
-      addons:
-        homebrew:
-          packages:
-            - gcc@7
-            - bison
-            - flex
-            - swig
-            - readline
-            - git-lfs
-          update: true
+    #  - name: "Generic Python 3.6 on macOS"
+    #    os: osx
+    #    osx_image: xcode11.4
+    #    language: shell
+    #    before_install:
+    #      - python3 --version
+    #      - pip3 install -U pip
+    #      - pip3 install -U pytest
+    #      - pip3 install -U numpy
+    #      - pip3 install -U virtualenv
+    #    addons:
+    #      homebrew:
+    #        packages:
+    #          - gcc@7
+    #          - bison
+    #          - flex
+    #          - swig
+    #          - readline
+    #          - git-lfs
+    #        update: true
     - name: "Generic Python 3.X on Linux"
       os: linux
       dist: xenial
       addons:
         apt:
+          sources:
+            - ppa:ubuntu-toolchain-r/test
           packages:
+            - build-essential
+            - software-properties-common
             - gcc-6
             - g++-6
             - bison
