@@ -15,11 +15,11 @@ jobs:
             # https://docs.travis-ci.com/user/reference/windows/
             [[ ! -f C:/tools/msys64/msys2_shell.cmd ]] && rm -rf C:/tools/msys64
             choco uninstall -y mingw
-            choco install cmake
-            choco install make
-            choco install python3
-            choco install python3-pip
-            choco install swig
+            # choco install cmake
+            # choco install make
+            # choco install python3
+            # choco install python3-pip
+            # choco install swig
             choco upgrade --no-progress -y msys2
             export msys2='cmd //C RefreshEnv.cmd '
             export msys2+='& set MSYS=winsymlinks:nativestrict '
@@ -40,7 +40,7 @@ jobs:
             $msys2 pacman -S --noconfirm --needed swig
             ## Install more MSYS2 packages from https://packages.msys2.org/base here
             taskkill //IM gpg-agent.exe //F  # https://travis-ci.community/t/4967
-            export PATH=/C/tools/msys64/mingw64/bin:$PATH
+            export PATH=/C/tools/msys64/usr/bin/:/C/tools/msys64/mingw64/bin:$PATH
             # https://www.msys2.org/wiki/Porting/
             # Don't use mingw32-make
             # export MAKE=mingw32-make  # so that Autotools can find it
@@ -125,23 +125,29 @@ before_script:
       pwd
       # Make the install directory
       mkdir -p $HOME/local
+      echo "ENV2"
+      env
 
       echo "==================================== VERSIONS: ==================================== "
       echo "==================================== PYTHON VERSION"
       case $TRAVIS_OS_NAME in
         windows)
           where python
-          find /C/tools/msys64 -name pip\*
+          find /C/tools/msys64 -name pip3\*
+          find /C/tools/msys64 -name swig\*
           find /C -name rpc.h
+          find /C -name fcntl.h
           ;;
       esac
       python -c "import sys; print(sys.version)"
       echo "==================================== CMAKE VERSION"
       cmake --version
       echo "==================================== Gcc VERSION"
+      export CC=gcc
       export CMAKE_C_COMPILER=gcc
       gcc --version
       echo "==================================== G++ VERSION"
+      export CXX=g++
       export CMAKE_CXX_COMPILER=g++
       g++ --version
       echo "==================================== SWIG VERSION"
