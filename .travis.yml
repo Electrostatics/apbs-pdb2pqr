@@ -15,10 +15,11 @@ jobs:
             # https://docs.travis-ci.com/user/reference/windows/
             [[ ! -f C:/tools/msys64/msys2_shell.cmd ]] && rm -rf C:/tools/msys64
             choco uninstall -y mingw
-            # choco install cmake
-            # choco install make
-            # choco install python3
-            # choco install swig
+            choco install cmake
+            choco install make
+            choco install python3
+            choco install python3-pip
+            choco install swig
             choco upgrade --no-progress -y msys2
             export msys2='cmd //C RefreshEnv.cmd '
             export msys2+='& set MSYS=winsymlinks:nativestrict '
@@ -178,7 +179,7 @@ before_script:
       pwd
       export CMAKE_C_STANDARD_INCLUDE_DIRECTORIES="/C/tools/msys64/opt/x86_64-w64-mingw32/"
       export CMAKE_CXX_STANDARD_INCLUDE_DIRECTORIES="/C/tools/msys64/opt/x86_64-w64-mingw32/"
-      cmake -G "MSYS Makefiles" $CMAKE_OPTS -DCMAKE_INSTALL_PREFIX:PATH=$HOME/local .. || exit 1
+      cmake $CMAKE_OPTS -DCMAKE_INSTALL_PREFIX:PATH=$HOME/local .. || exit 1
 
       echo "==================================== RUN MAKE ==================================== "
       pwd
