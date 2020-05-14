@@ -205,4 +205,4 @@ script:
 notifications:
   slack:
     on_success: always
-    #electrostatics:U4cSeRAFGXl9vUqdg4WOubnc
+    #  - electrostatics:U4cSeRAFGXl9vUqdg4WOubnc
