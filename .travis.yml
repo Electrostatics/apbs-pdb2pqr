@@ -113,6 +113,11 @@ before_script:
 
       echo "==================================== VERSIONS: ==================================== "
       echo "==================================== PYTHON VERSION"
+      case $TRAVIS_OS_NAME in
+        windows)
+          where python
+          ;;
+      esac
       python -c "import sys; print(sys.version)"
       echo "==================================== CMAKE VERSION"
       cmake --version
@@ -157,7 +162,8 @@ before_script:
 
       echo "==================================== RUN MAKE ==================================== "
       pwd
-      make -j 1 install
+      make -j 1
+      #make -j 1 install
 
 script:
   - |
