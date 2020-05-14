@@ -1,24 +1,25 @@
+---
 name: Build
 on:
   push:
-    branches: [ master ]
+    branches: [master]
 jobs:
   build:
     name: Compile Code
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        #os: [ ubuntu-latest ]
-        #os: [ macOS-latest ]
-        os: [ ubuntu-latest, macOS-latest ]
-        #os: [ ubuntu-latest, macOS-latest, windows-latest ]
-        #python-version: [ 3.6, 3.7 ]
-        #python-version: [ 3.6, 3.7 ]
-        python-version: [ 3.7 ]
+        # os: [ubuntu-latest]
+        # os: [macOS-latest]
+        os: [ubuntu-latest, macOS-latest]
+        # os: [ubuntu-latest, macOS-latest, windows-latest]
+        # python-version: [3.6, 3.7]
+        # python-version: [3.6, 3.7]
+        python-version: [3.7]
         cflag-options:
-          -  ' -DENABLE_GEOFLOW=ON  -DENABLE_BEM=ON  -DGET_MSMS=ON  -DENABLE_FETK=ON  -DENABLE_PBSAM=OFF -DENABLE_PBAM=OFF -DENABLE_PYTHON=OFF -DBUILD_SHARED_LIBS=OFF -DCMAKE_C_FLAGS="-fPIC"'
-#          -  ' -DENABLE_GEOFLOW=ON  -DENABLE_BEM=ON  -DGET_MSMS=ON  -DENABLE_FETK=ON  -DENABLE_PBSAM=OFF -DENABLE_PBAM=OFF -DENABLE_PYTHON=ON  -DBUILD_SHARED_LIBS=ON  -DCMAKE_C_FLAGS="-fPIC"'
-#          -  ' -DENABLE_GEOFLOW=ON  -DENABLE_BEM=OFF -DGET_MSMS=OFF -DENABLE_FETK=ON  -DENABLE_PBSAM=OFF -DENABLE_PBAM=OFF -DENABLE_PYTHON=ON  -DBUILD_SHARED_LIBS=ON  -DCMAKE_C_FLAGS="-fPIC"'
+          - ' -DENABLE_GEOFLOW=ON  -DENABLE_BEM=ON  -DGET_MSMS=ON  -DENABLE_FETK=ON  -DENABLE_PBSAM=OFF -DENABLE_PBAM=OFF -DENABLE_PYTHON=OFF -DBUILD_SHARED_LIBS=OFF -DCMAKE_C_FLAGS="-fPIC" -DBUILD_DOC=OFF'
+          # - ' -DENABLE_GEOFLOW=ON  -DENABLE_BEM=ON  -DGET_MSMS=ON  -DENABLE_FETK=ON  -DENABLE_PBSAM=OFF -DENABLE_PBAM=OFF -DENABLE_PYTHON=ON  -DBUILD_SHARED_LIBS=ON  -DCMAKE_C_FLAGS="-fPIC" -DBUILD_DOC=OFF'
+          # - ' -DENABLE_GEOFLOW=ON  -DENABLE_BEM=OFF -DGET_MSMS=OFF -DENABLE_FETK=ON  -DENABLE_PBSAM=OFF -DENABLE_PBAM=OFF -DENABLE_PYTHON=ON  -DBUILD_SHARED_LIBS=ON  -DCMAKE_C_FLAGS="-fPIC" -DBUILD_DOC=OFF'
     steps:
       - uses: actions/checkout@v1
       - name: Set up Python
@@ -30,10 +31,10 @@ jobs:
         with:
           brew: gcc@7 bison flex swig readline
           apt-get: bison flex swig libreadline-dev
-      - name: Build and Install 
+      - name: Build and Install
         run: |
           echo "==================================== WHERE AM I ==================================== "
-          pwd 
+          pwd
           # Make the install directory
           mkdir -p $HOME/local
 
@@ -51,7 +52,7 @@ jobs:
 
           echo "==================================== Install Python requirements ==================================== "
           pip3 install -U pip
-          pip3 install -U pytest 
+          pip3 install -U pytest
           pip3 install -U virtualenv
           pip3 install -U numpy
           pip3 install -r pdb2pqr/requirements.txt
@@ -85,7 +86,7 @@ jobs:
           pwd
           VERBOSE=1 make -j 1 install
       - name: Run the tests
-        run: |              
+        run: |
           #  Assume we are in the User's home directory where the top of the repository
           echo "==================================== LOOK for APBS binary ==================================== "
           #pwd
@@ -95,8 +96,8 @@ jobs:
           find $HOME -type f -name libmaloc\*
           echo cd apbs/tests
           cd apbs/tests
-          echo pwd 
-          pwd 
+          echo pwd
+          pwd
           echo ls
           ls
           if [ -f /etc/os-release ]; then
@@ -112,4 +113,4 @@ jobs:
         env:
           TEST_LIST: 'born geoflow actin-dimer-auto actin-dimer-parallel alkanes FKBP hca-bind ion-pmf ion-protein ionize pka-lig point-pmf solv protein-rna'
           # https://codecov.io/gh/Electrostatics/apbs-pdb2pqr
-          CODECOV_TOKEN : "e3a1e24c-5598-4f47-9353-7fa0ac57f98e"
+          CODECOV_TOKEN: "e3a1e24c-5598-4f47-9353-7fa0ac57f98e"

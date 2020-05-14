@@ -2,6 +2,8 @@
 
 [![Build Status](https://travis-ci.org/Electrostatics/apbs-pdb2pqr.svg?branch=master)](https://travis-ci.org/Electrostatics/apbs-pdb2pqr)
 
+![Build](https://github.com/Electrostatics/apbs-pdb2pqr/workflows/Build/badge.svg)
+
 # APBS and PDB2PQR: electrostatic and solvation properties for complex molecules
 
 ## Getting started
