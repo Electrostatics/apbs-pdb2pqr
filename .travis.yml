@@ -21,11 +21,13 @@ jobs:
             export mingw64="$msys2 -mingw64 -full-path -here -c "\"\$@"\" --"
             export msys2+=" -msys2 -c "\"\$@"\" --"
             $msys2 pacman --sync --noconfirm --needed mingw-w64-x86_64-toolchain
+            $msys2 pacman -S --noconfirm mingw-w64-cross-toolchain
             $msys2 pacman -S --noconfirm base
             $msys2 pacman -S --noconfirm base-devel
             $msys2 pacman -S --noconfirm development
             $msys2 pacman -S --noconfirm compression
             $msys2 pacman -S --noconfirm libraries
+            $msys2 pacman -S --noconfirm msys2-devel
             ## Install more MSYS2 packages from https://packages.msys2.org/base here
             taskkill //IM gpg-agent.exe //F  # https://travis-ci.community/t/4967
             choco install cmake
