@@ -12,8 +12,13 @@ jobs:
       language: shell
       before_install:
         - |
+            # https://docs.travis-ci.com/user/reference/windows/
             [[ ! -f C:/tools/msys64/msys2_shell.cmd ]] && rm -rf C:/tools/msys64
             choco uninstall -y mingw
+            choco install cmake
+            choco install make
+            choco install python3
+            choco install swig
             choco upgrade --no-progress -y msys2
             export msys2='cmd //C RefreshEnv.cmd '
             export msys2+='& set MSYS=winsymlinks:nativestrict '
@@ -28,14 +33,17 @@ jobs:
             $msys2 pacman -S --noconfirm compression
             $msys2 pacman -S --noconfirm libraries
             $msys2 pacman -S --noconfirm msys2-devel
+            $msys2 pacman -S --noconfirm make
             ## Install more MSYS2 packages from https://packages.msys2.org/base here
             taskkill //IM gpg-agent.exe //F  # https://travis-ci.community/t/4967
-            choco install cmake
-            ## choco install make
-            choco install python3
-            choco install swig
             export PATH=/C/tools/msys64/mingw64/bin:$PATH
-            export MAKE=mingw32-make  # so that Autotools can find it
+            # https://www.msys2.org/wiki/Porting/
+            # Don't use mingw32-make
+            # export MAKE=mingw32-make  # so that Autotools can find it
+            echo IAMHERE
+            getent passwd $(whoami) | cut -d: -f7
+            echo ENV
+            env
       before_cache:
         - |
             # https://unix.stackexchange.com/a/137322/107554
@@ -195,4 +203,6 @@ script:
       done
 
 notifications:
-  slack: electrostatics:U4cSeRAFGXl9vUqdg4WOubnc
+  slack:
+    on_success: always
+    #electrostatics:U4cSeRAFGXl9vUqdg4WOubnc
