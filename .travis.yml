@@ -17,6 +17,7 @@ jobs:
               windows)
                 [[ ! -f C:/tools/msys64/msys2_shell.cmd ]] && rm -rf C:/tools/msys64
                 choco uninstall -y mingw
+                choco uninstall -y python
                 choco upgrade --no-progress -y msys2
                 export msys2='cmd //C RefreshEnv.cmd '
                 export msys2+='& set MSYS=winsymlinks:nativestrict '
@@ -25,13 +26,8 @@ jobs:
                 export msys2+=" -msys2 -c "\"\$@"\" --"
                 $msys2 pacman --sync --noconfirm --needed mingw-w64-x86_64-toolchain
                 ## Install more MSYS2 packages from https://packages.msys2.org/base here
-                $msys2 pacman -S --noconfirm --needed base
-                $msys2 pacman -S --noconfirm --needed base-devel
-                $msys2 pacman -S --noconfirm --needed cmake3.13
-                $msys2 pacman -S --noconfirm --needed development
-                $msys2 pacman -S --noconfirm --needed compression
+                $msys2 pacman -S --noconfirm --needed cmake
                 $msys2 pacman -S --noconfirm --needed git
-                $msys2 pacman -S --noconfirm --needed libraries
                 $msys2 pacman -S --noconfirm --needed msys2-devel
                 $msys2 pacman -S --noconfirm --needed make
                 $msys2 pacman -S --noconfirm --needed python3.7
