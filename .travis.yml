@@ -24,6 +24,7 @@ jobs:
                 export mingw64="$msys2 -mingw64 -full-path -here -c "\"\$@"\" --"
                 export msys2+=" -msys2 -c "\"\$@"\" --"
                 $msys2 pacman --sync --noconfirm --needed mingw-w64-x86_64-toolchain
+                ## Install more MSYS2 packages from https://packages.msys2.org/base here
                 $msys2 pacman -S --noconfirm --needed base
                 $msys2 pacman -S --noconfirm --needed base-devel
                 $msys2 pacman -S --noconfirm --needed development
@@ -34,12 +35,11 @@ jobs:
                 $msys2 pacman -S --noconfirm --needed python3
                 $msys2 pacman -S --noconfirm --needed python3-pip
                 $msys2 pacman -S --noconfirm --needed swig
-                ## Install more MSYS2 packages from https://packages.msys2.org/base here
                 taskkill //IM gpg-agent.exe //F  # https://travis-ci.community/t/4967
-                export PATH=/C/tools/msys64/usr/bin/:/C/tools/msys64/mingw64/bin:$PATH
+                export PATH=/C/tools/msys64/bin/:/C/tools/msys64/mingw64/usr/bin:$PATH
                 ## https://www.msys2.org/wiki/Porting/
                 ## Don't use mingw32-make
-                ## export MAKE=mingw32-make  # so that Autotools can find it
+                export MAKE=mingw32-make  # so that Autotools can find it
                 echo IAMHERE
                 echo PRINTENV
                 printenv
@@ -119,15 +119,15 @@ before_install:
 
 before_script:
   - |
-      echo "==================================== WHERE AM I ==================================== "
-      pwd
+      $msys2 echo "==================================== WHERE AM I ==================================== "
+      $msys2 pwd
       # Make the install directory
-      mkdir -p $HOME/local
-      echo "ENV2"
-      env
+      $msys2 mkdir -p $HOME/local
+      $msys2 echo "ENV2"
+      $msys2 env
 
-      echo "==================================== VERSIONS: ==================================== "
-      echo "==================================== PYTHON VERSION"
+      $msys2 echo "==================================== VERSIONS: ==================================== "
+      $msys2 echo "==================================== PYTHON VERSION"
       case $TRAVIS_OS_NAME in
         windows)
           where python
@@ -137,74 +137,75 @@ before_script:
           find /C -name fcntl.h
           ;;
       esac
-      python -c "import sys; print(sys.version)"
-      echo "==================================== CMAKE VERSION"
-      cmake --version
-      echo "==================================== Gcc VERSION"
+      $msys2 python -c "import sys; print(sys.version)"
+      $msys2 echo "==================================== CMAKE VERSION"
+      $msys2 cmake --version
+      $msys2 echo "==================================== Gcc VERSION"
       export CC=gcc
       export CMAKE_C_COMPILER=gcc
-      gcc --version
-      echo "==================================== G++ VERSION"
+      $msys2 gcc --version
+      $msys2 echo "==================================== G++ VERSION"
       export CXX=g++
       export CMAKE_CXX_COMPILER=g++
-      g++ --version
-      echo "==================================== SWIG VERSION"
-      swig -version
+      $msys2 g++ --version
+      $msys2 echo "==================================== SWIG VERSION"
+      $msys2 swig -version
 
       echo "==================================== Install Python requirements ==================================== "
-      pip3 install -U pip
-      pip3 install -U pytest
-      pip3 install -U virtualenv
-      pip3 install -U numpy
-      pip3 install -r pdb2pqr/requirements.txt
+      $msys2 pip3 install -U pip
+      $msys2 pip3 install -U pytest
+      $msys2 pip3 install -U virtualenv
+      $msys2 pip3 install -U numpy
+      $msys2 pip3 install -r pdb2pqr/requirements.txt
 
       #  Just build APBS for now
-      echo "==================================== PWD FOR TOP DIR ==================================== "
-      pwd
+      $msys2 echo "==================================== PWD FOR TOP DIR ==================================== "
+      $msys2 pwd
 
-      echo "==================================== Get External SubModules ==================================== "
-      git submodule init
-      git submodule update
+      $msys2 echo "==================================== Get External SubModules ==================================== "
+      $msys2 git submodule init
+      $msys2 git submodule update
       #mkdir build
       #cd build
       #cmake ..
       #make VERBOSE=1
       #cd ..
 
-      cd apbs
-      echo "==================================== PWD FOR APBS SRC ==================================== "
-      pwd
-      mkdir build
-      cd build
-      echo "==================================== BUILD DIR ==================================== "
-      pwd
+      $msys2 cd apbs
+      $msys2 echo "==================================== PWD FOR APBS SRC ==================================== "
+      $msys2 pwd
+      $msys2 mkdir build
+      $msys2 cd build
+      $msys2 echo "==================================== BUILD DIR ==================================== "
+      $msys2 pwd
 
-      echo "==================================== RUN CMAKE ==================================== "
-      pwd
+      $msys2 echo "==================================== RUN CMAKE ==================================== "
+      $msys2 pwd
       export CMAKE_C_STANDARD_INCLUDE_DIRECTORIES="/C/tools/msys64/opt/x86_64-w64-mingw32/"
       export CMAKE_CXX_STANDARD_INCLUDE_DIRECTORIES="/C/tools/msys64/opt/x86_64-w64-mingw32/"
-      cmake $CMAKE_OPTS -DCMAKE_INSTALL_PREFIX:PATH=$HOME/local .. || exit 1
+      $msys2 cmake $CMAKE_OPTS -DCMAKE_INSTALL_PREFIX:PATH=$HOME/local .. || exit 1
+      $msys2 echo "==================================== RAN CMAKE =================================== "
 
-      echo "==================================== RUN MAKE ==================================== "
-      pwd
-      make -j 1
+      $msys2 echo "==================================== RUN MAKE ==================================== "
+      $msys2 pwd
+      $msys2 make -j 1
       #make -j 1 install
 
 script:
   - |
       #  Assume we are in the User's home directory where the top of the repository
-      echo "==================================== LOOK for APBS binary ==================================== "
-      pwd
-      echo find $HOME -type f -name apbs
-      find $HOME -type f -name apbs
-      echo find $HOME -type f -name libmaloc
-      find $HOME -type f -name libmaloc\*
-      echo cd ../tests
-      cd ../tests
-      echo pwd
-      pwd
-      echo ls
-      ls
+      $msys2 echo "==================================== LOOK for APBS binary ==================================== "
+      $msys2 pwd
+      $msys2 echo find $HOME -type f -name apbs
+      $msys2 find $HOME -type f -name apbs
+      $msys2 echo find $HOME -type f -name libmaloc
+      $msys2 find $HOME -type f -name libmaloc\*
+      $msys2 echo cd ../tests
+      $msys2 cd ../tests
+      $msys2 echo pwd
+      $msys2 pwd
+      $msys2 echo ls
+      $msys2 ls
       if [ -f /etc/os-release ]; then
         ldd $HOME/local/bin/apbs
       fi
