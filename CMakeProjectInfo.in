@@ -1,0 +1,15 @@
+
+###############################################################################
+#  Get the Current Version Number so that it can be embedded in files later
+###############################################################################
+file(STRINGS "${CMAKE_CURRENT_LIST_DIR}/VERSION" _VERSION_DATA REGEX ^[0-9]+_[0-9]+_[0-9]+)
+string(REPLACE "_" ";" _VERSION_LIST ${_VERSION_DATA})
+list(GET _VERSION_LIST 0 MAJOR_VERSION)
+list(GET _VERSION_LIST 1 MINOR_VERSION)
+list(GET _VERSION_LIST 2 MICRO_VERSION)
+
+file(STRINGS "${CMAKE_CURRENT_LIST_DIR}/CNAME" _CNAME_DATA REGEX ^[a-zA-Z]+)
+
+set(project_version ${MAJOR_VERSION}.${MINOR_VERSION}.${MICRO_VERSION})
+set(project_description "APBS - Adaptive Poisson-Boltzmann Solver")
+set(project_homepage "${_CNAME_DATA}")
