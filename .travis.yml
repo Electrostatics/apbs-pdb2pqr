@@ -27,7 +27,7 @@ jobs:
                 ## Install more MSYS2 packages from https://packages.msys2.org/base here
                 $msys2 pacman -S --noconfirm --needed base
                 $msys2 pacman -S --noconfirm --needed base-devel
-                $msys2 pacman -S --noconfirm --needed cmake-3.13
+                $msys2 pacman -S --noconfirm --needed cmake3.13
                 $msys2 pacman -S --noconfirm --needed development
                 $msys2 pacman -S --noconfirm --needed compression
                 $msys2 pacman -S --noconfirm --needed git
