@@ -1,6 +1,8 @@
-cmake_minimum_required (VERSION 3.12)
+cmake_minimum_required(VERSION 3.12)
 
-include("${CMAKE_CURRENT_LIST_DIR}/CMakeProjectInfo.in")
+
+set(CMAKE_PROJECT_INCLUDE_BEFORE
+    "${CMAKE_CURRENT_LIST_DIR}/CMakeProjectInfo.in")
 
 project(abps_pdb2pqr
         VERSION ${project_version}
