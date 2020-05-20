@@ -201,6 +201,7 @@ script:
       pwd
       echo ls
       ls
+      export LD_LIBRARY_PATH=${HOME}/local/lib
       if [ -f /etc/os-release ]; then
         ldd $HOME/local/bin/apbs
       fi

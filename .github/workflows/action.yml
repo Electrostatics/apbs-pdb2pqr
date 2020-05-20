@@ -104,7 +104,8 @@ jobs:
             ldd $HOME/local/bin/apbs
           fi
           #  TODO: Total HACK since it should be using STATIC libraries
-          export LD_LIBRARY_PATH="/home/runner/work/apbs-pdb2pqr/apbs-pdb2pqr/apbs/build/fetk/lib"
+          #export LD_LIBRARY_PATH="/home/runner/work/apbs-pdb2pqr/apbs-pdb2pqr/apbs/build/fetk/lib"
+          export LD_LIBRARY_PATH=${HOME}/local/lib
           for name in `echo $TEST_LIST`
           do
             echo bash run_travis_test.sh $HOME/local/bin $name
