@@ -17,8 +17,8 @@ jobs:
         # python-version: [3.6, 3.7]
         python-version: [3.7]
         cflag-options:
-          - ' -DENABLE_GEOFLOW=ON  -DENABLE_BEM=ON  -DGET_MSMS=ON  -DENABLE_FETK=ON  -DENABLE_PBSAM=ON  -DENABLE_PBAM=ON  -DENABLE_PYTHON=ON  -DBUILD_SHARED_LIBS=OFF -DBUILD_DOC=OFF'
           - ' -DENABLE_GEOFLOW=ON  -DENABLE_BEM=ON  -DGET_MSMS=ON  -DENABLE_FETK=ON  -DENABLE_PBSAM=ON  -DENABLE_PBAM=ON  -DENABLE_PYTHON=ON  -DBUILD_SHARED_LIBS=ON  -DBUILD_DOC=OFF'
+          # - ' -DENABLE_GEOFLOW=ON  -DENABLE_BEM=ON  -DGET_MSMS=ON  -DENABLE_FETK=ON  -DENABLE_PBSAM=ON  -DENABLE_PBAM=ON  -DENABLE_PYTHON=ON  -DBUILD_SHARED_LIBS=OFF -DBUILD_DOC=OFF'
           # - ' -DENABLE_GEOFLOW=ON  -DENABLE_BEM=ON  -DGET_MSMS=ON  -DENABLE_FETK=ON  -DENABLE_PBSAM=OFF -DENABLE_PBAM=OFF -DENABLE_PYTHON=ON  -DBUILD_SHARED_LIBS=ON  -DCMAKE_C_FLAGS="-fPIC" -DBUILD_DOC=OFF'
           # - ' -DENABLE_GEOFLOW=ON  -DENABLE_BEM=OFF -DGET_MSMS=OFF -DENABLE_FETK=ON  -DENABLE_PBSAM=OFF -DENABLE_PBAM=OFF -DENABLE_PYTHON=ON  -DBUILD_SHARED_LIBS=ON  -DCMAKE_C_FLAGS="-fPIC" -DBUILD_DOC=OFF'
     steps:
@@ -108,8 +108,8 @@ jobs:
             ldd $HOME/local/bin/apbs
           fi
           #  TODO: Total HACK since it should be using STATIC libraries
-          export LD_LIBRARY_PATH="/home/runner/work/apbs-pdb2pqr/apbs-pdb2pqr/apbs/build/fetk/lib"
-          export LD_LIBRARY_PATH=${HOME}/local/lib:$LD_LIBRARY_PATH
+          #export LD_LIBRARY_PATH="/home/runner/work/apbs-pdb2pqr/apbs-pdb2pqr/apbs/build/fetk/lib"
+          #export LD_LIBRARY_PATH=${HOME}/local/lib:$LD_LIBRARY_PATH
           for name in `echo $TEST_LIST`
           do
             echo bash run_travis_test.sh $HOME/local/bin $name
