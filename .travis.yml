@@ -90,7 +90,6 @@ jobs:
             - libreadline-dev
             - libncurses5-dev
             - libncursesw5-dev
-            - libopenmpi-dev
             - libreadline-dev
             - libssh-dev
             - python3.7
