@@ -51,7 +51,9 @@ Additional support and contributors are listed in the [online documentation](htt
 
 ### APBS Datasheet
 
-OS | PYTHON VERSION | GEOFLOW | BEM,MSMS | FETK | PBSAM | PBAM | PYTHON | SHARED_LIBS | TESTS PASS
+
+OS            | PYTHON VERSION | GEOFLOW            | BEM,MSMS           | FETK               | PBSAM              | PBAM               | PYTHON             | SHARED_LIBS        | TESTS PASS
 ------------- | ------------ | ------------- | ------------- | ------------- | ------------- | ------------- | ------------- | ------------- | ------------- 
-Ubuntu latest | 3.6, 3.7 | :grinning: | :grinning: | :grinning: | :nauseated_face: | :nauseated_face: | :nauseated_face: | :nauseated_face: | :partying_face:
-MacOSX latest | 3.6, 3.7 | :grinning: | :grinning: | :grinning: | :nauseated_face: | :nauseated_face: | :nauseated_face: | :nauseated_face: | :partying_face:
+Ubuntu latest | 3.6, 3.7       | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark:
+MacOSX latest | 3.6, 3.7       | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark:
+Windows 10    | 3.7            | :white_check_mark: | :white_check_mark: | :x:                | :x:                | :white_check_mark: | :white_check_mark: | :x:                | :white_check_mark:
