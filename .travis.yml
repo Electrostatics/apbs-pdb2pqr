@@ -79,13 +79,23 @@ jobs:
             - ubuntu-toolchain-r-test
           packages:
             - build-essential
+            - cmake 
+            - doxygen
             - software-properties-common
             - gcc-6
             - g++-6
+            - git
             - bison
             - flex
             - libreadline-dev
-            - python3
+            - libncurses5-dev
+            - libncursesw5-dev
+            - libopenmpi-dev
+            - libreadline-dev
+            - libssh-dev
+            - python3.7
+            - python3.7-dev
+            - python3-pip 
             - swig
 
 # compiler:
