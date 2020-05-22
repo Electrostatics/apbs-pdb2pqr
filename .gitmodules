@@ -10,6 +10,8 @@
 	url = https://github.com/lwwilson1/mesh_routines.git
 [submodule "apbs/externals/pb_s_am"]
 	path = apbs/externals/pb_s_am
+	branch = master
+	update = rebase
 	url = https://github.com/Electrostatics/pb_solvers
 [submodule "apbs/externals/bem"]
 	path = apbs/externals/bem
