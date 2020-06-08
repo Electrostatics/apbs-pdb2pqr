@@ -35,6 +35,8 @@ build_script:
 
     git submodule update
 
+    cd c:\projects\source\apbs
+
     mkdir build
 
     cd build
