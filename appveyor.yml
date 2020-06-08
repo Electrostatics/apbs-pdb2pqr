@@ -39,7 +39,6 @@ build_script:
 
     cd build
 
-    # NOTE: Just build APBS
     cmake -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=ON -DBUILD_TOOLS=ON -DCHECK_EPSILON=ON -DENABLE_BEM=ON -DENABLE_GEOFLOW=ON -DENABLE_INLINE=ON -DENABLE_PBAM=ON -DENABLE_PYTHON=ON -DENABLE_TESTS=ON -DENABLE_VERBOSE_DEBUG=ON -DGET_MSMS=ON -DGET_NanoShaper=ON -G "Visual Studio 16" c:\projects\source\apbs
 
     cmake --build . --config "Release" -- /p:PreferredToolArchitecture=x64
