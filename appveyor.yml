@@ -15,7 +15,7 @@ install:
   # Install non-python dependencies using chocolatey package manager
   - choco install -r -y swig
 
-  - "SET PATH=%PYTHON%;%PYTHON%\\Scripts;%PATH%"
+  - "SET PATH=%PYTHON%;%PYTHON%\\Scripts;C:\\projects\\source\\apbs\\build\\bin;%PATH%"
 
   # Check that we have the expected version and architecture for Python
   - python --version
