@@ -45,7 +45,7 @@ build_script:
 
     cmake --build . --config "Release" -- /p:PreferredToolArchitecture=x64
 
-    ctest -C Release --output-on-failure
+    ctest -C Release --verbose --output-on-failure
 
     cpack -C Release
 
