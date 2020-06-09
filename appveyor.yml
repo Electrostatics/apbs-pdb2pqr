@@ -1,0 +1,52 @@
+image:
+  - Visual Studio 2019
+
+clone_folder: c:\projects\source
+
+environment:
+
+  matrix:
+
+  - PYTHON: "C:\\Python37-x64"
+    PYTHON_VERSION: "3.6.x" # currently 3.6.5
+    PYTHON_ARCH: "64"
+
+install:
+  # Install non-python dependencies using chocolatey package manager
+  - choco install -r -y swig
+
+  - "SET PATH=%PYTHON%;%PYTHON%\\Scripts;%PATH%"
+
+  # Check that we have the expected version and architecture for Python
+  - python --version
+
+  - python -m pip install --upgrade pip
+
+  # Install the build dependencies of the project. If some dependencies contain
+  # compiled extensions and are not provided as pre-built wheel packages,
+  # pip will build them from source using the MSVC compiler matching the
+  # target Python version and architecture
+  - pip.exe install -r c:\projects\source\pdb2pqr\requirements.txt
+
+build_script:
+- cmd: >-
+
+    git submodule init
+
+    git submodule update
+
+    cd c:\projects\source\apbs
+
+    mkdir build
+
+    cd build
+
+    cmake -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=ON -DBUILD_TOOLS=ON -DCHECK_EPSILON=ON -DENABLE_BEM=ON -DENABLE_GEOFLOW=ON -DENABLE_INLINE=ON -DENABLE_PBAM=ON -DENABLE_PYTHON=ON -DENABLE_TESTS=ON -DENABLE_VERBOSE_DEBUG=ON -DGET_MSMS=ON -DGET_NanoShaper=ON -G "Visual Studio 16" c:\projects\source\apbs
+
+    cmake --build . --config "Release" -- /p:PreferredToolArchitecture=x64
+
+    ctest -C Release --output-on-failure
+
+    cpack -C Release
+
+    unzip -l APBS*.zip
