@@ -1,15 +1,21 @@
+version: 3.0.{build}
+
+branches:
+  only:
+    - master
+
 image:
   - Visual Studio 2019
 
 clone_folder: c:\projects\source
 
+clone_depth: 5
+
 environment:
+  PYTHON: "C:\\Python37-x64"
 
-  matrix:
-
-  - PYTHON: "C:\\Python37-x64"
-    PYTHON_VERSION: "3.6.x" # currently 3.6.5
-    PYTHON_ARCH: "64"
+matrix:
+  fast_finish: false
 
 install:
   # Install non-python dependencies using chocolatey package manager
@@ -41,11 +47,11 @@ build_script:
 
     cd build
 
-    cmake -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=ON -DBUILD_TOOLS=ON -DCHECK_EPSILON=ON -DENABLE_BEM=ON -DENABLE_GEOFLOW=ON -DENABLE_INLINE=ON -DENABLE_PBAM=ON -DENABLE_PYTHON=ON -DENABLE_TESTS=ON -DENABLE_VERBOSE_DEBUG=ON -DGET_MSMS=ON -DGET_NanoShaper=ON -G "Visual Studio 16" c:\projects\source\apbs
+    cmake -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=ON -DBUILD_TOOLS=ON -DCHECK_EPSILON=ON -DENABLE_BEM=ON -DENABLE_GEOFLOW=ON -DENABLE_INLINE=ON -DENABLE_PBAM=OFF -DENABLE_PYTHON=ON -DENABLE_TESTS=ON -DENABLE_VERBOSE_DEBUG=ON -DGET_MSMS=ON -DGET_NanoShaper=ON -G "Visual Studio 16 2019" -A x64 c:\projects\source\apbs
 
-    cmake --build . --config "Release" -- /p:PreferredToolArchitecture=x64
+    cmake --build . --config "Release"
 
-    ctest -C Release --output-on-failure
+    ctest -C Release --verbose --output-on-failure
 
     cpack -C Release
 
