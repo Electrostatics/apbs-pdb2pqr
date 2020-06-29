@@ -1,10 +1,8 @@
-<a href='http://www.poissonboltzmann.org/'><img src='https://img.shields.io/badge/homepage-poissonboltzmann-blue.svg'></a>
-
-[![Build Status](https://travis-ci.org/Electrostatics/apbs-pdb2pqr.svg?branch=master)](https://travis-ci.org/Electrostatics/apbs-pdb2pqr)
-
-![Build](https://github.com/Electrostatics/apbs-pdb2pqr/workflows/Build/badge.svg)
-
-![Build](https://ci.appveyor.com/api/projects/status/github/Electrostatics/apbs-pdb2pqr?branch=master&svg=true)
+[![Homepage](https://img.shields.io/badge/homepage-poissonboltzmann-blue.svg)](http://www.poissonboltzmann.org)
+[![Docs Build](https://readthedocs.org/projects/apbs-pdb2pqr/badge/)](https://apbs-pdb2pqr.readthedocs.io/)
+[![Travis Build](https://travis-ci.org/Electrostatics/apbs-pdb2pqr.svg?branch=master)](https://travis-ci.org/Electrostatics/apbs-pdb2pqr)
+![GitHub Build](https://github.com/Electrostatics/apbs-pdb2pqr/workflows/Build/badge.svg)
+![Appveyor Build](https://ci.appveyor.com/api/projects/status/github/Electrostatics/apbs-pdb2pqr?branch=master&svg=true)
 
 # APBS and PDB2PQR: electrostatic and solvation properties for complex molecules
 
@@ -53,9 +51,10 @@ Additional support and contributors are listed in the [online documentation](htt
 
 ### APBS Datasheet
 
+This shows the status of APBS functionality on different platforms.
 
-OS            | PYTHON VERSION | GEOFLOW            | BEM,MSMS           | FETK               | PBSAM              | PBAM               | PYTHON             | SHARED_LIBS        | TESTS PASS
-------------- | ------------ | ------------- | ------------- | ------------- | ------------- | ------------- | ------------- | ------------- | ------------- 
-Ubuntu latest | 3.6, 3.7       | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark:
-MacOSX latest | 3.6, 3.7       | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark:
-Windows 10    | 3.7            | :white_check_mark: | :white_check_mark: | :x:                | :x:                | :white_check_mark: | :white_check_mark: | :x:                | :white_check_mark:
+OS            | PYTHON VERSION | GEOFLOW  | BEM, MSMS | FETK  | PBSAM | PBAM | PYTHON | SHARED_LIBS |
+------------- | -------------- | -------- | --------- | ----- | ----- | ---- | ------ | ----------- |
+Ubuntu latest | 3.6, 3.7       | ✔️       | ✔️        | ✔️   | ✔️    | ✔️  | ✔️    | ✔️          |
+MacOSX latest | 3.6, 3.7       | ✔️       | ✔️        | ✔️   | ✔️    | ✔️  | ✔️    | ✔️          |
+Windows 10    | 3.7            | ✔️       | ✔️        | ❌   | ❌    | ✔️  | ✔️    | ❌          |
