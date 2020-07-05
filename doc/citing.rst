@@ -7,11 +7,6 @@ Please acknowledge your us of our software by citing:
 
 You may also wish to include one or more of the following citations:
 
-* Original PDB2PQR citations
-
-  * Dolinsky TJ, Czodrowski P, Li H, Nielsen JE, Jensen JH, Klebe G, Baker NA. PDB2PQR: Expanding and upgrading automated preparation of biomolecular structures for molecular simulations. Nucleic Acids Res, 35, W522-5, 2007. http://nar.oxfordjournals.org/content/35/suppl_2/W522
-  * Dolinsky TJ, Nielsen JE, McCammon JA, Baker NA. PDB2PQR: an automated pipeline for the setup, execution, and analysis of Poisson-Boltzmann electrostatics calculations. Nucleic Acids Res, 32, W665-W667, 2004. http://nar.oxfordjournals.org/content/32/suppl_2/W665.abstract
-
 * Original APBS citation
 
   * Baker NA, Sept D, Joseph S, Holst MJ, McCammon JA. Electrostatics of nanosystems: application to microtubules and the ribosome. Proc. Natl. Acad. Sci. USA 98, 10037-10041 2001. http://www.pnas.org/content/98/18/10037

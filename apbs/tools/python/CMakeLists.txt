@@ -37,19 +37,3 @@ endif(APPLE)
 #SET_TARGET_PROPERTIES(${SWIG_MODULE_apbslib_REAL_NAME} PROPERTIES SUFFIX ${CMAKE_SHARED_LIBRARY_SUFFIX})
 
 SWIG_LINK_LIBRARIES(apbslib ${APBS_LIBS} ${APBS_INTERNAL_LIBS} ${Python3_LIBRARIES})
-
-if(WIN32)
-	add_custom_command(TARGET _apbslib POST_BUILD
-		COMMAND ${CMAKE_COMMAND} -E
-			copy ${CMAKE_CURRENT_BINARY_DIR}/apbslib.py ${CMAKE_SOURCE_DIR}/../pdb2pqr/pdb2pka
-		COMMAND ${CMAKE_COMMAND} -E
-			copy ${LIBRARY_OUTPUT_PATH}/$<CONFIG>/_apbslib.pyd ${CMAKE_SOURCE_DIR}/../pdb2pqr/pdb2pka
-		)
-else()
-	add_custom_command(TARGET _apbslib POST_BUILD
-		COMMAND ${CMAKE_COMMAND} -E
-			copy ${CMAKE_CURRENT_BINARY_DIR}/apbslib.py ${CMAKE_SOURCE_DIR}/../pdb2pqr/pdb2pka
-		COMMAND ${CMAKE_COMMAND} -E
-			copy ${LIBRARY_OUTPUT_PATH}/_apbslib${CMAKE_SHARED_LIBRARY_SUFFIX} ${CMAKE_SOURCE_DIR}/../pdb2pqr/pdb2pka
-	)
-endif()

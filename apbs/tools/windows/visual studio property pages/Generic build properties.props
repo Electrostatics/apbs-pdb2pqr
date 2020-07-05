@@ -2,7 +2,7 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ImportGroup Label="PropertySheets" />
   <PropertyGroup Label="UserMacros">
-    <APBS_top_dir>C:\Users\bake113\Documents\Projects\APBS &amp; PDB2PQR\Source code\APBS</APBS_top_dir>
+    <APBS_top_dir>C:\Users\bake113\Documents\Projects\APBS\Source code\APBS</APBS_top_dir>
     <MALOC_src_dir>$(APBS_top_dir)\trunk\contrib\maloc\src</MALOC_src_dir>
     <APBS_src_dir>$(APBS_top_dir)\trunk\src</APBS_src_dir>
     <APBS_bin_dir>$(APBS_top_dir)\trunk\bin</APBS_bin_dir>
