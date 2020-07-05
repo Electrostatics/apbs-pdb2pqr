@@ -57,7 +57,6 @@ jobs:
           pip3 install -U pytest
           pip3 install -U virtualenv
           pip3 install -U numpy
-          pip3 install -r pdb2pqr/requirements.txt
 
           #  Just build APBS for now
           echo "==================================== PWD FOR TOP DIR ==================================== "
