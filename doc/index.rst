@@ -14,15 +14,12 @@ This is the documentation for these packages; more information can be found at t
    downloads
    getting-started
    getting-help
-   pdb2pqr/index
    apbs/index
-   other-software
    formats/index
    examples/index
    support
    citing
    reading
-   todo
 
 .. Indices and tables
 .. ==================

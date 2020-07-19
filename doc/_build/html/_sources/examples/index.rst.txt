@@ -1,26 +1,7 @@
 APBS-PDB2PQR examples and tutorials
 ===================================
 
-========================
-PDB2PQR operations
-========================
-
-In order to perform electrostatics calculations on your biomolecular structure of interest, you need to provide atomic charge and radius information to APBS.
-Charges are used to form the biomolecular charge distribution for the Poisson-Boltzmann (PB) equation while the radii are used to construct the dielectric and ionic accessibility functions.
-
-The PDB2PQR web service and software will convert most PDB files into PQR format with some caveats.
-Although PDB2PQR can fix some missing heavy atoms in sidechains, it does not currently have the (nontrivial) capability to model in large regions of missing backbone and sidechain coordinates.
-Be patient and make certain that the job you submitted to the PDB2PQR website has finished and you have downloaded the resulting PQR file correctly.
-It usually takes less than 10 minutes for the job to finish.
-
-This tutorial assumes that you have `registered <http://eepurl.com/by4eQr>`_ and have access to `the PDB2PQR web server <http://apbs.poissonboltzmann.org>`_.
-
-.. toctree::
-   :caption: PDB2PQR examples
-   :maxdepth: 1
-
-   adding-hydrogens
-   parameterizing-ligands
+Please see the `PDB2PQR documentation <http://pdb2pqr.readthedocs.io>`_ for PDB2PQR-specific examples.
 
 ===================
 APBS examples

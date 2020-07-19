@@ -23,7 +23,6 @@ Molecular structure formats
 
    pqr
    pdb
-   mol2
    xml-struct
 
 --------------
@@ -45,7 +44,6 @@ Parameter formats
    :maxdepth: 1
 
    apbs-xml-parm
-   pdb2pqr-xml-names
    flat-parm
 
 .. todo::

@@ -1,27 +1,19 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Using the PyMOL APBS plugin &#8212; APBS-PDB2PQR 1.6 documentation</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Using the PyMOL APBS plugin &#8212; APBS-PDB2PQR 3.0 documentation</title>
     <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../',
-        VERSION:     '1.6',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
-    <script type="text/javascript" src="../_static/jquery.js"></script>
-    <script type="text/javascript" src="../_static/underscore.js"></script>
-    <script type="text/javascript" src="../_static/doctools.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Virtual reality with UnityMol" href="unitymol.html" />
@@ -29,15 +21,17 @@
    
   <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
   
+  
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
 
-  </head>
-  <body>
+  </head><body>
   
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
+          
+
           <div class="body" role="main">
             
   <div class="section" id="using-the-pymol-apbs-plugin">
@@ -47,26 +41,19 @@ Below are instructions for performing a basic demonstration of how to go from a 
 <div class="section" id="run-the-apbs-calculation">
 <h2>Run the APBS calculation<a class="headerlink" href="#run-the-apbs-calculation" title="Permalink to this headline">¶</a></h2>
 <ul>
-<li><p class="first">Load your PQR file you created into PyMOL (<span class="guilabel">File → Open…</span>) and choose your favorite graphical representation of the molecular structure.</p>
-</li>
-<li><p class="first">Go to <span class="guilabel">Plugin → APBS Tools…</span> to open the APBS calculation plugin.</p>
-</li>
-<li><p class="first">Under the <span class="guilabel">Main</span> tab of the PyMOL APBS Tools window, select <span class="guilabel">Use another PQR</span> and either browse to (via the <span class="guilabel">Choose Externally Generated PQR</span> button) or input the path to your PQR file. This step is necessary to ensure you use the radii and charges assigned by PDB2PQR.</p>
-</li>
-<li><p class="first">Under the <span class="guilabel">APBS Location</span> tab of the PyMOL APBS Tools window, either browse to (via the APBS binary location: button) or input the path to your local APBS binary. It is not necessary to provide a path to the APBS <code class="file docutils literal"><span class="pre">psize.py</span></code> binary for most biomolecules.</p>
-</li>
-<li><p class="first">Under the <span class="guilabel">Temporary File Locations</span> tab of the PyMOL APBS Tools window, customize the locations of the various temporary files created during the run. This can be useful if you want to save the generated files for later use.</p>
-</li>
-<li><p class="first">Under the <span class="guilabel">Configuration</span> tab of the PyMOL APBS Tools window, press <span class="guilabel">Set grid</span> to set the grid spacings. The default values are usually sufficient for all but the most highly charged biomolecules.</p>
-</li>
-<li><p class="first">Under the <span class="guilabel">Configuration</span> tab of the PyMOL APBS Tools window, customize the remaining parameters; the defaults are usually OK.</p>
+<li><p>Load your PQR file you created into PyMOL (<span class="guilabel">File → Open…</span>) and choose your favorite graphical representation of the molecular structure.</p></li>
+<li><p>Go to <span class="guilabel">Plugin → APBS Tools…</span> to open the APBS calculation plugin.</p></li>
+<li><p>Under the <span class="guilabel">Main</span> tab of the PyMOL APBS Tools window, select <span class="guilabel">Use another PQR</span> and either browse to (via the <span class="guilabel">Choose Externally Generated PQR</span> button) or input the path to your PQR file. This step is necessary to ensure you use the radii and charges assigned by PDB2PQR.</p></li>
+<li><p>Under the <span class="guilabel">APBS Location</span> tab of the PyMOL APBS Tools window, either browse to (via the APBS binary location: button) or input the path to your local APBS binary. It is not necessary to provide a path to the APBS <code class="file docutils literal notranslate"><span class="pre">psize.py</span></code> binary for most biomolecules.</p></li>
+<li><p>Under the <span class="guilabel">Temporary File Locations</span> tab of the PyMOL APBS Tools window, customize the locations of the various temporary files created during the run. This can be useful if you want to save the generated files for later use.</p></li>
+<li><p>Under the <span class="guilabel">Configuration</span> tab of the PyMOL APBS Tools window, press <span class="guilabel">Set grid</span> to set the grid spacings. The default values are usually sufficient for all but the most highly charged biomolecules.</p></li>
+<li><p>Under the <span class="guilabel">Configuration</span> tab of the PyMOL APBS Tools window, customize the remaining parameters; the defaults are usually OK.</p>
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">0.150 M concentrations for the +1 and −1 ion species are often useful to ensure that electrostatic properties are not overly exaggerated.</p>
+<p class="admonition-title">Note</p>
+<p>0.150 M concentrations for the +1 and −1 ion species are often useful to ensure that electrostatic properties are not overly exaggerated.</p>
 </div>
 </li>
-<li><p class="first">Under the <span class="guilabel">Configuration</span> tab of the PyMOL APBS Tools window, press the Run <span class="guilabel">APBS button</span> to start the APBS calculation. Depending on the speed of your computer, this could take a few minutes. The <span class="guilabel">Run APBS</span> button will become unselected when the calculation is finished.</p>
-</li>
+<li><p>Under the <span class="guilabel">Configuration</span> tab of the PyMOL APBS Tools window, press the Run <span class="guilabel">APBS button</span> to start the APBS calculation. Depending on the speed of your computer, this could take a few minutes. The <span class="guilabel">Run APBS</span> button will become unselected when the calculation is finished.</p></li>
 </ul>
 </div>
 <div class="section" id="visualize-the-results">
@@ -77,9 +64,9 @@ Below are instructions for performing a basic demonstration of how to go from a 
 <p>PyMOL makes this step very easy: adjust the positive and negative “Contour” fields to the desired values (usually ±1, ±5, or ±10 kT/e)
 and press the <span class="guilabel">Positive Isosurface</span>, <span class="guilabel">Negative Isosurface</span>, and <span class="guilabel">Show buttons</span>.</p>
 <p>At this point, you probably have a figure that looks something like the image below.</p>
-<div class="figure" id="id1">
+<div class="figure align-default" id="id1">
 <img alt="../_images/fas2-iso-pymol.png" src="../_images/fas2-iso-pymol.png" />
-<p class="caption"><span class="caption-text">±1 kT/e electrostatic potential isocontours of FAS2 in PyMOL</span></p>
+<p class="caption"><span class="caption-text">±1 kT/e electrostatic potential isocontours of FAS2 in PyMOL</span><a class="headerlink" href="#id1" title="Permalink to this image">¶</a></p>
 </div>
 <p>If the colors are not as you expect, you can change the colors of the objects iso_neg and iso_pos in the main menu.
 By convention (for electrostatics in chemistry), red is negative (think oxygen atoms in carboxyl groups) and blue positive (think nitrogen atoms in amines).</p>
@@ -91,9 +78,9 @@ The surface potential is also straightforward to visualize.
 Set the “Low” and “High”values to the desired values (usually ±1, ±5, or ±10 kT/e) at which the surface colors are clamped at red (-) or blue (+).
 Check the “Solvent accessible surface” and “Color by potential on sol. acc. surf.” buttons to plot the potential on the solvent-accessible (probe-inflated or Lee-Richards) surface.
 Press the <span class="guilabel">Molecular Surface</span> <span class="guilabel">Show</span> button to load the surface potential.</p>
-<div class="figure" id="id2">
+<div class="figure align-default" id="id2">
 <img alt="../_images/fas2-surf-pymol.png" src="../_images/fas2-surf-pymol.png" />
-<p class="caption"><span class="caption-text">±5 kT/e electrostatic potential of FAS2 in PyMOL plotted on the solvent-accessible surface.</span></p>
+<p class="caption"><span class="caption-text">±5 kT/e electrostatic potential of FAS2 in PyMOL plotted on the solvent-accessible surface.</span><a class="headerlink" href="#id2" title="Permalink to this image">¶</a></p>
 </div>
 <p>The solvent-accessible surface tends to reveal more global features of the surface potential.
 Tighter surfaces (e.g., van der Waals and molecular or Connolly surfaces) provide more information about the shape of the biomolecule but otherwise tend to simply map atomic surface charges onto the biomolecular surface.
@@ -105,22 +92,39 @@ To visualize the molecule in this way, simply uncheck the “Solvent accessible 
 
 
           </div>
+          
         </div>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-  <h3><a href="../index.html">Table Of Contents</a></h3>
-  <ul>
-<li><a class="reference internal" href="#">Using the PyMOL APBS plugin</a><ul>
-<li><a class="reference internal" href="#run-the-apbs-calculation">Run the APBS calculation</a></li>
-<li><a class="reference internal" href="#visualize-the-results">Visualize the results</a><ul>
-<li><a class="reference internal" href="#electrostatic-isocontours">Electrostatic isocontours</a></li>
-<li><a class="reference internal" href="#surface-potentials">Surface potentials</a></li>
+<h1 class="logo"><a href="../index.html">APBS-PDB2PQR</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../overview.html">APBS-PDB2PQR overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../downloads.html">How to get the software</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting-started.html">Getting started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting-help.html">Getting help</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../apbs/index.html">APBS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../formats/index.html">File formats</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">APBS-PDB2PQR examples and tutorials</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="index.html#apbs-examples">APBS examples</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="index.html#visualizing-results">Visualizing results</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="../support.html">Support for APBS-PDB2PQR</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../citing.html">Citing your use of our software</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reading.html">Suggested reading for APBS-PDB2PQR</a></li>
 </ul>
-</li>
-</ul>
+
 <div class="relations">
 <h3>Related Topics</h3>
 <ul>
@@ -132,33 +136,34 @@ To visualize the molecule in this way, simply uncheck the “Solvent accessible 
   </ul></li>
 </ul>
 </div>
-  <div role="note" aria-label="source link">
-    <h3>This Page</h3>
-    <ul class="this-page-menu">
-      <li><a href="../_sources/examples/using-pymol.rst.txt"
-            rel="nofollow">Show Source</a></li>
-    </ul>
-   </div>
 <div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
-      <div><input type="text" name="q" /></div>
-      <div><input type="submit" value="Go" /></div>
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
     </form>
+    </div>
 </div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
         </div>
       </div>
       <div class="clearer"></div>
     </div>
     <div class="footer">
-      &copy;2017, Nathan Baker.
+      &copy;Copyright (c) 2010-2020 Battelle Memorial Institute.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.7</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.8</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.1.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |
       <a href="../_sources/examples/using-pymol.rst.txt"

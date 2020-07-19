@@ -1,27 +1,19 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>OpenDX scalar data format &#8212; APBS-PDB2PQR 1.6 documentation</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OpenDX scalar data format &#8212; APBS-PDB2PQR 3.0 documentation</title>
     <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../',
-        VERSION:     '1.6',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
-    <script type="text/javascript" src="../_static/jquery.js"></script>
-    <script type="text/javascript" src="../_static/underscore.js"></script>
-    <script type="text/javascript" src="../_static/doctools.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="MCSF mesh format" href="mcsf.html" />
@@ -29,15 +21,17 @@
    
   <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
   
+  
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
 
-  </head>
-  <body>
+  </head><body>
   
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
+          
+
           <div class="body" role="main">
             
   <div class="section" id="opendx-scalar-data-format">
@@ -45,7 +39,7 @@
 <p>We output most discretized scalar data (e.g., potential, accessibility, etc.) from APBS in the data format used by the OpenDX software package.
 The OpenDX data format is very flexible; the following sections describe the application of this format for APBS multigrid and finite element datasets.</p>
 <p>The multigrid data format has the following form:</p>
-<div class="highlight-bash"><div class="highlight"><pre><span></span>object <span class="m">1</span> class gridpositions counts nx ny nz
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>object <span class="m">1</span> class gridpositions counts nx ny nz
 origin xmin ymin zmin
 delta hx <span class="m">0</span>.0 <span class="m">0</span>.0
 delta <span class="m">0</span>.0 hy <span class="m">0</span>.0
@@ -70,20 +64,20 @@ component <span class="s2">&quot;data&quot;</span> value <span class="m">3</span
 </pre></div>
 </div>
 <p>The variables in this format include:</p>
-<dl class="docutils">
-<dt><code class="docutils literal"><span class="pre">nx</span> <span class="pre">ny</span> <span class="pre">nz</span></code></dt>
-<dd>The number of grid points in the x-, y-, and z-directions</dd>
-<dt><code class="docutils literal"><span class="pre">xmin</span> <span class="pre">ymin</span> <span class="pre">zmin</span></code></dt>
-<dd>The coordinates of the grid lower corner</dd>
-<dt><code class="docutils literal"><span class="pre">hx</span> <span class="pre">hy</span> <span class="pre">hz</span></code></dt>
-<dd>The grid spacings in the x-, y-, and z-directions.</dd>
-<dt><code class="docutils literal"><span class="pre">n</span></code></dt>
-<dd>The total number of grid points; <span class="math">\(n = nx * ny * nz\)</span></dd>
-<dt><code class="docutils literal"><span class="pre">u(*,*,*)</span></code></dt>
-<dd>The data values, ordered with the z-index increasing most quickly, followed by the y-index, and then the x-index.</dd>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">nx</span> <span class="pre">ny</span> <span class="pre">nz</span></code></dt><dd><p>The number of grid points in the x-, y-, and z-directions</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">xmin</span> <span class="pre">ymin</span> <span class="pre">zmin</span></code></dt><dd><p>The coordinates of the grid lower corner</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">hx</span> <span class="pre">hy</span> <span class="pre">hz</span></code></dt><dd><p>The grid spacings in the x-, y-, and z-directions.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">n</span></code></dt><dd><p>The total number of grid points; <span class="math notranslate nohighlight">\(n = nx * ny * nz\)</span></p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">u(*,*,*)</span></code></dt><dd><p>The data values, ordered with the z-index increasing most quickly, followed by the y-index, and then the x-index.</p>
+</dd>
 </dl>
 <p>For finite element solutions, the OpenDX format takes the following form:</p>
-<div class="highlight-bash"><div class="highlight"><pre><span></span>object <span class="m">1</span> class array <span class="nb">type</span> float rank <span class="m">1</span> shape <span class="m">3</span> items N
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>object <span class="m">1</span> class array <span class="nb">type</span> float rank <span class="m">1</span> shape <span class="m">3</span> items N
 v1x v1y v1z
 v2x v2y v2z
 ...
@@ -108,26 +102,57 @@ end
 </pre></div>
 </div>
 <p>where the variables in this format are:</p>
-<dl class="docutils">
-<dt><code class="docutils literal"><span class="pre">N</span></code></dt>
-<dd>Number of vertices</dd>
-<dt><code class="docutils literal"><span class="pre">vix</span> <span class="pre">viy</span> <span class="pre">viz</span></code></dt>
-<dd>Coordinates of vertex i</dd>
-<dt><code class="docutils literal"><span class="pre">M</span></code></dt>
-<dd>Number of simplices</dd>
-<dt><code class="docutils literal"><span class="pre">sia</span> <span class="pre">sib</span> <span class="pre">sic</span> <span class="pre">sid</span></code></dt>
-<dd>IDs of vertices in simplex i</dd>
-<dt><code class="docutils literal"><span class="pre">ui</span></code></dt>
-<dd>Data value associated with vertex i</dd>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">N</span></code></dt><dd><p>Number of vertices</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">vix</span> <span class="pre">viy</span> <span class="pre">viz</span></code></dt><dd><p>Coordinates of vertex i</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">M</span></code></dt><dd><p>Number of simplices</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">sia</span> <span class="pre">sib</span> <span class="pre">sic</span> <span class="pre">sid</span></code></dt><dd><p>IDs of vertices in simplex i</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">ui</span></code></dt><dd><p>Data value associated with vertex i</p>
+</dd>
 </dl>
 </div>
 
 
           </div>
+          
         </div>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
-        <div class="sphinxsidebarwrapper"><div class="relations">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">APBS-PDB2PQR</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../overview.html">APBS-PDB2PQR overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../downloads.html">How to get the software</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting-started.html">Getting started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting-help.html">Getting help</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../apbs/index.html">APBS</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">File formats</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="index.html#mesh-and-scalar-data-formats">Mesh and scalar data formats</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#molecular-structure-formats">Molecular structure formats</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#matrix-formats">Matrix formats</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/index.html">APBS-PDB2PQR examples and tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../support.html">Support for APBS-PDB2PQR</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../citing.html">Citing your use of our software</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reading.html">Suggested reading for APBS-PDB2PQR</a></li>
+</ul>
+
+<div class="relations">
 <h3>Related Topics</h3>
 <ul>
   <li><a href="../index.html">Documentation overview</a><ul>
@@ -138,33 +163,34 @@ end
   </ul></li>
 </ul>
 </div>
-  <div role="note" aria-label="source link">
-    <h3>This Page</h3>
-    <ul class="this-page-menu">
-      <li><a href="../_sources/formats/opendx.rst.txt"
-            rel="nofollow">Show Source</a></li>
-    </ul>
-   </div>
 <div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
-      <div><input type="text" name="q" /></div>
-      <div><input type="submit" value="Go" /></div>
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
     </form>
+    </div>
 </div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
         </div>
       </div>
       <div class="clearer"></div>
     </div>
     <div class="footer">
-      &copy;2017, Nathan Baker.
+      &copy;Copyright (c) 2010-2020 Battelle Memorial Institute.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.7</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.8</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.1.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |
       <a href="../_sources/formats/opendx.rst.txt"
