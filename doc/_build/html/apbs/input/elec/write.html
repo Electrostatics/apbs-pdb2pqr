@@ -1,27 +1,19 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>write &#8212; APBS-PDB2PQR 1.6 documentation</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>write &#8212; APBS-PDB2PQR 3.0 documentation</title>
     <link rel="stylesheet" href="../../../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../../../',
-        VERSION:     '1.6',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
-    <script type="text/javascript" src="../../../_static/jquery.js"></script>
-    <script type="text/javascript" src="../../../_static/underscore.js"></script>
-    <script type="text/javascript" src="../../../_static/doctools.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/language_data.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
     <link rel="next" title="geoflow-auto" href="geoflow-auto.html" />
@@ -29,15 +21,17 @@
    
   <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
   
+  
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
 
-  </head>
-  <body>
+  </head><body>
   
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
+          
+
           <div class="body" role="main">
             
   <div class="section" id="write">
@@ -45,86 +39,119 @@
 <p>This controls the output of scalar data calculated during the Poisson-Boltzmann run.
 This keyword can be repeated several times to provide various types of data output from APBS.
 The syntax is:</p>
-<div class="highlight-bash"><div class="highlight"><pre><span></span>write <span class="o">{</span>type<span class="o">}</span> <span class="o">{</span>format<span class="o">}</span> <span class="o">{</span>stem<span class="o">}</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>write <span class="o">{</span>type<span class="o">}</span> <span class="o">{</span>format<span class="o">}</span> <span class="o">{</span>stem<span class="o">}</span>
 </pre></div>
 </div>
-<dl class="docutils">
-<dt><code class="docutils literal"><span class="pre">type</span></code></dt>
-<dd><p class="first">A string indicating what type of data to output:&lt;/p&gt;</p>
-<dl class="last docutils">
-<dt><code class="docutils literal"><span class="pre">charge</span></code></dt>
-<dd>Write out the biomolecular charge distribution in units of e<sub>c</sub> (electron charge) per Å<sup>3</sup> (multigrid only).</dd>
-<dt><code class="docutils literal"><span class="pre">pot</span></code></dt>
-<dd><p class="first">Write out the electrostatic potential over the entire problem domain in units of k<sub>b</sub> T e<sub>c</sub><sup>-1</sup> (multigrid and finite element), where</p>
-<dl class="docutils">
-<dt>k<sub>b</sub></dt>
-<dd>Boltzmann’s constant:  1.3806504 × 10<sup>−23</sup> J K<sup>-1</sup></dd>
-<dt>T</dt>
-<dd>The temperature of your calculation in K</dd>
-<dt>e<sub>c</sub></dt>
-<dd>is the charge of an electron:  1.60217646 × 10<sup>-19</sup> C</dd>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">type</span></code></dt><dd><p>A string indicating what type of data to output:&lt;/p&gt;</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">charge</span></code></dt><dd><p>Write out the biomolecular charge distribution in units of e<sub>c</sub> (electron charge) per Å<sup>3</sup> (multigrid only).</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">pot</span></code></dt><dd><p>Write out the electrostatic potential over the entire problem domain in units of k<sub>b</sub> T e<sub>c</sub><sup>-1</sup> (multigrid and finite element), where</p>
+<dl class="simple">
+<dt>k<sub>b</sub></dt><dd><p>Boltzmann’s constant:  1.3806504 × 10<sup>−23</sup> J K<sup>-1</sup></p>
+</dd>
+<dt>T</dt><dd><p>The temperature of your calculation in K</p>
+</dd>
+<dt>e<sub>c</sub></dt><dd><p>is the charge of an electron:  1.60217646 × 10<sup>-19</sup> C</p>
+</dd>
 </dl>
-<p class="last">As an example, if you ran your calculation at 300 K, then the potential would be written out as multiples of
+<p>As an example, if you ran your calculation at 300 K, then the potential would be written out as multiples of
 k<sub>b</sub> T e<sub>c</sub><sup>-1</sup> = (1.3806504 × 10<sup>−23</sup> J K<sup>-1</sup>) × (300 K) × (1.60217646 × 10<sup>-19</sup> C)<sup>-1</sup> = (4.1419512 × 10<sup>-21</sup> J) × (6.241509752 × 10<sup>18</sup> C<sup>-1</sup>) = 25.85202 mV</p>
 </dd>
-<dt><code class="docutils literal"><span class="pre">atompot</span></code></dt>
-<dd>Write out the electrostatic potential at each atom location in units of k<sub>b</sub> T e<sub>c</sub><sup>-1</sup> (multigrid and finite element).</dd>
-<dt><code class="docutils literal"><span class="pre">smol</span></code></dt>
-<dd>Write out the solvent accessibility defined by the molecular surface definition (see <a class="reference internal" href="srfm.html#elecsrfm"><span class="std std-ref">srfm (elec)</span></a> <code class="docutils literal"><span class="pre">smol</span></code>).
-Values are unitless and range from 0 (inaccessible) to 1 (accessible). (multigrid and finite element).</dd>
-<dt><code class="docutils literal"><span class="pre">sspl</span></code></dt>
-<dd>Write out the spline-based solvent accessibility (see <a class="reference internal" href="srfm.html#elecsrfm"><span class="std std-ref">srfm (elec)</span></a> <code class="docutils literal"><span class="pre">spl2</span></code>).
-Values are unitless and range from 0 (inaccessible) to 1 (accessible) (multigrid and finite element)</dd>
-<dt><code class="docutils literal"><span class="pre">vdw</span></code></dt>
-<dd>Write out the van der Waals-based solvent accessibility (see <a class="reference internal" href="srfm.html#elecsrfm"><span class="std std-ref">srfm (elec)</span></a> <code class="docutils literal"><span class="pre">smol</span></code> with <a class="reference internal" href="../generic/srad.html#srad"><span class="std std-ref">srad</span></a> 0.0).
-Values are unitless and range from 0 (inaccessible) to 1 (accessible). (multigrid and finite element)</dd>
-<dt><code class="docutils literal"><span class="pre">ivdw</span></code></dt>
-<dd>Write out the inflated van der Waals-based ion accessibility (see <a class="reference internal" href="srfm.html#elecsrfm"><span class="std std-ref">srfm (elec)</span></a> <code class="docutils literal"><span class="pre">smol</span></code>).
-Values are unitless and range from 0 (inaccessible) to 1 (accessible). (multigrid and finite element)</dd>
-<dt><code class="docutils literal"><span class="pre">lap</span></code></dt>
-<dd>Write out the Laplacian of the potential <span class="math">\(\nabla^2 \phi\)</span> in units of k<sub>B</sub> T e<sub>c</sub><sup>-1</sup> Å<sup>-2</sup>  (multigrid only).</dd>
-<dt><code class="docutils literal"><span class="pre">edens</span></code></dt>
-<dd>Write out the “energy density” <span class="math">\(-\nabla \cdot \epsilon \nabla \phi\)</span> in units of k<sub>B</sub> T e<sub>c</sub><sup>-1</sup> Å<sup>-2</sup>  (multigrid only).</dd>
-<dt><code class="docutils literal"><span class="pre">ndens</span></code></dt>
-<dd>Write out the total mobile ion number density for all ion species in units of M (multigrid only).
-The output is calculated according to the formula (for nonlinear PB calculations):  <span class="math">\(\rho(x) = \sum_i^N {\bar{\rho}_i e^{-q_i\phi(x) - V_i (x)}}\)</span>, where <em>N</em> is the number of ion species, <span class="math">\(\bar{\rho}_i\)</span> is the bulk density of ion species <em>i</em>, <span class="math">\(q_i\)</span> is the charge of ion species <em>i</em>, <span class="math">\(\phi(x)\)</span> is the electrostatic potential, and <span class="math">\(V_i\)</span> is the solute-ion interaction potential for species <em>i</em>.</dd>
-<dt><code class="docutils literal"><span class="pre">qdens</span></code></dt>
-<dd>Write out the total mobile ion charge density for all ion species in units of e<sub>c</sub> M (multigrid only).
-The output is calculated according to the formula (for nonlinear PB calculations):  <span class="math">\(\rho(x) = \sum_i^N {\bar{\rho}_i q_i e^{-q_i\phi(x) - V_i (x)}}\)</span>, where <em>N</em> is the number of ion species, <span class="math">\(\bar{\rho}_i\)</span> is the bulk density of ion species <em>i</em>, <span class="math">\(q_i\)</span> is the charge of ion species <em>i</em>, <span class="math">\(\phi(x)\)</span> is the electrostatic potential, and <span class="math">\(V_i\)</span> is the solute-ion interaction potential for species <em>i</em>.</dd>
-<dt><code class="docutils literal"><span class="pre">dielx</span></code> or <code class="docutils literal"><span class="pre">diely</span></code> or <code class="docutils literal"><span class="pre">dielz</span></code></dt>
-<dd>Write out the dielectric map shifted by 1/2 grid spacing in the {x, y, z}-direction (see <a class="reference internal" href="../read.html#read"><span class="std std-ref">READ input file section</span></a> <code class="docutils literal"><span class="pre">diel</span></code>).
-The values are unitless (multigrid only).</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">atompot</span></code></dt><dd><p>Write out the electrostatic potential at each atom location in units of k<sub>b</sub> T e<sub>c</sub><sup>-1</sup> (multigrid and finite element).</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">smol</span></code></dt><dd><p>Write out the solvent accessibility defined by the molecular surface definition (see <a class="reference internal" href="srfm.html#elecsrfm"><span class="std std-ref">srfm (elec)</span></a> <code class="docutils literal notranslate"><span class="pre">smol</span></code>).
+Values are unitless and range from 0 (inaccessible) to 1 (accessible). (multigrid and finite element).</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">sspl</span></code></dt><dd><p>Write out the spline-based solvent accessibility (see <a class="reference internal" href="srfm.html#elecsrfm"><span class="std std-ref">srfm (elec)</span></a> <code class="docutils literal notranslate"><span class="pre">spl2</span></code>).
+Values are unitless and range from 0 (inaccessible) to 1 (accessible) (multigrid and finite element)</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">vdw</span></code></dt><dd><p>Write out the van der Waals-based solvent accessibility (see <a class="reference internal" href="srfm.html#elecsrfm"><span class="std std-ref">srfm (elec)</span></a> <code class="docutils literal notranslate"><span class="pre">smol</span></code> with <a class="reference internal" href="../generic/srad.html#srad"><span class="std std-ref">srad</span></a> 0.0).
+Values are unitless and range from 0 (inaccessible) to 1 (accessible). (multigrid and finite element)</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">ivdw</span></code></dt><dd><p>Write out the inflated van der Waals-based ion accessibility (see <a class="reference internal" href="srfm.html#elecsrfm"><span class="std std-ref">srfm (elec)</span></a> <code class="docutils literal notranslate"><span class="pre">smol</span></code>).
+Values are unitless and range from 0 (inaccessible) to 1 (accessible). (multigrid and finite element)</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">lap</span></code></dt><dd><p>Write out the Laplacian of the potential <span class="math notranslate nohighlight">\(\nabla^2 \phi\)</span> in units of k<sub>B</sub> T e<sub>c</sub><sup>-1</sup> Å<sup>-2</sup>  (multigrid only).</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">edens</span></code></dt><dd><p>Write out the “energy density” <span class="math notranslate nohighlight">\(-\nabla \cdot \epsilon \nabla \phi\)</span> in units of k<sub>B</sub> T e<sub>c</sub><sup>-1</sup> Å<sup>-2</sup>  (multigrid only).</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">ndens</span></code></dt><dd><p>Write out the total mobile ion number density for all ion species in units of M (multigrid only).
+The output is calculated according to the formula (for nonlinear PB calculations):  <span class="math notranslate nohighlight">\(\rho(x) = \sum_i^N {\bar{\rho}_i e^{-q_i\phi(x) - V_i (x)}}\)</span>, where <em>N</em> is the number of ion species, <span class="math notranslate nohighlight">\(\bar{\rho}_i\)</span> is the bulk density of ion species <em>i</em>, <span class="math notranslate nohighlight">\(q_i\)</span> is the charge of ion species <em>i</em>, <span class="math notranslate nohighlight">\(\phi(x)\)</span> is the electrostatic potential, and <span class="math notranslate nohighlight">\(V_i\)</span> is the solute-ion interaction potential for species <em>i</em>.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">qdens</span></code></dt><dd><p>Write out the total mobile ion charge density for all ion species in units of e<sub>c</sub> M (multigrid only).
+The output is calculated according to the formula (for nonlinear PB calculations):  <span class="math notranslate nohighlight">\(\rho(x) = \sum_i^N {\bar{\rho}_i q_i e^{-q_i\phi(x) - V_i (x)}}\)</span>, where <em>N</em> is the number of ion species, <span class="math notranslate nohighlight">\(\bar{\rho}_i\)</span> is the bulk density of ion species <em>i</em>, <span class="math notranslate nohighlight">\(q_i\)</span> is the charge of ion species <em>i</em>, <span class="math notranslate nohighlight">\(\phi(x)\)</span> is the electrostatic potential, and <span class="math notranslate nohighlight">\(V_i\)</span> is the solute-ion interaction potential for species <em>i</em>.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">dielx</span></code> or <code class="docutils literal notranslate"><span class="pre">diely</span></code> or <code class="docutils literal notranslate"><span class="pre">dielz</span></code></dt><dd><p>Write out the dielectric map shifted by 1/2 grid spacing in the {x, y, z}-direction (see <a class="reference internal" href="../read.html#read"><span class="std std-ref">READ input file section</span></a> <code class="docutils literal notranslate"><span class="pre">diel</span></code>).
+The values are unitless (multigrid only).</p>
+</dd>
 </dl>
 </dd>
-<dt><code class="docutils literal"><span class="pre">format</span></code></dt>
-<dd><p class="first">A string that specifies the format for writing out the data:</p>
-<dl class="last docutils">
-<dt><code class="docutils literal"><span class="pre">dx</span></code></dt>
-<dd>Write out data in <a class="reference internal" href="../../../formats/opendx.html"><span class="doc">OpenDX scalar data format</span></a>.
-This is the preferred format for APBS I/O. (multigrid and finite element).</dd>
-<dt><code class="docutils literal"><span class="pre">avs</span></code></dt>
-<dd>Write out data in AVS UCD format. (finite element only).</dd>
-<dt><code class="docutils literal"><span class="pre">uhbd</span></code></dt>
-<dd>Write out data in <a class="reference internal" href="../../../formats/uhbd.html"><span class="doc">UHBD scalar data format</span></a>. (multigrid only).</dd>
-<dt><code class="docutils literal"><span class="pre">gz</span></code></dt>
-<dd>Write out <a class="reference internal" href="../../../formats/opendx.html"><span class="doc">OpenDX scalar data format</span></a> in gzipped (zlib) compatible format.
-Appends .dx.gz to the filename.</dd>
-<dt><code class="docutils literal"><span class="pre">flat</span></code></dt>
-<dd>Write out data as a plain text file. (multigrid and finite element).</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">format</span></code></dt><dd><p>A string that specifies the format for writing out the data:</p>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">dx</span></code></dt><dd><p>Write out data in <a class="reference internal" href="../../../formats/opendx.html"><span class="doc">OpenDX scalar data format</span></a>.
+This is the preferred format for APBS I/O. (multigrid and finite element).</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">avs</span></code></dt><dd><p>Write out data in AVS UCD format. (finite element only).</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">uhbd</span></code></dt><dd><p>Write out data in <a class="reference internal" href="../../../formats/uhbd.html"><span class="doc">UHBD scalar data format</span></a>. (multigrid only).</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">gz</span></code></dt><dd><p>Write out <a class="reference internal" href="../../../formats/opendx.html"><span class="doc">OpenDX scalar data format</span></a> in gzipped (zlib) compatible format.
+Appends .dx.gz to the filename.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">flat</span></code></dt><dd><p>Write out data as a plain text file. (multigrid and finite element).</p>
+</dd>
 </dl>
 </dd>
-<dt><code class="docutils literal"><span class="pre">stem</span></code></dt>
-<dd>A string that specifies the path for the output; files are written to <code class="file docutils literal"><span class="pre">stem.</span><em><span class="pre">XYZ</span></em></code>, where <code class="docutils literal"><span class="pre">XYZ</span></code> is determined by the file format (and processor rank for parallel calculations).
-If the pathname contains spaces, then it must be surrounded by double quotes.</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">stem</span></code></dt><dd><p>A string that specifies the path for the output; files are written to <code class="file docutils literal notranslate"><span class="pre">stem.</span><em><span class="pre">XYZ</span></em></code>, where <code class="docutils literal notranslate"><span class="pre">XYZ</span></code> is determined by the file format (and processor rank for parallel calculations).
+If the pathname contains spaces, then it must be surrounded by double quotes.</p>
+</dd>
 </dl>
 </div>
 
 
           </div>
+          
         </div>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
-        <div class="sphinxsidebarwrapper"><div class="relations">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../../index.html">APBS-PDB2PQR</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../../overview.html">APBS-PDB2PQR overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../downloads.html">How to get the software</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../getting-started.html">Getting started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../getting-help.html">Getting help</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../index.html">APBS</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../../installing.html">Installing APBS</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../../invoking.html">Invoking APBS</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../index.html">APBS input files</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../background.html">Solvation model background</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../errors.html">Caveats and sources of error</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../utilities/index.html">APBS utilities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../programming.html">APBS programmer’s guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../license.html">APBS license</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../formats/index.html">File formats</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../examples/index.html">APBS-PDB2PQR examples and tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../support.html">Support for APBS-PDB2PQR</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../citing.html">Citing your use of our software</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reading.html">Suggested reading for APBS-PDB2PQR</a></li>
+</ul>
+
+<div class="relations">
 <h3>Related Topics</h3>
 <ul>
   <li><a href="../../../index.html">Documentation overview</a><ul>
@@ -143,33 +170,34 @@ If the pathname contains spaces, then it must be surrounded by double quotes.</d
   </ul></li>
 </ul>
 </div>
-  <div role="note" aria-label="source link">
-    <h3>This Page</h3>
-    <ul class="this-page-menu">
-      <li><a href="../../../_sources/apbs/input/elec/write.rst.txt"
-            rel="nofollow">Show Source</a></li>
-    </ul>
-   </div>
 <div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
     <form class="search" action="../../../search.html" method="get">
-      <div><input type="text" name="q" /></div>
-      <div><input type="submit" value="Go" /></div>
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
     </form>
+    </div>
 </div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
         </div>
       </div>
       <div class="clearer"></div>
     </div>
     <div class="footer">
-      &copy;2017, Nathan Baker.
+      &copy;Copyright (c) 2010-2020 Battelle Memorial Institute.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.7</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.8</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.1.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |
       <a href="../../../_sources/apbs/input/elec/write.rst.txt"

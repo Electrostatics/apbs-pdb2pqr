@@ -28,7 +28,7 @@ Downloads
 =========
 
 If you prefer to download the software rather than use the APBS webserver, both APBS and PDB2PQR are also available for download to use in standalone mode.
-Users can either download binaries for their platform or compile the software from source (GitHub_)
+Users can either download binaries for their platform or compile the software from source.
 
 --------------
 APBS downloads
@@ -45,10 +45,7 @@ Usage information for APBS is available at :doc:`/apbs/index`.
 PDB2PQR downloads
 -----------------
 
-PDB2PQR is currently available in source code form.
-Stable versions can be downloaded from `SourceForge (PDB2PQR)` and developmental versions can be checked out from GitHub_.
-If you are installing from source, please follow the instructions at :doc:`/pdb2pqr/installing`.
-After compilation, PDB2PQR can be used as described at :doc:`/pdb2pqr/index`.
+Please see the `PDB2PQR homepage <https://github.com/Electrostatics/pdb2pqr>` for information on downloading the software.
 
 =================
 Release histories

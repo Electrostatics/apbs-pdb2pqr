@@ -1,43 +1,37 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>APBS 1.3 (2010-10) &#8212; APBS-PDB2PQR 1.6 documentation</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>APBS 1.3 (2010-10) &#8212; APBS-PDB2PQR 3.0 documentation</title>
     <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../',
-        VERSION:     '1.6',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
-    <script type="text/javascript" src="../_static/jquery.js"></script>
-    <script type="text/javascript" src="../_static/underscore.js"></script>
-    <script type="text/javascript" src="../_static/doctools.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="PDB2PQR 1.7 (2010-10)" href="201010-PDB2PQR-1.7.html" />
-    <link rel="prev" title="PDB2PQR 1.6 (2010-04)" href="201004-PDB2PQR-1.6.html" />
+    <link rel="next" title="APBS 1.4.0 (2012-07)" href="201207-APBS-1.4.0.html" />
+    <link rel="prev" title="APBS 1.2.1 (2009-12)" href="200912-APBS-1.2.1.html" />
    
   <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
   
+  
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
 
-  </head>
-  <body>
+  </head><body>
   
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
+          
+
           <div class="body" role="main">
             
   <div class="section" id="apbs-1-3-2010-10">
@@ -45,92 +39,115 @@
 <div class="section" id="new-features">
 <h2>New features<a class="headerlink" href="#new-features" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
-<li>Added in new read and write binary (gz) commands. Can read gzipped DX files directly.</li>
-<li>Added new write format to output the atomic potentials to a flat file (see atompot)</li>
-<li>Added new functionality for using a previously calculated potential map for a new calculation.</li>
-<li>Added a new program for converting delphi potential maps to OpenDX format. tools/mesh/del2dx</li>
-<li>Updated Doxygen manual with call/caller graphs.  Replaced HTML with PDF.</li>
-<li>Added tools/matlab/solver with simple Matlab LPBE solver for prototyping, teaching, etc.</li>
-<li>Deprecated APBS XML output format.</li>
-<li>Deprecated nlev keyword.</li>
-<li>Added etol keyword, which allows user-defined error tolerance in LPBE and NPBE calculations (default errtol value is 1.0e-6).</li>
-<li>Added more explanatory error messages for the case in which parm keyword is missing from APBS input file for apolar calculations.</li>
-<li>Added a polar and apolor forces calculation example to examples/born/ .</li>
-<li>Added warning messages for users who try to compile APBS with –enable-tinker flag and run APBS stand-alone execution.</li>
-<li>Switched default Opal service urls from sccne.wustl.edu to NBCR.</li>
-<li>Added a sanity check in routines.c: ‘bcfl map’ in the input file requires ‘usemap pot’ statement in the input file as well.</li>
-<li>Introduced Vpmgp_size() routine to replace F77MGSZ call in vpmg.c</li>
-<li>Updated test results for APBS-1.3 release.</li>
+<li><p>Added in new read and write binary (gz) commands. Can read gzipped DX files directly.</p></li>
+<li><p>Added new write format to output the atomic potentials to a flat file (see atompot)</p></li>
+<li><p>Added new functionality for using a previously calculated potential map for a new calculation.</p></li>
+<li><p>Added a new program for converting delphi potential maps to OpenDX format. tools/mesh/del2dx</p></li>
+<li><p>Updated Doxygen manual with call/caller graphs.  Replaced HTML with PDF.</p></li>
+<li><p>Added tools/matlab/solver with simple Matlab LPBE solver for prototyping, teaching, etc.</p></li>
+<li><p>Deprecated APBS XML output format.</p></li>
+<li><p>Deprecated nlev keyword.</p></li>
+<li><p>Added etol keyword, which allows user-defined error tolerance in LPBE and NPBE calculations (default errtol value is 1.0e-6).</p></li>
+<li><p>Added more explanatory error messages for the case in which parm keyword is missing from APBS input file for apolar calculations.</p></li>
+<li><p>Added a polar and apolor forces calculation example to examples/born/ .</p></li>
+<li><p>Added warning messages for users who try to compile APBS with –enable-tinker flag and run APBS stand-alone execution.</p></li>
+<li><p>Switched default Opal service urls from sccne.wustl.edu to NBCR.</p></li>
+<li><p>Added a sanity check in routines.c: ‘bcfl map’ in the input file requires ‘usemap pot’ statement in the input file as well.</p></li>
+<li><p>Introduced Vpmgp_size() routine to replace F77MGSZ call in vpmg.c</p></li>
+<li><p>Updated test results for APBS-1.3 release.</p></li>
 </ul>
 </div>
 <div class="section" id="bug-fixes">
 <h2>Bug fixes<a class="headerlink" href="#bug-fixes" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
-<li>Modified Vpmg_dbForce with some grid checking code provided by Matteo Rotter.</li>
-<li>Fixed a bug in psize.py per Michael Lerner’s suggestion. The old version of psize.py gives wrong cglen and fglen results in special cases (e.g., all y coordinates are negative values).</li>
-<li>Fixed a bug in examples/scripts/checkforces.sh: the condition for “Passed with rounding error” is abs(difference) &lt; errortol, not the other way around.</li>
-<li>Fixed the help string in ApbsClient.py .</li>
-<li>Fixed a bug in Vacc_atomdSASA(): the atom SASA needs to be reset to zero displacement after finite melement methods.</li>
-<li>Fixed a bug in Vpmg_dbForce(): the initialization of rtot should appear before it is used.</li>
-<li>Fixed a bug in initAPOL(): center should be initialized before used.</li>
-<li>Fixed a bug in routines.c: eliminated spurious “Invalid data type for writing!” and “Invalid format for writing!” from outputs with “write atompot” statement in the input file.</li>
-<li>Fixed a bug in vpmg.c: fixed zero potential value problem on eges and corners in non-focusing calculations.</li>
+<li><p>Modified Vpmg_dbForce with some grid checking code provided by Matteo Rotter.</p></li>
+<li><p>Fixed a bug in psize.py per Michael Lerner’s suggestion. The old version of psize.py gives wrong cglen and fglen results in special cases (e.g., all y coordinates are negative values).</p></li>
+<li><p>Fixed a bug in examples/scripts/checkforces.sh: the condition for “Passed with rounding error” is abs(difference) &lt; errortol, not the other way around.</p></li>
+<li><p>Fixed the help string in ApbsClient.py .</p></li>
+<li><p>Fixed a bug in Vacc_atomdSASA(): the atom SASA needs to be reset to zero displacement after finite melement methods.</p></li>
+<li><p>Fixed a bug in Vpmg_dbForce(): the initialization of rtot should appear before it is used.</p></li>
+<li><p>Fixed a bug in initAPOL(): center should be initialized before used.</p></li>
+<li><p>Fixed a bug in routines.c: eliminated spurious “Invalid data type for writing!” and “Invalid format for writing!” from outputs with “write atompot” statement in the input file.</p></li>
+<li><p>Fixed a bug in vpmg.c: fixed zero potential value problem on eges and corners in non-focusing calculations.</p></li>
 </ul>
 </div>
 </div>
 
 
           </div>
+          
         </div>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-  <h3><a href="../index.html">Table Of Contents</a></h3>
-  <ul>
-<li><a class="reference internal" href="#">APBS 1.3 (2010-10)</a><ul>
-<li><a class="reference internal" href="#new-features">New features</a></li>
-<li><a class="reference internal" href="#bug-fixes">Bug fixes</a></li>
+<h1 class="logo"><a href="../index.html">APBS-PDB2PQR</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../overview.html">APBS-PDB2PQR overview</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../downloads.html">How to get the software</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../downloads.html#web-servers">Web servers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../downloads.html#downloads">Downloads</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../downloads.html#release-histories">Release histories</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="../getting-started.html">Getting started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting-help.html">Getting help</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../apbs/index.html">APBS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../formats/index.html">File formats</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/index.html">APBS-PDB2PQR examples and tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../support.html">Support for APBS-PDB2PQR</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../citing.html">Citing your use of our software</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reading.html">Suggested reading for APBS-PDB2PQR</a></li>
 </ul>
+
 <div class="relations">
 <h3>Related Topics</h3>
 <ul>
   <li><a href="../index.html">Documentation overview</a><ul>
   <li><a href="../downloads.html">How to get the software</a><ul>
-      <li>Previous: <a href="201004-PDB2PQR-1.6.html" title="previous chapter">PDB2PQR 1.6 (2010-04)</a></li>
-      <li>Next: <a href="201010-PDB2PQR-1.7.html" title="next chapter">PDB2PQR 1.7 (2010-10)</a></li>
+      <li>Previous: <a href="200912-APBS-1.2.1.html" title="previous chapter">APBS 1.2.1 (2009-12)</a></li>
+      <li>Next: <a href="201207-APBS-1.4.0.html" title="next chapter">APBS 1.4.0 (2012-07)</a></li>
   </ul></li>
   </ul></li>
 </ul>
 </div>
-  <div role="note" aria-label="source link">
-    <h3>This Page</h3>
-    <ul class="this-page-menu">
-      <li><a href="../_sources/releases/201010-APBS-1.3.0.rst.txt"
-            rel="nofollow">Show Source</a></li>
-    </ul>
-   </div>
 <div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
-      <div><input type="text" name="q" /></div>
-      <div><input type="submit" value="Go" /></div>
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
     </form>
+    </div>
 </div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
         </div>
       </div>
       <div class="clearer"></div>
     </div>
     <div class="footer">
-      &copy;2017, Nathan Baker.
+      &copy;Copyright (c) 2010-2020 Battelle Memorial Institute.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.7</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.8</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.1.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |
       <a href="../_sources/releases/201010-APBS-1.3.0.rst.txt"

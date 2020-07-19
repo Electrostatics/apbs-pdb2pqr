@@ -12,10 +12,6 @@ You may also wish to include one or more of the following citations:
   * Baker NA, Sept D, Joseph S, Holst MJ, McCammon JA. Electrostatics of nanosystems: application to microtubules and the ribosome. Proc. Natl. Acad. Sci. USA 98, 10037-10041 2001. http://www.pnas.org/content/98/18/10037
   * Additional articles discussing APBS and the PBE are available from the [suggested reading]
 
-* Please acknowledge your use of PEOE_PB protein/ligand parameterization software by citing:
-
-  * Czodrowski P, Dramburg I, Sotriffer CA, Klebe G. Development, validation, and application of adapted PEOE charges to estimate pKa values of functional groups in protein-ligand complexes. Proteins, 65, 424-437, 2006.  http://onlinelibrary.wiley.com/doi/10.1002/prot.21110/abstract
-
 * Please acknowledge your use of the Holst group software by citing:
 
   * For the multigrid solver:
