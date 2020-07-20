@@ -1,13 +1,6 @@
 Installing APBS
 ===============
 
-.. note::
-
-   Please `register <http://eepurl.com/by4eQr>`_ before installing APBS.
-
-The best way to install APBS is via the binary installation; see :doc:`/downloads` for more information.
-We currently offer binaries for the Ubuntu platform on a variety of architectures as well as command-line binaries for WinXP and Mac OS X.
-For all other systems, please install from source on your particular platform and feel free to contact the APBS users mailing list for more help and/or to request a binary for that system.
 
 ===================
 Binary installation

@@ -26,7 +26,7 @@ Suggested reading for APBS-PDB2PQR
   * Chen Z, Baker NA, Wei GW. Differential geometry based solvation model I: Eulerian formulation, J Comput Phys, 229, 8231-58, 2010. http://dx.doi.org/10.1016/j.jcp.2010.06.036
   * Chen Z, Baker NA, Wei GW. Differential geometry based solvation model II: Lagrangian formulation. J Math Biol, 63, 1139-1200, 2011. http://dx.doi.org/10.1007/s00285-011-0402-z
   * Chen Z, Zhao S, Chun J, Thomas DG, Baker NA, Wei GW. Variational approach for nonpolar solvation analysis. Journal of Chemical Physics, 137, 084101, 2012. http://dx.doi.org/10.1063/1.4745084
-  * Thomas DG, Chun J, Chen Z, Wei G, Baker NA. Parameterization of a Geometric Flow Implicit Solvation Model. Journal of Computational Chemistry, 34, 687-95, 2013. http://dx.doi.org/10.1002/jcc.23181
+  * Thomas DG, Chun J, Chen Z, Wei G, Baker NA. Parameterization of a Geometric flow implicit solvation model. Journal of Computational Chemistry, 34, 687-95, 2013. http://dx.doi.org/10.1002/jcc.23181
   * Daily M, Chun J, Heredia-Langner A, Baker NA. Origin of parameter degeneracy and molecular shape relationships in geometric-flow calculations of solvation free energies. J Chem Phys, 139, 204108, 2013. http://dx.doi.org/10.1063/1.4832900
 
 * TABI-PB boundary element solver
@@ -54,3 +54,5 @@ Suggested reading for APBS-PDB2PQR
   * Callenberg KM, Choudhary OP, de Forest GL, Gohara DW, Baker NA, Grabe M. APBSmem: A graphical interface for electrostatic calculations at the membrane. PLoS ONE, 5, e12722, 2010. http://dx.doi.org/10.1371/journal.pone.0012722
   * Unni S, Huang Y, Hanson RM, Tobias M, Krishnan S, Li WW, Nielsen JE, Baker NA. Web servers and services for electrostatics calculations with APBS and PDB2PQR. J Comput Chem, 32 (7), 1488-1491, 2011. http://dx.doi.org/10.1002/jcc.21720
   * Konecny R, Baker NA, McCammon JA. iAPBS: a programming interface to the adaptive Poisson–Boltzmann solver. Computational Science and Discovery, 5, 015005, 2012. http://dx.doi.org/10.1088/1749-4699/5/1/015005
+  * Jurrus E, Engel D, Star K, Monson K, Brandi J, Felberg LE, Brookes DH, Wilson L, Chen J, Liles K, Chun M, Li P, Gohara DW, Dolinsky T, Konecny R, Koes DR, Nielsen JE, Head-Gordon T, Geng W, Krasny R, Wei G-W, Holst MJ, McCammon JA, Baker NA. Improvements to the APBS biomolecular solvation software suite. Protein Sci, 27 (1), 112-128, 2018. https://doi.org/10.1002/pro.3280
+  * Laureanti J, Brandi J, Offor E, Engel D, Rallo R, Ginovska B, Martinez X, Baaden M, Baker NA. Visualizing biomolecular electrostatics in virtual reality with UnityMol‐APBS. Protein Sci, 29 (1), 237-246, 2020. https://doi.org/10.1002/pro.3773
