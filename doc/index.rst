@@ -10,12 +10,10 @@ This is the documentation for these packages; more information can be found at t
    :maxdepth: 2
    :caption: Contents:
 
-   overview
    downloads
    getting-started
    getting-help
    apbs/index
-   formats/index
    examples/index
    support
    citing
