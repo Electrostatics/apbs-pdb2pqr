@@ -1,6 +1,0 @@
-APBS 0.2.6 (2003-01)
-====================
-
-* Changed license to GPL
-* Made a few routines compliant with ANSI X3.159-1989 by removing snprintf (compliant with ISO/IEC 9899:1999).  This is basically for the sake of OSF support.
-

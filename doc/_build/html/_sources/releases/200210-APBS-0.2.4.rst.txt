@@ -1,8 +1,0 @@
-APBS 0.2.4 (2002-10)
-====================
-
-    
-* Fixed bug which set one of the  z-boundaries to zero for "bcfl 1".  This can perturb results for systems where the grid boundaries are particularly close to the biomolecule.  While this is an embarassing bug, most systems using settings suggested by the psize script appear largely unaffected (see examples/README.html).  Thanks to Michael Grabe for finding this bug (Michael, you can stop finding bugs now...)
-* Updated VMD scripts to agree with the current OpenDX output format
-* A COMMENT:  As far as I can tell, the current version of OpenDX-formatted output (same as version 0.2.3) is fully compliant with the OpenDX standards (see, for example,  http://opendx.npaci.edu/docs/html/pages/usrgu065.htm#HDRXMPLES).   However, I realize this is different than the format for previous versions and would encourage all users to update their APBS-based applications to accomodate these changes.  The best solution would be for all downstream applications to use the APBS Vgrid class (see http://agave.wustl.edu/apbs/doc/api/html/group__Vgrid.html) to manipulate the data since this class should remain internally consistent between releases.  Finally, I would love to have some OpenDX guru who uses APBS to contact me so I can solidfy the data ouput format of APBS.  I'm about ready to permanently switch to another format if I can't reach a consensus withOpenDX...
-        
